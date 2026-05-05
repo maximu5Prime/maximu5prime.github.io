@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lernportal</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #171717;
+      --border: #2a2a2a;
+      --text: #f0ede8;
+      --text-muted: #888;
+      --math: #e8c547;
+      --physik: #5b9cf6;
+      --kit: #6ee7b7;
+      --accent: #ff6b35;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .site-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .site-title span {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .site-subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-top: 0.5rem;
+    }
+
+    .year-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 2rem;
+      white-space: nowrap;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      margin: 3rem 0 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Fach Cards */
+    .fach-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .fach-card {
+      background: var(--surface);
+      padding: 2rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fach-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--fach-color);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .fach-card:hover {
+      background: #1e1e1e;
+    }
+
+    .fach-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .fach-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .fach-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.3rem;
+      color: var(--fach-color);
+    }
+
+    .fach-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .klassen-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 2rem;
+      border: 1px solid var(--fach-color);
+      color: var(--fach-color);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .pill:hover {
+      background: var(--fach-color);
+      color: #000;
+    }
+
+    /* Übungen Section */
+    .uebung-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .uebung-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.4rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .uebung-card:hover {
+      border-color: var(--accent);
+      background: #1e1e1e;
+    }
+
+    .uebung-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .uebung-info {}
+    .uebung-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+    .uebung-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 5rem;
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    header { animation: fadeUp 0.5s ease both; }
+    .fach-grid { animation: fadeUp 0.5s 0.15s ease both; }
+    .uebung-grid { animation: fadeUp 0.5s 0.3s ease both; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1 class="site-title">Lern<span>portal</span></h1>
+        <p class="site-subtitle">Materialien · Aufgaben · Übungen</p>
+      </div>
+      <div class="year-badge">Jahrgangsstufe 11 &amp; 12</div>
+    </div>
+  </header>
+
+  <!-- FÄCHER -->
+  <p class="section-label">Fächer</p>
+
+  <div class="fach-grid">
+
+    <!-- Mathematik -->
+    <div class="fach-card" style="--fach-color: var(--math);">
+      <span class="fach-icon">∑</span>
+      <div class="fach-name">Mathematik</div>
+      <div class="fach-desc">Analysis, Stochastik, Lineare Algebra und mehr.</div>
+      <div class="klassen-pills">
+        <a class="pill" href="mathematik/klasse11/index.html">Jgst. 11</a>
+        <a class="pill" href="mathematik/klasse12/index.html">Jgst. 12</a>
+      </div>
+    </div>
+
+    <!-- Physik -->
+    <div class="fach-card" style="--fach-color: var(--physik);">
+      <span class="fach-icon">⚛</span>
+      <div class="fach-name">Physik</div>
+      <div class="fach-desc">Mechanik, Elektrodynamik, Quantenphysik und Optik.</div>
+      <div class="klassen-pills">
+        <a class="pill" href="physik/klasse11/index.html">Jgst. 11</a>
+        <a class="pill" href="physik/klasse12/index.html">Jgst. 12</a>
+      </div>
+    </div>
+
+    <!-- KIT -->
+    <div class="fach-card" style="--fach-color: var(--kit);">
+      <span class="fach-icon">⚙</span>
+      <div class="fach-name">Technology</div>
+      <div class="fach-desc">KIT – Informatik, Technik und Innovation im Unterricht.</div>
+      <div class="klassen-pills">
+        <a class="pill" href="kit/klasse11/index.html">Jgst. 11</a>
+        <a class="pill" href="kit/klasse12/index.html">Jgst. 12</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ÜBUNGEN -->
+  <p class="section-label">Übungsaufgaben</p>
+
+  <div class="uebung-grid">
+    <a class="uebung-card" href="uebungen/mathematik/index.html">
+      <span class="uebung-icon">📐</span>
+      <div class="uebung-info">
+        <div class="uebung-title">Mathe-Übungen</div>
+        <div class="uebung-meta">Jgst. 11 &amp; 12</div>
+      </div>
+    </a>
+    <a class="uebung-card" href="uebungen/physik/index.html">
+      <span class="uebung-icon">🔬</span>
+      <div class="uebung-info">
+        <div class="uebung-title">Physik-Übungen</div>
+        <div class="uebung-meta">Jgst. 11 &amp; 12</div>
+      </div>
+    </a>
+    <a class="uebung-card" href="uebungen/kit/index.html">
+      <span class="uebung-icon">💻</span>
+      <div class="uebung-info">
+        <div class="uebung-title">KIT-Übungen</div>
+        <div class="uebung-meta">Jgst. 11 &amp; 12</div>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    <span class="footer-text">Lernportal · Gymnasium</span>
+    <span class="footer-text">Mathematik · Physik · Technology</span>
+  </footer>
+</div>
+
+</body>
+</html>
