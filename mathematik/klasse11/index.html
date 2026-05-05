@@ -1,886 +1,252 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Differentialrechnung – Interaktives Arbeitsblatt</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
-<!-- KaTeX: schnell, stabil, kein Async-Konflikt -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
-<style>
-:root {
-  --ink: #1a1208;
-  --paper: #f7f3ec;
-  --cream: #ede8de;
-  --accent: #c8400a;
-  --accent2: #2a6496;
-  --gold: #c9961a;
-  --green: #2e7d4f;
-  --line: #d4cfc6;
-  --serif: 'Playfair Display', Georgia, serif;
-  --mono: 'DM Mono', monospace;
-  --sans: 'Source Sans 3', sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mathematik – Jahrgangsstufe 11</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #171717;
+      --border: #2a2a2a;
+      --text: #f0ede8;
+      --text-muted: #888;
+      --accent: #e8c547;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; position: relative; z-index: 1; }
 
-header { background: var(--ink); color: var(--paper); padding: 2.8rem 2rem 2.2rem; position: relative; overflow: hidden; }
-header::before { content:''; position:absolute; top:-60px; right:-80px; width:300px; height:300px; border-radius:50%; background:var(--accent); opacity:.1; }
-header::after  { content:''; position:absolute; bottom:-40px; left:8%; width:180px; height:180px; border-radius:50%; background:var(--gold); opacity:.08; }
-.hinner { max-width: 900px; margin: 0 auto; position: relative; }
-.klass { font-family:var(--mono); font-size:.78rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.5rem; }
-header h1 { font-family:var(--serif); font-size:clamp(1.8rem,5vw,3.2rem); font-weight:900; line-height:1.1; margin-bottom:.8rem; }
-header h1 span { color:var(--accent); }
-header p { font-size:.95rem; color:#a09888; max-width:560px; }
+    /* Breadcrumb */
+    .breadcrumb { padding: 1.5rem 0 0; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: #333; }
 
-nav { background:var(--ink); border-top:1px solid #2e2e2e; padding:0 1.5rem; display:flex; overflow-x:auto; gap:0; }
-nav button { font-family:var(--mono); font-size:.75rem; letter-spacing:.07em; text-transform:uppercase; background:none; border:none; color:#777; padding:.8rem 1.2rem; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
-nav button:hover { color:var(--paper); }
-nav button.active { color:var(--gold); border-bottom-color:var(--gold); }
+    /* Header */
+    header { padding: 2rem 0 2.5rem; border-bottom: 1px solid var(--border); }
+    .fach-tag { font-family: 'DM Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 0.6rem; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; }
+    h1 em { font-style: italic; color: var(--accent); }
+    .header-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; max-width: 620px; }
+    .header-badges { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.75rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
+    .badge.highlight { border-color: var(--accent); color: var(--accent); }
 
-main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 5rem; }
-.tab { display:none; }
-.tab.active { display:block; animation: fu .3s ease; }
-@keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+    /* Section label */
+    .section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin: 2.5rem 0 1rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-h2 { font-family:var(--serif); font-size:1.85rem; font-weight:700; margin-bottom:.3rem; }
-h2 .num { font-family:var(--mono); font-size:.95rem; color:var(--accent); margin-right:.4rem; }
-.sub { color:#999; font-size:.88rem; font-style:italic; margin-bottom:1.8rem; }
-h3 { font-family:var(--serif); font-size:1.05rem; margin-bottom:.6rem; }
+    /* Lernbereich Cards */
+    .lernbereich-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
 
-.card { background:white; border:1px solid var(--line); border-radius:2px; padding:1.5rem 1.7rem; margin-bottom:1.4rem; box-shadow:0 2px 6px rgba(0,0,0,.04); }
-.card.theory { border-left:4px solid var(--accent2); background:#f0f5fa; }
-.card.ex     { border-left:4px solid var(--accent); }
+    .lb-card { background: var(--surface); display: grid; grid-template-columns: 56px 1fr auto; align-items: start; text-decoration: none; color: inherit; transition: background 0.15s; }
+    .lb-card:hover { background: #1d1d1d; }
+    .lb-card:hover .lb-arrow { opacity: 1; transform: translateX(0); }
+    .lb-card:hover .lb-num { opacity: 1; }
 
-/* Formelbox: zentriert, etwas größer, ordentlich */
-.fbox {
-  background:var(--cream);
-  border:1px solid var(--line);
-  border-radius:2px;
-  padding:1rem 1.4rem;
-  margin:.9rem 0;
-  text-align:center;
-  font-size:1.05rem;
-  overflow-x:auto;
-}
-/* Dynamische Formelbox (JS-befüllt) */
-.fbox-dyn {
-  background:var(--cream);
-  border:1px solid var(--line);
-  border-radius:2px;
-  padding:.8rem 1.2rem;
-  margin:.9rem 0;
-  text-align:center;
-  font-family:var(--mono);
-  font-size:.9rem;
-  overflow-x:auto;
-}
+    .lb-num { padding: 1.5rem 0 1.5rem 1.4rem; font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--accent); line-height: 1; opacity: 0.28; transition: opacity 0.15s; }
+    .lb-content { padding: 1.4rem 1rem 1.4rem 1.2rem; border-left: 1px solid var(--border); }
+    .lb-id { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--text-muted); margin-bottom: 0.3rem; letter-spacing: 0.12em; }
+    .lb-title { font-size: 0.98rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.35; }
+    .lb-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; }
+    .lb-tags { margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .lb-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 0.18rem 0.5rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
 
-.srow { display:flex; align-items:center; gap:.9rem; flex-wrap:wrap; margin:.7rem 0; }
-.srow label { font-family:var(--mono); font-size:.83rem; min-width:90px; }
-input[type=range] { -webkit-appearance:none; width:180px; height:5px; border-radius:3px; background:var(--line); outline:none; }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(--accent); cursor:pointer; }
-.vd { font-family:var(--mono); font-size:.9rem; color:var(--accent); min-width:55px; }
+    .lb-meta { padding: 1.4rem 1.4rem 1.4rem 1rem; display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; min-width: 80px; }
+    .lb-hours { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--text-muted); white-space: nowrap; border: 1px solid var(--border); padding: 0.22rem 0.55rem; border-radius: 2rem; }
+    .lb-arrow { font-size: 1rem; color: var(--accent); opacity: 0; transform: translateX(-5px); transition: opacity 0.15s, transform 0.15s; }
 
-.cwrap { width:100%; height:300px; border:1px solid var(--line); background:white; margin:.8rem 0; position:relative; }
-.cwrap canvas { position:absolute; top:0; left:0; }
+    /* Quick nav */
+    .quicknav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .qn-pill { font-family: 'DM Mono', monospace; font-size: 0.7rem; padding: 0.35rem 0.8rem; border: 1px solid var(--border); border-radius: 2rem; color: var(--text-muted); text-decoration: none; transition: border-color 0.15s, color 0.15s; }
+    .qn-pill:hover { border-color: var(--accent); color: var(--accent); }
 
-table.rt { width:100%; border-collapse:collapse; font-size:.88rem; margin:.8rem 0; }
-table.rt th { font-family:var(--mono); font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; background:var(--ink); color:var(--gold); padding:.55rem .8rem; text-align:left; }
-table.rt td { padding:.65rem .8rem; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:.85rem; }
-table.rt tr:nth-child(even) td { background:var(--cream); }
+    /* Animations */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    header            { animation: fadeUp 0.4s ease both; }
+    .lernbereich-list { animation: fadeUp 0.4s 0.1s ease both; }
+    .quicknav         { animation: fadeUp 0.4s 0.2s ease both; }
 
-input[type=text], select { font-family:var(--mono); font-size:.88rem; padding:.45rem .7rem; border:1px solid var(--line); border-radius:2px; background:white; color:var(--ink); outline:none; transition:border-color .2s; }
-input[type=text]:focus, select:focus { border-color:var(--accent2); }
-.btn { font-family:var(--mono); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; padding:.5rem 1.1rem; border:none; border-radius:2px; cursor:pointer; transition:opacity .15s,transform .1s; }
-.btn:active { transform:scale(.97); }
-.bp { background:var(--accent); color:white; }
-.bs { background:var(--accent2); color:white; }
-.bh { background:none; border:1px dashed var(--gold); color:var(--gold); font-family:var(--mono); font-size:.73rem; padding:.3rem .65rem; border-radius:2px; cursor:pointer; }
-
-.fb { font-family:var(--mono); font-size:.83rem; padding:.45rem .85rem; border-radius:2px; margin-top:.6rem; display:none; }
-.fb.show { display:inline-block; }
-.fb.ok  { background:#eaf7ee; color:var(--green); border:1px solid #b7dfca; }
-.fb.err { background:#fdecea; color:#c0392b; border:1px solid #f5c6c6; }
-
-.hint { background:#fffbea; border-left:3px solid var(--gold); padding:.65rem 1rem; font-size:.87rem; margin:.7rem 0; display:none; overflow-x:auto; }
-.hint.open { display:block; }
-
-.qopts { display:flex; flex-direction:column; gap:.45rem; margin-top:.7rem; }
-.qopt { background:white; border:1px solid var(--line); padding:.5rem .9rem; border-radius:2px; cursor:pointer; font-size:.92rem; text-align:left; transition:border-color .2s,background .2s; }
-.qopt:hover:not([disabled]) { border-color:var(--accent2); background:#f0f5fa; }
-.qopt.correct { border-color:var(--green)!important; background:#eaf7ee!important; color:var(--green)!important; }
-.qopt.wrong   { border-color:#c0392b!important; background:#fdecea!important; color:#c0392b!important; }
-
-.gmgrid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; margin:.8rem 0; }
-@media(max-width:550px){ .gmgrid { grid-template-columns:1fr; } }
-.gc-wrap { cursor:pointer; border:2px solid var(--line); border-radius:2px; transition:border-color .2s; background:white; }
-.gc-wrap:hover { border-color:var(--accent2); }
-.gc-wrap.sel { border-color:var(--accent); border-width:3px; }
-.gc-wrap.ok  { border-color:var(--green)!important; border-width:3px!important; cursor:default; }
-.gc-wrap.bad { border-color:#c0392b!important; border-width:3px!important; cursor:default; }
-.gc-wrap canvas { display:block; }
-.glabel { font-family:var(--mono); font-size:.75rem; text-align:center; padding:.25rem; color:#666; }
-
-.scorebar { display:flex; align-items:center; gap:1rem; background:var(--cream); border:1px solid var(--line); padding:.75rem 1.1rem; border-radius:2px; margin-bottom:1.8rem; font-family:var(--mono); font-size:.83rem; }
-.stars { font-size:1.15rem; letter-spacing:.1em; }
-
-.tag { display:inline-block; font-family:var(--mono); font-size:.7rem; padding:.18rem .55rem; border-radius:20px; margin-right:.3rem; margin-bottom:.3rem; }
-.tb { background:#dbeafe; color:#1e40af; }
-.tr { background:#fee2e2; color:#991b1b; }
-.tg { background:#d1fae5; color:#065f46; }
-
-.step { display:none; }
-.step.vis { display:block; animation:fu .3s ease; }
-
-/* Schritt-Kasten Formel */
-.step-formula {
-  background: var(--cream);
-  border-left: 3px solid var(--accent2);
-  padding: .6rem 1rem;
-  margin: .5rem 0;
-  border-radius: 0 2px 2px 0;
-  overflow-x: auto;
-}
-.result-box {
-  padding:.7rem 1rem;
-  background:#eaf7ee;
-  border-left:3px solid var(--green);
-  margin-top:.6rem;
-  border-radius: 0 2px 2px 0;
-  overflow-x: auto;
-}
-
-/* KaTeX display override für fbox */
-.fbox .katex-display { margin: 0; }
-.fbox .katex { font-size: 1.15em; }
-</style>
+    @media (max-width: 580px) {
+      .lb-card { grid-template-columns: 40px 1fr; }
+      .lb-meta { display: none; }
+      .lb-num { padding: 1.2rem 0 1.2rem 1rem; font-size: 1.4rem; }
+    }
+  </style>
 </head>
 <body>
+<div class="container">
 
-<header>
-  <div class="hinner">
-    <div class="klass">Mathematik · FOS · Differentialrechnung</div>
-    <h1>Vom <span>Differenzen-</span><br>zum Differentialquotienten</h1>
-    <p>Interaktives Arbeitsblatt · Ableitungsregeln · Grafisches Ableiten</p>
-  </div>
-</header>
+  <nav class="breadcrumb">
+    <a href="../../index.html">Lernportal</a>
+    <span>/</span>
+    <a href="../klasse11/index.html">Mathematik</a>
+    <span>/</span>
+    Jahrgangsstufe 11
+  </nav>
 
-<nav id="mainNav">
-  <button class="active" onclick="showTab('t1',this)">① Differenzenquotient</button>
-  <button onclick="showTab('t2',this)">② Grenzwert → f'</button>
-  <button onclick="showTab('t3',this)">③ Ableitungsregeln</button>
-  <button onclick="showTab('t4',this)">④ Aufgaben</button>
-  <button onclick="showTab('t5',this)">⑤ Grafisch Ableiten</button>
-</nav>
-
-<main>
-
-<!-- ══════════════════════ TAB 1 ══════════════════════ -->
-<div class="tab active" id="t1">
-  <h2><span class="num">01</span>Der Differenzenquotient</h2>
-  <p class="sub">Die mittlere Änderungsrate — Steigung der Sekante</p>
-
-  <div class="card theory">
-    <h3>Grundidee ($x_1$-Methode)</h3>
-    <p>Wir betrachten zwei Punkte $P(x_0 \mid f(x_0))$ und $Q(x_1 \mid f(x_1))$ auf dem Graphen.
-    Die Steigung der <strong>Sekante</strong> durch $P$ und $Q$ heißt <em>Differenzenquotient</em>:</p>
-    <div class="fbox">
-      $$\frac{\Delta y}{\Delta x} = \frac{f(x_1) - f(x_0)}{x_1 - x_0}$$
-    </div>
-    <p>Er beschreibt die <strong>mittlere Änderungsrate</strong> von $f$ im Intervall $[x_0;\, x_1]$.</p>
-  </div>
-
-  <div class="card ex">
-    <h3>Interaktive Sekante — $f(x) = x^2$</h3>
-    <p>Verschiebe $x_0$ und $x_1$, um die Sekante zu bewegen.</p>
-    <div class="srow">
-      <label>$x_0 =$</label>
-      <input type="range" id="sx0" min="-3" max="2.8" step="0.1" value="-1" oninput="drawSecant()">
-      <span class="vd" id="vx0">−1.0</span>
-    </div>
-    <div class="srow">
-      <label>$x_1 =$</label>
-      <input type="range" id="sx1" min="-2.8" max="3" step="0.1" value="2" oninput="drawSecant()">
-      <span class="vd" id="vx1">2.0</span>
-    </div>
-    <div class="cwrap" id="wSecant"><canvas id="cSecant"></canvas></div>
-    <div class="fbox-dyn" id="dqFormula">Differenzenquotient = …</div>
-  </div>
-
-  <div class="card ex">
-    <h3>Aufgabe: Differenzenquotient berechnen</h3>
-    <p>Gegeben: $f(x) = x^2$, $x_0 = 1$, $x_1 = 3$.<br>
-    Berechne den Differenzenquotienten $\dfrac{f(x_1)-f(x_0)}{x_1-x_0}$.</p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="dqIn" placeholder="Ergebnis (Zahl)">
-      <button class="btn bp" onclick="checkDQ()">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ht1')">💡 Hinweis</button>
-    </div>
-    <div class="hint" id="ht1">$f(1) = 1,\quad f(3) = 9 \quad\Rightarrow\quad \dfrac{9 - 1}{3 - 1} = \dfrac{8}{2} = 4$</div>
-    <div class="fb" id="fbDQ"></div>
-  </div>
-</div>
-
-<!-- ══════════════════════ TAB 2 ══════════════════════ -->
-<div class="tab" id="t2">
-  <h2><span class="num">02</span>Der Differentialquotient</h2>
-  <p class="sub">$x_1 \to x_0$ : aus der Sekante wird die Tangente</p>
-
-  <div class="card theory">
-    <h3>Definition ($x_1$-Schreibweise)</h3>
-    <p>Lässt man $x_1$ gegen $x_0$ streben, nähert sich die Sekante der <strong>Tangente</strong> in $P$.
-    Ihre Steigung heißt <em>Differentialquotient</em> (= Ableitung):</p>
-    <div class="fbox">
-      $$f'(x_0) \;=\; \lim_{x_1 \to x_0} \frac{f(x_1) - f(x_0)}{x_1 - x_0}$$
-    </div>
-  </div>
-
-  <div class="card ex">
-    <h3>Animation: $x_1 \to x_0$ bei $f(x)=x^2$, $x_0 = 1$</h3>
-    <p>Schiebe $x_1$ näher an $x_0 = 1$ heran — beobachte, wie die rote Sekante zur grünen Tangente wird.</p>
-    <div class="srow">
-      <label>$x_1 =$</label>
-      <input type="range" id="lx1" min="1.01" max="4" step="0.01" value="3.5" oninput="drawLimit()">
-      <span class="vd" id="vlx1">3.50</span>
-    </div>
-    <div class="cwrap" id="wLimit"><canvas id="cLimit"></canvas></div>
-    <div class="fbox-dyn" id="limResult">Differenzenquotient = …</div>
-    <p style="margin-top:.5rem;font-size:.88rem;color:#666;">➜ Für $x_1 \to 1$ gilt: Steigung $\to$ <strong>$f'(1) = 2$</strong> (grüne Tangente)</p>
-  </div>
-
-  <div class="card">
-    <h3>Wertetabelle: $f(x) = x^2$, $x_0 = 1$</h3>
-    <table class="rt">
-      <thead><tr><th>$x_1$</th><th>$f(x_1)$</th><th>$\dfrac{f(x_1)-f(x_0)}{x_1-x_0}$</th></tr></thead>
-      <tbody>
-        <tr><td>3</td><td>9</td><td>4</td></tr>
-        <tr><td>2</td><td>4</td><td>3</td></tr>
-        <tr><td>1,5</td><td>2,25</td><td>2,5</td></tr>
-        <tr><td>1,1</td><td>1,21</td><td>2,1</td></tr>
-        <tr><td>1,01</td><td>1,0201</td><td>2,01</td></tr>
-        <tr><td>1,001</td><td>1,002001</td><td>2,001</td></tr>
-        <tr><td style="color:var(--accent)">$\to 1$</td><td>$\to 1$</td><td style="color:var(--accent);font-weight:600">$\to 2$</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:.88rem;margin-top:.5rem;">Also: $f'(1) = 2$ — entspricht der Potenzregel: $(x^2)' = 2x$, eingesetzt $x_0 = 1$.</p>
-  </div>
-
-  <div class="card ex">
-    <h3>Schritt-für-Schritt: $f'(x)$ für $f(x) = x^2 + 3x$</h3>
-    <div id="stepBox">
-      <div class="step vis" id="s1">
-        <strong>Schritt 1:</strong> Bilde den Zähler $f(x_1) - f(x_0)$
-        <div class="step-formula">$(x_1^2 + 3x_1) - (x_0^2 + 3x_0)$</div>
-        Was erhältst du nach dem Ausmultiplizieren (3. Binomische Formel)?
-        <div style="display:flex;gap:.6rem;align-items:center;margin-top:.5rem;flex-wrap:wrap;">
-          <input type="text" id="s1in" placeholder="Ausdruck mit x₁ und x₀ ...">
-          <button class="btn bp" onclick="checkS1()">Weiter</button>
-          <button class="bh" onclick="toggleHint('hs1')">💡</button>
-        </div>
-        <div class="hint" id="hs1">
-          $(x_1^2 - x_0^2) + 3(x_1 - x_0) = (x_1 - x_0)(x_1 + x_0) + 3(x_1 - x_0)$
-        </div>
-        <div class="fb" id="fbs1"></div>
-      </div>
-      <div class="step" id="s2">
-        <strong>Schritt 2:</strong> Dividiere durch $(x_1 - x_0)$ — der Faktor kürzt sich heraus:
-        <div class="step-formula">
-          $\dfrac{(x_1-x_0)(x_1+x_0) + 3(x_1-x_0)}{x_1-x_0} = (x_1+x_0) + 3$
-        </div>
-        <button class="btn bs" style="margin-top:.6rem;" onclick="showS(3)">Nächster Schritt →</button>
-      </div>
-      <div class="step" id="s3">
-        <strong>Schritt 3:</strong> Grenzwert $x_1 \to x_0$ bilden:
-        <div class="step-formula">
-          $\displaystyle\lim_{x_1 \to x_0}(x_1 + x_0 + 3) = x_0 + x_0 + 3 = 2x_0 + 3$
-        </div>
-        <div class="result-box">
-          ✅ $f'(x) = 2x + 3$
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════ TAB 3 ══════════════════════ -->
-<div class="tab" id="t3">
-  <h2><span class="num">03</span>Ableitungsregeln</h2>
-  <p class="sub">Schnelles Ableiten ohne Grenzwert</p>
-
-  <div class="card theory">
-    <table class="rt">
-      <thead><tr><th>Regel</th><th>$f(x)$</th><th>$f'(x)$</th></tr></thead>
-      <tbody>
-        <tr><td>Potenzregel</td><td>$x^n$</td><td>$n \cdot x^{n-1}$</td></tr>
-        <tr><td>Konstantenregel</td><td>$c$</td><td>$0$</td></tr>
-        <tr><td>Faktorregel</td><td>$c \cdot f(x)$</td><td>$c \cdot f'(x)$</td></tr>
-        <tr><td>Summenregel</td><td>$f(x) + g(x)$</td><td>$f'(x) + g'(x)$</td></tr>
-        <tr><td>Produktregel</td><td>$f(x) \cdot g(x)$</td><td>$f'(x)\cdot g(x) + f(x)\cdot g'(x)$</td></tr>
-        <tr><td>Kettenregel</td><td>$g(f(x))$</td><td>$g'(f(x)) \cdot f'(x)$</td></tr>
-        <tr><td>Quotientenregel</td><td>$\dfrac{f(x)}{g(x)}$</td><td>$\dfrac{f'(x)\cdot g(x) - f(x)\cdot g'(x)}{[g(x)]^2}$</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card ex">
-    <h3>Ableitungsquiz</h3>
-    <div id="rqBox"></div>
-    <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-top:1rem;">
-      <button class="btn bp" onclick="nextRQ()">Nächste Frage →</button>
-      <span id="rqScore" style="font-family:var(--mono);font-size:.83rem;color:#888;">0 / 0 richtig</span>
-    </div>
-  </div>
-
-  <div class="card ex">
-    <h3>Schritt-für-Schritt Lösungen</h3>
-    <div style="display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin-bottom:.8rem;">
-      <select id="funcSel">
-        <option value="p1">f(x) = 3x⁴ − 2x² + 5</option>
-        <option value="p2">f(x) = x³ · (x + 1)</option>
-        <option value="c1">f(x) = (2x + 1)³</option>
-        <option value="c2">f(x) = √(x² + 1)</option>
-        <option value="q1">f(x) = (x² + 1) / (x − 1)</option>
-      </select>
-      <button class="btn bs" onclick="showDeriv()">Lösung anzeigen</button>
-    </div>
-    <div id="derivOut"></div>
-  </div>
-</div>
-
-<!-- ══════════════════════ TAB 4 ══════════════════════ -->
-<div class="tab" id="t4">
-  <h2><span class="num">04</span>Aufgaben</h2>
-  <p class="sub">Teste dein Wissen</p>
-
-  <div class="scorebar">
-    <span>Punkte:</span>
-    <span class="stars" id="starBar">☆☆☆☆☆</span>
-    <span id="scoreNum" style="font-family:var(--mono);color:#888;">0 / 5</span>
-  </div>
-
-  <div class="card ex">
-    <span class="tag tb">Differenzenquotient</span>
-    <h3>Aufgabe 1</h3>
-    <p>Berechne den Differenzenquotienten von $f(x) = 3x^2$ auf $[1;\, 1{,}5]$.<br>
-    Verwende die $x_1$-Methode: $x_0 = 1$, $x_1 = 1{,}5$.</p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a1" placeholder="Ergebnis">
-      <button class="btn bp" onclick="checkTask(1,['7.5','7,5'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah1')">💡</button>
-    </div>
-    <div class="hint" id="ah1">$f(1{,}5) = 3 \cdot 2{,}25 = 6{,}75 \qquad f(1) = 3$
-    $$\frac{6{,}75 - 3}{1{,}5 - 1} = \frac{3{,}75}{0{,}5} = 7{,}5$$</div>
-    <div class="fb" id="fb1"></div>
-  </div>
-
-  <div class="card ex">
-    <span class="tag tg">Ableitungsregeln</span>
-    <h3>Aufgabe 2</h3>
-    <p>Leite ab: $f(x) = 4x^3 - 6x + 2$</p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a2" placeholder="f'(x) = ...">
-      <button class="btn bp" onclick="checkTask(2,['12x^2-6','12x²-6','12x2-6'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah2')">💡</button>
-    </div>
-    <div class="hint" id="ah2">Potenzregel: $4 \cdot 3x^2 = 12x^2$ &ensp;|&ensp; $-6x \to -6$ &ensp;|&ensp; Konstante $2 \to 0$</div>
-    <div class="fb" id="fb2"></div>
-  </div>
-
-  <div class="card ex">
-    <span class="tag tr">Kettenregel</span>
-    <h3>Aufgabe 3</h3>
-    <p>Leite ab: $f(x) = (x^2 - 1)^4$</p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a3" placeholder="f'(x) = ...">
-      <button class="btn bp" onclick="checkTask(3,['8x(x^2-1)^3','8x(x²-1)³','8x*(x^2-1)^3'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah3')">💡</button>
-    </div>
-    <div class="hint" id="ah3">Äußere Funktion: $u^4 \to 4u^3$ &ensp;|&ensp; Innere: $u = x^2-1 \to u' = 2x$
-    $$f'(x) = 4(x^2-1)^3 \cdot 2x = 8x(x^2-1)^3$$</div>
-    <div class="fb" id="fb3"></div>
-  </div>
-
-  <div class="card ex">
-    <span class="tag tg">Produktregel</span>
-    <h3>Aufgabe 4</h3>
-    <p>Leite ab: $f(x) = x^2 \cdot (x - 3)$</p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a4" placeholder="f'(x) = ...">
-      <button class="btn bp" onclick="checkTask(4,['3x^2-6x','3x²-6x'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah4')">💡</button>
-    </div>
-    <div class="hint" id="ah4">Produktregel: $(x^2)' \cdot (x-3) + x^2 \cdot (x-3)'$
-    $= 2x(x-3) + x^2 \cdot 1 = 2x^2 - 6x + x^2 = 3x^2 - 6x$</div>
-    <div class="fb" id="fb4"></div>
-  </div>
-
-  <div class="card ex">
-    <span class="tag tb">Tangentensteigung</span>
-    <h3>Aufgabe 5</h3>
-    <p>Bestimme die Steigung der Tangente an $f(x) = x^3 - 2x$ im Punkt $x_0 = 2$.</p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a5" placeholder="m = ...">
-      <button class="btn bp" onclick="checkTask(5,['10'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah5')">💡</button>
-    </div>
-    <div class="hint" id="ah5">$f'(x) = 3x^2 - 2 \qquad\Rightarrow\qquad f'(2) = 3 \cdot 4 - 2 = 10$</div>
-    <div class="fb" id="fb5"></div>
-  </div>
-</div>
-
-<!-- ══════════════════════ TAB 5 ══════════════════════ -->
-<div class="tab" id="t5">
-  <h2><span class="num">05</span>Grafisch Ableiten</h2>
-  <p class="sub">Ordne dem Graphen von $f$ den Graphen von $f'$ zu</p>
-
-  <div class="card theory">
-    <h3>Merkhilfen</h3>
-    <p style="line-height:2;">
-      <span class="tag tg">$f$ steigt</span> $\Rightarrow$ $f' > 0$ (Graph <em>über</em> der $x$-Achse)&ensp;
-      <span class="tag tr">$f$ fällt</span> $\Rightarrow$ $f' < 0$ (Graph <em>unter</em> der $x$-Achse)<br>
-      <span class="tag tb">Extremum von $f$</span> $\Rightarrow$ $f'$ hat dort eine <em>Nullstelle</em>&ensp;
-      <span class="tag tb">Wendepunkt von $f$</span> $\Rightarrow$ $f'$ hat dort ein <em>Extremum</em>
+  <header>
+    <div class="fach-tag">∑ Mathematik · Jahrgangsstufe 11</div>
+    <h1>Lernbereiche<br><em>Übersicht</em></h1>
+    <p class="header-meta">
+      Alle 5 Lernbereiche gemäß Fachlehrplan · Mathematik 11 (ABU, G, S, W, GH, IW) · gültig ab 2017/18.
+      Klicke auf einen Lernbereich, um zu den Materialien und Aufgaben zu gelangen.
     </p>
+    <div class="header-badges">
+      <span class="badge highlight">5 Lernbereiche</span>
+      <span class="badge">ca. 84 Std. gesamt</span>
+      <span class="badge">Stochastik</span>
+      <span class="badge">Analysis</span>
+      <span class="badge">Kombinatorik</span>
+    </div>
+  </header>
+
+  <p class="section-label">Lernbereiche</p>
+
+  <div class="lernbereich-list">
+
+    <!-- LB 1 -->
+    <a class="lb-card" href="m11-1-ganzrationale-funktionen.html">
+      <div class="lb-num">1</div>
+      <div class="lb-content">
+        <div class="lb-id">M 11 · Lernbereich 1</div>
+        <div class="lb-title">Ganzrationale Funktionen</div>
+        <div class="lb-desc">
+          Eigenschaften linearer und quadratischer Funktionen, Nullstellen (Polynomdivision, Substitution), Grenzverhalten, Symmetrie, Graphen skizzieren, Modellierung mit ganzrationalen Funktionen, Aufstellung von Funktionstermen.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Nullstellen</span>
+          <span class="lb-tag">Polynomdivision</span>
+          <span class="lb-tag">Grenzverhalten</span>
+          <span class="lb-tag">Symmetrie</span>
+          <span class="lb-tag">Modellierung</span>
+          <span class="lb-tag">Funktionenscharen</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 32 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- LB 2 -->
+    <a class="lb-card" href="m11-2-differenzialrechnung.html">
+      <div class="lb-num">2</div>
+      <div class="lb-content">
+        <div class="lb-id">M 11 · Lernbereich 2</div>
+        <div class="lb-title">Differenzialrechnung bei ganzrationalen Funktionen</div>
+        <div class="lb-desc">
+          Differenzenquotient und Sekantensteigung, Differenzialquotient und Tangentensteigung, lokale Änderungsrate, Grenzwertbegriff, lokale Differenzierbarkeit, Monotonie- und Krümmungsverhalten, Extrempunkte und Wendepunkte.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Differenzenquotient</span>
+          <span class="lb-tag">Ableitung</span>
+          <span class="lb-tag">Monotonie</span>
+          <span class="lb-tag">Extrempunkte</span>
+          <span class="lb-tag">Wendepunkte</span>
+          <span class="lb-tag">Krümmung</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 24 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- LB 3 -->
+    <a class="lb-card" href="m11-3-zufallsexperiment.html">
+      <div class="lb-num">3</div>
+      <div class="lb-content">
+        <div class="lb-id">M 11 · Lernbereich 3</div>
+        <div class="lb-title">Zufallsexperiment und Ereignis</div>
+        <div class="lb-desc">
+          Zufallsexperimente erkennen und dokumentieren, Baumdiagramme, Ergebnisräume, Urnenmodell, Ereignisse und Gegenereignisse, Verknüpfungen (Venn-Diagramme), Gesetze von de Morgan, sichere/mögliche/unmögliche Ereignisse.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Baumdiagramm</span>
+          <span class="lb-tag">Ergebnisraum</span>
+          <span class="lb-tag">Urnenmodell</span>
+          <span class="lb-tag">Venn-Diagramm</span>
+          <span class="lb-tag">de Morgan</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 8 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- LB 4 -->
+    <a class="lb-card" href="m11-4-wahrscheinlichkeit.html">
+      <div class="lb-num">4</div>
+      <div class="lb-content">
+        <div class="lb-id">M 11 · Lernbereich 4</div>
+        <div class="lb-title">Relative Häufigkeit und Wahrscheinlichkeit</div>
+        <div class="lb-desc">
+          Absolute und relative Häufigkeiten, Satz von Sylvester, Vierfeldertafel, empirisches Gesetz der großen Zahlen, Laplace-Experimente, Pfadregeln bei mehrstufigen Zufallsexperimenten, bedingte Wahrscheinlichkeit, stochastische Unabhängigkeit.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Häufigkeiten</span>
+          <span class="lb-tag">Laplace</span>
+          <span class="lb-tag">Pfadregeln</span>
+          <span class="lb-tag">Bedingte W'keit</span>
+          <span class="lb-tag">Unabhängigkeit</span>
+          <span class="lb-tag">Vierfeldertafel</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 14 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- LB 5 -->
+    <a class="lb-card" href="m11-5-kombinatorik.html">
+      <div class="lb-num">5</div>
+      <div class="lb-content">
+        <div class="lb-id">M 11 · Lernbereich 5</div>
+        <div class="lb-title">Grundlagen der Kombinatorik</div>
+        <div class="lb-desc">
+          Allgemeines Zählprinzip, k-Tupel und Belegungsmöglichkeiten, Anzahl von Passwörtern, Ziehen ohne Zurücklegen und ohne Reihenfolge (Kombinationen), Permutationen (Buchstaben eines Wortes).
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Zählprinzip</span>
+          <span class="lb-tag">Kombinationen</span>
+          <span class="lb-tag">Permutationen</span>
+          <span class="lb-tag">k-Tupel</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 6 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </a>
+
   </div>
 
-  <div id="gmGame"></div>
-
-  <div style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-top:1rem;">
-    <button class="btn bp" id="btnNext" onclick="nextGP()">Nächste Aufgabe →</button>
-    <button class="btn bs" id="btnSolve" onclick="solveGP()">Lösung zeigen</button>
-    <span id="gmScore" style="font-family:var(--mono);font-size:.83rem;color:#888;"></span>
+  <p class="section-label">Schnellnavigation</p>
+  <div class="quicknav">
+    <a class="qn-pill" href="m11-1-ganzrationale-funktionen.html">LB 1 · Ganzrationale Funktionen</a>
+    <a class="qn-pill" href="m11-2-differenzialrechnung.html">LB 2 · Differenzialrechnung</a>
+    <a class="qn-pill" href="m11-3-zufallsexperiment.html">LB 3 · Zufallsexperiment</a>
+    <a class="qn-pill" href="m11-4-wahrscheinlichkeit.html">LB 4 · Wahrscheinlichkeit</a>
+    <a class="qn-pill" href="m11-5-kombinatorik.html">LB 5 · Kombinatorik</a>
+    <a class="qn-pill" href="../../uebungen/mathematik/index.html">📐 Übungsaufgaben</a>
+    <a class="qn-pill" href="../klasse12/index.html">→ Jahrgangsstufe 12</a>
+    <a class="qn-pill" href="../../index.html">← Startseite</a>
   </div>
+
 </div>
-
-</main>
-
-<script>
-// ══════════ KaTeX Helper ══════════
-function renderLatex(el) {
-  if (window.renderMathInElement) {
-    renderMathInElement(el, {
-      delimiters: [
-        {left:'$$', right:'$$', display:true},
-        {left:'$',  right:'$',  display:false}
-      ],
-      throwOnError: false
-    });
-  }
-}
-
-// ══════════ TAB SWITCHING ══════════
-function showTab(id, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-  setTimeout(() => {
-    if (id === 't1') drawSecant();
-    if (id === 't2') drawLimit();
-    if (id === 't5') renderGM();
-  }, 40);
-}
-
-function toggleHint(id) {
-  const el = document.getElementById(id);
-  el.classList.toggle('open');
-  if (el.classList.contains('open')) renderLatex(el);
-}
-
-// ══════════ CANVAS HELPERS ══════════
-function setupCanvas(canvasId, wrapperId) {
-  const canvas = document.getElementById(canvasId);
-  const wrap   = document.getElementById(wrapperId);
-  const dpr    = window.devicePixelRatio || 1;
-  const w      = wrap.clientWidth;
-  const h      = wrap.clientHeight;
-  canvas.width  = w * dpr;
-  canvas.height = h * dpr;
-  canvas.style.width  = w + 'px';
-  canvas.style.height = h + 'px';
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-  return { ctx, w, h };
-}
-
-function drawGrid(ctx, w, h, xMin, xMax, yMin, yMax) {
-  const toX = x => (x - xMin) / (xMax - xMin) * w;
-  const toY = y => h - (y - yMin) / (yMax - yMin) * h;
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0, 0, w, h);
-  ctx.strokeStyle = '#ece8e0';
-  ctx.lineWidth = 1;
-  for (let gx = Math.ceil(xMin); gx <= xMax; gx++) {
-    ctx.beginPath(); ctx.moveTo(toX(gx), 0); ctx.lineTo(toX(gx), h); ctx.stroke();
-  }
-  for (let gy = Math.ceil(yMin); gy <= yMax; gy++) {
-    ctx.beginPath(); ctx.moveTo(0, toY(gy)); ctx.lineTo(w, toY(gy)); ctx.stroke();
-  }
-  ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.5;
-  if (yMin <= 0 && 0 <= yMax) { ctx.beginPath(); ctx.moveTo(0, toY(0)); ctx.lineTo(w, toY(0)); ctx.stroke(); }
-  if (xMin <= 0 && 0 <= xMax) { ctx.beginPath(); ctx.moveTo(toX(0), 0); ctx.lineTo(toX(0), h); ctx.stroke(); }
-  ctx.fillStyle = '#999'; ctx.font = '10px DM Mono, monospace';
-  for (let gx = Math.ceil(xMin); gx <= xMax; gx++) {
-    if (gx === 0) continue;
-    ctx.fillText(gx, toX(gx) + 2, toY(0) + 12);
-  }
-  for (let gy = Math.ceil(yMin); gy <= yMax; gy++) {
-    if (gy === 0) continue;
-    ctx.fillText(gy, toX(0) + 3, toY(gy) - 2);
-  }
-  return { toX, toY };
-}
-
-function plotFn(ctx, fn, toX, toY, xMin, xMax, color, lw, dash) {
-  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5;
-  ctx.setLineDash(dash || []);
-  ctx.beginPath();
-  let first = true;
-  for (let i = 0; i <= 800; i++) {
-    const x = xMin + (xMax - xMin) * i / 800;
-    let y; try { y = fn(x); } catch(e) { first = true; continue; }
-    if (!isFinite(y) || Math.abs(y) > 1e4) { first = true; continue; }
-    if (first) { ctx.moveTo(toX(x), toY(y)); first = false; } else ctx.lineTo(toX(x), toY(y));
-  }
-  ctx.stroke(); ctx.setLineDash([]);
-}
-
-function dot(ctx, toX, toY, x, y, color) {
-  ctx.beginPath(); ctx.arc(toX(x), toY(y), 5, 0, 2*Math.PI);
-  ctx.fillStyle = color; ctx.fill();
-}
-
-// ══════════ TAB 1: SECANT ══════════
-function drawSecant() {
-  const x0 = parseFloat(document.getElementById('sx0').value);
-  const x1 = parseFloat(document.getElementById('sx1').value);
-  document.getElementById('vx0').textContent = x0.toFixed(1);
-  document.getElementById('vx1').textContent = x1.toFixed(1);
-  const { ctx, w, h } = setupCanvas('cSecant', 'wSecant');
-  const { toX, toY } = drawGrid(ctx, w, h, -3.5, 3.5, -1, 10);
-  const f = x => x * x;
-  plotFn(ctx, f, toX, toY, -3.5, 3.5, '#2a6496', 2.5);
-  if (Math.abs(x1 - x0) > 0.05) {
-    const slope = (f(x1) - f(x0)) / (x1 - x0);
-    plotFn(ctx, x => f(x0) + slope * (x - x0), toX, toY, -3.5, 3.5, '#c8400a', 2, [8,4]);
-    dot(ctx, toX, toY, x0, f(x0), '#c8400a');
-    dot(ctx, toX, toY, x1, f(x1), '#c8400a');
-    ctx.font = 'bold 12px DM Mono, monospace'; ctx.fillStyle = '#c8400a';
-    ctx.fillText('P(x\u2080)', toX(x0)+7, toY(f(x0))-6);
-    ctx.fillText('Q(x\u2081)', toX(x1)+7, toY(f(x1))-6);
-    document.getElementById('dqFormula').textContent =
-      '(f(x\u2081)\u2212f(x\u2080)) / (x\u2081\u2212x\u2080)  =  (' +
-      f(x1).toFixed(3) + ' \u2212 ' + f(x0).toFixed(3) + ') / (' +
-      x1.toFixed(2) + ' \u2212 ' + x0.toFixed(2) + ')  =  ' + slope.toFixed(4);
-  } else {
-    document.getElementById('dqFormula').textContent = 'x\u2081 zu nah an x\u2080 \u2014 bitte weiter auseinanderziehen.';
-  }
-}
-
-// ══════════ TAB 1: DQ CHECK ══════════
-function checkDQ() {
-  const v = parseFloat(document.getElementById('dqIn').value.replace(',','.'));
-  showFB('fbDQ', Math.abs(v - 4) < 0.01, 'f(3)=9, f(1)=1 \u2192 (9\u22121)/(3\u22121) = 8/2 = 4');
-}
-
-// ══════════ TAB 2: LIMIT ══════════
-function drawLimit() {
-  const x1 = parseFloat(document.getElementById('lx1').value);
-  document.getElementById('vlx1').textContent = x1.toFixed(2);
-  const { ctx, w, h } = setupCanvas('cLimit', 'wLimit');
-  const { toX, toY } = drawGrid(ctx, w, h, -0.5, 4.5, -1, 12);
-  const f = x => x*x; const x0 = 1;
-  plotFn(ctx, f, toX, toY, -0.5, 4.5, '#2a6496', 2.5);
-  plotFn(ctx, x => f(x0) + 2*(x-x0), toX, toY, -0.5, 4.5, '#2e7d4f', 2, [5,3]);
-  if (Math.abs(x1 - x0) > 0.001) {
-    const slope = (f(x1)-f(x0))/(x1-x0);
-    plotFn(ctx, x => f(x0)+slope*(x-x0), toX, toY, -0.5, 4.5, '#c8400a', 2, [7,4]);
-    dot(ctx, toX, toY, x0, f(x0), '#c8400a');
-    dot(ctx, toX, toY, x1, f(x1), '#c8400a');
-    document.getElementById('limResult').textContent =
-      'Differenzenquotient = ' + slope.toFixed(6) +
-      (Math.abs(slope-2) < 0.005 ? '  \u2248 2 \u2713  (Tangente erreicht!)' : '');
-  }
-}
-
-// ══════════ TAB 2: STEPS ══════════
-function checkS1() {
-  const v = document.getElementById('s1in').value.trim();
-  const ok = v.length > 2;
-  showFB('fbs1', ok, 'Bitte einen Ausdruck eingeben.');
-  if (ok) showS(2);
-}
-function showS(n) {
-  const el = document.getElementById('s'+n);
-  if (el) {
-    el.classList.add('vis');
-    renderLatex(el);
-    el.scrollIntoView({behavior:'smooth', block:'nearest'});
-  }
-}
-
-// ══════════ TAB 3: QUIZ ══════════
-// Questions: q = display text, correct = answer, opts = choices
-const rqData = [
-  { q:'$f(x) = x^5$',
-    correct:'$5x^4$',
-    opts:['$5x^4$','$x^4$','$4x^5$','$5x^6$'] },
-  { q:'$f(x) = 3x^2$',
-    correct:'$6x$',
-    opts:['$3x$','$6x$','$6x^2$','$2x$'] },
-  { q:'$f(x) = x^3 + 4x - 7$',
-    correct:'$3x^2 + 4$',
-    opts:['$3x^2 + 4x$','$3x^2 + 4$','$3x^2 - 7$','$x^2 + 4$'] },
-  { q:'$f(x) = (x+2)^3$',
-    correct:'$3(x+2)^2$',
-    opts:['$3x^2$','$(x+2)^2$','$3(x+2)^2$','$6(x+2)^2$'] },
-  { q:'$f(x) = x^{-2}$',
-    correct:'$-2x^{-3}$',
-    opts:['$-2x^{-3}$','$2x^{-1}$','$-x^{-3}$','$-2x^3$'] },
-  { q:'$f(x) = \\sqrt{x}$',
-    correct:'$\\dfrac{1}{2\\sqrt{x}}$',
-    opts:['$2\\sqrt{x}$','$\\dfrac{1}{2\\sqrt{x}}$','$\\dfrac{\\sqrt{x}}{2}$','$x^{-1/2}$'] },
-  { q:'$f(x) = x \\cdot e^x$',
-    correct:'$e^x + x \\cdot e^x$',
-    opts:['$e^x$','$x \\cdot e^x$','$e^x + x \\cdot e^x$','$2e^x$'] },
-  { q:'$f(x) = (3x^2+1)^5$',
-    correct:'$10x \\cdot (3x^2+1)^4$',
-    opts:['$5(3x^2+1)^4$','$15x \\cdot (3x^2+1)^4$','$10x \\cdot (3x^2+1)^4$','$30x \\cdot (3x^2+1)^4$'] },
-];
-let rqIdx=0, rqC=0, rqT=0;
-
-function renderRQ() {
-  const q = rqData[rqIdx % rqData.length];
-  const box = document.getElementById('rqBox');
-  box.innerHTML =
-    '<p style="font-size:1rem;margin-bottom:.6rem;">Leite ab: <strong>' + q.q + '</strong></p>' +
-    '<div class="qopts">' +
-    q.opts.map((o,i) =>
-      '<button class="qopt" id="rqopt'+i+'" onclick="ansRQ('+i+')">' + o + '</button>'
-    ).join('') +
-    '</div><div class="fb" id="rqFB"></div>';
-  // store correct index
-  box._correctOpt = q.correct;
-  box._opts = q.opts;
-  renderLatex(box);
-}
-
-function ansRQ(chosen) {
-  const box = document.getElementById('rqBox');
-  const correct = box._correctOpt;
-  const opts    = box._opts;
-  rqT++;
-  const ok = opts[chosen].replace(/\s/g,'') === correct.replace(/\s/g,'');
-  if (ok) rqC++;
-  opts.forEach((o,i) => {
-    const btn = document.getElementById('rqopt'+i);
-    btn.disabled = true;
-    if (o.replace(/\s/g,'') === correct.replace(/\s/g,'')) btn.classList.add('correct');
-    else if (i === chosen && !ok) btn.classList.add('wrong');
-  });
-  document.getElementById('rqScore').textContent = rqC + ' / ' + rqT + ' richtig';
-  const fb = document.getElementById('rqFB');
-  fb.textContent = ok ? '\u2713 Korrekt!' : '\u2717 Richtig w\xe4re: ' + correct;
-  fb.className = 'fb show ' + (ok ? 'ok' : 'err');
-  renderLatex(fb);
-}
-
-function nextRQ() { rqIdx++; renderRQ(); }
-
-// ══════════ TAB 3: DERIV STEPS ══════════
-const derivSteps = {
-  p1:{ title:'$f(x) = 3x^4 - 2x^2 + 5$',
-       steps:[
-         'Summenregel: jeden Term einzeln ableiten',
-         '$3x^4 \\;\\to\\; 12x^3$ &ensp;(Potenz- & Faktorregel)',
-         '$-2x^2 \\;\\to\\; -4x$',
-         '$5 \\;\\to\\; 0$ &ensp;(Konstantenregel)'
-       ],
-       res:'$f\'(x) = 12x^3 - 4x$' },
-  p2:{ title:'$f(x) = x^3 \\cdot (x+1)$',
-       steps:[
-         'Ausmultiplizieren: $x^4 + x^3$',
-         'Potenzregel: $4x^3 + 3x^2$'
-       ],
-       res:'$f\'(x) = 4x^3 + 3x^2$' },
-  c1:{ title:'$f(x) = (2x+1)^3$',
-       steps:[
-         'Kettenregel: $[g(u)]\'= g\'(u) \\cdot u\'$',
-         'Äußere Funktion: $u^3 \\;\\to\\; 3u^2$',
-         'Innere Funktion: $(2x+1)\' = 2$',
-         'Zusammen: $3(2x+1)^2 \\cdot 2$'
-       ],
-       res:'$f\'(x) = 6(2x+1)^2$' },
-  c2:{ title:'$f(x) = \\sqrt{x^2+1} = (x^2+1)^{1/2}$',
-       steps:[
-         'Kettenregel',
-         'Äußere Funktion: $\\tfrac{1}{2}\\,u^{-1/2}$',
-         'Innere Funktion: $(x^2+1)\' = 2x$',
-         'Zusammen: $\\tfrac{1}{2}(x^2+1)^{-1/2} \\cdot 2x$'
-       ],
-       res:'$f\'(x) = \\dfrac{x}{\\sqrt{x^2+1}}$' },
-  q1:{ title:'$f(x) = \\dfrac{x^2+1}{x-1}$',
-       steps:[
-         'Quotientenregel: $\\left(\\dfrac{u}{v}\\right)\' = \\dfrac{u\'v - uv\'}{v^2}$',
-         '$u = x^2+1 \\;\\Rightarrow\\; u\' = 2x$',
-         '$v = x-1 \\;\\Rightarrow\\; v\' = 1$',
-         'Zähler: $2x(x-1)-(x^2+1) = x^2-2x-1$'
-       ],
-       res:'$f\'(x) = \\dfrac{x^2-2x-1}{(x-1)^2}$' },
-};
-
-function showDeriv() {
-  const d = derivSteps[document.getElementById('funcSel').value];
-  const el = document.getElementById('derivOut');
-  el.innerHTML =
-    '<div class="card theory" style="margin-top:0;">' +
-    '<h3>' + d.title + '</h3>' +
-    d.steps.map((s,i) =>
-      '<p style="margin:.4rem 0;"><span style="font-family:var(--mono);color:var(--accent);margin-right:.4rem;">' +
-      (i+1) + '.</span>' + s + '</p>'
-    ).join('') +
-    '<div class="result-box">✅ ' + d.res + '</div>' +
-    '</div>';
-  renderLatex(el);
-}
-
-// ══════════ TAB 4: TASKS ══════════
-let taskDone = new Set(), taskScore = 0;
-const taskSol = ['','7,5','12x²\u22126','8x(x²\u22121)³','3x²\u22126x','10'];
-
-function checkTask(n, correct) {
-  if (taskDone.has(n)) return;
-  const raw = document.getElementById('a'+n).value.trim().replace(/\s/g,'').toLowerCase();
-  const ok  = correct.map(c => c.toLowerCase().replace(/\s/g,'')).includes(raw);
-  showFB('fb'+n, ok, 'L\xf6sung: ' + taskSol[n]);
-  if (ok) {
-    taskDone.add(n); taskScore++;
-    document.getElementById('scoreNum').textContent = taskScore + ' / 5';
-    document.getElementById('starBar').textContent  = '\u2605'.repeat(taskScore) + '\u2606'.repeat(5-taskScore);
-  }
-}
-
-// ══════════ GENERIC FEEDBACK ══════════
-function showFB(id, ok, hint) {
-  const el = document.getElementById(id);
-  el.textContent = ok ? '\u2713 Richtig!' : '\u2717 Nicht ganz. ' + hint;
-  el.className = 'fb show ' + (ok ? 'ok' : 'err');
-}
-
-// ══════════ TAB 5: GRAPH MATCHING ══════════
-const gpData = [
-  { name:'Parabel',  desc_f:'f(x) = x\u00b2 \u2212 2',
-    f:x=>x*x-2, df:x=>2*x, desc_df:"f'(x) = 2x",
-    wrong:[{fn:x=>x*x,lbl:'x\u00b2'},{fn:x=>-2*x,lbl:'\u22122x'},{fn:x=>2*x+1,lbl:'2x+1'}] },
-  { name:'Kubisch',  desc_f:'f(x) = x\u00b3/3 \u2212 x',
-    f:x=>x*x*x/3-x, df:x=>x*x-1, desc_df:"f'(x) = x\u00b2 \u2212 1",
-    wrong:[{fn:x=>2*x,lbl:'2x'},{fn:x=>x*x+1,lbl:'x\u00b2+1'},{fn:x=>-x*x+1,lbl:'\u2212x\u00b2+1'}] },
-  { name:'Betrag',   desc_f:'f(x) = |x|',
-    f:x=>Math.abs(x), df:x=>x>0?1:x<0?-1:NaN, desc_df:"f'(x) = sgn(x)",
-    wrong:[{fn:x=>x*x,lbl:'x\u00b2'},{fn:x=>-1+0*x,lbl:'\u22121'},{fn:x=>2*Math.abs(x),lbl:'2|x|'}] },
-  { name:'Sinus',    desc_f:'f(x) = sin(x)',
-    f:x=>Math.sin(x), df:x=>Math.cos(x), desc_df:"f'(x) = cos(x)",
-    wrong:[{fn:x=>-Math.sin(x),lbl:'\u2212sin(x)'},{fn:x=>Math.sin(2*x),lbl:'sin(2x)'},{fn:x=>Math.cos(2*x),lbl:'cos(2x)'}] },
-  { name:'Parabel mit Wendepunkt', desc_f:'f(x) = x\u00b3 \u2212 3x',
-    f:x=>x*x*x-3*x, df:x=>3*x*x-3, desc_df:"f'(x) = 3x\u00b2 \u2212 3",
-    wrong:[{fn:x=>3*x*x,lbl:'3x\u00b2'},{fn:x=>3*x*x+3,lbl:'3x\u00b2+3'},{fn:x=>-3*x*x+3,lbl:'\u22123x\u00b2+3'}] },
-];
-let gpIdx=0, gpOk=0, gpDone=0, gpSolved=false, gmSel=null;
-
-function renderGM() {
-  const pair = gpData[gpIdx % gpData.length];
-  const opts = [{fn:pair.df,lbl:pair.desc_df,correct:true},...pair.wrong.map(w=>({fn:w.fn,lbl:w.lbl,correct:false}))];
-  for (let i=opts.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [opts[i],opts[j]]=[opts[j],opts[i]]; }
-  window._gmOpts = opts;
-  gpSolved=false; gmSel=null;
-  document.getElementById('btnSolve').disabled=false;
-
-  document.getElementById('gmGame').innerHTML =
-    '<div class="card ex">' +
-    '<h3>Aufgabe: ' + pair.name + ' \u2014 ' + pair.desc_f + '</h3>' +
-    '<p style="font-size:.88rem;margin-bottom:.7rem;">Welcher Graph unten ist der Graph von $f\'$? ($f$ ist blau dargestellt)</p>' +
-    '<div style="width:100%;height:220px;border:1px solid var(--line);background:white;margin-bottom:.7rem;position:relative;" id="wGMsrc">' +
-    '<canvas id="gmSource" style="position:absolute;top:0;left:0;"></canvas></div>' +
-    '<p style="font-family:var(--mono);font-size:.75rem;color:#888;margin-bottom:.5rem;">W\xe4hle den Graphen von $f\'$:</p>' +
-    '<div class="gmgrid">' +
-    opts.map((o,i) =>
-      '<div>' +
-      '<div class="gc-wrap" id="gco'+i+'" onclick="selectGC('+i+')" style="height:150px;position:relative;">' +
-      '<canvas id="gmc'+i+'" style="position:absolute;top:0;left:0;"></canvas>' +
-      '</div>' +
-      '<div class="glabel">Option ' + String.fromCharCode(65+i) + '</div>' +
-      '</div>'
-    ).join('') +
-    '</div></div>';
-
-  renderLatex(document.getElementById('gmGame'));
-
-  requestAnimationFrame(() => {
-    drawMini('gmSource','wGMsrc',pair.f,'#2a6496',pair.desc_f);
-    opts.forEach((o,i) => drawMini('gmc'+i,'gco'+i,o.fn,'#c8400a',o.lbl));
-  });
-  document.getElementById('gmScore').textContent = gpDone>0 ? (gpOk+' / '+gpDone+' richtig') : '';
-}
-
-function drawMini(canvasId, wrapperId, fn, color, label) {
-  const canvas=document.getElementById(canvasId);
-  const wrap=document.getElementById(wrapperId);
-  if (!canvas||!wrap) return;
-  const dpr=window.devicePixelRatio||1;
-  const w=wrap.clientWidth||260, h=wrap.clientHeight||150;
-  canvas.width=w*dpr; canvas.height=h*dpr;
-  canvas.style.width=w+'px'; canvas.style.height=h+'px';
-  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
-  const {toX,toY}=drawGrid(ctx,w,h,-3.5,3.5,-4,4);
-  plotFn(ctx,fn,toX,toY,-3.5,3.5,color,2.2);
-  ctx.font='bold 11px DM Mono, monospace'; ctx.fillStyle=color;
-  ctx.fillText(label,6,16);
-}
-
-function selectGC(i) {
-  if (gpSolved) return;
-  document.querySelectorAll('.gc-wrap').forEach(w=>w.classList.remove('sel'));
-  document.getElementById('gco'+i).classList.add('sel');
-  gmSel=i;
-}
-
-function solveGP() {
-  if (gmSel===null) { alert('Bitte zuerst eine Option ausw\xe4hlen!'); return; }
-  if (gpSolved) return;
-  gpSolved=true; gpDone++;
-  const ok=window._gmOpts[gmSel].correct;
-  if (ok) gpOk++;
-  window._gmOpts.forEach((o,i) => {
-    const el=document.getElementById('gco'+i); el.onclick=null;
-    if (o.correct) el.classList.add('ok');
-    else if (i===gmSel&&!ok) el.classList.add('bad');
-  });
-  document.getElementById('gmScore').textContent=gpOk+' / '+gpDone+' richtig';
-  document.getElementById('btnSolve').disabled=true;
-}
-
-function nextGP() { gpIdx++; renderGM(); }
-
-// ══════════ INIT ══════════
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    drawSecant();
-    drawLimit();
-    renderRQ();
-    renderGM();
-  }, 200);
-});
-
-window.addEventListener('resize', () => {
-  const id = document.querySelector('.tab.active').id;
-  if (id==='t1') drawSecant();
-  if (id==='t2') drawLimit();
-  if (id==='t5') renderGM();
-});
-</script>
 </body>
 </html>
