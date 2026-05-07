@@ -1,1 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathematik – Übungen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
+  --accent:#c8400a; --accent2:#2a6496; --gold:#c9961a; --green:#2e7d4f; --line:#d4cfc6;
+  --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7;}
 
+header{background:var(--ink);color:var(--paper);padding:2.8rem 2rem 2.2rem;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-60px;right:-80px;width:300px;height:300px;border-radius:50%;background:var(--accent);opacity:.1;}
+header::after{content:'';position:absolute;bottom:-40px;left:8%;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.08;}
+.hinner{max-width:900px;margin:0 auto;position:relative;}
+.klass{font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem;}
+header h1{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:900;line-height:1.1;margin-bottom:.6rem;}
+header p{font-size:.95rem;color:#a09888;max-width:560px;}
+
+main{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+h2{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;margin:2.2rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--line);}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
+.card{background:white;border:1px solid var(--line);border-radius:2px;padding:1.4rem 1.5rem;
+  text-decoration:none;color:var(--ink);display:block;transition:box-shadow .2s,transform .15s;
+  border-left:4px solid var(--accent);}
+.card:hover{box-shadow:0 4px 14px rgba(0,0,0,.09);transform:translateY(-2px);}
+.card-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;}
+.card h3{font-family:var(--serif);font-size:1.1rem;font-weight:700;margin-bottom:.3rem;}
+.card p{font-size:.86rem;color:#888;line-height:1.55;}
+.card-meta{margin-top:.9rem;font-family:var(--mono);font-size:.75rem;color:var(--line);display:flex;gap:1rem;}
+.card-meta span{color:#aaa;}
+
+.footer-nav{background:var(--ink);padding:1.1rem 2rem;margin-top:3rem;}
+.footer-nav-inner{max-width:900px;margin:0 auto;}
+.back-btn{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
+.back-btn:hover{opacity:.7;}
+
+@media(max-width:560px){.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hinner">
+    <div class="klass">Mathematik · FOS Nürnberg · Übungen</div>
+    <h1>Interaktive Übungen</h1>
+    <p>Selbsttests und Prüfungsvorbereitung – mit automatischer Auswertung</p>
+  </div>
+</header>
+
+<main>
+  <h2>Vorklasse / Klasse 10</h2>
+  <div class="grid">
+    <a class="card" href="mathe-vorklasse-uebungen.html">
+      <div class="card-tag">Vorklasse · 12 Aufgaben</div>
+      <h3>Prüfungsvorbereitung</h3>
+      <p>Zuordnungen &amp; Funktionen · Lineare Gleichungssysteme · Funktionenscharen · Quadratische Funktionen</p>
+      <div class="card-meta">
+        <span>4 Kapitel</span>
+        <span>Ankreuz · Lückentext · MC</span>
+      </div>
+    </a>
+  </div>
+
+  <h2>Klasse 11</h2>
+  <div class="grid">
+    <div class="card" style="border-left-color:var(--line);opacity:.5;cursor:default;">
+      <div class="card-tag">In Vorbereitung</div>
+      <h3>Ganzrationale Funktionen</h3>
+      <p>Nullstellen · Scheitelpunkt · Kurvendiskussion</p>
+      <div class="card-meta"><span>demnächst</span></div>
+    </div>
+    <div class="card" style="border-left-color:var(--line);opacity:.5;cursor:default;">
+      <div class="card-tag">In Vorbereitung</div>
+      <h3>Differentialrechnung</h3>
+      <p>Ableitungsregeln · Tangenten · Extremwerte</p>
+      <div class="card-meta"><span>demnächst</span></div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer-nav">
+  <div class="footer-nav-inner">
+    <a class="back-btn" href="../../index.html"><span>←</span> Startseite</a>
+  </div>
+</footer>
+
+</body>
+</html>

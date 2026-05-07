@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathematik Übungen – FOS Vorklasse</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+:root {
+  --ink:    #1a1208;
+  --paper:  #f7f3ec;
+  --cream:  #ede8de;
+  --accent: #c8400a;
+  --accent2:#2a6496;
+  --gold:   #c9961a;
+  --green:  #2e7d4f;
+  --line:   #d4cfc6;
+  --serif:  'Playfair Display', Georgia, serif;
+  --mono:   'DM Mono', monospace;
+  --sans:   'Source Sans 3', sans-serif;
+  /* Kapitel-Farben */
+  --k1: #2a6496; --k1l: #f0f5fa;
+  --k2: #c9961a; --k2l: #fdf8ec;
+  --k3: #2e7d4f; --k3l: #edf7f1;
+  --k4: #8b5cf6; --k4l: #f5f3ff;
+  /* Zustände */
+  --ok:#2e7d4f; --okl:#eaf7ee;
+  --err:#c0392b; --errl:#fdecea;
+  --warn:#92400e; --warnl:#fffbeb;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:var(--sans); font-weight:300; background:var(--paper); color:var(--ink); min-height:100vh; line-height:1.7; }
+
+/* ── HEADER ── */
+header { background:var(--ink); color:var(--paper); padding:2.8rem 2rem 2.2rem; position:relative; overflow:hidden; }
+header::before { content:''; position:absolute; top:-60px; right:-80px; width:300px; height:300px; border-radius:50%; background:var(--accent); opacity:.1; }
+header::after  { content:''; position:absolute; bottom:-40px; left:8%; width:180px; height:180px; border-radius:50%; background:var(--gold); opacity:.08; }
+.hinner { max-width:900px; margin:0 auto; position:relative; }
+.klass { font-family:var(--mono); font-size:.78rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.5rem; }
+header h1 { font-family:var(--serif); font-size:clamp(1.8rem,5vw,3rem); font-weight:900; line-height:1.1; margin-bottom:.8rem; }
+header p { font-size:.95rem; color:#a09888; max-width:560px; }
+.prog-wrap { width:240px; height:5px; background:rgba(255,255,255,.15); border-radius:99px; margin:.9rem 0 .4rem; }
+.prog-fill { height:5px; border-radius:99px; background:#a3e635; transition:width .4s ease; width:0%; }
+#prog-label { font-family:var(--mono); font-size:.75rem; color:#a09888; }
+
+/* ── TABS / NAV ── */
+.tabs { background:var(--ink); border-top:1px solid #2e2e2e; padding:0 1.5rem; display:flex; overflow-x:auto; gap:0; }
+.tab-btn { font-family:var(--mono); font-size:.73rem; letter-spacing:.07em; text-transform:uppercase; background:none; border:none;
+  color:#777; padding:.85rem 1.1rem; cursor:pointer; border-bottom:3px solid transparent;
+  margin-bottom:-1px; white-space:nowrap; display:flex; align-items:center; gap:6px;
+  transition:color .2s,border-color .2s; }
+.tab-btn:hover { color:var(--paper); }
+.tab-btn.active { color:var(--gold); border-bottom-color:var(--gold); }
+.dot { width:8px; height:8px; border-radius:50%; background:#444; flex-shrink:0; transition:background .2s; }
+.tab-btn.done .dot { background:var(--ok); }
+.score-tag { font-size:.7rem; background:#2e2e2e; color:#777; padding:1px 7px; border-radius:99px; font-weight:400; }
+.tab-btn.done .score-tag { background:#1e3a2a; color:#6ee7a0; }
+
+/* ── MAIN ── */
+main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 5rem; }
+.chapter { display:none; }
+.chapter.active { display:block; animation:fu .3s ease; }
+@keyframes fu { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+/* ── HEADINGS ── */
+.ch-head { margin-bottom:1.8rem; padding:.8rem 1rem .8rem 1.2rem;
+  border-left:4px solid currentColor; background:white;
+  border:1px solid var(--line); border-left-width:4px; border-radius:0 2px 2px 0; }
+.ch-head h2 { font-family:var(--serif); font-size:1.45rem; font-weight:700; }
+.ch-head p  { font-size:.86rem; color:#888; margin-top:.2rem; font-style:italic; }
+h3 { font-family:var(--serif); font-size:1.05rem; margin-bottom:.6rem; }
+
+/* ── CARDS ── */
+.ex { background:white; border:1px solid var(--line); border-radius:2px;
+  margin-bottom:1.25rem; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.04);
+  transition:box-shadow .2s; }
+.ex:hover { box-shadow:0 3px 10px rgba(0,0,0,.07); }
+.ex-head { display:flex; align-items:center; gap:.65rem; padding:.85rem 1.2rem;
+  border-bottom:1px solid var(--line); }
+.ex-num { width:28px; height:28px; border-radius:50%; display:flex; align-items:center;
+  justify-content:center; font-family:var(--mono); font-size:.78rem; font-weight:500;
+  color:#fff; flex-shrink:0; }
+.ex-head h3 { font-family:var(--serif); font-size:.95rem; font-weight:700; flex:1; margin:0; }
+.ex-badge { font-family:var(--mono); font-size:.72rem; color:#999; }
+.ex-body { padding:1.2rem 1.4rem; }
+
+/* ── QUESTION & HINT ── */
+.q { font-size:.93rem; line-height:1.75; margin-bottom:.9rem; }
+.q .sys { margin:.5rem 0 .5rem 1.2rem; font-family:var(--mono); font-size:.88rem; line-height:2; }
+.hint-box { background:var(--cream); border-left:3px solid var(--gold); padding:.6rem 1rem;
+  font-size:.84rem; color:#666; border-radius:0 2px 2px 0; margin-bottom:.9rem; line-height:1.55; }
+.hint-box b { color:var(--ink); }
+
+/* ── SVG PFEILDIAGRAMM ── */
+.pfeil { display:flex; justify-content:center; margin:.5rem 0 1rem; }
+.pfeil svg { max-width:100%; }
+
+/* ── ANKREUZ TABLE ── */
+.ankreuz { width:100%; border-collapse:collapse; font-size:.86rem; margin-bottom:.9rem; }
+.ankreuz th { font-family:var(--mono); font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+  background:var(--ink); color:var(--gold); padding:.5rem .7rem;
+  text-align:center; font-weight:500; }
+.ankreuz th:first-child { text-align:left; }
+.ankreuz td { padding:.6rem .7rem; border-bottom:1px solid var(--line); vertical-align:middle; }
+.ankreuz tr:last-child td { border-bottom:none; }
+.ankreuz td:not(:first-child) { text-align:center; }
+.ankreuz input[type=radio] { accent-color:var(--ink); width:15px; height:15px; cursor:pointer; }
+.ankreuz tr.ok-row td:first-child { color:var(--ok); font-weight:600; }
+.ankreuz tr.err-row td:first-child { color:var(--err); font-weight:600; }
+.ankreuz tr.ok-row td:first-child::before  { content:'✓ '; }
+.ankreuz tr.err-row td:first-child::before { content:'✗ '; }
+
+/* ── FILL-IN ── */
+.fill-group { display:flex; flex-wrap:wrap; gap:.75rem; margin-bottom:.9rem; align-items:flex-end; }
+.fill-f { display:flex; flex-direction:column; gap:3px; }
+.fill-f label { font-family:var(--mono); font-size:.75rem; color:#888; }
+.fill-f input { border:1px solid var(--line); border-radius:2px; padding:.45rem .7rem;
+  font-family:var(--mono); font-size:.88rem; width:110px; outline:none; background:white; color:var(--ink);
+  transition:border-color .2s,background .2s; }
+.fill-f input.wide { width:160px; }
+.fill-f input:focus { border-color:var(--accent2); }
+.fill-f input.ok  { border-color:var(--ok);  background:var(--okl); }
+.fill-f input.err { border-color:var(--err); background:var(--errl); }
+
+/* ── MCQ ── */
+.mcq { display:flex; flex-direction:column; gap:.45rem; margin-bottom:.9rem; }
+.mcq-opt { display:flex; align-items:flex-start; gap:.7rem; padding:.65rem .95rem;
+  border:1px solid var(--line); border-radius:2px; cursor:pointer;
+  font-size:.9rem; line-height:1.55; transition:border-color .2s,background .2s; background:white; }
+.mcq-opt:hover { border-color:var(--accent2); background:var(--k1l); }
+.mcq-opt.sel  { border-color:var(--ink); background:var(--cream); }
+.mcq-opt.ok   { border-color:var(--ok)!important;  background:var(--okl)!important;  color:#14532d; }
+.mcq-opt.err  { border-color:var(--err)!important; background:var(--errl)!important; color:#7f1d1d; }
+.mcq-opt input[type=radio] { margin-top:3px; flex-shrink:0; accent-color:var(--ink); }
+.mcq-letter { font-family:var(--mono); font-weight:500; color:#888; flex-shrink:0; min-width:18px; }
+
+/* ── LÖSBARKEIT ── */
+.losbar-set { display:flex; flex-direction:column; gap:.75rem; margin-bottom:.9rem; }
+.losbar-item { border:1px solid var(--line); border-radius:2px; padding:.8rem 1rem; background:white; }
+.losbar-sys { font-family:var(--mono); font-size:.86rem; margin-bottom:.55rem; line-height:1.9; }
+.losbar-item select { border:1px solid var(--line); border-radius:2px; padding:.38rem .6rem;
+  font-family:var(--mono); font-size:.84rem; background:white; cursor:pointer;
+  color:var(--ink); outline:none; transition:border-color .2s; }
+.losbar-item select:focus { border-color:var(--accent2); }
+.losbar-item select.ok  { border-color:var(--ok);  background:var(--okl); }
+.losbar-item select.err { border-color:var(--err); background:var(--errl); }
+
+/* ── BUTTONS ── */
+.btn-row { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin-top:.9rem; }
+.btn { font-family:var(--mono); font-size:.73rem; letter-spacing:.05em; text-transform:uppercase;
+  padding:.52rem 1.15rem; border-radius:2px; cursor:pointer; border:none;
+  transition:opacity .15s,transform .1s; }
+.btn:active { transform:scale(.97); }
+.btn:disabled { opacity:.35; cursor:not-allowed; }
+.btn-primary { background:var(--accent); color:white; }
+.btn-ghost { background:transparent; border:1px solid var(--line); color:var(--ink); }
+
+/* ── FEEDBACK ── */
+.fb { margin-top:.9rem; padding:.8rem 1.1rem; border-radius:2px; font-size:.86rem;
+  line-height:1.65; display:none; }
+.fb.show { display:block; }
+.fb.ok   { background:var(--okl);   border:1px solid #b7dfca; color:#14532d; }
+.fb.warn { background:var(--warnl); border:1px solid #fde68a; color:var(--warn); }
+.fb.err  { background:var(--errl);  border:1px solid #f5c6c6; color:#7f1d1d; }
+.fb b { display:block; margin-bottom:3px; font-weight:600; font-family:var(--mono); font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; }
+.fb .sol { font-family:var(--sans); font-weight:300; margin-top:.5rem; padding:.5rem .8rem;
+  background:rgba(0,0,0,.04); border-radius:2px; font-size:.85rem; }
+
+/* ── SUMMARY ── */
+.summary { margin-top:1.5rem; padding:1.1rem 1.4rem; background:white;
+  border:1px solid var(--line); border-radius:2px; display:flex; align-items:center; gap:1rem; }
+.sum-circle { width:52px; height:52px; border-radius:50%; display:flex; align-items:center;
+  justify-content:center; font-family:var(--mono); font-weight:500; font-size:1rem; flex-shrink:0; }
+.sum-text p { font-size:.86rem; color:#888; }
+.sum-text strong { font-size:.95rem; font-family:var(--serif); }
+
+/* ── FOOTER NAV ── */
+.footer-nav { background:var(--ink); padding:1.1rem 2rem; margin-top:3rem; }
+.footer-nav-inner { max-width:900px; margin:0 auto; }
+.back-btn { font-family:var(--mono); font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--gold); text-decoration:none; display:inline-flex; align-items:center; gap:.5rem; transition:opacity .2s; }
+.back-btn:hover { opacity:.7; }
+
+@media(max-width:580px) {
+  header h1 { font-size:1.5rem; }
+  .fill-group { flex-direction:column; }
+  .ankreuz th:nth-child(4), .ankreuz td:nth-child(4) { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header>
+  <div class="hinner">
+    <div class="klass">Mathematik · FOS Vorklasse · Übungen</div>
+    <h1>Prüfungsvorbereitung</h1>
+    <p>Funktionen · LGS · Funktionenscharen · Quadratische Funktionen</p>
+    <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
+    <p id="prog-label">0 von 12 Aufgaben abgeschlossen</p>
+  </div>
+</header>
+
+<!-- ═══════════ TABS ═══════════ -->
+<nav class="tabs">
+  <button class="tab-btn active" data-ch="k1" onclick="switchTab('k1')">
+    <span class="dot"></span>Zuordnungen &amp; Funktionen
+    <span class="score-tag" id="badge-k1">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k2" onclick="switchTab('k2')">
+    <span class="dot"></span>Lineare Gleichungssysteme
+    <span class="score-tag" id="badge-k2">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k3" onclick="switchTab('k3')">
+    <span class="dot"></span>Lineare Funktionenscharen
+    <span class="score-tag" id="badge-k3">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k4" onclick="switchTab('k4')">
+    <span class="dot"></span>Quadratische Funktionen
+    <span class="score-tag" id="badge-k4">0/3</span>
+  </button>
+</nav>
+
+<main>
+
+<!-- ═══════════ K1: ZUORDNUNGEN & FUNKTIONEN ═══════════ -->
+<div class="chapter active" id="k1">
+  <div class="ch-head" style="color:var(--k1)">
+    <h2>Kapitel 1 – Zuordnungen &amp; Funktionen</h2>
+    <p>Pfeildiagramme lesen · Definitions- und Zielmenge · Funktionsbegriff</p>
+  </div>
+
+  <!-- 1.1 -->
+  <div class="ex" id="ex-1-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.1</div>
+      <h3>Ankreuzaufgabe: Eigenschaften einer Zuordnung</h3>
+      <span class="ex-badge" id="st-1-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist das folgende Pfeildiagramm. Kreuze an, ob die jeweilige Aussage
+        <strong>wahr</strong>, <strong>falsch</strong> oder <strong>nicht beantwortbar</strong> ist.<br>
+        <em style="font-size:.82rem;color:#888">Bewertung: richtiges Kreuz +1 BE &nbsp;|&nbsp; falsches Kreuz −1 BE &nbsp;|&nbsp; Mindestpunktzahl 0 BE</em>
+      </p>
+      <div class="pfeil">
+        <svg viewBox="0 0 290 185" width="270" height="185" aria-label="Pfeildiagramm: D={1,2,3} Z={a,b,c,d}, Pfeile: 1→a, 2→b, 3→c">
+          <defs>
+            <marker id="ar" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0,8 3,0 6" fill="#475569"/>
+            </marker>
+          </defs>
+          <ellipse cx="68" cy="98" rx="48" ry="72" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+          <ellipse cx="222" cy="98" rx="48" ry="72" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="68" y="18" text-anchor="middle" font-size="13" font-weight="600" fill="#888" font-family="DM Mono,monospace">D</text>
+          <text x="222" y="18" text-anchor="middle" font-size="13" font-weight="600" fill="#888" font-family="DM Mono,monospace">Z</text>
+          <text x="68" y="60" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">1</text>
+          <text x="68" y="100" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">2</text>
+          <text x="68" y="140" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">3</text>
+          <text x="222" y="48" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">a</text>
+          <text x="222" y="84" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">b</text>
+          <text x="222" y="120" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">c</text>
+          <text x="222" y="156" text-anchor="middle" font-size="15" fill="var(--line)" font-family="Source Sans 3,sans-serif">d</text>
+          <line x1="84" y1="57" x2="200" y2="46" stroke="#475569" stroke-width="1.5" marker-end="url(#ar)"/>
+          <line x1="84" y1="97" x2="200" y2="82" stroke="#475569" stroke-width="1.5" marker-end="url(#ar)"/>
+          <line x1="84" y1="137" x2="200" y2="118" stroke="#475569" stroke-width="1.5" marker-end="url(#ar)"/>
+        </svg>
+      </div>
+      <table class="ankreuz" id="tbl-1-1" data-ans="W,F,W,W">
+        <thead>
+          <tr><th style="width:58%">Aussage</th><th>wahr</th><th>falsch</th><th>nicht beantwortbar</th></tr>
+        </thead>
+        <tbody>
+          <tr data-r="0"><td>Die dargestellte Zuordnung ist eine Funktion.</td>
+            <td><input type="radio" name="r1-1-0" value="W"></td><td><input type="radio" name="r1-1-0" value="F"></td><td><input type="radio" name="r1-1-0" value="NB"></td></tr>
+          <tr data-r="1"><td>Die Definitionsmenge der Zuordnung ist die Menge $\{a;\,b;\,c;\,d\}$.</td>
+            <td><input type="radio" name="r1-1-1" value="W"></td><td><input type="radio" name="r1-1-1" value="F"></td><td><input type="radio" name="r1-1-1" value="NB"></td></tr>
+          <tr data-r="2"><td>Im Koordinatensystem wird die Definitionsmenge einer Funktion auf der $x$-Achse dargestellt.</td>
+            <td><input type="radio" name="r1-1-2" value="W"></td><td><input type="radio" name="r1-1-2" value="F"></td><td><input type="radio" name="r1-1-2" value="NB"></td></tr>
+          <tr data-r="3"><td>Das Element $d$ der Zielmenge hat kein Urbild in $D$.</td>
+            <td><input type="radio" name="r1-1-3" value="W"></td><td><input type="radio" name="r1-1-3" value="F"></td><td><input type="radio" name="r1-1-3" value="NB"></td></tr>
+        </tbody>
+      </table>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-1-1')">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-1-1">
+        <b></b>
+        <div class="sol">
+          <strong>Lösungen:</strong> wahr · falsch · wahr · wahr<br>
+          (1) Jedes Element von $D$ hat <em>genau ein</em> Bild → Funktion. ✓<br>
+          (2) $\{a;b;c;d\}$ ist die <em>Zielmenge</em>, nicht die Definitionsmenge.<br>
+          (3) Definitionsmenge ↔ $x$-Achse; Zielmenge ↔ $y$-Achse. ✓<br>
+          (4) $d$ hat keinen Pfeil, der auf es zeigt → kein Urbild. ✓
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.2 -->
+  <div class="ex" id="ex-1-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.2</div>
+      <h3>Ankreuzaufgabe: Ist dies eine Funktion?</h3>
+      <span class="ex-badge" id="st-1-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist das folgende Pfeildiagramm. Kreuze an, ob die jeweilige Aussage
+        <strong>wahr</strong>, <strong>falsch</strong> oder <strong>nicht beantwortbar</strong> ist.</p>
+      <div class="pfeil">
+        <svg viewBox="0 0 290 175" width="270" height="175" aria-label="Pfeildiagramm: D={1,2,3} Z={a,b,c}, Pfeile: 1→a, 2→a, 2→c, 3→b">
+          <defs>
+            <marker id="ar2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0,8 3,0 6" fill="#475569"/>
+            </marker>
+          </defs>
+          <ellipse cx="68" cy="92" rx="48" ry="68" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+          <ellipse cx="222" cy="92" rx="48" ry="68" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="68" y="17" text-anchor="middle" font-size="13" font-weight="600" fill="#888" font-family="DM Mono,monospace">D</text>
+          <text x="222" y="17" text-anchor="middle" font-size="13" font-weight="600" fill="#888" font-family="DM Mono,monospace">Z</text>
+          <text x="68" y="56" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">1</text>
+          <text x="68" y="94" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">2</text>
+          <text x="68" y="132" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">3</text>
+          <text x="222" y="56" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">a</text>
+          <text x="222" y="94" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">b</text>
+          <text x="222" y="132" text-anchor="middle" font-size="15" fill="var(--ink)" font-family="Source Sans 3,sans-serif">c</text>
+          <line x1="84" y1="53" x2="200" y2="53" stroke="#475569" stroke-width="1.5" marker-end="url(#ar2)"/>
+          <path d="M84,89 Q152,62 200,54" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#ar2)"/>
+          <path d="M84,99 Q152,118 200,129" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#ar2)"/>
+          <line x1="84" y1="129" x2="200" y2="95" stroke="#475569" stroke-width="1.5" marker-end="url(#ar2)"/>
+        </svg>
+      </div>
+      <table class="ankreuz" id="tbl-1-2" data-ans="F,W,F,NB">
+        <thead>
+          <tr><th style="width:58%">Aussage</th><th>wahr</th><th>falsch</th><th>nicht beantwortbar</th></tr>
+        </thead>
+        <tbody>
+          <tr data-r="0"><td>Die dargestellte Zuordnung ist eine Funktion.</td>
+            <td><input type="radio" name="r1-2-0" value="W"></td><td><input type="radio" name="r1-2-0" value="F"></td><td><input type="radio" name="r1-2-0" value="NB"></td></tr>
+          <tr data-r="1"><td>Die Zielmenge enthält genau 3 Elemente.</td>
+            <td><input type="radio" name="r1-2-1" value="W"></td><td><input type="radio" name="r1-2-1" value="F"></td><td><input type="radio" name="r1-2-1" value="NB"></td></tr>
+          <tr data-r="2"><td>Element 2 der Ausgangsmenge hat genau ein Bild in der Zielmenge.</td>
+            <td><input type="radio" name="r1-2-2" value="W"></td><td><input type="radio" name="r1-2-2" value="F"></td><td><input type="radio" name="r1-2-2" value="NB"></td></tr>
+          <tr data-r="3"><td>Die Zuordnung kann sinnvoll in einem Koordinatensystem dargestellt werden.</td>
+            <td><input type="radio" name="r1-2-3" value="W"></td><td><input type="radio" name="r1-2-3" value="F"></td><td><input type="radio" name="r1-2-3" value="NB"></td></tr>
+        </tbody>
+      </table>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-1-2')">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-1-2">
+        <b></b>
+        <div class="sol">
+          <strong>Lösungen:</strong> falsch · wahr · falsch · nicht beantwortbar<br>
+          (1) Element 2 wird <em>zwei</em> Elementen zugeordnet ($a$ und $c$) → keine Funktion.<br>
+          (2) $Z = \{a;\,b;\,c\}$ hat genau 3 Elemente. ✓<br>
+          (3) Element 2 hat <em>zwei</em> Bilder ($a$ und $c$), nicht genau eines.<br>
+          (4) Die Elemente der Zielmenge sind Buchstaben ohne numerischen Wert – ein Koordinatensystem ist nicht anwendbar.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.3 -->
+  <div class="ex" id="ex-1-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.3</div>
+      <h3>Multiple Choice: Welche Zuordnung ist keine Funktion?</h3>
+      <span class="ex-badge" id="st-1-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Entscheide, welche der folgenden Zuordnungen <strong>keine Funktion</strong> ist.</p>
+      <div class="mcq" id="mcq-1-3" data-ans="1">
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-3')">
+          <input type="radio" name="mcq1-3"><span class="mcq-letter">(a)</span>
+          <span>Jeder natürlichen Zahl $n \in \mathbb{N}$ wird ihr Quadrat $n^2$ zugeordnet.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-3')">
+          <input type="radio" name="mcq1-3"><span class="mcq-letter">(b)</span>
+          <span>Jeder reellen Zahl $x > 0$ wird eine Zahl $y$ zugeordnet, für die $y^2 = x$ gilt.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-3')">
+          <input type="radio" name="mcq1-3"><span class="mcq-letter">(c)</span>
+          <span>Jeder reellen Zahl $x$ wird der Absolutbetrag $|x|$ zugeordnet.</span>
+        </label>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkMCQ('ex-1-3')">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-1-3">
+        <b></b>
+        <div class="sol">
+          <strong>Korrekte Antwort: (b)</strong><br>
+          Für $x = 4$ gilt $y^2 = 4$, also $y = 2$ oder $y = -2$ – es gibt <em>zwei</em> mögliche Bilder.
+          Da nicht jedem Element der Definitionsmenge <em>genau ein</em> Bild zugeordnet wird,
+          handelt es sich um <strong>keine Funktion</strong>.<br>
+          (a) und (c) sind Funktionen: $n \mapsto n^2$ und $x \mapsto |x|$ liefern für jeden Eingabewert genau einen Ausgabewert.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary" id="sum-k1">
+    <div class="sum-circle" style="background:var(--k1l);color:var(--k1)" id="sum-k1-circle">0/3</div>
+    <div class="sum-text"><strong>Kapitel 1 abgeschlossen</strong><p>Weiter zu Kapitel 2: Lineare Gleichungssysteme</p></div>
+    <button class="btn btn-ghost" onclick="switchTab('k2')">Weiter →</button>
+  </div>
+</div>
+
+
+<!-- ═══════════ K2: LINEARE GLEICHUNGSSYSTEME ═══════════ -->
+<div class="chapter" id="k2">
+  <div class="ch-head" style="color:var(--k2)">
+    <h2>Kapitel 2 – Lineare Gleichungssysteme</h2>
+    <p>LGS lösen · Lösbarkeit untersuchen · Sachaufgaben</p>
+  </div>
+
+  <!-- 2.1 -->
+  <div class="ex" id="ex-2-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.1</div>
+      <h3>LGS lösen – Additionsverfahren</h3>
+      <span class="ex-badge" id="st-2-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Löse das folgende lineare Gleichungssystem. Gib die Lösungsmenge an.
+        <span class="sys">$\text{(I)}\quad 2x + y = 7$<br>$\text{(II)}\quad x - y = 2$</span>
+      </p>
+      <div class="hint-box"><b>Tipp:</b> Addiere beide Gleichungen direkt – die Variable $y$ fällt heraus.</div>
+      <div class="fill-group">
+        <div class="fill-f"><label>$x =$</label><input type="text" id="in-2-1-x" placeholder="z. B. 3" data-ans="3"></div>
+        <div class="fill-f"><label>$y =$</label><input type="text" id="in-2-1-y" placeholder="z. B. 1" data-ans="1"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-2-1',['in-2-1-x','in-2-1-y'])">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-2-1">
+        <b></b>
+        <div class="sol">
+          (I) + (II): $3x = 9 \;\Rightarrow\; x = 3$<br>
+          In (I): $2 \cdot 3 + y = 7 \;\Rightarrow\; y = 1$<br>
+          <strong>Lösungsmenge:</strong> $L = \{(3\,|\,1)\}$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.2 -->
+  <div class="ex" id="ex-2-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.2</div>
+      <h3>Lösbarkeit untersuchen</h3>
+      <span class="ex-badge" id="st-2-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Untersuche die drei Gleichungssysteme auf Lösbarkeit. Wähle jeweils die passende Antwort.</p>
+      <div class="losbar-set" id="los-2-2" data-ans="keine,unendlich,eine">
+        <div class="losbar-item">
+          <div class="losbar-sys">System A:&ensp; $\text{(I)}\quad y = 3x - 1$ &emsp; $\text{(II)}\quad y = 3x + 2$</div>
+          <select id="sel-2-2-0"><option value="">– bitte wählen –</option><option value="eine">genau eine Lösung</option><option value="keine">keine Lösung</option><option value="unendlich">unendlich viele Lösungen</option></select>
+        </div>
+        <div class="losbar-item">
+          <div class="losbar-sys">System B:&ensp; $\text{(I)}\quad 2y = 4x + 6$ &emsp; $\text{(II)}\quad y = 2x + 3$</div>
+          <select id="sel-2-2-1"><option value="">– bitte wählen –</option><option value="eine">genau eine Lösung</option><option value="keine">keine Lösung</option><option value="unendlich">unendlich viele Lösungen</option></select>
+        </div>
+        <div class="losbar-item">
+          <div class="losbar-sys">System C:&ensp; $\text{(I)}\quad y = x + 2$ &emsp; $\text{(II)}\quad y = -x + 4$</div>
+          <select id="sel-2-2-2"><option value="">– bitte wählen –</option><option value="eine">genau eine Lösung</option><option value="keine">keine Lösung</option><option value="unendlich">unendlich viele Lösungen</option></select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkLosbar('ex-2-2')">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-2-2">
+        <b></b>
+        <div class="sol">
+          <strong>A – keine Lösung:</strong> Gleiche Steigung ($m = 3$), verschiedene $y$-Achsenabschnitte → parallele Geraden.<br>
+          <strong>B – unendlich viele Lösungen:</strong> (I) umgeformt: $y = 2x + 3$ ≡ (II) → identische Geraden.<br>
+          <strong>C – genau eine Lösung:</strong> $x + 2 = -x + 4 \Rightarrow x = 1,\; y = 3$ → $L = \{(1\,|\,3)\}$.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.3 -->
+  <div class="ex" id="ex-2-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.3</div>
+      <h3>Sachaufgabe – LGS aufstellen und lösen</h3>
+      <span class="ex-badge" id="st-2-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Lena kauft auf dem Markt <strong>4 Brötchen und 2 Brezeln</strong> für <strong>5,00 €</strong>.
+        Tim kauft vom selben Stand <strong>2 Brötchen und 6 Brezeln</strong> für <strong>4,00 €</strong>.
+        Bestimme mithilfe eines linearen Gleichungssystems den Preis eines Brötchens und den Preis einer Brezel.</p>
+      <div class="hint-box">
+        <b>Tipp:</b> Definiere zunächst Variablen (z. B. $b$ = Brötchenpreis in €, $p$ = Brezelpreis in €) und stelle dann zwei Gleichungen auf.
+      </div>
+      <div class="fill-group">
+        <div class="fill-f"><label>Brötchen (in €)</label><input type="text" id="in-2-3-b" placeholder="z. B. 1,10" data-ans="1.1"></div>
+        <div class="fill-f"><label>Brezel (in €)</label><input type="text" id="in-2-3-p" placeholder="z. B. 0,30" data-ans="0.3"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-2-3',['in-2-3-b','in-2-3-p'])">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-2-3">
+        <b></b>
+        <div class="sol">
+          LGS: $\;\text{(I)}\;4b + 2p = 5{,}00\;$ und $\;\text{(II)}\;2b + 6p = 4{,}00$<br>
+          (I)·3: $12b + 6p = 15{,}00$ &nbsp;|&nbsp; (II): $2b + 6p = 4{,}00$ &nbsp;→ subtrahieren:<br>
+          $10b = 11{,}00 \Rightarrow b = 1{,}10\,€$<br>
+          In (II): $2{,}20 + 6p = 4{,}00 \Rightarrow p = 0{,}30\,€$<br>
+          <strong>Ein Brötchen kostet 1,10 € und eine Brezel 0,30 €.</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary" id="sum-k2">
+    <div class="sum-circle" style="background:var(--k2l);color:var(--k2)" id="sum-k2-circle">0/3</div>
+    <div class="sum-text"><strong>Kapitel 2 abgeschlossen</strong><p>Weiter zu Kapitel 3: Lineare Funktionenscharen</p></div>
+    <button class="btn btn-ghost" onclick="switchTab('k3')">Weiter →</button>
+  </div>
+</div>
+
+
+<!-- ═══════════ K3: LINEARE FUNKTIONENSCHAREN ═══════════ -->
+<div class="chapter" id="k3">
+  <div class="ch-head" style="color:var(--k3)">
+    <h2>Kapitel 3 – Lineare Funktionenscharen</h2>
+    <p>Orthogonalität · Parallelität · Parameterwert · Büschelpunkt</p>
+  </div>
+
+  <!-- 3.1 -->
+  <div class="ex" id="ex-3-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.1</div>
+      <h3>Ankreuzaufgabe: Eigenschaften linearer Funktionen</h3>
+      <span class="ex-badge" id="st-3-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben sind die Funktionen $f$, $g$ und $h$ mit den Funktionsgleichungen
+        $$f(x) = 2x + 3, \quad g(x) = -\tfrac{1}{2}x + 1, \quad h(x) = 2x - 5.$$
+        Kreuze an, ob die jeweilige Aussage <strong>wahr</strong>, <strong>falsch</strong> oder <strong>nicht beantwortbar</strong> ist.</p>
+      <table class="ankreuz" id="tbl-3-1" data-ans="W,W,F,F">
+        <thead>
+          <tr><th style="width:58%">Aussage</th><th>wahr</th><th>falsch</th><th>nicht beantwortbar</th></tr>
+        </thead>
+        <tbody>
+          <tr data-r="0"><td>Die Graphen von $f$ und $g$ sind orthogonal zueinander.</td>
+            <td><input type="radio" name="r3-1-0" value="W"></td><td><input type="radio" name="r3-1-0" value="F"></td><td><input type="radio" name="r3-1-0" value="NB"></td></tr>
+          <tr data-r="1"><td>Die Graphen von $f$ und $h$ verlaufen parallel zueinander.</td>
+            <td><input type="radio" name="r3-1-1" value="W"></td><td><input type="radio" name="r3-1-1" value="F"></td><td><input type="radio" name="r3-1-1" value="NB"></td></tr>
+          <tr data-r="2"><td>Der Graph von $g$ schneidet die $y$-Achse bei $y = 2$.</td>
+            <td><input type="radio" name="r3-1-2" value="W"></td><td><input type="radio" name="r3-1-2" value="F"></td><td><input type="radio" name="r3-1-2" value="NB"></td></tr>
+          <tr data-r="3"><td>Die Graphen von $f$ und $h$ schneiden sich in genau einem Punkt.</td>
+            <td><input type="radio" name="r3-1-3" value="W"></td><td><input type="radio" name="r3-1-3" value="F"></td><td><input type="radio" name="r3-1-3" value="NB"></td></tr>
+        </tbody>
+      </table>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-3-1')">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-3-1">
+        <b></b>
+        <div class="sol">
+          <strong>Lösungen:</strong> wahr · wahr · falsch · falsch<br>
+          (1) Orthogonalitätsbedingung: $m_f \cdot m_g = 2 \cdot (-\tfrac{1}{2}) = -1$ ✓<br>
+          (2) $m_f = m_h = 2$ und $b_f \neq b_h$ → parallele Graphen. ✓<br>
+          (3) Der $y$-Achsenabschnitt von $g$ ist $1$, nicht $2$.<br>
+          (4) Da die Graphen von $f$ und $h$ parallel sind, haben sie keinen Schnittpunkt.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.2 -->
+  <div class="ex" id="ex-3-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.2</div>
+      <h3>Parameterwert einer Funktionenschar bestimmen</h3>
+      <span class="ex-badge" id="st-3-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist die Funktionenschar $f_k$ mit der Funktionsgleichung
+        $$f_k(x) = (k - 3)\,x + k + 2, \quad k \in \mathbb{R}.$$</p>
+      <p class="q"><strong>(a)</strong> Bestimme den Wert von $k$, für den der Graph von $f_k$ eine <strong>waagerechte Gerade</strong> ist.</p>
+      <div class="fill-group">
+        <div class="fill-f"><label>$k =$</label><input type="text" id="in-3-2-a" placeholder="z. B. 3" data-ans="3"></div>
+      </div>
+      <p class="q" style="margin-top:.5rem"><strong>(b)</strong> Bestimme den Wert von $k$, für den der Graph von $f_k$ die $y$-Achse im Punkt $A(0\,|\,6)$ schneidet.</p>
+      <div class="fill-group">
+        <div class="fill-f"><label>$k =$</label><input type="text" id="in-3-2-b" placeholder="z. B. 4" data-ans="4"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-3-2',['in-3-2-a','in-3-2-b'])">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-3-2">
+        <b></b>
+        <div class="sol">
+          <strong>(a)</strong> Waagerechte Gerade → Steigung $= 0$: $\;k - 3 = 0 \Rightarrow \boxed{k = 3}$<br>
+          Probe: $f_3(x) = 0 \cdot x + 5 = 5$ (konstante Funktion) ✓<br><br>
+          <strong>(b)</strong> $y$-Achsenabschnitt $= k + 2 = 6 \Rightarrow \boxed{k = 4}$<br>
+          Probe: $f_4(0) = (4-3) \cdot 0 + 4 + 2 = 6$ ✓
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.3 -->
+  <div class="ex" id="ex-3-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.3</div>
+      <h3>Büschelpunkt einer Funktionenschar bestimmen</h3>
+      <span class="ex-badge" id="st-3-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist die Funktionenschar $g_t$ mit der Funktionsgleichung
+        $$g_t(x) = t \cdot (x - 1) + 4, \quad t \in \mathbb{R}.$$
+        Bestimme den Punkt, der auf dem Graphen jeder Funktion der Schar liegt (den sogenannten <strong>Büschelpunkt</strong> $B$).</p>
+      <div class="hint-box">
+        <b>Tipp:</b> Für welchen $x$-Wert verschwindet der Term, der $t$ enthält? Dann ist das Ergebnis unabhängig von $t$.
+      </div>
+      <div class="fill-group">
+        <div class="fill-f"><label>$x$-Koordinate von $B$</label><input type="text" id="in-3-3-x" placeholder="z. B. 1" data-ans="1"></div>
+        <div class="fill-f"><label>$y$-Koordinate von $B$</label><input type="text" id="in-3-3-y" placeholder="z. B. 4" data-ans="4"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-3-3',['in-3-3-x','in-3-3-y'])">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-3-3">
+        <b></b>
+        <div class="sol">
+          $g_t(x) = t \cdot (x-1) + 4$: Der Term $t \cdot (x-1)$ verschwindet genau dann, wenn $x - 1 = 0$, also für $x = 1$.<br>
+          $g_t(1) = t \cdot 0 + 4 = 4$ für <em>jedes</em> $t \in \mathbb{R}$.<br>
+          <strong>Büschelpunkt:</strong> $B(1\,|\,4)$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary" id="sum-k3">
+    <div class="sum-circle" style="background:var(--k3l);color:var(--k3)" id="sum-k3-circle">0/3</div>
+    <div class="sum-text"><strong>Kapitel 3 abgeschlossen</strong><p>Weiter zu Kapitel 4: Quadratische Funktionen</p></div>
+    <button class="btn btn-ghost" onclick="switchTab('k4')">Weiter →</button>
+  </div>
+</div>
+
+
+<!-- ═══════════ K4: QUADRATISCHE FUNKTIONEN ═══════════ -->
+<div class="chapter" id="k4">
+  <div class="ch-head" style="color:var(--k4)">
+    <h2>Kapitel 4 – Quadratische Funktionen</h2>
+    <p>Scheitelpunktform · allgemeine Form · Graphen zeichnen</p>
+  </div>
+
+  <!-- 4.1 -->
+  <div class="ex" id="ex-4-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.1</div>
+      <h3>Scheitelpunktform ablesen und auswerten</h3>
+      <span class="ex-badge" id="st-4-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist die Funktion $f$ mit der Funktionsgleichung in Scheitelpunktform:
+        $$f(x) = -2(x + 1)^2 + 5$$
+        Gib den Scheitelpunkt $S$ und den Streckfaktor $a$ an. Berechne anschließend den $y$-Achsenabschnitt.</p>
+      <div class="fill-group">
+        <div class="fill-f"><label>$x_S =$</label><input type="text" id="in-4-1-sx" placeholder="-1" data-ans="-1"></div>
+        <div class="fill-f"><label>$y_S =$</label><input type="text" id="in-4-1-sy" placeholder="5" data-ans="5"></div>
+        <div class="fill-f"><label>$a =$</label><input type="text" id="in-4-1-a" placeholder="-2" data-ans="-2"></div>
+        <div class="fill-f"><label>$f(0) =$</label><input type="text" id="in-4-1-y0" placeholder="3" data-ans="3"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-4-1',['in-4-1-sx','in-4-1-sy','in-4-1-a','in-4-1-y0'])">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-4-1">
+        <b></b>
+        <div class="sol">
+          Scheitelpunktform $f(x) = a(x - x_S)^2 + y_S$ direkt ablesen:<br>
+          $x_S = -1$, $\;y_S = 5$, $\;a = -2$ (da $a &lt; 0$: nach unten geöffnet).<br>
+          $y$-Achsenabschnitt: $f(0) = -2(0+1)^2 + 5 = -2 + 5 = \mathbf{3}$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.2 -->
+  <div class="ex" id="ex-4-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.2</div>
+      <h3>Allgemeine Form → Scheitelpunktform</h3>
+      <span class="ex-badge" id="st-4-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist die Funktion $g$ mit $g(x) = x^2 - 4x + 7$.
+        Forme die Funktionsgleichung in die <strong>Scheitelpunktform</strong> um und bestimme den Scheitelpunkt $S$.</p>
+      <div class="hint-box"><b>Tipp:</b> Quadratische Ergänzung oder Scheitelpunktformel $x_S = -\tfrac{b}{2a}$ sind beide möglich.</div>
+      <div class="fill-group">
+        <div class="fill-f"><label>$x_S =$</label><input type="text" id="in-4-2-sx" placeholder="2" data-ans="2"></div>
+        <div class="fill-f"><label>$y_S =$</label><input type="text" id="in-4-2-sy" placeholder="3" data-ans="3"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-4-2',['in-4-2-sx','in-4-2-sy'])">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-4-2">
+        <b></b>
+        <div class="sol">
+          <em>Quadratische Ergänzung:</em><br>
+          $g(x) = x^2 - 4x + 4 - 4 + 7 = (x - 2)^2 + 3$<br>
+          <em>Alternativ – Scheitelpunktformel:</em> $x_S = -\tfrac{-4}{2 \cdot 1} = 2,\quad y_S = g(2) = 4 - 8 + 7 = 3$<br>
+          <strong>Scheitelpunktform:</strong> $g(x) = (x-2)^2 + 3, \quad S(2\,|\,3)$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.3 -->
+  <div class="ex" id="ex-4-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.3</div>
+      <h3>Scheitelpunktform → allgemeine Form</h3>
+      <span class="ex-badge" id="st-4-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist $f(x) = 3(x - 2)^2 - 5$.
+        Forme in die <strong>allgemeine Form</strong> $f(x) = ax^2 + bx + c$ um und gib die Koeffizienten an.</p>
+      <div class="fill-group">
+        <div class="fill-f"><label>$a =$</label><input type="text" id="in-4-3-a" placeholder="3" data-ans="3"></div>
+        <div class="fill-f"><label>$b =$</label><input type="text" id="in-4-3-b" placeholder="-12" data-ans="-12"></div>
+        <div class="fill-f"><label>$c =$</label><input type="text" id="in-4-3-c" placeholder="7" data-ans="7"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-4-3',['in-4-3-a','in-4-3-b','in-4-3-c'])">Überprüfen</button>
+      </div>
+      <div class="fb" id="fb-4-3">
+        <b></b>
+        <div class="sol">
+          $f(x) = 3(x-2)^2 - 5 = 3(x^2 - 4x + 4) - 5 = 3x^2 - 12x + 12 - 5$<br>
+          $= \mathbf{3x^2 - 12x + 7}$<br>
+          Also: $a = 3,\; b = -12,\; c = 7$.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary" id="sum-k4">
+    <div class="sum-circle" style="background:var(--k4l);color:var(--k4)" id="sum-k4-circle">0/3</div>
+    <div class="sum-text"><strong>Alle Kapitel abgeschlossen!</strong><p>Gut gemacht – zurück zum Anfang oder einzelne Aufgaben nochmal lösen.</p></div>
+    <button class="btn btn-ghost" onclick="switchTab('k1')">↑ Zum Anfang</button>
+  </div>
+</div>
+
+</main>
+
+<footer class="footer-nav">
+  <div class="footer-nav-inner">
+    <a class="back-btn" href="index.html"><span>←</span> Übersicht Mathematik</a>
+  </div>
+</footer>
+
+<!-- ═══════════ JS ═══════════ -->
+<script>
+const done = new Set();
+const correct = new Set();
+const chMap = {k1:['ex-1-1','ex-1-2','ex-1-3'], k2:['ex-2-1','ex-2-2','ex-2-3'], k3:['ex-3-1','ex-3-2','ex-3-3'], k4:['ex-4-1','ex-4-2','ex-4-3']};
+
+function switchTab(ch) {
+  document.querySelectorAll('.chapter').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById(ch).classList.add('active');
+  document.querySelector('[data-ch="'+ch+'"]').classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateProgress() {
+  const total = 12, n = done.size;
+  document.getElementById('prog-fill').style.width = (n/total*100)+'%';
+  document.getElementById('prog-label').textContent = n + ' von ' + total + ' Aufgaben abgeschlossen';
+  ['k1','k2','k3','k4'].forEach(ch => {
+    const ids = chMap[ch];
+    const chOk = ids.filter(id => correct.has(id)).length;
+    const chDone = ids.filter(id => done.has(id)).length;
+    const badge = document.getElementById('badge-'+ch);
+    badge.textContent = chOk + '/' + ids.length;
+    const tab = document.querySelector('[data-ch="'+ch+'"]');
+    if (chDone === ids.length) { tab.classList.add('done'); badge.textContent = chOk+'/'+ids.length+' ✓'; }
+    const circle = document.getElementById('sum-'+ch+'-circle');
+    if (circle) circle.textContent = chOk + '/' + ids.length;
+  });
+}
+
+function pg(s) { return parseFloat(s.trim().replace(',','.')); }
+function near(a, b) { return Math.abs(pg(a) - b) < 0.015; }
+
+function showFb(exId, cls, title) {
+  const sfx = exId.slice(3);
+  const fb = document.getElementById('fb-'+sfx);
+  fb.className = 'fb show ' + cls;
+  fb.querySelector('b').textContent = title;
+  fb.querySelector('.sol').style.display = (cls === 'ok') ? 'none' : 'block';
+  const badge = document.getElementById('st-'+sfx);
+  badge.textContent = cls==='ok' ? '✓ Richtig' : cls==='warn' ? '~ Teilweise' : '✗ Falsch';
+  badge.style.color = cls==='ok' ? 'var(--ok)' : cls==='warn' ? 'var(--k2)' : 'var(--err)';
+  if (window.renderMathInElement) renderMathInElement(fb);
+}
+
+function showSol(exId) {
+  const fb = document.getElementById('fb-'+exId.slice(3));
+  if (fb) fb.querySelector('.sol').style.display = 'block';
+}
+
+function checkAnkreuz(exId) {
+  const sfx = exId.slice(3);
+  const tbl = document.getElementById('tbl-'+sfx);
+  const ans = tbl.dataset.ans.split(',');
+  const rows = tbl.querySelectorAll('tbody tr');
+  let got = 0;
+  rows.forEach((row,i) => {
+    row.classList.remove('ok-row','err-row');
+    const sel = row.querySelector('input[type=radio]:checked');
+    if (sel && sel.value === ans[i]) { got++; row.classList.add('ok-row'); }
+    else if (sel) row.classList.add('err-row');
+  });
+  done.add(exId);
+  tbl.querySelectorAll('input[type=radio]').forEach(r => r.disabled=true);
+  const btn = document.querySelector('#'+exId+' .btn');
+  if (btn) btn.disabled = true;
+  if (got === ans.length) { correct.add(exId); showFb(exId,'ok','✓ Alle Aussagen richtig!'); }
+  else showFb(exId, got>0?'warn':'err', got>0 ? '~ '+got+' von '+ans.length+' Aussagen richtig.' : '✗ Leider keine Aussage richtig.');
+  showSol(exId);
+  updateProgress();
+}
+
+function checkFill(exId, ids) {
+  let allOk = true;
+  ids.forEach(id => {
+    const inp = document.getElementById(id);
+    inp.classList.remove('ok','err');
+    if (near(inp.value, parseFloat(inp.dataset.ans))) inp.classList.add('ok');
+    else { inp.classList.add('err'); allOk = false; }
+    inp.disabled = true;
+  });
+  done.add(exId);
+  const btn = document.querySelector('#'+exId+' .btn');
+  if (btn) btn.disabled = true;
+  if (allOk) { correct.add(exId); showFb(exId,'ok','✓ Alle Werte korrekt!'); }
+  else showFb(exId,'err','✗ Nicht alle Werte stimmen – sieh dir die Musterlösung an.');
+  showSol(exId);
+  updateProgress();
+}
+
+function checkLosbar(exId) {
+  const sfx = exId.slice(3);
+  const set = document.getElementById('los-'+sfx);
+  const ans = set.dataset.ans.split(',');
+  let got = 0;
+  ans.forEach((a,i) => {
+    const sel = document.getElementById('sel-'+sfx+'-'+i);
+    sel.classList.remove('ok','err');
+    if (sel.value === a) { got++; sel.classList.add('ok'); }
+    else sel.classList.add('err');
+    sel.disabled = true;
+  });
+  done.add(exId);
+  const btn = document.querySelector('#'+exId+' .btn');
+  if (btn) btn.disabled = true;
+  if (got === ans.length) { correct.add(exId); showFb(exId,'ok','✓ Alle Systeme korrekt eingeordnet!'); }
+  else showFb(exId, got>0?'warn':'err', got+' von '+ans.length+' Systemen richtig.');
+  showSol(exId);
+  updateProgress();
+}
+
+function selMCQ(el, groupId) {
+  document.getElementById(groupId).querySelectorAll('.mcq-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function checkMCQ(exId) {
+  const sfx = exId.slice(3);
+  const group = document.getElementById('mcq-'+sfx);
+  const ans = parseInt(group.dataset.ans);
+  const opts = group.querySelectorAll('.mcq-opt');
+  const sel = group.querySelector('.mcq-opt.sel');
+  if (!sel) return;
+  const idx = Array.from(opts).indexOf(sel);
+  opts.forEach((o,i) => {
+    o.classList.remove('sel');
+    if (i === ans) o.classList.add('ok');
+    else if (i === idx && idx !== ans) o.classList.add('err');
+    o.style.pointerEvents = 'none';
+  });
+  done.add(exId);
+  const btn = document.querySelector('#'+exId+' .btn');
+  if (btn) btn.disabled = true;
+  if (idx === ans) { correct.add(exId); showFb(exId,'ok','✓ Richtig!'); }
+  else showFb(exId,'err','✗ Leider falsch – sieh dir die Erklärung an.');
+  showSol(exId);
+  updateProgress();
+}
+
+window.addEventListener('load', updateProgress);
+</script>
+</body>
+</html>

@@ -157,6 +157,61 @@ input[type=text]:focus, select:focus { border-color:var(--accent2); }
 /* KaTeX display override für fbox */
 .fbox .katex-display { margin: 0; }
 .fbox .katex { font-size: 1.15em; }
+
+/* ══════════════════════════════════════
+   PRINT — Chromium headless
+══════════════════════════════════════ */
+@media print {
+  @page { size: A4; margin: 1.5cm 2cm 2cm 2cm; }
+
+  /* Chrom ausblenden */
+  nav, header, footer, .scorebar { display: none !important; }
+
+  /* Interaktive Steuerelemente ausblenden */
+  .srow, input[type=range], .vd,
+  button, input[type=text], select,
+  .fb, .fbox-dyn, .hint { display: none !important; }
+
+  /* Alle Tabs zeigen */
+  .tab { display: block !important; }
+
+  /* Schritte im Step-by-Step alle zeigen */
+  .step { display: block !important; opacity: 1 !important; }
+
+  /* Grafiken/Canvas anzeigen */
+  .cwrap { display: block !important; max-width: 100%; }
+  canvas { display: block !important; }
+
+  /* Quiz- und Spielboxen ausblenden (nur interaktiv sinnvoll) */
+  #rqBox, #gmGame, #derivOut { display: none !important; }
+
+  /* Jeder Tab beginnt auf neuer Seite */
+  #t2, #t3, #t4, #t5 { break-before: page; }
+  h2 { break-after: avoid; }
+  .card.theory { break-inside: avoid; }
+  .card { box-shadow: none; border: 1px solid #ddd; padding: .65rem .9rem; margin-bottom: .45rem; }
+
+  /* Kompaktes Layout */
+  body { font-size: 10pt; line-height: 1.45; background: white; }
+  main { padding: .4rem 0; }
+  p { margin: .2rem 0 .35rem; }
+  h3 { font-size: 1rem; margin: .15rem 0 .3rem; }
+  .fbox { padding: .45rem .7rem; margin: .35rem 0; }
+  table { font-size: .9em; }
+
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-header { display: flex !important; }
+}
+
+.print-header {
+  display: none;
+  gap: 2rem;
+  margin: 1rem 2rem 0;
+  font-family: var(--mono);
+  font-size: .85rem;
+  color: var(--ink);
+}
+.print-header span { border-bottom: 1px solid #999; min-width: 5cm; display: inline-block; }
 </style>
 </head>
 <body>
@@ -168,6 +223,12 @@ input[type=text]:focus, select:focus { border-color:var(--accent2); }
     <p>Interaktives Arbeitsblatt · Ableitungsregeln · Grafisches Ableiten</p>
   </div>
 </header>
+
+<!-- Nur im Druck sichtbar -->
+<div class="print-header">
+  <div>Name: <span>&nbsp;</span></div>
+  <div>Datum: <span style="min-width:3cm">&nbsp;</span></div>
+</div>
 
 <nav id="mainNav">
   <button class="active" onclick="showTab('t1',this)">① Differenzenquotient</button>
@@ -873,6 +934,14 @@ window.addEventListener('load', () => {
     renderRQ();
     renderGM();
   }, 200);
+});
+
+// Vor dem Druck: alle Tabs kurz einblenden damit setupCanvas die Breite korrekt messen kann
+window.addEventListener('beforeprint', () => {
+  document.querySelectorAll('.tab').forEach(t => t.style.display = 'block');
+  void document.body.offsetWidth; // Layout-Reflow erzwingen
+  drawSecant();
+  drawLimit();
 });
 
 window.addEventListener('resize', () => {
