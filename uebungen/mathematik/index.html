@@ -36,11 +36,19 @@ h2{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:#888;text-tra
 .card-meta{margin-top:.9rem;font-family:var(--mono);font-size:.75rem;color:var(--line);display:flex;gap:1rem;}
 .card-meta span{color:#aaa;}
 
+/* Breadcrumb im Header */
+header .bc{font-family:var(--mono);font-size:.68rem;color:#666;display:flex;gap:.4rem;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;}
+header .bc a{color:#888;text-decoration:none;transition:color .15s;}
+header .bc a:hover{color:var(--gold);}
+header .bc span{color:#444;}
+
 .footer-nav{background:var(--ink);padding:1.1rem 2rem;margin-top:3rem;}
-.footer-nav-inner{max-width:900px;margin:0 auto;}
+.footer-nav-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
 .back-btn{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
 .back-btn:hover{opacity:.7;}
+.portal-link{font-family:var(--mono);font-size:.68rem;color:#555;text-decoration:none;transition:color .15s;}
+.portal-link:hover{color:var(--gold);}
 
 @media(max-width:560px){.grid{grid-template-columns:1fr;}}
 </style>
@@ -49,6 +57,13 @@ h2{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:#888;text-tra
 
 <header>
   <div class="hinner">
+    <nav class="bc" aria-label="Breadcrumb">
+      <a href="../../index.html">Lernportal</a>
+      <span>/</span>
+      <a href="../index.html">Übungen</a>
+      <span>/</span>
+      <span>Mathematik</span>
+    </nav>
     <div class="klass">Mathematik · FOS Nürnberg · Übungen</div>
     <h1>Interaktive Übungen</h1>
     <p>Selbsttests und Prüfungsvorbereitung – mit automatischer Auswertung</p>
@@ -88,7 +103,8 @@ h2{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:#888;text-tra
 
 <footer class="footer-nav">
   <div class="footer-nav-inner">
-    <a class="back-btn" href="../../index.html"><span>←</span> Startseite</a>
+    <a class="back-btn" href="../index.html"><span>←</span> Übungen</a>
+    <a class="portal-link" href="../../index.html">Lernportal ↗</a>
   </div>
 </footer>
 
