@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Lernportal</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="fonts/fonts.css">
   <style>
     :root {
       --bg: #0f0f0f;
@@ -348,8 +348,14 @@
   </div>
 
   <footer>
-    <span class="footer-text">Lernportal · FOS/BOS </span>
-    <span class="footer-text">Mathematik · Physik · Technology</span>
+    <span class="footer-text">Lernportal · FOS/BOS</span>
+    <span class="footer-text" style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;">
+      <span>Mathematik · Physik · Technology</span>
+      <span style="display:flex;gap:1rem;">
+        <a href="impressum.html" style="color:var(--text-muted);text-decoration:none;font-family:'DM Mono',monospace;font-size:.7rem;transition:color .15s;" onmouseover="this.style.color='#f0ede8'" onmouseout="this.style.color=''">Impressum</a>
+        <a href="datenschutz.html" style="color:var(--text-muted);text-decoration:none;font-family:'DM Mono',monospace;font-size:.7rem;transition:color .15s;" onmouseover="this.style.color='#f0ede8'" onmouseout="this.style.color=''">Datenschutz</a>
+      </span>
+    </span>
   </footer>
 </div>
 
