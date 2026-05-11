@@ -97,6 +97,15 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
 .section-label { font-family:var(--mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.18em; color:#999; margin: 1.8rem 0 .8rem; display:flex; align-items:center; gap:.8rem; }
 .section-label::after { content:''; flex:1; height:1px; background:var(--line); }
 
+/* Canvas + Slider */
+.cwrap { width:100%; border:1px solid var(--line); background:white; display:block; border-radius:2px; }
+.srow { display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap; font-family:var(--mono); font-size:.82rem; margin:.5rem 0; }
+.srow label { display:flex; align-items:center; gap:.5rem; }
+input[type=range] { -webkit-appearance:none; width:120px; height:4px; border-radius:3px; background:var(--line); outline:none; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; height:15px; border-radius:50%; background:var(--accent); cursor:pointer; }
+.vd { font-family:var(--mono); font-size:.88rem; color:var(--accent); display:inline-block; min-width:36px; }
+.formula-disp { background:var(--cream); border:1px solid var(--line); padding:.45rem 1rem; text-align:center; font-family:var(--mono); font-size:.88rem; margin:.5rem 0; border-radius:2px; }
+
 @media print {
   @page { size: A4; margin: 1.5cm 2cm 2cm 2cm; }
   nav, header .klass, .bh { display:none !important; }
@@ -155,6 +164,18 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
     <div class="step-formula">$a = 2, \quad b = -5, \quad c = 3$</div>
     <p style="margin-top:.6rem">$a = 2 > 0$ → Parabel öffnet sich <strong>nach oben</strong>, ist schmaler als die Normalparabel.<br>
     y-Achsenabschnitt: $f(0) = 3$ → Punkt $(0\,|\,3)$</p>
+  </div>
+
+  <div class="card" style="padding:1.2rem 1.7rem;">
+    <h3>Interaktiver Graph</h3>
+    <p style="font-size:.85rem; color:#555; margin-bottom:.7rem">Verändere die Schieberegler und beobachte die Auswirkungen auf die Parabel. Scheitelpunkt (blau) und y-Achsenabschnitt (grün) werden automatisch markiert.</p>
+    <div class="srow">
+      <label>a = <span class="vd" id="va1">1</span><input type="range" id="sa1" min="-3" max="3" step="0.5" value="1" oninput="updateT1()"></label>
+      <label>b = <span class="vd" id="vb1">0</span><input type="range" id="sb1" min="-6" max="6" step="0.5" value="0" oninput="updateT1()"></label>
+      <label>c = <span class="vd" id="vc1">0</span><input type="range" id="sc1" min="-6" max="6" step="0.5" value="0" oninput="updateT1()"></label>
+    </div>
+    <div class="formula-disp" id="fd1">f(x) = x²</div>
+    <canvas class="cwrap" id="cv1" width="840" height="300"></canvas>
   </div>
 
   <p class="section-label">Aufgaben</p>
@@ -254,6 +275,9 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
     <p style="margin-top:1rem"><strong>Gemerkte Formeln:</strong></p>
     <div class="fbox">$$x_S = -\frac{b}{2a}, \qquad y_S = c - \frac{b^2}{4a}$$</div>
     <p style="font-size:.85rem; color:#666">Diese Formeln kann man auch direkt anwenden, wenn man die Herleitung kennt.</p>
+    <p style="margin-top:.7rem; font-size:.9rem"><strong>Alternative für $y_S$:</strong> Den berechneten Wert $x_S$ direkt in die Funktion einsetzen:</p>
+    <div class="fbox" style="margin:.5rem 0">$$y_S = f(x_S)$$</div>
+    <p style="font-size:.85rem; color:#666">Das ist oft die schnellere Methode — besonders wenn $x_S$ eine Dezimalzahl ist.</p>
   </div>
 
   <div class="card theory">
@@ -400,12 +424,13 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
     <h3>Nullstellen — Schnittpunkte mit der x-Achse</h3>
     <p>Setze $f(x) = 0$ und löse:</p>
     <div class="fbox">$$ax^2 + bx + c = 0$$</div>
-    <p>Zur Lösung verwenden wir die <strong>allgemeine Lösungsformel</strong> (Mitternachtsformel):</p>
+    <p>Zur Lösung verwenden wir die <strong>Lösungsformel für quadratische Gleichungen</strong>:</p>
     <div class="card formula" style="margin:.9rem 0 .5rem">
       <div class="fbox" style="border:none; background:transparent; font-size:1.1rem">
         $$x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
       </div>
       <p style="text-align:center; font-family:var(--mono); font-size:.78rem; color:var(--green)">▲ Diese Formel gilt immer — für beliebige Werte von a, b, c</p>
+      <p style="text-align:center; font-size:.83rem; color:#777; margin-top:.4rem">Auch bekannt als: <strong>Mitternachtsformel</strong> (MNF) &nbsp;·&nbsp; <strong>abc-Formel</strong></p>
     </div>
   </div>
 
@@ -442,6 +467,18 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
     <div class="step-formula">$x_{1,2} = \dfrac{-(-5) \pm \sqrt{1}}{2 \cdot 2} = \dfrac{5 \pm 1}{4}$</div>
     <div class="result-box">$x_1 = \dfrac{6}{4} = \dfrac{3}{2} = 1{,}5 \qquad x_2 = \dfrac{4}{4} = 1$</div>
     <p style="margin-top:.7rem">Schnittpunkte mit der x-Achse: $(1\,|\,0)$ und $(1{,}5\,|\,0)$</p>
+  </div>
+
+  <div class="card" style="padding:1.2rem 1.7rem;">
+    <h3>Nullstellen im Graph</h3>
+    <p style="font-size:.85rem; color:#555; margin-bottom:.7rem">Verändere $a$, $b$, $c$ und beobachte, wie $D$ die Anzahl der Schnittpunkte mit der x-Achse bestimmt. Nullstellen sind rot markiert.</p>
+    <div class="srow">
+      <label>a = <span class="vd" id="va3">2</span><input type="range" id="sa3" min="-3" max="3" step="0.5" value="2" oninput="updateT3()"></label>
+      <label>b = <span class="vd" id="vb3">-5</span><input type="range" id="sb3" min="-8" max="8" step="0.5" value="-5" oninput="updateT3()"></label>
+      <label>c = <span class="vd" id="vc3">3</span><input type="range" id="sc3" min="-8" max="8" step="0.5" value="3" oninput="updateT3()"></label>
+    </div>
+    <div class="formula-disp" id="fd3"></div>
+    <canvas class="cwrap" id="cv3" width="840" height="300"></canvas>
   </div>
 
   <p class="section-label">Aufgaben</p>
@@ -748,6 +785,7 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
 </main>
 
 <script>
+// ── Tab / Hint ──────────────────────────────────────────────
 function show(id, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -759,6 +797,187 @@ function tog(btn) {
   h.classList.toggle('open');
   btn.textContent = h.classList.contains('open') ? 'Lösung verbergen' : 'Lösung';
 }
+
+// ── Canvas helpers ──────────────────────────────────────────
+function fmt(n) {
+  const r = Math.round(n * 100) / 100;
+  return (r % 1 === 0 ? r : r.toFixed(2)).toString().replace('.', ',');
+}
+
+function fmtPoly(a, b, c) {
+  if (a === 0 && b === 0) return 'f(x) = ' + c;
+  let s = 'f(x) = ';
+  if (a === 1) s += 'x²';
+  else if (a === -1) s += '−x²';
+  else if (a !== 0) s += fmt(a) + 'x²';
+  if (b > 0)  s += (a !== 0 ? ' + ' : '') + (b === 1 ? '' : fmt(b)) + 'x';
+  else if (b < 0) s += ' − ' + (b === -1 ? '' : fmt(Math.abs(b))) + 'x';
+  if (c > 0) s += ' + ' + fmt(c);
+  else if (c < 0) s += ' − ' + fmt(Math.abs(c));
+  return s;
+}
+
+function drawParabola(canvasId, a, b, c, opts) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const xMin = -6, xMax = 6;
+  const f = x => a * x * x + b * x + c;
+
+  // y range: sample parabola
+  let ys = [];
+  for (let i = 0; i <= 240; i++) {
+    const x = xMin + (i / 240) * (xMax - xMin);
+    const y = f(x);
+    if (isFinite(y)) ys.push(y);
+  }
+  if (!ys.length) ys = [-5, 5];
+  let rawYMin = Math.min(...ys), rawYMax = Math.max(...ys);
+  rawYMin = Math.min(rawYMin, -0.5);
+  rawYMax = Math.max(rawYMax, 0.5);
+  const pad = (rawYMax - rawYMin) * 0.15 + 0.8;
+  let yMin = Math.max(rawYMin - pad, -14);
+  let yMax = Math.min(rawYMax + pad, 18);
+
+  const toX = x => ((x - xMin) / (xMax - xMin)) * W;
+  const toY = y => H - ((y - yMin) / (yMax - yMin)) * H;
+  const ox = toX(0), oy = toY(0);
+
+  // grid
+  ctx.strokeStyle = '#eae6de'; ctx.lineWidth = 1;
+  for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+    ctx.beginPath(); ctx.moveTo(toX(x), 0); ctx.lineTo(toX(x), H); ctx.stroke();
+  }
+  const yStep = (yMax - yMin) > 20 ? 5 : (yMax - yMin) > 10 ? 2 : 1;
+  for (let y = Math.ceil(yMin / yStep) * yStep; y <= yMax; y += yStep) {
+    ctx.beginPath(); ctx.moveTo(0, toY(y)); ctx.lineTo(W, toY(y)); ctx.stroke();
+  }
+
+  // axes
+  ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W - 10, oy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ox, H); ctx.lineTo(ox, 10); ctx.stroke();
+
+  // axis arrows
+  ctx.fillStyle = '#555';
+  ctx.beginPath(); ctx.moveTo(W - 10, oy - 5); ctx.lineTo(W, oy); ctx.lineTo(W - 10, oy + 5); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(ox - 5, 10); ctx.lineTo(ox, 0); ctx.lineTo(ox + 5, 10); ctx.fill();
+
+  // tick labels
+  ctx.fillStyle = '#888'; ctx.font = '10px DM Mono, monospace';
+  ctx.textAlign = 'center';
+  for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+    if (x === 0) continue;
+    ctx.beginPath(); ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1;
+    ctx.moveTo(toX(x), oy - 3); ctx.lineTo(toX(x), oy + 3); ctx.stroke();
+    const labelY = oy + 14 < H - 2 ? oy + 14 : oy - 5;
+    ctx.fillText(x, toX(x), labelY);
+  }
+  ctx.textAlign = 'right';
+  for (let y = Math.ceil(yMin / yStep) * yStep; y <= yMax; y += yStep) {
+    if (y === 0) continue;
+    ctx.beginPath(); ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1;
+    ctx.moveTo(ox - 3, toY(y)); ctx.lineTo(ox + 3, toY(y)); ctx.stroke();
+    if (ox - 4 > 18) ctx.fillText(y, ox - 4, toY(y) + 4);
+  }
+  ctx.fillStyle = '#777'; ctx.font = 'italic 12px DM Sans, sans-serif';
+  ctx.textAlign = 'left'; ctx.fillText('x', W - 8, oy - 7);
+  ctx.fillText('y', ox + 6, 14);
+
+  // parabola
+  if (Math.abs(a) > 0.001) {
+    ctx.strokeStyle = '#c8400a'; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    let first = true;
+    for (let px = 0; px <= W; px++) {
+      const x = xMin + (px / W) * (xMax - xMin);
+      const py = toY(f(x));
+      if (py < -H || py > 2 * H) { first = true; continue; }
+      first ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      first = false;
+    }
+    ctx.stroke();
+  }
+
+  // vertex
+  if (Math.abs(a) > 0.001) {
+    const xS = -b / (2 * a), yS = f(xS);
+    if (xS >= xMin - 0.1 && xS <= xMax + 0.1 && toY(yS) > -20 && toY(yS) < H + 20) {
+      ctx.fillStyle = '#2a6496';
+      ctx.beginPath(); ctx.arc(toX(xS), toY(yS), 5, 0, 2 * Math.PI); ctx.fill();
+      ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = '#2a6496';
+      const tx = toX(xS) + 8, ty = toY(yS) - 8;
+      ctx.textAlign = 'left';
+      ctx.fillText('S(' + fmt(xS) + ' | ' + fmt(yS) + ')', tx, ty);
+    }
+  }
+
+  // y-intercept
+  if (toY(c) > -10 && toY(c) < H + 10) {
+    ctx.fillStyle = '#2e7d4f';
+    ctx.beginPath(); ctx.arc(ox, toY(c), 5, 0, 2 * Math.PI); ctx.fill();
+    ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = '#2e7d4f';
+    ctx.textAlign = 'left';
+    ctx.fillText('(0 | ' + fmt(c) + ')', ox + 8, toY(c) - 8);
+  }
+
+  // nullstellen
+  if (opts && opts.showNullstellen && Math.abs(a) > 0.001) {
+    const D = b * b - 4 * a * c;
+    ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = '#c8400a';
+    if (D >= 0) {
+      const sq = Math.sqrt(D);
+      const roots = D === 0 ? [(-b) / (2 * a)] : [(-b + sq) / (2 * a), (-b - sq) / (2 * a)];
+      roots.forEach((xi, i) => {
+        if (Math.abs(xi) > xMax + 0.2) return;
+        ctx.beginPath(); ctx.arc(toX(xi), oy, 5, 0, 2 * Math.PI); ctx.fill();
+        ctx.textAlign = 'center';
+        const lbl = (D === 0 ? 'x₁₂' : (i === 0 ? 'x₁' : 'x₂')) + '=' + fmt(xi);
+        const labelY = oy + 18 < H - 2 ? oy + 18 : oy - 8;
+        ctx.fillText(lbl, toX(xi), labelY);
+      });
+    } else {
+      ctx.textAlign = 'center'; ctx.font = '11px DM Sans, sans-serif';
+      ctx.fillText('D < 0 — keine reellen Nullstellen', W / 2, H - 8);
+    }
+  }
+}
+
+// ── Update functions ────────────────────────────────────────
+function updateT1() {
+  const a = parseFloat(document.getElementById('sa1').value);
+  const b = parseFloat(document.getElementById('sb1').value);
+  const c = parseFloat(document.getElementById('sc1').value);
+  document.getElementById('va1').textContent = fmt(a);
+  document.getElementById('vb1').textContent = fmt(b);
+  document.getElementById('vc1').textContent = fmt(c);
+  document.getElementById('fd1').textContent = fmtPoly(a, b, c);
+  drawParabola('cv1', a, b, c, {});
+}
+
+function updateT3() {
+  const a = parseFloat(document.getElementById('sa3').value);
+  const b = parseFloat(document.getElementById('sb3').value);
+  const c = parseFloat(document.getElementById('sc3').value);
+  document.getElementById('va3').textContent = fmt(a);
+  document.getElementById('vb3').textContent = fmt(b);
+  document.getElementById('vc3').textContent = fmt(c);
+  const D = Math.round((b * b - 4 * a * c) * 100) / 100;
+  let dStr = 'D = ' + fmt(D);
+  if (D > 0) dStr += ' > 0 → 2 Nullstellen';
+  else if (D === 0) dStr += ' = 0 → 1 Nullstelle';
+  else dStr += ' < 0 → keine Nullstellen';
+  document.getElementById('fd3').textContent = fmtPoly(a, b, c) + '   |   ' + dStr;
+  drawParabola('cv3', a, b, c, { showNullstellen: true });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  updateT1();
+  updateT3();
+});
 </script>
 </body>
 </html>
