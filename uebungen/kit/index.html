@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KIT-Übungen</title>
+  <link rel="stylesheet" href="../../fonts/fonts.css">
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #171717;
+      --border: #2a2a2a;
+      --text: #f0ede8;
+      --text-muted: #888;
+      --accent: #6ee7b7;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
+    .breadcrumb {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 3rem;
+      display: flex; gap: 0.5rem; align-items: center;
+    }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { opacity: 0.4; }
+    .construction { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1.5rem; padding: 4rem 0; }
+    .construction-icon { font-size: 4rem; opacity: 0.6; }
+    .construction-title { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: var(--accent); line-height: 1.1; }
+    .construction-sub { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; }
+    .construction-desc { font-size: 0.9rem; color: var(--text-muted); max-width: 380px; line-height: 1.6; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      color: var(--accent); text-decoration: none;
+      border: 1px solid var(--accent); padding: 0.5rem 1.1rem;
+      border-radius: 2rem; transition: background 0.15s, color 0.15s; margin-top: 1rem;
+    }
+    .back-link:hover { background: var(--accent); color: #000; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .construction { animation: fadeUp 0.5s ease both; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="../../index.html">Lernportal</a>
+    <span>/</span>
+    Übungen
+    <span>/</span>
+    Technology
+  </nav>
+  <div class="construction">
+    <div class="construction-icon">🚧</div>
+    <div class="construction-title">Im Aufbau</div>
+    <div class="construction-sub">KIT-Übungen · Jgst. 11 &amp; 12</div>
+    <p class="construction-desc">
+      Diese Seite wird gerade aufgebaut. Hier erscheinen bald interaktive Übungsaufgaben für Technology / KIT.
+    </p>
+    <a class="back-link" href="../../index.html">← Zurück zur Übersicht</a>
+  </div>
+</div>
+</body>
+</html>
