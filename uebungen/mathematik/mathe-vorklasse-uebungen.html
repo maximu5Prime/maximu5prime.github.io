@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mathematik Übungen – FOS Vorklasse</title>
 <link rel="stylesheet" href="../../fonts/fonts.css">
+  <link rel="stylesheet" href="../../fonts/theme.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
@@ -199,13 +200,6 @@ header .bc span { color:#444; }
   .ankreuz th:nth-child(4), .ankreuz td:nth-child(4) { display:none; }
 }
 
-    /* ── Theme Toggle ── */
-    #themeToggle{position:fixed;top:.75rem;right:.85rem;z-index:9999;width:1.9rem;height:1.9rem;border-radius:50%;cursor:pointer;font-size:.88rem;border:1px solid;display:flex;align-items:center;justify-content:center;transition:opacity .2s,transform .15s;line-height:1;padding:0;opacity:.5;}
-    #themeToggle:hover{opacity:1;transform:scale(1.15);}
-    html[data-theme="dark"]{--ink:#e8e4df;--paper:#111111;--cream:#1c1c1c;--line:#2e2e2e;}
-    html[data-theme="dark"] header{background:#1c1a17!important;color:#e8e4df!important;}
-    html[data-theme="light"] #themeToggle{background:var(--cream);border-color:var(--line);color:var(--ink);}
-    html[data-theme="dark"] #themeToggle{background:#252525;border-color:#444;color:#e8e4df;}
   </style>
 <script>
 (function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
