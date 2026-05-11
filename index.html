@@ -6,11 +6,7 @@
   <title>Lernportal</title>
   <link rel="stylesheet" href="fonts/fonts.css">
   <script>
-    (function(){
-      var t = localStorage.getItem('theme') ||
-              (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-      document.documentElement.setAttribute('data-theme', t);
-    })();
+    (function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
   </script>
   <style>
     :root {
@@ -281,24 +277,10 @@
     }
 
     /* Theme Toggle */
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--text-muted);
-      color: var(--text-muted);
-      font-family: 'DM Mono', monospace;
-      font-size: .68rem;
-      padding: .35rem .8rem;
-      border-radius: 2rem;
-      cursor: pointer;
-      transition: color .2s, border-color .2s, background .2s;
-      white-space: nowrap;
-      letter-spacing: .05em;
-    }
-    .theme-toggle:hover {
-      color: var(--text);
-      border-color: var(--text);
-      background: var(--surface);
-    }
+    #themeToggle{position:fixed;top:.75rem;right:.85rem;z-index:9999;width:1.9rem;height:1.9rem;border-radius:50%;cursor:pointer;font-size:.88rem;border:1px solid;display:flex;align-items:center;justify-content:center;transition:opacity .2s,transform .15s;line-height:1;padding:0;opacity:.5;}
+    #themeToggle:hover{opacity:1;transform:scale(1.15);}
+    html[data-theme="dark"] #themeToggle{background:var(--surface);border-color:var(--text-muted);color:var(--text-muted);}
+    html[data-theme="light"] #themeToggle{background:var(--surface);border-color:var(--text-muted);color:var(--text-muted);}
 
     /* Animations */
     @keyframes fadeUp {
@@ -320,10 +302,7 @@
         <h1 class="site-title">Lern<span>portal</span></h1>
         <p class="site-subtitle">Materialien · Aufgaben · Übungen</p>
       </div>
-      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;justify-content:flex-end;">
-        <button class="theme-toggle" id="themeToggle" aria-label="Farbschema wechseln">☀ Hell</button>
-        <div class="year-badge">Jahrgangsstufe 11 &amp; 12</div>
-      </div>
+      <div class="year-badge">Jahrgangsstufe 11 &amp; 12</div>
     </div>
   </header>
 
@@ -407,24 +386,9 @@
   </footer>
 </div>
 
+<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
 <script>
-  (function(){
-    var root = document.documentElement;
-    var btn  = document.getElementById('themeToggle');
-
-    function apply(t) {
-      root.setAttribute('data-theme', t);
-      btn.textContent = t === 'dark' ? '☀ Hell' : '☾ Dunkel';
-    }
-
-    apply(root.getAttribute('data-theme') || 'dark');
-
-    btn.addEventListener('click', function(){
-      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('theme', next);
-      apply(next);
-    });
-  })();
+(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'dark');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
 </script>
 </body>
 </html>
