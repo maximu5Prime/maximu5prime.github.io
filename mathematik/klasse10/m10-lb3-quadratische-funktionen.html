@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quadratische Funktionen – M10 Lernbereich 3</title>
+<link rel="stylesheet" href="../../fonts/fonts.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+:root {
+  --ink: #1a1208;
+  --paper: #f7f3ec;
+  --cream: #ede8de;
+  --accent: #c8400a;
+  --accent2: #2a6496;
+  --gold: #c9961a;
+  --green: #2e7d4f;
+  --line: #d4cfc6;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.7; }
+
+header { background: var(--ink); color: var(--paper); padding: 2.8rem 2rem 2.2rem; position: relative; overflow: hidden; }
+header::before { content:''; position:absolute; top:-60px; right:-80px; width:300px; height:300px; border-radius:50%; background:var(--accent); opacity:.1; }
+header::after  { content:''; position:absolute; bottom:-40px; left:8%; width:180px; height:180px; border-radius:50%; background:var(--gold); opacity:.08; }
+.hinner { max-width: 900px; margin: 0 auto; position: relative; }
+.klass { font-family:var(--mono); font-size:.78rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.5rem; }
+.klass a { color: var(--gold); text-decoration: none; }
+.klass a:hover { text-decoration: underline; }
+header h1 { font-family:var(--serif); font-size:clamp(1.8rem,5vw,3rem); line-height:1.1; margin-bottom:.8rem; }
+header h1 span { color:var(--accent); }
+header p { font-size:.95rem; color:#a09888; max-width:580px; }
+
+nav { background:var(--ink); border-top:1px solid #2e2e2e; padding:0 1.5rem; display:flex; overflow-x:auto; gap:0; }
+nav button { font-family:var(--mono); font-size:.75rem; letter-spacing:.07em; text-transform:uppercase; background:none; border:none; color:#777; padding:.8rem 1.2rem; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
+nav button:hover { color:var(--paper); }
+nav button.active { color:var(--gold); border-bottom-color:var(--gold); }
+
+main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 5rem; }
+.tab { display:none; }
+.tab.active { display:block; animation: fu .3s ease; }
+@keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+
+h2 { font-family:var(--serif); font-size:1.8rem; font-weight:700; margin-bottom:.3rem; }
+h2 .num { font-family:var(--mono); font-size:.95rem; color:var(--accent); margin-right:.4rem; }
+.sub { color:#999; font-size:.88rem; font-style:italic; margin-bottom:1.8rem; }
+h3 { font-family:var(--serif); font-size:1.05rem; margin-bottom:.6rem; }
+
+.card { background:white; border:1px solid var(--line); border-radius:2px; padding:1.5rem 1.7rem; margin-bottom:1.2rem; box-shadow:0 2px 6px rgba(0,0,0,.04); }
+.card.theory { border-left:4px solid var(--accent2); background:#f0f5fa; }
+.card.ex     { border-left:4px solid var(--accent); }
+.card.warn   { border-left:4px solid var(--gold); background:#fffdf0; }
+.card.formula { border-left:4px solid var(--green); background:#f0faf5; }
+
+.fbox { background:var(--cream); border:1px solid var(--line); border-radius:2px; padding:.9rem 1.4rem; margin:.9rem 0; text-align:center; overflow-x:auto; }
+.fbox .katex-display { margin:0; }
+.fbox .katex { font-size:1.1em; }
+
+.step-formula { background:var(--cream); border-left:3px solid var(--accent2); padding:.55rem 1rem; margin:.45rem 0; border-radius:0 2px 2px 0; overflow-x:auto; }
+.result-box { padding:.65rem 1rem; background:#eaf7ee; border-left:3px solid var(--green); margin-top:.5rem; border-radius:0 2px 2px 0; overflow-x:auto; }
+
+ol.ex-list { padding-left:1.4rem; }
+ol.ex-list li { margin:.85rem 0; }
+ol.ex-list li .ex-stem { font-weight:500; }
+
+.bh { font-family:var(--mono); font-size:.72rem; padding:.3rem .75rem; border:1px dashed var(--gold); color:var(--gold); background:none; border-radius:2px; cursor:pointer; margin-top:.5rem; transition:background .15s; }
+.bh:hover { background:#fffbea; }
+.hint { background:#fffbea; border-left:3px solid var(--gold); padding:.65rem 1rem; font-size:.87rem; margin:.5rem 0 .2rem; display:none; overflow-x:auto; }
+.hint.open { display:block; }
+
+table.rt { width:100%; border-collapse:collapse; font-size:.88rem; margin:.8rem 0; }
+table.rt th { font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; background:var(--ink); color:var(--gold); padding:.5rem .8rem; text-align:left; }
+table.rt td { padding:.55rem .8rem; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:.84rem; }
+table.rt tr:nth-child(even) td { background:var(--cream); }
+
+.disc-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:.7rem; margin:.9rem 0; }
+@media(max-width:600px){ .disc-grid { grid-template-columns:1fr; } }
+.disc-card { background:white; border:1px solid var(--line); border-radius:2px; padding:.9rem 1.1rem; text-align:center; }
+.disc-card .dk { font-family:var(--mono); font-size:1.5rem; font-weight:700; margin-bottom:.3rem; }
+.disc-card .dk.pos { color:var(--green); }
+.disc-card .dk.zero { color:var(--gold); }
+.disc-card .dk.neg { color:var(--accent); }
+.disc-card p { font-size:.82rem; color:#555; }
+
+.tag { display:inline-block; font-family:var(--mono); font-size:.7rem; padding:.18rem .55rem; border-radius:20px; margin-right:.3rem; margin-bottom:.3rem; }
+.tb { background:#dbeafe; color:#1e40af; }
+.tr { background:#fee2e2; color:#991b1b; }
+.tg { background:#d1fae5; color:#065f46; }
+.ty { background:#fef9c3; color:#854d0e; }
+
+.section-label { font-family:var(--mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.18em; color:#999; margin: 1.8rem 0 .8rem; display:flex; align-items:center; gap:.8rem; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--line); }
+
+@media print {
+  @page { size: A4; margin: 1.5cm 2cm 2cm 2cm; }
+  nav, header .klass, .bh { display:none !important; }
+  .hint { display:block !important; }
+  .tab { display:block !important; }
+  body { font-size:10pt; line-height:1.45; background:white; }
+  main { padding:.4rem 0; }
+  .card { box-shadow:none; padding:.65rem .9rem; margin-bottom:.4rem; }
+  #t2, #t3, #t4, #t5 { break-before:page; }
+  h2 { break-after:avoid; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hinner">
+    <div class="klass"><a href="index.html">← Mathematik · Jgst. 10</a> &nbsp;/&nbsp; Lernbereich 3</div>
+    <h1>Quadratische<br><span>Funktionen</span></h1>
+    <p>Allgemeine Form · Scheitelpunktform · Schnittpunkte mit Achsen und anderen Funktionen</p>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="show('t1',this)">1 · Allgemeine Form</button>
+  <button onclick="show('t2',this)">2 · Scheitelpunktform</button>
+  <button onclick="show('t3',this)">3 · Schnittpunkte mit Achsen</button>
+  <button onclick="show('t4',this)">4 · Schnittpunkte zweier Funktionen</button>
+  <button onclick="show('t5',this)">5 · Gemischte Übungen</button>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 1 — ALLGEMEINE FORM
+════════════════════════════════════════════════════════════════ -->
+<div class="tab active" id="t1">
+  <h2><span class="num">1</span>Allgemeine Form</h2>
+  <p class="sub">Grundstruktur quadratischer Funktionen und ihre Parameter</p>
+
+  <div class="card theory">
+    <h3>Die allgemeine Form</h3>
+    <div class="fbox">$$f(x) = ax^2 + bx + c \qquad (a \neq 0)$$</div>
+    <table class="rt">
+      <tr><th>Parameter</th><th>Bedeutung</th><th>Beispiel</th></tr>
+      <tr><td>$a$</td><td>Öffnungsrichtung &amp; Stauchung/Streckung</td><td>$a>0$: oben offen &nbsp;|&nbsp; $a<0$: unten offen</td></tr>
+      <tr><td>$|a|$</td><td>Weite der Parabel</td><td>$|a|$ groß → schmal, $|a|$ klein → breit</td></tr>
+      <tr><td>$b$</td><td>beeinflusst Lage des Scheitels</td><td>(nicht direkt ablesbar)</td></tr>
+      <tr><td>$c$</td><td><strong>y-Achsenabschnitt</strong> (direkt ablesbar)</td><td>$f(0) = c$</td></tr>
+    </table>
+  </div>
+
+  <div class="card theory">
+    <h3>Beispiel</h3>
+    <p>$f(x) = 2x^2 - 5x + 3$</p>
+    <div class="step-formula">$a = 2, \quad b = -5, \quad c = 3$</div>
+    <p style="margin-top:.6rem">$a = 2 > 0$ → Parabel öffnet sich <strong>nach oben</strong>, ist schmaler als die Normalparabel.<br>
+    y-Achsenabschnitt: $f(0) = 3$ → Punkt $(0\,|\,3)$</p>
+  </div>
+
+  <p class="section-label">Aufgaben</p>
+
+  <div class="card ex">
+    <h3>Aufgabe 1 — Parameter ablesen</h3>
+    <p>Lies $a$, $b$ und $c$ ab. Bestimme außerdem die Öffnungsrichtung und den y-Achsenabschnitt.</p>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">$f(x) = 3x^2 - 5x + 2$</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$a = 3,\ b = -5,\ c = 2$ &nbsp;|&nbsp; öffnet <strong>nach oben</strong> &nbsp;|&nbsp; y-AS: $(0\,|\,2)$</div>
+      </li>
+      <li>
+        <span class="ex-stem">$g(x) = -x^2 + 4x$</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$a = -1,\ b = 4,\ c = 0$ &nbsp;|&nbsp; öffnet <strong>nach unten</strong> &nbsp;|&nbsp; y-AS: $(0\,|\,0)$</div>
+      </li>
+      <li>
+        <span class="ex-stem">$h(x) = 2x^2 + x - 7$</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$a = 2,\ b = 1,\ c = -7$ &nbsp;|&nbsp; öffnet <strong>nach oben</strong> &nbsp;|&nbsp; y-AS: $(0\,|\,-7)$</div>
+      </li>
+      <li>
+        <span class="ex-stem">$k(x) = -\tfrac{1}{2}x^2 + 3x - 1$</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$a = -\frac{1}{2},\ b = 3,\ c = -1$ &nbsp;|&nbsp; öffnet <strong>nach unten</strong>, breiter als Normalparabel &nbsp;|&nbsp; y-AS: $(0\,|\,-1)$</div>
+      </li>
+      <li>
+        <span class="ex-stem">$m(x) = 4x^2 - 8x$</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$a = 4,\ b = -8,\ c = 0$ &nbsp;|&nbsp; öffnet <strong>nach oben</strong>, schmaler als Normalparabel &nbsp;|&nbsp; y-AS: $(0\,|\,0)$</div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card ex">
+    <h3>Aufgabe 2 — Funktionswerte berechnen</h3>
+    <p>Gegeben: $f(x) = 2x^2 - 4x + 1$. Berechne die folgenden Funktionswerte.</p>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">$f(0)$</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$f(0) = 2 \cdot 0 - 4 \cdot 0 + 1 = 1$</div>
+      </li>
+      <li>
+        <span class="ex-stem">$f(3)$</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$f(3) = 2 \cdot 9 - 4 \cdot 3 + 1 = 18 - 12 + 1 = 7$</div>
+      </li>
+      <li>
+        <span class="ex-stem">$f(-2)$</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$f(-2) = 2 \cdot 4 - 4 \cdot (-2) + 1 = 8 + 8 + 1 = 17$</div>
+      </li>
+      <li>
+        <span class="ex-stem">Für welchen x-Wert gilt $f(x) = 1$? (Hinweis: Gleichung aufstellen!)</span>
+        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $2x^2 - 4x + 1 = 1 \Rightarrow 2x^2 - 4x = 0 \Rightarrow 2x(x-2) = 0$<br>
+          $x_1 = 0$ oder $x_2 = 2$
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 2 — SCHEITELPUNKTFORM
+════════════════════════════════════════════════════════════════ -->
+<div class="tab" id="t2">
+  <h2><span class="num">2</span>Scheitelpunktform</h2>
+  <p class="sub">Scheitelpunkt ablesen, umformen und umrechnen</p>
+
+  <div class="card theory">
+    <h3>Die Scheitelpunktform</h3>
+    <div class="fbox">$$f(x) = a(x - x_S)^2 + y_S$$</div>
+    <p>Der <strong>Scheitelpunkt</strong> $S(x_S\,|\,y_S)$ ist direkt ablesbar.<br>
+    Achtung: Das Vorzeichen vor $x_S$ ändert sich! Bei $f(x) = a(x \mathbf{+} 3)^2 + 1$ ist $x_S = \mathbf{-}3$.</p>
+    <table class="rt" style="margin-top:1rem">
+      <tr><th>Scheitelpunktform</th><th>Scheitelpunkt</th></tr>
+      <tr><td>$f(x) = 2(x-3)^2 + 5$</td><td>$S(3\,|\,5)$</td></tr>
+      <tr><td>$f(x) = -(x+1)^2 - 2$</td><td>$S(-1\,|\,-2)$</td></tr>
+      <tr><td>$f(x) = 3(x-0)^2 + 4$</td><td>$S(0\,|\,4)$</td></tr>
+    </table>
+  </div>
+
+  <div class="card theory">
+    <h3>Normalform → Scheitelpunktform (Quadratische Ergänzung)</h3>
+    <p>Ziel: $ax^2 + bx + c$ umformen in $a(x - x_S)^2 + y_S$</p>
+    <p style="margin-top:.8rem"><strong>Vorgehen:</strong></p>
+    <ol style="padding-left:1.4rem; margin-top:.4rem; font-size:.93rem; line-height:1.9">
+      <li>Falls $a \neq 1$: $a$ ausklammern</li>
+      <li>Quadratische Ergänzung: den Term $\left(\frac{b}{2a}\right)^2$ addieren und subtrahieren</li>
+      <li>Binomische Formel erkennen und zusammenfassen</li>
+    </ol>
+    <p style="margin-top:1rem"><strong>Gemerkte Formeln:</strong></p>
+    <div class="fbox">$$x_S = -\frac{b}{2a}, \qquad y_S = c - \frac{b^2}{4a}$$</div>
+    <p style="font-size:.85rem; color:#666">Diese Formeln kann man auch direkt anwenden, wenn man die Herleitung kennt.</p>
+  </div>
+
+  <div class="card theory">
+    <h3>Beispiel — Herleitung Schritt für Schritt</h3>
+    <p>$f(x) = 2x^2 - 8x + 3$</p>
+    <div class="step-formula">$= 2\left(x^2 - 4x\right) + 3$ &emsp; <span style="color:#888; font-size:.85rem">[$a = 2$ ausklammern]</span></div>
+    <div class="step-formula">$= 2\left(x^2 - 4x + 4 - 4\right) + 3$ &emsp; <span style="color:#888; font-size:.85rem">[Ergänze $\left(\frac{4}{2}\right)^2 = 4$]</span></div>
+    <div class="step-formula">$= 2\left(x - 2\right)^2 - 8 + 3$ &emsp; <span style="color:#888; font-size:.85rem">[Binomische Formel, $-4$ aus der Klammer heraus: $2 \cdot (-4) = -8$]</span></div>
+    <div class="result-box">$f(x) = 2(x-2)^2 - 5 \quad \Rightarrow \quad S(2\,|\,-5)$</div>
+  </div>
+
+  <p class="section-label">Aufgaben</p>
+
+  <div class="card ex">
+    <h3>Aufgabe 3 — Scheitelpunkt ablesen</h3>
+    <p>Lies den Scheitelpunkt direkt aus der Scheitelpunktform ab.</p>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">$f(x) = (x - 5)^2 + 3$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$S(5\,|\,3)$</div>
+      </li>
+      <li>
+        <span class="ex-stem">$g(x) = 3(x + 2)^2 - 7$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$S(-2\,|\,-7)$ &nbsp; Achtung: $+2$ in der Klammer → $x_S = -2$!</div>
+      </li>
+      <li>
+        <span class="ex-stem">$h(x) = -(x - 1)^2 + 6$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$S(1\,|\,6)$ &nbsp; Parabel öffnet nach unten ($a = -1$), Scheitelpunkt ist Maximum.</div>
+      </li>
+      <li>
+        <span class="ex-stem">$k(x) = 2(x + 4)^2$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$S(-4\,|\,0)$ &nbsp; Der Scheitel liegt auf der x-Achse.</div>
+      </li>
+      <li>
+        <span class="ex-stem">$m(x) = -\tfrac{1}{2}(x - 3)^2 + 9$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$S(3\,|\,9)$ &nbsp; Parabel öffnet nach unten, Scheitelpunkt ist globales Maximum.</div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card ex">
+    <h3>Aufgabe 4 — Normalform → Scheitelpunktform</h3>
+    <p>Forme durch quadratische Ergänzung um und lies den Scheitelpunkt ab.</p>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">$f(x) = x^2 - 6x + 5$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= x^2 - 6x + 9 - 9 + 5 = (x-3)^2 - 4$<br>
+          $\Rightarrow f(x) = (x-3)^2 - 4, \quad S(3\,|\,-4)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$g(x) = x^2 + 4x - 1$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= x^2 + 4x + 4 - 4 - 1 = (x+2)^2 - 5$<br>
+          $\Rightarrow g(x) = (x+2)^2 - 5, \quad S(-2\,|\,-5)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$h(x) = 2x^2 - 4x + 7$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= 2(x^2 - 2x) + 7 = 2(x^2 - 2x + 1 - 1) + 7 = 2(x-1)^2 - 2 + 7$<br>
+          $\Rightarrow h(x) = 2(x-1)^2 + 5, \quad S(1\,|\,5)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$k(x) = -x^2 + 2x + 3$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= -(x^2 - 2x) + 3 = -(x^2 - 2x + 1 - 1) + 3 = -(x-1)^2 + 1 + 3$<br>
+          $\Rightarrow k(x) = -(x-1)^2 + 4, \quad S(1\,|\,4)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$m(x) = 3x^2 + 6x - 9$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= 3(x^2 + 2x) - 9 = 3(x^2 + 2x + 1 - 1) - 9 = 3(x+1)^2 - 3 - 9$<br>
+          $\Rightarrow m(x) = 3(x+1)^2 - 12, \quad S(-1\,|\,-12)$
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card ex">
+    <h3>Aufgabe 5 — Scheitelpunktform → Normalform</h3>
+    <p>Multipliziere aus und ordne nach Potenzen.</p>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">$f(x) = (x - 3)^2 + 2$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= x^2 - 6x + 9 + 2 = x^2 - 6x + 11$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$g(x) = 2(x + 1)^2 - 5$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= 2(x^2 + 2x + 1) - 5 = 2x^2 + 4x + 2 - 5 = 2x^2 + 4x - 3$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$h(x) = -(x - 2)^2 + 4$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= -(x^2 - 4x + 4) + 4 = -x^2 + 4x - 4 + 4 = -x^2 + 4x$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$k(x) = 3(x + 2)^2 - 1$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= 3(x^2 + 4x + 4) - 1 = 3x^2 + 12x + 12 - 1 = 3x^2 + 12x + 11$
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 3 — SCHNITTPUNKTE MIT ACHSEN
+════════════════════════════════════════════════════════════════ -->
+<div class="tab" id="t3">
+  <h2><span class="num">3</span>Schnittpunkte mit den Achsen</h2>
+  <p class="sub">y-Achsenabschnitt, Nullstellen und die allgemeine Lösungsformel</p>
+
+  <div class="card theory">
+    <h3>Schnittpunkt mit der y-Achse</h3>
+    <p>Setze $x = 0$ ein:</p>
+    <div class="fbox">$$f(0) = a \cdot 0 + b \cdot 0 + c = c \quad \Rightarrow \quad \text{Punkt } (0\,|\,c)$$</div>
+    <p>Der y-Achsenabschnitt ist also immer direkt als $c$ ablesbar.</p>
+  </div>
+
+  <div class="card theory">
+    <h3>Nullstellen — Schnittpunkte mit der x-Achse</h3>
+    <p>Setze $f(x) = 0$ und löse:</p>
+    <div class="fbox">$$ax^2 + bx + c = 0$$</div>
+    <p>Zur Lösung verwenden wir die <strong>allgemeine Lösungsformel</strong> (Mitternachtsformel):</p>
+    <div class="card formula" style="margin:.9rem 0 .5rem">
+      <div class="fbox" style="border:none; background:transparent; font-size:1.1rem">
+        $$x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+      </div>
+      <p style="text-align:center; font-family:var(--mono); font-size:.78rem; color:var(--green)">▲ Diese Formel gilt immer — für beliebige Werte von a, b, c</p>
+    </div>
+  </div>
+
+  <div class="card warn">
+    <h3>Hinweis zur pq-Formel</h3>
+    <span class="tag ty">Wichtig</span>
+    <p style="margin-top:.5rem">Die pq-Formel ($x = -\frac{p}{2} \pm \sqrt{\left(\frac{p}{2}\right)^2 - q}$) funktioniert <strong>nur</strong> bei Gleichungen der Form $x^2 + px + q = 0$, also wenn der Koeffizient vor $x^2$ genau $1$ ist.</p>
+    <p style="margin-top:.6rem">Bei $2x^2 - 5x + 3 = 0$ müsste man erst durch 2 dividieren — das ist fehleranfällig. Die <strong>abc-Formel funktioniert immer direkt</strong> und sollte daher ab sofort immer verwendet werden.</p>
+  </div>
+
+  <div class="card theory">
+    <h3>Die Diskriminante $D = b^2 - 4ac$</h3>
+    <p>Vor dem Rechnen kann man mit $D$ die Anzahl der Nullstellen bestimmen:</p>
+    <div class="disc-grid">
+      <div class="disc-card">
+        <div class="dk pos">D &gt; 0</div>
+        <p><strong>Zwei</strong> Nullstellen<br>Parabel schneidet x-Achse zweimal</p>
+      </div>
+      <div class="disc-card">
+        <div class="dk zero">D = 0</div>
+        <p><strong>Eine</strong> Nullstelle<br>Parabel berührt x-Achse (Scheitelpunkt)</p>
+      </div>
+      <div class="disc-card">
+        <div class="dk neg">D &lt; 0</div>
+        <p><strong>Keine</strong> reelle Nullstelle<br>Parabel hat keinen Schnittpunkt mit x-Achse</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card theory">
+    <h3>Beispiel — Nullstellen mit der abc-Formel</h3>
+    <p>$f(x) = 2x^2 - 5x + 3$ &nbsp; mit &nbsp; $a = 2,\ b = -5,\ c = 3$</p>
+    <div class="step-formula">$D = b^2 - 4ac = (-5)^2 - 4 \cdot 2 \cdot 3 = 25 - 24 = 1 > 0$ &nbsp;→&nbsp; zwei Nullstellen</div>
+    <div class="step-formula">$x_{1,2} = \dfrac{-(-5) \pm \sqrt{1}}{2 \cdot 2} = \dfrac{5 \pm 1}{4}$</div>
+    <div class="result-box">$x_1 = \dfrac{6}{4} = \dfrac{3}{2} = 1{,}5 \qquad x_2 = \dfrac{4}{4} = 1$</div>
+    <p style="margin-top:.7rem">Schnittpunkte mit der x-Achse: $(1\,|\,0)$ und $(1{,}5\,|\,0)$</p>
+  </div>
+
+  <p class="section-label">Aufgaben</p>
+
+  <div class="card ex">
+    <h3>Aufgabe 6 — y-Achsenabschnitt bestimmen</h3>
+    <p>Gib den Schnittpunkt mit der y-Achse an.</p>
+    <ol class="ex-list">
+      <li>$f(x) = x^2 - 3x + 7$<button class="bh" onclick="tog(this)">Lösung</button><div class="hint">$f(0) = 7 \Rightarrow (0\,|\,7)$</div></li>
+      <li>$g(x) = -2x^2 + 5x$<button class="bh" onclick="tog(this)">Lösung</button><div class="hint">$g(0) = 0 \Rightarrow (0\,|\,0)$. Die Parabel verläuft durch den Ursprung.</div></li>
+      <li>$h(x) = 4x^2 - 1$<button class="bh" onclick="tog(this)">Lösung</button><div class="hint">$h(0) = -1 \Rightarrow (0\,|\,-1)$</div></li>
+      <li>$k(x) = -x^2 - 4x + 12$<button class="bh" onclick="tog(this)">Lösung</button><div class="hint">$k(0) = 12 \Rightarrow (0\,|\,12)$</div></li>
+    </ol>
+  </div>
+
+  <div class="card ex">
+    <h3>Aufgabe 7 — Nullstellen mit der abc-Formel</h3>
+    <p>Bestimme die Nullstellen mit der abc-Formel. Berechne zuerst $D$.</p>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">$f(x) = x^2 - 5x + 6$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=1,\, b=-5,\, c=6$ &nbsp;|&nbsp; $D = 25 - 24 = 1$<br>
+          $x_{1,2} = \frac{5 \pm 1}{2}$ &nbsp;→&nbsp; $x_1 = 3,\; x_2 = 2$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$g(x) = 2x^2 + 4x - 6$ &nbsp; <span class="tag tr">a ≠ 1</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=2,\, b=4,\, c=-6$ &nbsp;|&nbsp; $D = 16 + 48 = 64$<br>
+          $x_{1,2} = \frac{-4 \pm 8}{4}$ &nbsp;→&nbsp; $x_1 = 1,\; x_2 = -3$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$h(x) = x^2 + 4x + 4$ &nbsp; <span class="tag ty">D = 0?</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=1,\, b=4,\, c=4$ &nbsp;|&nbsp; $D = 16 - 16 = 0$<br>
+          $x = \frac{-4}{2} = -2$ &nbsp;→&nbsp; genau eine Nullstelle: $(-2\,|\,0)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$k(x) = 3x^2 - 12x + 9$ &nbsp; <span class="tag tr">a ≠ 1</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=3,\, b=-12,\, c=9$ &nbsp;|&nbsp; $D = 144 - 108 = 36$<br>
+          $x_{1,2} = \frac{12 \pm 6}{6}$ &nbsp;→&nbsp; $x_1 = 3,\; x_2 = 1$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$m(x) = x^2 - 2x + 5$ &nbsp; <span class="tag tb">D &lt; 0?</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=1,\, b=-2,\, c=5$ &nbsp;|&nbsp; $D = 4 - 20 = -16 < 0$<br>
+          Keine reellen Nullstellen — die Parabel liegt vollständig über der x-Achse.
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$n(x) = -2x^2 + 8x$ &nbsp; <span class="tag tr">a ≠ 1, c = 0</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=-2,\, b=8,\, c=0$ &nbsp;|&nbsp; $D = 64 - 0 = 64$<br>
+          $x_{1,2} = \frac{-8 \pm 8}{-4}$ &nbsp;→&nbsp; $x_1 = 0,\; x_2 = 4$<br>
+          (Alternativ: $-2x(x-4) = 0$ direkt ausklammern)
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$p(x) = 2x^2 + 3x - 2$ &nbsp; <span class="tag tr">a ≠ 1</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=2,\, b=3,\, c=-2$ &nbsp;|&nbsp; $D = 9 + 16 = 25$<br>
+          $x_{1,2} = \frac{-3 \pm 5}{4}$ &nbsp;→&nbsp; $x_1 = \frac{1}{2},\; x_2 = -2$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$q(x) = -x^2 + 6x - 9$ &nbsp; <span class="tag ty">D = 0?</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=-1,\, b=6,\, c=-9$ &nbsp;|&nbsp; $D = 36 - 36 = 0$<br>
+          $x = \frac{-6}{-2} = 3$ &nbsp;→&nbsp; genau eine Nullstelle: $(3\,|\,0)$ (Scheitelpunkt auf x-Achse)
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 4 — SCHNITTPUNKTE ZWEIER FUNKTIONEN
+════════════════════════════════════════════════════════════════ -->
+<div class="tab" id="t4">
+  <h2><span class="num">4</span>Schnittpunkte zweier Funktionen</h2>
+  <p class="sub">Gleichung aufstellen, auf 0 bringen, abc-Formel anwenden</p>
+
+  <div class="card theory">
+    <h3>Vorgehen</h3>
+    <p>Gesucht: alle Punkte, in denen $f$ und $g$ denselben y-Wert haben.</p>
+    <ol style="padding-left:1.4rem; margin-top:.6rem; line-height:2">
+      <li>Gleichung $f(x) = g(x)$ aufstellen</li>
+      <li>Alles auf eine Seite bringen: $\ldots = 0$</li>
+      <li>Gleichung vereinfachen → Form $ax^2 + bx + c = 0$</li>
+      <li>abc-Formel anwenden → $x$-Werte berechnen</li>
+      <li>$x$-Werte in <em>eine</em> der Funktionen einsetzen → $y$-Werte</li>
+      <li>Schnittpunkte als Koordinatenpaare angeben</li>
+    </ol>
+  </div>
+
+  <div class="card theory">
+    <h3>Beispiel — Parabel und Gerade</h3>
+    <p>$f(x) = x^2 - 2x + 1$ und $g(x) = 2x - 1$</p>
+    <div class="step-formula">$x^2 - 2x + 1 = 2x - 1$</div>
+    <div class="step-formula">$x^2 - 4x + 2 = 0$ &emsp; ($a=1, b=-4, c=2$)</div>
+    <div class="step-formula">$D = 16 - 8 = 8 > 0$ &nbsp;→&nbsp; zwei Schnittpunkte</div>
+    <div class="step-formula">$x_{1,2} = \dfrac{4 \pm \sqrt{8}}{2} = 2 \pm \sqrt{2}$</div>
+    <p style="margin:.7rem 0 .3rem">y-Werte (in $g$ einsetzen):</p>
+    <div class="step-formula">$y_1 = 2(2+\sqrt{2})-1 = 3+2\sqrt{2}$ &emsp; $y_2 = 2(2-\sqrt{2})-1 = 3-2\sqrt{2}$</div>
+    <div class="result-box">$S_1\!\left(2{+}\sqrt{2}\;|\;3{+}2\sqrt{2}\right) \approx (3{,}41\,|\,5{,}83)$<br>
+    $S_2\!\left(2{-}\sqrt{2}\;|\;3{-}2\sqrt{2}\right) \approx (0{,}59\,|\,0{,}17)$</div>
+  </div>
+
+  <p class="section-label">Aufgaben</p>
+
+  <div class="card ex">
+    <h3>Aufgabe 8 — Schnittpunkte bestimmen</h3>
+    <p>Bestimme alle Schnittpunkte der gegebenen Funktionen.</p>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">$f(x) = x^2 - 3x + 2$ und $g(x) = x - 1$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $x^2 - 3x + 2 = x - 1 \Rightarrow x^2 - 4x + 3 = 0$<br>
+          $D = 16 - 12 = 4 \Rightarrow x_{1,2} = \frac{4 \pm 2}{2} \Rightarrow x_1 = 3,\; x_2 = 1$<br>
+          $y_1 = 3 - 1 = 2,\; y_2 = 1 - 1 = 0$<br>
+          Schnittpunkte: $S_1(3\,|\,2)$ und $S_2(1\,|\,0)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$f(x) = x^2 - 4$ und $g(x) = x + 2$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $x^2 - 4 = x + 2 \Rightarrow x^2 - x - 6 = 0$<br>
+          $D = 1 + 24 = 25 \Rightarrow x_{1,2} = \frac{1 \pm 5}{2} \Rightarrow x_1 = 3,\; x_2 = -2$<br>
+          $y_1 = 5,\; y_2 = 0$<br>
+          Schnittpunkte: $S_1(3\,|\,5)$ und $S_2(-2\,|\,0)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$f(x) = 2x^2 + 1$ und $g(x) = x^2 + 2x$ &nbsp; <span class="tag tb">zwei Parabeln</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $2x^2 + 1 = x^2 + 2x \Rightarrow x^2 - 2x + 1 = 0$<br>
+          $D = 4 - 4 = 0 \Rightarrow x = 1$ (genau ein Schnittpunkt / Berührpunkt)<br>
+          $y = 2 \cdot 1 + 1 = 3$<br>
+          Schnittpunkt: $S(1\,|\,3)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$f(x) = x^2 + x - 2$ und $g(x) = 3x + 2$</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $x^2 + x - 2 = 3x + 2 \Rightarrow x^2 - 2x - 4 = 0$<br>
+          $D = 4 + 16 = 20 \Rightarrow x_{1,2} = \frac{2 \pm \sqrt{20}}{2} = 1 \pm \sqrt{5}$<br>
+          $y_1 = 3(1+\sqrt{5})+2 = 5 + 3\sqrt{5} \approx 11{,}7$<br>
+          $y_2 = 3(1-\sqrt{5})+2 = 5 - 3\sqrt{5} \approx -1{,}7$<br>
+          Schnittpunkte: $S_1(1{+}\sqrt{5}\;|\;5{+}3\sqrt{5})$ und $S_2(1{-}\sqrt{5}\;|\;5{-}3\sqrt{5})$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">$f(x) = x^2 - 2x + 3$ und $g(x) = x + 1$ &nbsp; <span class="tag tr">kein Schnittpunkt?</span></span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $x^2 - 2x + 3 = x + 1 \Rightarrow x^2 - 3x + 2{,}5 = 0$<br>
+
+          Achtung: hier muss man genau rechnen. $a=1, b=-3, c=2{,}5$<br>
+          $D = 9 - 10 = -1 < 0$<br>
+          Keine reellen Lösungen → die Gerade und die Parabel haben <strong>keinen Schnittpunkt</strong>.
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAB 5 — GEMISCHTE ÜBUNGEN
+════════════════════════════════════════════════════════════════ -->
+<div class="tab" id="t5">
+  <h2><span class="num">5</span>Gemischte Übungen</h2>
+  <p class="sub">Kombinierte Aufgaben — alle Themen</p>
+
+  <div class="card ex">
+    <h3>Aufgabe 9 — Vollständige Analyse</h3>
+    <p>Gegeben: $f(x) = 2x^2 - 6x - 8$. Bestimme:</p>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">a) Öffnungsrichtung und y-Achsenabschnitt (ohne Rechnung)</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$a = 2 > 0$ → öffnet nach oben. y-AS: $c = -8$ → Punkt $(0\,|\,-8)$</div>
+      </li>
+      <li>
+        <span class="ex-stem">b) Den Scheitelpunkt (Scheitelpunktform bestimmen)</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $= 2(x^2 - 3x) - 8 = 2\!\left(x^2 - 3x + \tfrac{9}{4} - \tfrac{9}{4}\right) - 8 = 2\!\left(x - \tfrac{3}{2}\right)^2 - \tfrac{9}{2} - 8$<br>
+          $= 2\!\left(x - \tfrac{3}{2}\right)^2 - \tfrac{25}{2}$<br>
+          $S\!\left(\tfrac{3}{2}\,\big|\,-\tfrac{25}{2}\right) = S(1{,}5\,|\,-12{,}5)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">c) Die Nullstellen</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=2, b=-6, c=-8$ &nbsp;|&nbsp; $D = 36 + 64 = 100$<br>
+          $x_{1,2} = \frac{6 \pm 10}{4}$ &nbsp;→&nbsp; $x_1 = 4,\; x_2 = -1$<br>
+          Nullstellen: $(4\,|\,0)$ und $(-1\,|\,0)$
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card ex">
+    <h3>Aufgabe 10 — Parabel aus Bedingungen</h3>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">Eine Parabel hat den Scheitelpunkt $S(2\,|\,3)$ und verläuft durch $(0\,|\,7)$. Bestimme ihre Gleichung.</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          Ansatz: $f(x) = a(x-2)^2 + 3$<br>
+          Punkt $(0\,|\,7)$ einsetzen: $7 = a \cdot 4 + 3 \Rightarrow a = 1$<br>
+          $f(x) = (x-2)^2 + 3 = x^2 - 4x + 7$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">Eine Parabel verläuft durch die Nullstellen $x_1 = -1$ und $x_2 = 5$ sowie durch den Punkt $(0\,|\,-5)$. Bestimme ihre Gleichung.</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          Ansatz (Linearfaktorform): $f(x) = a(x+1)(x-5)$<br>
+          Punkt $(0\,|\,-5)$: $-5 = a \cdot 1 \cdot (-5) = -5a \Rightarrow a = 1$<br>
+          $f(x) = (x+1)(x-5) = x^2 - 4x - 5$
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card ex">
+    <h3>Aufgabe 11 — Schnittpunkte und Lage</h3>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">Untersuche, wie oft sich $f(x) = x^2 + 2$ und $g(x) = -x^2 + 10$ schneiden, und bestimme die Schnittpunkte.</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $x^2 + 2 = -x^2 + 10 \Rightarrow 2x^2 - 8 = 0 \Rightarrow x^2 = 4 \Rightarrow x = \pm 2$<br>
+          $y = 4 + 2 = 6$<br>
+          Schnittpunkte: $S_1(2\,|\,6)$ und $S_2(-2\,|\,6)$
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">Für welchen Wert $k$ berührt die Gerade $g(x) = kx + 1$ die Parabel $f(x) = x^2$ genau einmal?</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $x^2 = kx + 1 \Rightarrow x^2 - kx - 1 = 0$<br>
+          Berührung genau einmal: $D = 0 \Rightarrow k^2 + 4 = 0$<br>
+          Keine reelle Lösung! Jede Gerade $g(x) = kx + 1$ schneidet $f(x) = x^2$ immer genau zweimal oder gar nicht (für $k = 0$: $D = -4 < 0$, kein Schnittpunkt).<br>
+          <em>Hinweis: Die Gerade $g(x) = kx + 1$ geht durch $(0|1)$ — oberhalb des Scheitels $S(0|0)$ → je nach Steigung 0 oder 2 Schnittpunkte.</em>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card ex">
+    <h3>Aufgabe 12 — Textaufgabe</h3>
+    <p>Ein Ball wird geworfen und seine Höhe (in Metern) in Abhängigkeit von der Wurfweite $x$ (in Metern) beschreibt die Funktion:</p>
+    <div class="fbox">$$h(x) = -0{,}1x^2 + 1{,}2x + 2$$</div>
+    <ol class="ex-list">
+      <li>
+        <span class="ex-stem">Wie hoch liegt der Ball zu Beginn (bei $x = 0$)?</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">$h(0) = 2$ m — der Ball wird aus 2 m Höhe geworfen.</div>
+      </li>
+      <li>
+        <span class="ex-stem">In welcher maximalen Höhe fliegt der Ball? (Scheitelpunkt)</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $a=-0{,}1,\, b=1{,}2,\, c=2$<br>
+          $x_S = -\frac{b}{2a} = -\frac{1{,}2}{-0{,}2} = 6$ m (Wurfweite am Scheitelpunkt)<br>
+          $h(6) = -0{,}1 \cdot 36 + 1{,}2 \cdot 6 + 2 = -3{,}6 + 7{,}2 + 2 = 5{,}6$ m
+        </div>
+      </li>
+      <li>
+        <span class="ex-stem">Bei welcher Wurfweite landet der Ball (Nullstellen, $h(x) = 0$)?</span>
+        <button class="bh" onclick="tog(this)">Lösung</button>
+        <div class="hint">
+          $-0{,}1x^2 + 1{,}2x + 2 = 0$ &nbsp;|&nbsp; $\cdot(-10)$:<br>
+          $x^2 - 12x - 20 = 0$<br>
+          $D = 144 + 80 = 224$<br>
+          $x_{1,2} = \frac{12 \pm \sqrt{224}}{2} = 6 \pm \sqrt{56} \approx 6 \pm 7{,}48$<br>
+          $x_1 \approx 13{,}48$ m (Landepunkt) &nbsp;|&nbsp; $x_2 \approx -1{,}48$ m (nicht sinnvoll)
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>
+
+</main>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function tog(btn) {
+  const h = btn.nextElementSibling;
+  h.classList.toggle('open');
+  btn.textContent = h.classList.contains('open') ? 'Lösung verbergen' : 'Lösung';
+}
+</script>
+</body>
+</html>
