@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mathematik – Jahrgangsstufe 10</title>
+  <title>Mathematik – Jahrgangsstufe 10 (VKL)</title>
   <link rel="stylesheet" href="../../fonts/fonts.css">
   <style>
     :root {
@@ -15,7 +15,7 @@
       --accent: #e8c547;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
     body::before {
       content: '';
       position: fixed; inset: 0;
@@ -25,95 +25,293 @@
       background-size: 40px 40px;
       pointer-events: none; z-index: 0;
     }
-    .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
-    .breadcrumb {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 3rem;
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; position: relative; z-index: 1; }
+
+    /* Breadcrumb */
+    .breadcrumb { padding: 1.5rem 0 0; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
     .breadcrumb a:hover { color: var(--accent); }
-    .breadcrumb span { opacity: 0.4; }
-    .construction {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 1.5rem;
-      padding: 4rem 0;
+    .breadcrumb span { color: #333; }
+
+    /* Header */
+    header { padding: 2rem 0 2.5rem; border-bottom: 1px solid var(--border); }
+    .fach-tag { font-family: 'DM Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 0.6rem; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; }
+    h1 em { font-style: italic; color: var(--accent); }
+    .header-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; max-width: 620px; }
+    .header-badges { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.75rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
+    .badge.highlight { border-color: var(--accent); color: var(--accent); }
+
+    /* Section label */
+    .section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin: 2.5rem 0 1rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Lernbereich Cards */
+    .lernbereich-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+
+    .lb-card { background: var(--surface); display: grid; grid-template-columns: 56px 1fr auto; align-items: start; text-decoration: none; color: inherit; transition: background 0.15s; }
+    .lb-card:hover { background: #1d1d1d; }
+    .lb-card:hover .lb-arrow { opacity: 1; transform: translateX(0); }
+    .lb-card:hover .lb-num { opacity: 1; }
+
+    .lb-num { padding: 1.5rem 0 1.5rem 1.4rem; font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--accent); line-height: 1; opacity: 0.28; transition: opacity 0.15s; }
+    .lb-content { padding: 1.4rem 1rem 1.4rem 1.2rem; border-left: 1px solid var(--border); }
+    .lb-id { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--text-muted); margin-bottom: 0.3rem; letter-spacing: 0.12em; }
+    .lb-title { font-size: 0.98rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.35; }
+    .lb-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; }
+    .lb-tags { margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .lb-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 0.18rem 0.5rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
+
+    .lb-meta { padding: 1.4rem 1.4rem 1.4rem 1rem; display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; min-width: 80px; }
+    .lb-hours { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--text-muted); white-space: nowrap; border: 1px solid var(--border); padding: 0.22rem 0.55rem; border-radius: 2rem; }
+    .lb-arrow { font-size: 1rem; color: var(--accent); opacity: 0; transform: translateX(-5px); transition: opacity 0.15s, transform 0.15s; }
+
+    /* Animations */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    header            { animation: fadeUp 0.4s ease both; }
+    .lernbereich-list { animation: fadeUp 0.4s 0.1s ease both; }
+
+    @media (max-width: 580px) {
+      .lb-card { grid-template-columns: 40px 1fr; }
+      .lb-meta { display: none; }
+      .lb-num { padding: 1.2rem 0 1.2rem 1rem; font-size: 1.4rem; }
     }
-    .construction-icon {
-      font-size: 4rem;
-      opacity: 0.6;
-    }
-    .construction-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      color: var(--accent);
-      line-height: 1.1;
-    }
-    .construction-sub {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-    }
-    .construction-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      max-width: 380px;
-      line-height: 1.6;
-    }
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--accent);
-      padding: 0.5rem 1.1rem;
-      border-radius: 2rem;
-      transition: background 0.15s, color 0.15s;
-      margin-top: 1rem;
-    }
-    .back-link:hover { background: var(--accent); color: #000; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .construction { animation: fadeUp 0.5s ease both; }
   </style>
 </head>
 <body>
 <div class="container">
-  <nav class="breadcrumb">
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
     <a href="../../index.html">Lernportal</a>
     <span>/</span>
-    <a href="../../index.html#mathematik">Mathematik</a>
+    <span>Mathematik</span>
     <span>/</span>
-    Jgst. 10
+    Jahrgangsstufe 10 (VKL)
   </nav>
 
-  <div class="construction">
-    <div class="construction-icon">🚧</div>
-    <div class="construction-title">Im Aufbau</div>
-    <div class="construction-sub">Mathematik · Jahrgangsstufe 10</div>
-    <p class="construction-desc">
-      Diese Seite wird gerade aufgebaut. Hier erscheinen bald Materialien, Aufgaben und Übungen für die Jahrgangsstufe 10.
+  <header>
+    <div class="fach-tag">∑ Mathematik · Vorklasse (Jgst. 10)</div>
+    <h1>Lernbereiche<br><em>Übersicht</em></h1>
+    <p class="header-meta">
+      Alle 8 Lernbereiche gemäß Fachlehrplan · Mathematik Vorklasse (FOS) · gültig ab 2017/18.
+      Klicke auf einen Lernbereich, um zu den Materialien und Aufgaben zu gelangen.
     </p>
-    <a class="back-link" href="../../index.html">← Zurück zur Übersicht</a>
+    <div class="header-badges">
+      <span class="badge highlight">8 Lernbereiche</span>
+      <span class="badge">ca. 224 Std. gesamt</span>
+      <span class="badge">Algebra</span>
+      <span class="badge">Funktionen</span>
+      <span class="badge">Geometrie</span>
+      <span class="badge">Stochastik</span>
+    </div>
+  </header>
+
+  <p class="section-label">Lernbereiche</p>
+
+  <div class="lernbereich-list">
+
+    <!-- LB 1 -->
+    <div class="lb-card">
+      <div class="lb-num">1</div>
+      <div class="lb-content">
+        <div class="lb-id">M 10 · Lernbereich 1</div>
+        <div class="lb-title">Aussagenlogik, Mengenlehre mit Zahlenmengen, Rechenregeln</div>
+        <div class="lb-desc">
+          Konjunktion, Disjunktion, Negation, Konditional. Zahlenmengen ℕ, ℤ, ℚ, ℝ und Mengenoperationen.
+          Grundrechenarten, Potenzgesetze, Absolutbeträge. Wurzelgesetze, Rationalmachen des Nenners.
+          Bruchterme, binomische Formeln.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Aussagenlogik</span>
+          <span class="lb-tag">Zahlenmengen</span>
+          <span class="lb-tag">Potenzen</span>
+          <span class="lb-tag">Wurzeln</span>
+          <span class="lb-tag">Bruchterme</span>
+          <span class="lb-tag">Binomische Formeln</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 50 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- LB 2 -->
+    <div class="lb-card">
+      <div class="lb-num">2</div>
+      <div class="lb-content">
+        <div class="lb-id">M 10 · Lernbereich 2</div>
+        <div class="lb-title">Gleichungen und lineare Ungleichungen</div>
+        <div class="lb-desc">
+          Lineare Gleichungen und Ungleichungen (auch mit Parameter). Quadratische Gleichungen:
+          Diskriminante, Lösungsformel, Satz von Vieta, Faktorisieren. Bruchgleichungen und Definitionsmenge.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Äquivalenzumformung</span>
+          <span class="lb-tag">Diskriminante</span>
+          <span class="lb-tag">pq-Formel</span>
+          <span class="lb-tag">Satz von Vieta</span>
+          <span class="lb-tag">Bruchgleichung</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 20 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- LB 3 -->
+    <div class="lb-card">
+      <div class="lb-num">3</div>
+      <div class="lb-content">
+        <div class="lb-id">M 10 · Lernbereich 3</div>
+        <div class="lb-title">Lineare und quadratische Funktionen</div>
+        <div class="lb-desc">
+          Lineare Funktionen: Darstellungsweisen, Funktionsbegriff. Quadratische Funktionen in Normal-,
+          Scheitelpunkt- und Linearfaktorform. Eigenschaften, Schnittpunkte, Ungleichungen grafisch.
+          Funktionenscharen mit linearem Parameter.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Normalform</span>
+          <span class="lb-tag">Scheitelpunktform</span>
+          <span class="lb-tag">Linearfaktorform</span>
+          <span class="lb-tag">Nullstellen</span>
+          <span class="lb-tag">Intervallschreibweise</span>
+          <span class="lb-tag">Scharen</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 60 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- LB 4 -->
+    <div class="lb-card">
+      <div class="lb-num">4</div>
+      <div class="lb-content">
+        <div class="lb-id">M 10 · Lernbereich 4</div>
+        <div class="lb-title">Lineare Gleichungssysteme</div>
+        <div class="lb-desc">
+          LGS mit 2 Gleichungen und 2 Unbekannten grafisch lösen. LGS mit bis zu 3 Unbekannten:
+          Einsetzverfahren, Additionsverfahren, Gauß-Algorithmus.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Einsetzverfahren</span>
+          <span class="lb-tag">Additionsverfahren</span>
+          <span class="lb-tag">Gauß-Algorithmus</span>
+          <span class="lb-tag">Lösbarkeit</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 20 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- LB 5 -->
+    <div class="lb-card">
+      <div class="lb-num">5</div>
+      <div class="lb-content">
+        <div class="lb-id">M 10 · Lernbereich 5</div>
+        <div class="lb-title">Dreieckslehre</div>
+        <div class="lb-desc">
+          Dreiecksarten (gleichseitig, gleichschenklig, rechtwinklig). Seitenlängen und Winkel berechnen:
+          Innenwinkelsumme, Satz des Pythagoras, Sinus, Kosinus, Tangens.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Pythagoras</span>
+          <span class="lb-tag">Sinus</span>
+          <span class="lb-tag">Kosinus</span>
+          <span class="lb-tag">Tangens</span>
+          <span class="lb-tag">Innenwinkelsumme</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 13 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- LB 6 -->
+    <div class="lb-card">
+      <div class="lb-num">6</div>
+      <div class="lb-content">
+        <div class="lb-id">M 10 · Lernbereich 6</div>
+        <div class="lb-title">Berechnungen von Längen, Flächeninhalten und Volumina</div>
+        <div class="lb-desc">
+          Strahlensatz für unbekannte Längen. Flächeninhalte und Umfänge ebener Figuren (Rechteck,
+          Parallelogramm, Dreieck, Trapez, Kreis, Kreissektor). Oberfläche und Volumen von Körpern
+          (Quader, Prisma, Pyramide, Zylinder, Kegel, Kugel).
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Strahlensatz</span>
+          <span class="lb-tag">Kreissektor</span>
+          <span class="lb-tag">Volumen</span>
+          <span class="lb-tag">Oberfläche</span>
+          <span class="lb-tag">Körper</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 25 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- LB 7 -->
+    <div class="lb-card">
+      <div class="lb-num">7</div>
+      <div class="lb-content">
+        <div class="lb-id">M 10 · Lernbereich 7</div>
+        <div class="lb-title">Daten und Zufall, Wahrscheinlichkeit</div>
+        <div class="lb-desc">
+          Zufallsexperimente (max. dreistufig), Ergebnisraum, Baumdiagramm, Ereignis-Algebra,
+          Venn-Diagramm. Absolute und relative Häufigkeiten. Laplace-Experimente, Pfadregeln,
+          Vierfeldertafel.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Baumdiagramm</span>
+          <span class="lb-tag">Laplace</span>
+          <span class="lb-tag">Pfadregeln</span>
+          <span class="lb-tag">Vierfeldertafel</span>
+          <span class="lb-tag">Häufigkeit</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 18 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- LB 8 -->
+    <div class="lb-card">
+      <div class="lb-num">8</div>
+      <div class="lb-content">
+        <div class="lb-id">M 10 · Lernbereich 8</div>
+        <div class="lb-title">Exponentialfunktion und Logarithmus</div>
+        <div class="lb-desc">
+          Exponentielles Wachstum und Abnahme. Funktionen b · aˣ (a > 0): Wertemenge, Asymptote,
+          Monotonie. Exponentialgleichungen mit Logarithmusgesetzen lösen. Modellierung von
+          Wachstums- und Zerfallsprozessen.
+        </div>
+        <div class="lb-tags">
+          <span class="lb-tag">Exponentialfunktion</span>
+          <span class="lb-tag">Asymptote</span>
+          <span class="lb-tag">Logarithmus</span>
+          <span class="lb-tag">Wachstum</span>
+          <span class="lb-tag">Zerfall</span>
+          <span class="lb-tag">Modellierung</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. 18 Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </div>
+
   </div>
+
 </div>
 </body>
 </html>
