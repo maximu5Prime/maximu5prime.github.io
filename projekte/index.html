@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projekte</title>
+  <link rel="stylesheet" href="../static/fonts.css">
+  <link rel="stylesheet" href="../static/theme.css">
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <style>
+    :root { --bg:#0f0f0f; --surface:#171717; --border:#2a2a2a; --text:#f0ede8; --text-muted:#888; --projekte:#c084fc; }
+    html[data-theme="light"] { --projekte:#7c3aed; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; z-index:0; }
+    .container { max-width:1100px; margin:0 auto; padding:0 2rem; position:relative; z-index:1; }
+    header { padding:3rem 0 2rem; border-bottom:1px solid var(--border); }
+    .bc { font-family:'DM Mono',monospace; font-size:.68rem; color:var(--text-muted); display:flex; gap:.4rem; align-items:center; margin-bottom:.8rem; }
+    .bc a { color:var(--text-muted); text-decoration:none; } .bc a:hover { color:var(--text); }
+    .klass { font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.18em; color:var(--projekte); text-transform:uppercase; margin-bottom:.5rem; }
+    h1 { font-family:'DM Serif Display',serif; font-size:clamp(2rem,5vw,3.2rem); line-height:1.1; }
+    h1 span { color:var(--projekte); font-style:italic; }
+    .placeholder { margin:4rem 0; text-align:center; color:var(--text-muted); font-family:'DM Mono',monospace; font-size:.85rem; }
+    .placeholder p { margin:.4rem 0; }
+    footer { margin-top:5rem; padding:2rem 0; border-top:1px solid var(--border); }
+    .back-btn { font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--projekte); text-decoration:none; }
+    .back-btn:hover { opacity:.7; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <nav class="bc"><a href="../index.html">Lernportal</a> <span>/</span> <span>Projekte</span></nav>
+    <div class="klass">Projekte</div>
+    <h1>Schüler<span>projekte</span></h1>
+  </header>
+
+  <div class="placeholder">
+    <p>— Noch keine Projekte vorhanden —</p>
+    <p style="margin-top:.8rem;font-size:.75rem;">Hier werden fächerübergreifende Projekte und Dokumentationen erscheinen.</p>
+  </div>
+
+  <footer><a class="back-btn" href="../index.html">← Lernportal</a></footer>
+</div>
+<button id="themeToggle" aria-label="Farbschema wechseln"></button>
+<script>(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'dark');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();</script>
+</body>
+</html>
