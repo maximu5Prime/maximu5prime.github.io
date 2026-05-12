@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LB 4 – Relative Häufigkeit und Wahrscheinlichkeit · Mathe 11</title>
+  <link rel="stylesheet" href="../../../static/fonts.css">
+  <link rel="stylesheet" href="../../../static/theme.css">
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #171717;
+      --border: #2a2a2a;
+      --text: #f0ede8;
+      --text-muted: #888;
+      --accent: #e8c547;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; position: relative; z-index: 1; }
+    .breadcrumb { padding: 1.5rem 0 0; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: #333; }
+    header { padding: 2rem 0 2.5rem; border-bottom: 1px solid var(--border); }
+    .fach-tag { font-family: 'DM Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 0.6rem; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.1; letter-spacing: -0.02em; }
+    h1 em { font-style: italic; color: var(--accent); }
+    .header-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; max-width: 620px; }
+    .header-badges { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.75rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
+    .badge.highlight { border-color: var(--accent); color: var(--accent); }
+    .section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin: 2.5rem 0 1rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .coming-soon { border: 1px dashed var(--border); border-radius: 10px; padding: 3rem 2rem; text-align: center; }
+    .coming-soon p { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    header { animation: fadeUp 0.4s ease both; }
+    .coming-soon { animation: fadeUp 0.4s 0.1s ease both; }
+  </style>
+<script>
+(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+</script></head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="../../../index.html">Lernportal</a>
+    <span>/</span>
+    <a href="../index.html">Mathematik · Jgst. 11</a>
+    <span>/</span>
+    Relative Häufigkeit und Wahrscheinlichkeit
+  </nav>
+
+  <header>
+    <div class="fach-tag">∑ M 11 · Lernbereich 4</div>
+    <h1>Relative Häufigkeit<br><em>und Wahrscheinlichkeit</em></h1>
+    <p class="header-meta">
+      Laplace-Experimente, Pfadregeln, bedingte Wahrscheinlichkeit, stochastische Unabhängigkeit, Vierfeldertafel.
+    </p>
+    <div class="header-badges">
+      <span class="badge highlight">ca. 14 Std.</span>
+      <span class="badge">Laplace</span>
+      <span class="badge">Pfadregeln</span>
+      <span class="badge">Vierfeldertafel</span>
+    </div>
+  </header>
+
+  <p class="section-label">Unterrichtseinheiten &amp; Materialien</p>
+
+  <div class="coming-soon">
+    <p>Materialien für diesen Lernbereich sind in Vorbereitung.</p>
+  </div>
+
+</div>
+
+<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
+<script>
+(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'dark');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
+</script>
+</body>
+</html>
