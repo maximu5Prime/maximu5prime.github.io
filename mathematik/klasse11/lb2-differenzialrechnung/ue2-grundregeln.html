@@ -342,9 +342,11 @@ details[open] summary { margin-bottom:.5rem; }
       draw();
     }
 
+    window.derivUpdate = update;
     slider.addEventListener('input', update);
-    window.addEventListener('resize', update);
-    window.addEventListener('load', function(){ setTimeout(update, 200); });
+    window.addEventListener('resize', function(){
+      if (document.getElementById('t2').classList.contains('active')) update();
+    });
   })();
   </script>
 
@@ -512,6 +514,7 @@ function showTab(id, btn) {
   document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
+  if (id === 't2') setTimeout(function(){ if(window.derivUpdate) window.derivUpdate(); }, 40);
 }
 function toggleHint(id) {
   const el = document.getElementById(id);
