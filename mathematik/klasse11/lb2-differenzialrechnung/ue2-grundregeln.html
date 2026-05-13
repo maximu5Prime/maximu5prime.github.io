@@ -74,10 +74,23 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
 .qopt.correct { border-color:var(--green)!important; background:#eaf7ee!important; color:var(--green)!important; }
 .qopt.wrong   { border-color:#c0392b!important; background:#fdecea!important; color:#c0392b!important; }
 .ggb-wrap { margin:.9rem 0; border-radius:4px; overflow:hidden; border:1px solid var(--line); background:var(--cream); }
-.ggb-wrap iframe { display:block; width:100%; height:450px; border:0; }
-.ggb-pending { padding:1.5rem; text-align:center; font-family:var(--mono); font-size:.82rem; color:#888; }
-.ggb-pending strong { display:block; margin-bottom:.4rem; color:var(--ink); font-size:.9rem; }
-.ggb-pending code { background:#e8e2d8; padding:.1rem .35rem; border-radius:2px; font-size:.78rem; }
+.ggb-wrap canvas { display:block; width:100%; }
+.ggb-controls {
+  display:flex; align-items:center; gap:1rem;
+  padding:.6rem 1rem; background:#e8e2d8;
+  font-family:var(--mono); font-size:.8rem; color:var(--ink);
+  flex-wrap:wrap;
+}
+.ggb-controls label { white-space:nowrap; }
+.ggb-controls input[type=range] {
+  flex:1; min-width:120px; accent-color:var(--accent2);
+  cursor:pointer;
+}
+.slope-badge {
+  background:var(--green); color:white;
+  padding:.18rem .65rem; border-radius:2px;
+  font-weight:600; white-space:nowrap; font-size:.78rem;
+}
 details summary { cursor:pointer; font-family:var(--mono); font-size:.8rem; color:var(--accent2); letter-spacing:.05em; margin-top:.8rem; }
 details[open] summary { margin-bottom:.5rem; }
 .footer-nav { background:var(--ink); padding:1rem 2rem; margin-top:3rem; }
@@ -199,9 +212,150 @@ details[open] summary { margin-bottom:.5rem; }
   </div>
 
   <div class="ggb-wrap">
-    <iframe src="https://www.geogebra.org/material/iframe/id/unx2ds5h/width/800/height/450/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"
-            allowfullscreen></iframe>
+    <canvas id="deriv-canvas"></canvas>
+    <div class="ggb-controls">
+      <label>Schieberegler &nbsp;<strong id="a-disp">a = 1,00</strong></label>
+      <input type="range" id="a-slider" min="-3.5" max="3.5" step="0.05" value="1">
+      <span class="slope-badge">f'(a) = <span id="slope-disp">9,00</span></span>
+    </div>
   </div>
+  <script>
+  (function(){
+    var canvas = document.getElementById('deriv-canvas');
+    var slider = document.getElementById('a-slider');
+    var aDisp  = document.getElementById('a-disp');
+    var sDisp  = document.getElementById('slope-disp');
+
+    var xMin=-4.4, xMax=4.4, yMin=-22, yMax=22;
+    var pad = {l:52, r:18, t:18, b:34};
+
+    function f(x)  { return -x*x*x + 12*x; }
+    function df(x) { return -3*x*x + 12; }
+    function fmt(n){ return n.toFixed(2).replace('.',','); }
+
+    function draw(){
+      var dpr = window.devicePixelRatio||1;
+      var W = canvas.offsetWidth;
+      var H = Math.round(W * 0.46);
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.height = H + 'px';
+      var ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      var pw = W - pad.l - pad.r;
+      var ph = H - pad.t - pad.b;
+      function tx(x){ return pad.l + (x-xMin)/(xMax-xMin)*pw; }
+      function ty(y){ return pad.t + (1-(y-yMin)/(yMax-yMin))*ph; }
+
+      var a = parseFloat(slider.value);
+
+      /* grid */
+      ctx.strokeStyle='#ddd8cf'; ctx.lineWidth=1;
+      for(var xi=-4;xi<=4;xi++){
+        ctx.beginPath(); ctx.moveTo(tx(xi),pad.t); ctx.lineTo(tx(xi),pad.t+ph); ctx.stroke();
+      }
+      for(var yi=-20;yi<=20;yi+=4){
+        ctx.beginPath(); ctx.moveTo(pad.l,ty(yi)); ctx.lineTo(pad.l+pw,ty(yi)); ctx.stroke();
+      }
+
+      /* axes */
+      ctx.strokeStyle='#1a1208'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(pad.l,ty(0)); ctx.lineTo(pad.l+pw,ty(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(tx(0),pad.t); ctx.lineTo(tx(0),pad.t+ph); ctx.stroke();
+
+      /* axis labels */
+      ctx.fillStyle='#888'; ctx.font='10px DM Mono,monospace'; ctx.textAlign='center';
+      for(var xi=-4;xi<=4;xi++){
+        if(xi===0) continue;
+        ctx.fillText(xi, tx(xi), ty(0)+14);
+      }
+      ctx.textAlign='right';
+      for(var yi=-20;yi<=20;yi+=4){
+        if(yi===0) continue;
+        ctx.fillText(yi, tx(0)-5, ty(yi)+3);
+      }
+      ctx.fillStyle='#555'; ctx.font='italic 11px Georgia,serif';
+      ctx.textAlign='left'; ctx.fillText('x', pad.l+pw+4, ty(0)+4);
+      ctx.textAlign='center'; ctx.fillText('y', tx(0), pad.t-5);
+
+      /* tangent */
+      var m=df(a), b0=f(a)-m*a;
+      ctx.strokeStyle='#2e7d4f'; ctx.lineWidth=1.8; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(tx(xMin),ty(m*xMin+b0)); ctx.lineTo(tx(xMax),ty(m*xMax+b0)); ctx.stroke();
+
+      /* curve f */
+      ctx.strokeStyle='#2a6496'; ctx.lineWidth=2.5; ctx.setLineDash([]);
+      ctx.beginPath();
+      var first=true;
+      for(var i=0;i<=400;i++){
+        var x=xMin+(xMax-xMin)*i/400, y=f(x);
+        if(y<yMin-4||y>yMax+4){first=true;continue;}
+        if(first){ctx.moveTo(tx(x),ty(y));first=false;}else ctx.lineTo(tx(x),ty(y));
+      }
+      ctx.stroke();
+
+      /* curve f' dashed */
+      ctx.strokeStyle='#c8400a'; ctx.lineWidth=2; ctx.setLineDash([7,5]);
+      ctx.beginPath(); first=true;
+      for(var i=0;i<=400;i++){
+        var x=xMin+(xMax-xMin)*i/400, y=df(x);
+        if(y<yMin-4||y>yMax+4){first=true;continue;}
+        if(first){ctx.moveTo(tx(x),ty(y));first=false;}else ctx.lineTo(tx(x),ty(y));
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+
+      /* vertical connector P→Q */
+      ctx.strokeStyle='#bbb'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(tx(a),ty(f(a))); ctx.lineTo(tx(a),ty(df(a))); ctx.stroke();
+      ctx.setLineDash([]);
+
+      /* point P on f */
+      ctx.fillStyle='#2a6496';
+      ctx.beginPath(); ctx.arc(tx(a),ty(f(a)),5.5,0,2*Math.PI); ctx.fill();
+      ctx.fillStyle='white';
+      ctx.beginPath(); ctx.arc(tx(a),ty(f(a)),2.5,0,2*Math.PI); ctx.fill();
+
+      /* point Q on f' */
+      ctx.fillStyle='#c8400a';
+      ctx.beginPath(); ctx.arc(tx(a),ty(df(a)),5,0,2*Math.PI); ctx.fill();
+      ctx.fillStyle='white';
+      ctx.beginPath(); ctx.arc(tx(a),ty(df(a)),2.2,0,2*Math.PI); ctx.fill();
+
+      /* slope label near Q */
+      var qx=tx(a), qy=ty(df(a));
+      ctx.font='bold 11px DM Mono,monospace';
+      ctx.fillStyle='#2e7d4f';
+      ctx.textAlign= a>0 ? 'right':'left';
+      ctx.fillText("f'("+fmt(a)+") = "+fmt(df(a)), qx+(a>0?-9:9), qy-8);
+
+      /* legend */
+      var lx=pad.l+8, ly=pad.t+13;
+      ctx.font='11px DM Mono,monospace'; ctx.textAlign='left';
+      ctx.strokeStyle='#2a6496'; ctx.lineWidth=2.5; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+20,ly); ctx.stroke();
+      ctx.fillStyle='#2a6496'; ctx.fillText('f(x) = −x³ + 12x', lx+25, ly+4);
+      ctx.strokeStyle='#c8400a'; ctx.lineWidth=1.8; ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.moveTo(lx,ly+17); ctx.lineTo(lx+20,ly+17); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle='#c8400a'; ctx.fillText("f'(x) = −3x² + 12", lx+25, ly+21);
+    }
+
+    function update(){
+      var a=parseFloat(slider.value);
+      aDisp.textContent = 'a = '+fmt(a);
+      sDisp.textContent = fmt(df(a));
+      draw();
+    }
+    function df(x){return -3*x*x+12;}
+    function fmt(n){return n.toFixed(2).replace('.',',');}
+
+    slider.addEventListener('input', update);
+    window.addEventListener('resize', update);
+    window.addEventListener('load', update);
+    update();
+  })();
+  </script>
 
   <div class="card ex">
     <h3>Schritt-für-Schritt: $f(x) = x^3 - 3x$</h3>
