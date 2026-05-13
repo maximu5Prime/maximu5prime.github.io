@@ -73,8 +73,11 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
 .qopt:hover:not([disabled]) { border-color:var(--accent2); background:#f0f5fa; }
 .qopt.correct { border-color:var(--green)!important; background:#eaf7ee!important; color:var(--green)!important; }
 .qopt.wrong   { border-color:#c0392b!important; background:#fdecea!important; color:#c0392b!important; }
-.ggb-placeholder { background:var(--cream); border:2px dashed var(--line); border-radius:2px; padding:1.5rem; text-align:center; font-family:var(--mono); font-size:.82rem; color:#888; margin:.9rem 0; }
-.ggb-placeholder strong { display:block; margin-bottom:.4rem; color:var(--ink); font-size:.9rem; }
+.ggb-wrap { margin:.9rem 0; border-radius:4px; overflow:hidden; border:1px solid var(--line); background:var(--cream); }
+.ggb-wrap iframe { display:block; width:100%; height:450px; border:0; }
+.ggb-pending { padding:1.5rem; text-align:center; font-family:var(--mono); font-size:.82rem; color:#888; }
+.ggb-pending strong { display:block; margin-bottom:.4rem; color:var(--ink); font-size:.9rem; }
+.ggb-pending code { background:#e8e2d8; padding:.1rem .35rem; border-radius:2px; font-size:.78rem; }
 details summary { cursor:pointer; font-family:var(--mono); font-size:.8rem; color:var(--accent2); letter-spacing:.05em; margin-top:.8rem; }
 details[open] summary { margin-bottom:.5rem; }
 .footer-nav { background:var(--ink); padding:1rem 2rem; margin-top:3rem; }
@@ -195,10 +198,19 @@ details[open] summary { margin-bottom:.5rem; }
     </table>
   </div>
 
-  <div class="ggb-placeholder" data-title="Ableitungsfunktion interaktiv — f und f' parallel">
-    <strong>GeoGebra-Applet: Ableitungsfunktion</strong>
-    Schieberegler bewegen → Tangente wandert · Steigung wird in f' eingetragen<br>
-    GeoGebra-Vorlage: <code>ggb/m11-lb2-ableitungsregeln-grundlagen.ggb</code> — URL nach Upload auf geogebra.org eintragen
+  <!-- GeoGebra-Applet
+       Nach Upload auf geogebra.org: XXXXXXXX durch die 8-stellige Material-ID ersetzen
+       und den .ggb-pending-Block entfernen. -->
+  <div class="ggb-wrap">
+    <!-- iframe src="https://www.geogebra.org/material/iframe/id/XXXXXXXX/width/800/height/450/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"
+         allowfullscreen -->
+    <div class="ggb-pending">
+      <strong>GeoGebra-Applet: Ableitungsfunktion</strong>
+      Schieberegler bewegen → Tangente wandert · Steigung wird in $f'$ eingetragen<br><br>
+      Datei hochladen: <code>ggb/m11-lb2-ableitungsregeln-grundlagen.ggb</code> auf
+      <a href="https://www.geogebra.org" target="_blank" rel="noopener" style="color:var(--accent2)">geogebra.org</a>
+      → Material-ID in den <code>iframe src</code> eintragen
+    </div>
   </div>
 
   <div class="card ex">
