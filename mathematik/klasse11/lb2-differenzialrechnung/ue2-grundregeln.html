@@ -73,24 +73,17 @@ table.rt tr:nth-child(even) td { background:var(--cream); }
 .qopt:hover:not([disabled]) { border-color:var(--accent2); background:#f0f5fa; }
 .qopt.correct { border-color:var(--green)!important; background:#eaf7ee!important; color:var(--green)!important; }
 .qopt.wrong   { border-color:#c0392b!important; background:#fdecea!important; color:#c0392b!important; }
-.ggb-wrap { margin:.9rem 0; border-radius:4px; overflow:hidden; border:1px solid var(--line); background:var(--cream); }
-.ggb-wrap canvas { display:block; width:100%; }
+.cwrap { width:100%; height:340px; border:1px solid var(--line); background:white; margin:.8rem 0; position:relative; border-radius:4px; overflow:hidden; }
+.cwrap canvas { position:absolute; top:0; left:0; }
 .ggb-controls {
   display:flex; align-items:center; gap:1rem;
   padding:.6rem 1rem; background:#e8e2d8;
   font-family:var(--mono); font-size:.8rem; color:var(--ink);
-  flex-wrap:wrap;
+  flex-wrap:wrap; border:1px solid var(--line); border-top:none; border-radius:0 0 4px 4px; margin-top:-.5rem;
 }
 .ggb-controls label { white-space:nowrap; }
-.ggb-controls input[type=range] {
-  flex:1; min-width:120px; accent-color:var(--accent2);
-  cursor:pointer;
-}
-.slope-badge {
-  background:var(--green); color:white;
-  padding:.18rem .65rem; border-radius:2px;
-  font-weight:600; white-space:nowrap; font-size:.78rem;
-}
+.ggb-controls input[type=range] { flex:1; min-width:120px; accent-color:var(--accent2); cursor:pointer; }
+.slope-badge { background:var(--green); color:white; padding:.18rem .65rem; border-radius:2px; font-weight:600; white-space:nowrap; font-size:.78rem; }
 details summary { cursor:pointer; font-family:var(--mono); font-size:.8rem; color:var(--accent2); letter-spacing:.05em; margin-top:.8rem; }
 details[open] summary { margin-bottom:.5rem; }
 .footer-nav { background:var(--ink); padding:1rem 2rem; margin-top:3rem; }
@@ -211,17 +204,14 @@ details[open] summary { margin-bottom:.5rem; }
     </table>
   </div>
 
-  <div class="ggb-wrap">
-    <canvas id="deriv-canvas" style="display:block;width:100%;min-height:320px;"></canvas>
-    <div class="ggb-controls">
-      <label>Schieberegler &nbsp;<strong id="a-disp">a = 1,00</strong></label>
-      <input type="range" id="a-slider" min="-3.5" max="3.5" step="0.05" value="1">
-      <span class="slope-badge">f'(a) = <span id="slope-disp">9,00</span></span>
-    </div>
+  <div class="cwrap" id="wDeriv"><canvas id="cDeriv"></canvas></div>
+  <div class="ggb-controls">
+    <label>Schieberegler &nbsp;<strong id="a-disp">a = 1,00</strong></label>
+    <input type="range" id="a-slider" min="-3.5" max="3.5" step="0.05" value="1">
+    <span class="slope-badge">f'(a) = <span id="slope-disp">9,00</span></span>
   </div>
   <script>
   (function(){
-    var canvas = document.getElementById('deriv-canvas');
     var slider = document.getElementById('a-slider');
     var aDisp  = document.getElementById('a-disp');
     var sDisp  = document.getElementById('slope-disp');
@@ -233,16 +223,20 @@ details[open] summary { margin-bottom:.5rem; }
     function df(x) { return -3*x*x + 12; }
     function fmt(n){ return n.toFixed(2).replace('.',','); }
 
-    function draw(){
-      var dpr = window.devicePixelRatio||1;
-      var W = canvas.parentElement.offsetWidth || 600;
-      var H = Math.round(W * 0.46);
-      canvas.width  = W * dpr;
-      canvas.height = H * dpr;
-      canvas.style.height = H + 'px';
-      var ctx = canvas.getContext('2d');
-      ctx.scale(dpr, dpr);
+    function setupCanvas() {
+      var canvas = document.getElementById('cDeriv');
+      var wrap   = document.getElementById('wDeriv');
+      var dpr    = window.devicePixelRatio || 1;
+      var W = wrap.clientWidth, H = wrap.clientHeight;
+      canvas.width  = W * dpr; canvas.height = H * dpr;
+      canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+      var ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+      return { ctx, W, H };
+    }
 
+    function draw(){
+      var s = setupCanvas();
+      var ctx = s.ctx, W = s.W, H = s.H;
       var pw = W - pad.l - pad.r;
       var ph = H - pad.t - pad.b;
       function tx(x){ return pad.l + (x-xMin)/(xMax-xMin)*pw; }
@@ -350,11 +344,7 @@ details[open] summary { margin-bottom:.5rem; }
 
     slider.addEventListener('input', update);
     window.addEventListener('resize', update);
-    // Mehrfach-Init: sofort + nach Layout + nach vollständigem Load
-    setTimeout(update, 0);
-    setTimeout(update, 150);
-    window.addEventListener('load', update);
-    if(document.readyState==='complete') update();
+    window.addEventListener('load', function(){ setTimeout(update, 200); });
   })();
   </script>
 
