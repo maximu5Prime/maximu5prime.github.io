@@ -212,7 +212,7 @@ details[open] summary { margin-bottom:.5rem; }
   </div>
 
   <div class="ggb-wrap">
-    <canvas id="deriv-canvas"></canvas>
+    <canvas id="deriv-canvas" style="display:block;width:100%;min-height:320px;"></canvas>
     <div class="ggb-controls">
       <label>Schieberegler &nbsp;<strong id="a-disp">a = 1,00</strong></label>
       <input type="range" id="a-slider" min="-3.5" max="3.5" step="0.05" value="1">
@@ -235,7 +235,7 @@ details[open] summary { margin-bottom:.5rem; }
 
     function draw(){
       var dpr = window.devicePixelRatio||1;
-      var W = canvas.offsetWidth;
+      var W = canvas.parentElement.offsetWidth || 600;
       var H = Math.round(W * 0.46);
       canvas.width  = W * dpr;
       canvas.height = H * dpr;
@@ -347,13 +347,14 @@ details[open] summary { margin-bottom:.5rem; }
       sDisp.textContent = fmt(df(a));
       draw();
     }
-    function df(x){return -3*x*x+12;}
-    function fmt(n){return n.toFixed(2).replace('.',',');}
 
     slider.addEventListener('input', update);
     window.addEventListener('resize', update);
+    // Mehrfach-Init: sofort + nach Layout + nach vollständigem Load
+    setTimeout(update, 0);
+    setTimeout(update, 150);
     window.addEventListener('load', update);
-    update();
+    if(document.readyState==='complete') update();
   })();
   </script>
 
