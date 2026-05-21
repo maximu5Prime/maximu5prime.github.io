@@ -1,0 +1,26 @@
+# PDFs — gehören nach 01_Materialien/, nicht ins Website-Repo
+*.pdf
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor-Backups
+*~
+*.orig
+*.bak
+*.swp
+*.swo
+
+# Temporäre Dateien
+*.tmp
+*.temp
+
+# Node (falls mal ein Build-Tool genutzt wird)
+node_modules/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
