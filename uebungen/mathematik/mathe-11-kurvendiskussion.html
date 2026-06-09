@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurvendiskussion – Übungen Klasse 11</title>
+<link rel="stylesheet" href="../../static/fonts.css">
+<link rel="stylesheet" href="../../static/theme.css">
+<link rel="stylesheet" href="../../static/katex/katex.min.css">
+<script defer src="../../static/katex/katex.min.js"></script>
+<script defer src="../../static/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<style>
+:root {
+  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
+  --accent:#c8400a; --accent2:#2a6496; --gold:#c9961a; --green:#2e7d4f; --line:#d4cfc6;
+  --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
+  --k1:#c8400a; --k1l:#fdf0eb;
+  --k2:#2a6496; --k2l:#eef4fa;
+  --k3:#2e7d4f; --k3l:#edf7f1;
+  --k4:#8b5cf6; --k4l:#f5f3ff;
+  --ok:#2e7d4f; --okl:#eaf7ee;
+  --err:#c0392b; --errl:#fdecea;
+  --warn:#92400e; --warnl:#fffbeb;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7;}
+
+/* ── Header ── */
+header{background:var(--ink);color:var(--paper);padding:2.8rem 2rem 2.2rem;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-60px;right:-80px;width:300px;height:300px;border-radius:50%;background:var(--accent);opacity:.1;}
+header::after{content:'';position:absolute;bottom:-40px;left:8%;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.08;}
+.hinner{max-width:900px;margin:0 auto;position:relative;}
+.klass{font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem;}
+header h1{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:900;line-height:1.1;margin-bottom:.8rem;}
+header p{font-size:.95rem;color:#a09888;max-width:560px;}
+.prog-wrap{width:240px;height:5px;background:rgba(255,255,255,.15);border-radius:99px;margin:.9rem 0 .4rem;}
+.prog-fill{height:5px;border-radius:99px;background:#a3e635;transition:width .4s ease;width:0%;}
+#prog-label{font-family:var(--mono);font-size:.75rem;color:#a09888;}
+
+/* ── Tabs ── */
+.tabs{background:var(--ink);border-top:1px solid #2e2e2e;padding:0 1.5rem;display:flex;overflow-x:auto;}
+.tab-btn{font-family:var(--mono);font-size:.73rem;letter-spacing:.07em;text-transform:uppercase;background:none;border:none;
+  color:#777;padding:.85rem 1.1rem;cursor:pointer;border-bottom:3px solid transparent;
+  margin-bottom:-1px;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:color .2s,border-color .2s;}
+.tab-btn:hover{color:var(--paper);}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.dot{width:8px;height:8px;border-radius:50%;background:#444;flex-shrink:0;}
+.tab-btn.done .dot{background:var(--ok);}
+.score-tag{font-size:.7rem;background:#2e2e2e;color:#777;padding:1px 7px;border-radius:99px;}
+.tab-btn.done .score-tag{background:#1e3a2a;color:#6ee7a0;}
+
+/* ── Layout ── */
+main{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+.chapter{display:none;}
+.chapter.active{display:block;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.ch-head{margin-bottom:1.6rem;padding:.75rem 1rem .75rem 1.2rem;
+  border:1px solid var(--line);border-left-width:4px;border-radius:0 2px 2px 0;background:white;}
+.ch-head h2{font-family:var(--serif);font-size:1.35rem;font-weight:700;}
+.ch-head p{font-size:.84rem;color:#888;margin-top:.2rem;font-style:italic;}
+
+.ex{background:white;border:1px solid var(--line);border-radius:2px;
+  margin-bottom:1.1rem;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.04);}
+.ex-head{display:flex;align-items:center;gap:.65rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line);}
+.ex-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-family:var(--mono);font-size:.78rem;font-weight:500;color:#fff;flex-shrink:0;}
+.ex-head h3{font-family:var(--serif);font-size:.93rem;font-weight:700;flex:1;margin:0;}
+.ex-badge{font-family:var(--mono);font-size:.72rem;color:#999;}
+.ex-body{padding:1.1rem 1.3rem;}
+.q{font-size:.91rem;line-height:1.7;margin-bottom:.9rem;}
+
+/* ── Step blocks (strukturierter Rechenrahmen) ── */
+.step{border:1px solid var(--line);border-radius:2px;margin-bottom:.6rem;overflow:hidden;}
+.step-hd{display:flex;align-items:center;gap:.55rem;padding:.4rem .9rem;
+  background:var(--cream);border-bottom:1px solid var(--line);}
+.step-nr{font-family:var(--mono);font-size:.67rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--ink);color:var(--gold);padding:.15rem .5rem;border-radius:2px;white-space:nowrap;}
+.step-hd span:not(.step-nr){font-size:.81rem;color:var(--ink);}
+[data-theme=dark] .step-hd{background:#252525;}
+[data-theme=dark] .step-nr{background:#333;color:var(--gold);}
+[data-theme=dark] .hint-box{background:#1e1a08;color:var(--ink);}
+[data-theme=dark] .ex{background:#181818;}
+[data-theme=dark] .ch-head{background:#181818;}
+
+/* ── Dark mode: alle Light-Background-Elemente reparieren ── */
+[data-theme=dark] .eq input{background:#1e1e1e;border-color:#555;color:var(--ink);}
+[data-theme=dark] .eq input:focus{border-color:var(--accent2);}
+[data-theme=dark] .eq input.ok{background:#0d2218;border-color:var(--ok);}
+[data-theme=dark] .eq input.err{background:#2a0a0a;border-color:var(--err);}
+[data-theme=dark] .mcq-opt{background:#1e1e1e;border-color:#444;}
+[data-theme=dark] .mcq-opt:hover{background:#252525;border-color:var(--accent2);}
+[data-theme=dark] .mcq-opt.sel{background:#252525;border-color:var(--ink);}
+[data-theme=dark] .mcq-opt.ok{background:#0d2218!important;border-color:var(--ok)!important;color:#86efac!important;}
+[data-theme=dark] .mcq-opt.err{background:#2a0a0a!important;border-color:var(--err)!important;color:#fca5a5!important;}
+[data-theme=dark] .ankreuz th{background:#2a2a2a;}
+[data-theme=dark] .ankreuz tr.ok-row td:first-child{color:#86efac;}
+[data-theme=dark] .ankreuz tr.err-row td:first-child{color:#fca5a5;}
+[data-theme=dark] .fb.ok{background:#0a1f12;border-color:#1a5c3a;color:#86efac;}
+[data-theme=dark] .fb.err{background:#1f0a0a;border-color:#5c1a1a;color:#fca5a5;}
+[data-theme=dark] .fb.warn{background:#1a1400;border-color:#5c4000;color:#fde68a;}
+[data-theme=dark] .fb .sol{background:rgba(255,255,255,.06);color:var(--ink);}
+[data-theme=dark] .btn-ghost{border-color:#555;}
+.step-bd{padding:.65rem 1rem;}
+
+/* Inline-Gleichungszeile mit Eingabefeldern */
+.eq{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.3rem 0;font-size:.9rem;line-height:1;}
+.eq input{width:78px;border:1px solid var(--line);border-radius:2px;padding:.32rem .55rem;
+  font-family:var(--mono);font-size:.86rem;background:white;color:var(--ink);outline:none;
+  transition:border-color .15s,background .15s;text-align:center;}
+.eq input.w110{width:110px;}
+.eq input:focus{border-color:var(--accent2);}
+.eq input.ok{border-color:var(--ok);background:var(--okl);}
+.eq input.err{border-color:var(--err);background:var(--errl);}
+.eq-hint{font-size:.76rem;color:#bbb;font-style:italic;}
+.eq-sep{display:inline-block;width:1px;height:20px;background:var(--line);margin:0 .45rem;vertical-align:middle;}
+
+/* ── Hint ── */
+.hint-toggle{font-family:var(--mono);font-size:.71rem;letter-spacing:.05em;text-transform:uppercase;
+  background:none;border:1px solid var(--gold);color:var(--gold);padding:.35rem .85rem;border-radius:2px;
+  cursor:pointer;transition:background .15s,color .15s;margin-bottom:.65rem;display:inline-block;}
+.hint-toggle:hover{background:var(--gold);color:white;}
+.hint-box{background:#fdf8ec;border-left:3px solid var(--gold);padding:.6rem 1rem;
+  font-size:.83rem;color:#666;border-radius:0 2px 2px 0;margin-bottom:.8rem;line-height:1.6;display:none;}
+.hint-box.show{display:block;}
+.hint-box strong{color:var(--ink);}
+
+/* ── Canvas / Slider ── */
+.canvas-wrap{display:flex;justify-content:center;margin:.5rem 0 .8rem;overflow:hidden;}
+canvas{border:1px solid var(--line);border-radius:2px;max-width:100%;}
+.slider-row{display:flex;align-items:center;gap:.9rem;margin:.4rem 0 .8rem;flex-wrap:wrap;}
+.slider-row label{font-family:var(--mono);font-size:.82rem;color:#888;}
+.slider-row input[type=range]{flex:1;min-width:120px;accent-color:var(--accent);}
+.slider-val{font-family:var(--mono);font-size:.9rem;font-weight:500;color:var(--accent);min-width:36px;}
+.canvas-legend{font-family:var(--mono);font-size:.71rem;color:#888;text-align:center;margin-top:.2rem;line-height:1.5;}
+
+/* ── MCQ ── */
+.mcq{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.85rem;}
+.mcq-opt{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .9rem;
+  border:1px solid var(--line);border-radius:2px;cursor:pointer;
+  font-size:.88rem;line-height:1.55;transition:border-color .15s,background .15s;background:white;}
+.mcq-opt:hover{border-color:var(--accent2);background:var(--k2l);}
+.mcq-opt.sel{border-color:var(--ink);background:var(--cream);}
+.mcq-opt.ok{border-color:var(--ok)!important;background:var(--okl)!important;color:#14532d;}
+.mcq-opt.err{border-color:var(--err)!important;background:var(--errl)!important;color:#7f1d1d;}
+.mcq-opt input[type=radio]{margin-top:3px;flex-shrink:0;accent-color:var(--ink);}
+.mcq-letter{font-family:var(--mono);font-weight:500;color:#888;flex-shrink:0;min-width:18px;}
+
+/* ── Ankreuz ── */
+.ankreuz{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:.85rem;}
+.ankreuz th{font-family:var(--mono);font-size:.71rem;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--ink);color:var(--gold);padding:.45rem .65rem;text-align:center;font-weight:500;}
+.ankreuz th:first-child{text-align:left;}
+.ankreuz td{padding:.55rem .65rem;border-bottom:1px solid var(--line);vertical-align:middle;}
+.ankreuz tr:last-child td{border-bottom:none;}
+.ankreuz td:not(:first-child){text-align:center;}
+.ankreuz input[type=radio]{accent-color:var(--ink);width:15px;height:15px;cursor:pointer;}
+.ankreuz tr.ok-row td:first-child{color:var(--ok);font-weight:600;}
+.ankreuz tr.err-row td:first-child{color:var(--err);font-weight:600;}
+.ankreuz tr.ok-row td:first-child::before{content:'✓ ';}
+.ankreuz tr.err-row td:first-child::before{content:'✗ ';}
+
+/* ── Buttons ── */
+.btn-row{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap;margin-top:.85rem;}
+.btn{font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;
+  padding:.5rem 1.1rem;border-radius:2px;cursor:pointer;border:none;transition:opacity .15s,transform .1s;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--accent);color:white;}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink);}
+
+/* ── Feedback ── */
+.fb{margin-top:.85rem;padding:.75rem 1.1rem;border-radius:2px;font-size:.85rem;line-height:1.65;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--okl);border:1px solid #b7dfca;color:#14532d;}
+.fb.warn{background:var(--warnl);border:1px solid #fde68a;color:var(--warn);}
+.fb.err{background:var(--errl);border:1px solid #f5c6c6;color:#7f1d1d;}
+.fb b{display:block;margin-bottom:4px;font-weight:600;font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;text-transform:uppercase;}
+.fb .sol{margin-top:.55rem;padding:.5rem .85rem;background:rgba(0,0,0,.04);border-radius:2px;font-size:.84rem;line-height:1.7;}
+
+/* ── Footer ── */
+header .bc{font-family:var(--mono);font-size:.68rem;color:#666;display:flex;gap:.4rem;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;}
+header .bc a{color:#888;text-decoration:none;}
+header .bc a:hover{color:var(--gold);}
+header .bc span{color:#444;}
+.footer-nav{background:var(--ink);padding:1.1rem 2rem;margin-top:3rem;}
+.footer-nav-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
+.back-btn{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
+.back-btn:hover{opacity:.7;}
+.portal-link{font-family:var(--mono);font-size:.68rem;color:#555;text-decoration:none;}
+.portal-link:hover{color:var(--gold);}
+
+/* ── Rechenaufgaben / Textaufgaben (Lösung aufdecken) ── */
+.ex-task{font-size:.9rem;line-height:1.75;margin-bottom:1rem;}
+.task-info{background:var(--k2l);border-left:3px solid var(--accent2);padding:.6rem 1rem;
+  border-radius:0 2px 2px 0;font-size:.84rem;line-height:1.65;margin-bottom:.85rem;}
+[data-theme=dark] .task-info{background:#0d1e30;}
+.sol-toggle{font-family:var(--mono);font-size:.71rem;letter-spacing:.05em;text-transform:uppercase;
+  background:none;border:1px solid var(--accent2);color:var(--accent2);padding:.35rem .85rem;border-radius:2px;
+  cursor:pointer;transition:background .15s,color .15s;margin-bottom:.65rem;display:inline-block;}
+.sol-toggle:hover,.sol-toggle:focus{background:var(--accent2);color:white;outline:none;}
+.sol-reveal{background:var(--okl);border-left:3px solid var(--ok);padding:.75rem 1.1rem;
+  border-radius:0 2px 2px 0;margin-bottom:.8rem;line-height:1.75;font-size:.85rem;display:none;}
+.sol-reveal.show{display:block;}
+[data-theme=dark] .sol-reveal{background:#0d1f14;}
+.sol-reveal h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ok);margin-bottom:.55rem;}
+.sol-reveal .sol-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.35rem .9rem;margin-bottom:.5rem;}
+.sol-reveal .sg{font-size:.85rem;}
+.text-context{background:var(--cream);border:1px solid var(--line);border-radius:2px;
+  padding:.85rem 1.1rem;margin-bottom:1rem;font-size:.88rem;line-height:1.75;}
+[data-theme=dark] .text-context{background:#1e1e1e;}
+.text-context strong{font-family:var(--mono);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;
+  display:block;margin-bottom:.4rem;color:#888;}
+
+@media(max-width:580px){
+  header h1{font-size:1.5rem;}
+  .eq{flex-direction:column;align-items:flex-start;}
+  .eq-sep{display:none;}
+}
+</style>
+<script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+</head>
+<body>
+
+<header>
+  <div class="hinner">
+    <nav class="bc" aria-label="Breadcrumb">
+      <a href="../../index.html">Lernportal</a><span>/</span>
+      <a href="../index.html">Übungen</a><span>/</span>
+      <a href="index.html">Mathematik</a><span>/</span>
+      <span>Kurvendiskussion</span>
+    </nav>
+    <div class="klass">Mathematik · Klasse 11 · Übungen</div>
+    <h1>Kurvendiskussion</h1>
+    <p>Vollständige Kurvendiskussion · Funktionenscharen · Interaktive Graphen</p>
+    <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
+    <p id="prog-label">0 von 18 Aufgaben abgeschlossen</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-ch="k1" onclick="switchTab('k1')">
+    <span class="dot"></span>Graph lesen<span class="score-tag" id="badge-k1">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k2" onclick="switchTab('k2')">
+    <span class="dot"></span>Kurvendiskussion<span class="score-tag" id="badge-k2">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k3" onclick="switchTab('k3')">
+    <span class="dot"></span>Funktionenscharen<span class="score-tag" id="badge-k3">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k4" onclick="switchTab('k4')">
+    <span class="dot"></span>Schar allgemein<span class="score-tag" id="badge-k4">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k5" onclick="switchTab('k5')">
+    <span class="dot"></span>Rechenaufgaben<span class="score-tag" id="badge-k5">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k6" onclick="switchTab('k6')">
+    <span class="dot"></span>Textaufgaben<span class="score-tag" id="badge-k6">0/3</span>
+  </button>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════
+     K1: GRAPH LESEN
+════════════════════════════════════════════════════════ -->
+<div class="chapter active" id="k1">
+  <div class="ch-head" style="border-left-color:var(--k1)">
+    <h2>Kapitel 1 – Eigenschaften am Graphen ablesen</h2>
+    <p>Hoch- und Tiefpunkte · Wendepunkte · Monotonie · Nullstellen · Grenzverhalten</p>
+  </div>
+
+  <!-- 1.1 -->
+  <div class="ex" id="ex-1-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.1</div>
+      <h3>Graph von $f(x) = x^3 - 3x$ – Ankreuzaufgabe</h3>
+      <span class="ex-badge" id="st-1-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Analysiere den Graphen (Hover über die farbigen Punkte für Koordinaten) und kreuze an, ob die Aussage wahr oder falsch ist.</p>
+
+      <div class="canvas-wrap">
+        <canvas id="cv11" width="480" height="300" aria-label="Graph von f(x)=x³-3x"></canvas>
+      </div>
+      <p class="canvas-legend">Maus über die markierten Punkte bewegen.</p>
+
+      <table class="ankreuz" id="tbl-1-1" data-ans="W,F,W,W,F">
+        <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr data-r="0"><td>$H(-1\,|\,2)$ ist ein Hochpunkt von $f$.</td>
+            <td><input type="radio" name="r11-0" value="W"></td><td><input type="radio" name="r11-0" value="F"></td></tr>
+          <tr data-r="1"><td>$f$ hat genau eine Nullstelle.</td>
+            <td><input type="radio" name="r11-1" value="W"></td><td><input type="radio" name="r11-1" value="F"></td></tr>
+          <tr data-r="2"><td>Der Wendepunkt liegt im Ursprung $W(0\,|\,0)$.</td>
+            <td><input type="radio" name="r11-2" value="W"></td><td><input type="radio" name="r11-2" value="F"></td></tr>
+          <tr data-r="3"><td>$f$ ist auf $\left]-\infty;\,-1\right]$ monoton steigend.</td>
+            <td><input type="radio" name="r11-3" value="W"></td><td><input type="radio" name="r11-3" value="F"></td></tr>
+          <tr data-r="4"><td>$\displaystyle\lim_{x\to+\infty} f(x) = -\infty$</td>
+            <td><input type="radio" name="r11-4" value="W"></td><td><input type="radio" name="r11-4" value="F"></td></tr>
+        </tbody>
+      </table>
+
+      <button class="hint-toggle" onclick="toggleHint('h11')">Tipp anzeigen</button>
+      <div class="hint-box" id="h11">
+        <strong>Tipp:</strong> Lies am Graphen ab, wo die Kurve am höchsten bzw. am niedrigsten liegt. Der Wendepunkt ist dort, wo die Krümmung wechselt. Für das Grenzverhalten: Das Leitglied von $f$ ist $+x^3$ – ungerade Potenz, positiver Koeffizient. Was folgt daraus für $x \to \pm\infty$?
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-1-1')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-1-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-1-1"><b></b>
+        <div class="sol">
+          <strong>wahr · falsch · wahr · wahr · falsch</strong><br>
+          (1) $f'(x)=3x^2-3=0 \Rightarrow x=\pm 1$; $f''(-1)=-6<0$ → Hochpunkt $H(-1\,|\,2)$. ✓<br>
+          (2) $f(x)=x(x^2-3)=0$ → drei Nullstellen: $x=0,\;\pm\!\sqrt{3}$.<br>
+          (3) $f''(x)=6x=0$ bei $x=0$; VZW von $-$ nach $+$ → $W(0\,|\,0)$. ✓<br>
+          (4) $f'(x)>0$ für $x\in\left]-\infty;\,-1\right[$ → $f$ steigt auf $\left]-\infty;\,-1\right]$. ✓<br>
+          (5) Leitglied $+x^3$, ungerade: $\displaystyle\lim_{x\to+\infty}f(x)=+\infty$.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.2 -->
+  <div class="ex" id="ex-1-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.2</div>
+      <h3>Multiple Choice: Notwendige und hinreichende Bedingung</h3>
+      <span class="ex-badge" id="st-1-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Für $g(x) = -x^3 + 3x^2$ gilt $g'(2) = 0$. Welche Aussage ist korrekt?</p>
+
+      <div class="mcq" id="mcq-1-2" data-ans="1">
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-2')">
+          <input type="radio" name="mcq12"><span class="mcq-letter">(a)</span>
+          <span>Da $g'(2)=0$, ist $x_0=2$ bereits ein Hochpunkt – keine weitere Prüfung nötig.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-2')">
+          <input type="radio" name="mcq12"><span class="mcq-letter">(b)</span>
+          <span>Da $g''(2) = -6 \cdot 2 + 6 = -6 < 0$, liegt bei $x_0 = 2$ ein lokaler Hochpunkt vor: $H(2\,|\,4)$.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-2')">
+          <input type="radio" name="mcq12"><span class="mcq-letter">(c)</span>
+          <span>$g'(2)=0$ und $g''(2)>0$, also liegt ein Tiefpunkt vor.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-2')">
+          <input type="radio" name="mcq12"><span class="mcq-letter">(d)</span>
+          <span>$x_0=2$ ist ein Wendepunkt, da $g'(2)=0$.</span>
+        </label>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h12')">Tipp anzeigen</button>
+      <div class="hint-box" id="h12">
+        <strong>Tipp:</strong> $g'(x_0)=0$ ist nur die <em>notwendige</em> Bedingung für ein Extremum. Erst $g''(x_0)\neq 0$ liefert die <em>hinreichende</em> Bedingung und die Art: $g''<0$ → Hochpunkt, $g''>0$ → Tiefpunkt. Berechne $g''(x)=-6x+6$ und setze $x=2$ ein.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkMCQ('ex-1-2')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-1-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-1-2"><b></b>
+        <div class="sol">
+          <strong>Korrekte Antwort: (b)</strong><br>
+          $g'(x)=-3x^2+6x$; $g'(2)=-12+12=0$ ✓<br>
+          $g''(x)=-6x+6$; $g''(2)=-12+6=-6<0$ → lokaler Hochpunkt.<br>
+          $g(2)=-8+12=4$ → $H(2\,|\,4)$.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.3 -->
+  <div class="ex" id="ex-1-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.3</div>
+      <h3>Ankreuzaufgabe: Wendepunkt von $h(x) = 2x^3 - 3x^2 - 12x + 4$</h3>
+      <span class="ex-badge" id="st-1-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Kreuze an, ob die Aussage wahr oder falsch ist.</p>
+
+      <table class="ankreuz" id="tbl-1-3" data-ans="W,F,W,W">
+        <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr data-r="0"><td>$h''(x) = 12x - 6$</td>
+            <td><input type="radio" name="r13-0" value="W"></td><td><input type="radio" name="r13-0" value="F"></td></tr>
+          <tr data-r="1"><td>Der Wendepunkt liegt bei $x_W = 1$.</td>
+            <td><input type="radio" name="r13-1" value="W"></td><td><input type="radio" name="r13-1" value="F"></td></tr>
+          <tr data-r="2"><td>$h''$ wechselt an der Wendestelle das Vorzeichen.</td>
+            <td><input type="radio" name="r13-2" value="W"></td><td><input type="radio" name="r13-2" value="F"></td></tr>
+          <tr data-r="3"><td>Weil $h'\!\left(\tfrac{1}{2}\right) \neq 0$, liegt an der Wendestelle kein Extremum vor.</td>
+            <td><input type="radio" name="r13-3" value="W"></td><td><input type="radio" name="r13-3" value="F"></td></tr>
+        </tbody>
+      </table>
+
+      <button class="hint-toggle" onclick="toggleHint('h13')">Tipp anzeigen</button>
+      <div class="hint-box" id="h13">
+        <strong>Tipp:</strong> Leite $h$ zweimal ab. Setze $h''(x)=0$ und löse nach $x$ – liegt der WP wirklich bei $x=1$? Prüfe den VZW von $h''$, indem du Werte links und rechts von $x_W$ einsetzt. Zur letzten Zeile: Wann liegt an einem Wendepunkt <em>zusätzlich</em> ein Extremum vor (Stichwort: Terrassenpunkt)?
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-1-3')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-1-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-1-3"><b></b>
+        <div class="sol">
+          <strong>wahr · falsch · wahr · wahr</strong><br>
+          (1) $h'(x)=6x^2-6x-12$; $h''(x)=12x-6$. ✓<br>
+          (2) $h''(x)=0 \Rightarrow x=\tfrac{1}{2}$, nicht $x=1$. Wendestelle: $x_W=\tfrac{1}{2}$.<br>
+          (3) Bei $x<\tfrac{1}{2}{:}\ h''<0$; bei $x>\tfrac{1}{2}{:}\ h''>0$ → VZW bestätigt. ✓<br>
+          (4) Ein Extremum an der Wendestelle (Terrassenpunkt) erfordert $h'(x_W)=0$. Da $h'\!\left(\tfrac{1}{2}\right)\neq 0$, ist kein Extremum möglich. ✓
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K2: VOLLSTÄNDIGE KURVENDISKUSSION
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k2">
+  <div class="ch-head" style="border-left-color:var(--k2)">
+    <h2>Kapitel 2 – Vollständige Kurvendiskussion</h2>
+    <p>Alle 6 Schritte: $D_f$ · Nullstellen · $y$-Achse · Extrempunkte · Wendepunkte · Grenzverhalten</p>
+  </div>
+
+  <!-- 2.1 -->
+  <div class="ex" id="ex-2-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.1</div>
+      <h3>Lückentext: $f(x) = x^3 - 6x^2 + 9x$</h3>
+      <span class="ex-badge" id="st-2-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Fülle die Ergebnisse der einzelnen Schritte ein. Die Rechenschritte sind vorgegeben.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 2</span><span>Nullstellen &nbsp; $f(x) = x \cdot (x-3)^2 = 0$</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $x_1 =$ <input id="f21-1" data-ans="0" data-tol="0"> <span class="eq-hint">(einfache NS)</span>
+            <span class="eq-sep"></span>
+            $x_2 =$ <input id="f21-2" data-ans="3" data-tol="0"> <span class="eq-hint">(doppelte NS)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 4</span><span>Extrempunkte &nbsp; $f'(x) = 3(x-1)(x-3) = 0$</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $H\!\left(\right.$ <input id="f21-3" data-ans="1" data-tol="0"> $\,\Big|\,$ <input id="f21-4" data-ans="4" data-tol="0"> $\left.\right)$
+            <span class="eq-sep"></span>
+            $T\!\left(\right.$ <input id="f21-5" data-ans="3" data-tol="0"> $\,\Big|\,$ <input id="f21-6" data-ans="0" data-tol="0"> $\left.\right)$
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 5</span><span>Wendepunkt &nbsp; $f''(x) = 6x - 12 = 0$</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $W\!\left(\right.$ <input id="f21-7" data-ans="2" data-tol="0"> $\,\Big|\,$ <input id="f21-8" data-ans="2" data-tol="0"> $\left.\right)$
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h21')">Tipp anzeigen</button>
+      <div class="hint-box" id="h21">
+        <strong>Tipp:</strong> Die $y$-Koordinaten von Extrem- und Wendepunkt erhältst du, indem du den $x$-Wert in $f(x)$ einsetzt (nicht in $f'$ oder $f''$!). Art des Extrempunkts: $f''(x_0)<0$ → Hochpunkt, $f''(x_0)>0$ → Tiefpunkt.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-2-1',['f21-1','f21-2','f21-3','f21-4','f21-5','f21-6','f21-7','f21-8'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-2-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-2-1"><b></b>
+        <div class="sol">
+          $x_1=0$ (einfache NS, Graph schneidet), $x_2=3$ (doppelte NS, Graph berührt).<br>
+          $f''(x)=6x-12$: $f''(1)=-6<0$ → $H(1\,|\,4)$; $f''(3)=6>0$ → $T(3\,|\,0)$.<br>
+          Wendepunkt: $f''(2)=0$, VZW $-\to+$ → $W(2\,|\,2)$.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.2 -->
+  <div class="ex" id="ex-2-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.2</div>
+      <h3>Lückentext: $p(x) = 2x^3 - 3x^2 - 12x + 4$</h3>
+      <span class="ex-badge" id="st-2-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Führe die vollständige Kurvendiskussion durch. Berechne zunächst die Ableitungen, dann Extrem- und Wendepunkt.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Ableitung</span><span>$p'(x)$ und $p''(x)$ bestimmen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $p'(x) =$ <input id="f22-1" data-ans="6" data-tol="0"> $x^2$
+            <input id="f22-2" data-ans="-6" data-tol="0"> $x$
+            <input id="f22-3" data-ans="-12" data-tol="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 4</span><span>Extrempunkte &nbsp; $p'(x) = 6(x-2)(x+1) = 0$</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $H\!\left(\right.$ <input id="f22-4" data-ans="-1" data-tol="0"> $\,\Big|\,$ <input id="f22-5" data-ans="11" data-tol="0"> $\left.\right)$
+            <span class="eq-sep"></span>
+            $T\!\left(\right.$ <input id="f22-6" data-ans="2" data-tol="0"> $\,\Big|\,$ <input id="f22-7" data-ans="-16" data-tol="0"> $\left.\right)$
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 5</span><span>Wendepunkt &nbsp; $p''(x) = 12x - 6 = 0$</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $W\!\left(\right.$ <input id="f22-8" data-ans="0.5" data-tol="0.01"> $\,\Big|\,$ <input id="f22-9" data-ans="-2.5" data-tol="0.1"> $\left.\right)$
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h22')">Tipp anzeigen</button>
+      <div class="hint-box" id="h22">
+        <strong>Tipp:</strong> Für die $y$-Werte der Extrempunkte setze $x=-1$ und $x=2$ in $p(x)$ ein, nicht in $p'(x)$. Für die Art: $p''(-1)=12\cdot(-1)-6=-18<0$ → Hochpunkt; $p''(2)=18>0$ → Tiefpunkt.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-2-2',['f22-1','f22-2','f22-3','f22-4','f22-5','f22-6','f22-7','f22-8','f22-9'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-2-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-2-2"><b></b>
+        <div class="sol">
+          $p'(x)=6x^2-6x-12$; $p''(x)=12x-6$.<br>
+          $p''(-1)=-18<0$ → $H(-1\,|\,11)$; $p''(2)=18>0$ → $T(2\,|\,-16)$.<br>
+          $p''(x)=0 \Rightarrow x_W=\tfrac{1}{2}$; $p\!\left(\tfrac{1}{2}\right)=\tfrac{1}{4}-\tfrac{3}{4}-6+4=-\tfrac{5}{2}$ → $W\!\left(\tfrac{1}{2}\,\Big|\,-\tfrac{5}{2}\right)$.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.3 -->
+  <div class="ex" id="ex-2-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.3</div>
+      <h3>Multiple Choice: Grenzverhalten bestimmen</h3>
+      <span class="ex-badge" id="st-2-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Welche Aussage gilt für $q(x) = -3x^4 + 2x^3 - x + 5$?</p>
+
+      <div class="mcq" id="mcq-2-3" data-ans="2">
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-2-3')">
+          <input type="radio" name="mcq23"><span class="mcq-letter">(a)</span>
+          <span>$\displaystyle\lim_{x\to+\infty}q(x)=+\infty$ und $\displaystyle\lim_{x\to-\infty}q(x)=-\infty$, da $-3x^4$ ungerade Potenz hat.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-2-3')">
+          <input type="radio" name="mcq23"><span class="mcq-letter">(b)</span>
+          <span>$\displaystyle\lim_{x\to\pm\infty}q(x)=+\infty$, da der Koeffizient positiv ist.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-2-3')">
+          <input type="radio" name="mcq23"><span class="mcq-letter">(c)</span>
+          <span>$\displaystyle\lim_{x\to+\infty}q(x)=-\infty$ und $\displaystyle\lim_{x\to-\infty}q(x)=-\infty$, da das Leitglied $-3x^4$ geraden Grad und negativen Koeffizienten hat.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-2-3')">
+          <input type="radio" name="mcq23"><span class="mcq-letter">(d)</span>
+          <span>Das Grenzverhalten hängt von allen vier Summanden ab, nicht nur vom Leitglied.</span>
+        </label>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h23')">Tipp anzeigen</button>
+      <div class="hint-box" id="h23">
+        <strong>Tipp:</strong> Nur das Leitglied – der Term mit der höchsten Potenz – bestimmt das Grenzverhalten. Hier: $-3x^4$. Gerader Grad → links und rechts gleiche Richtung. Negativer Koeffizient $-3$ → Graph fällt auf beiden Seiten ($\cap$-Form).
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkMCQ('ex-2-3')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-2-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-2-3"><b></b>
+        <div class="sol">
+          <strong>Korrekte Antwort: (c)</strong><br>
+          Leitglied $-3x^4$: gerader Grad → gleiches Verhalten für $x\to\pm\infty$. Negativer Koeffizient → $\lim_{x\to\pm\infty}q(x)=-\infty$ ($\cap$-Form).
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K3: FUNKTIONENSCHAREN
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k3">
+  <div class="ch-head" style="border-left-color:var(--k3)">
+    <h2>Kapitel 3 – Funktionenscharen</h2>
+    <p>Parameter $k$ einsetzen · Parametereinfluss interaktiv erkunden</p>
+  </div>
+
+  <!-- 3.1 -->
+  <div class="ex" id="ex-3-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.1</div>
+      <h3>Interaktiv: Schar $f_k(x) = x^3 - 3k\,x$ erkunden</h3>
+      <span class="ex-badge" id="st-3-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Verschiebe den Regler und beobachte, wie sich Graph und charakteristische Punkte verändern. Beantworte dann die Fragen.</p>
+
+      <div class="slider-row">
+        <label>$k =$</label>
+        <input type="range" id="sl31" min="-1" max="4" step="0.1" value="1" oninput="updateSl31(this.value)">
+        <span class="slider-val" id="sv31">1,0</span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="cv31" width="480" height="300" aria-label="Graph der Schar f_k(x)=x³-3kx"></canvas>
+      </div>
+      <p class="canvas-legend" id="cl31">$f_1(x)=x^3-3x$ &nbsp;·&nbsp; $H(-1\,|\,2)$ &nbsp;·&nbsp; $T(1\,|\,-2)$</p>
+
+      <table class="ankreuz" id="tbl-3-1" data-ans="W,F,W,W" style="margin-top:.9rem">
+        <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr data-r="0"><td>Für $k>0$ hat die Schar stets zwei Extrempunkte.</td>
+            <td><input type="radio" name="r31-0" value="W"></td><td><input type="radio" name="r31-0" value="F"></td></tr>
+          <tr data-r="1"><td>Für $k=0$ liegt der Hochpunkt im Ursprung.</td>
+            <td><input type="radio" name="r31-1" value="W"></td><td><input type="radio" name="r31-1" value="F"></td></tr>
+          <tr data-r="2"><td>Der Wendepunkt liegt für alle $k$ im Ursprung $W(0\,|\,0)$.</td>
+            <td><input type="radio" name="r31-2" value="W"></td><td><input type="radio" name="r31-2" value="F"></td></tr>
+          <tr data-r="3"><td>Mit wachsendem $k>0$ rücken Hoch- und Tiefpunkt weiter von der $y$-Achse weg.</td>
+            <td><input type="radio" name="r31-3" value="W"></td><td><input type="radio" name="r31-3" value="F"></td></tr>
+        </tbody>
+      </table>
+
+      <button class="hint-toggle" onclick="toggleHint('h31')">Tipp anzeigen</button>
+      <div class="hint-box" id="h31">
+        <strong>Tipp:</strong> Schiebe den Regler auf $k=0$: Wie sieht $f_0(x)=x^3$ aus? Hat er Extrempunkte? Bei $k<0$: Was passiert mit $f_k'(x)=3x^2-3k$, wenn $-3k>0$? Für den Wendepunkt: $f_k''(x)=6x$ – enthält $k$ überhaupt $k$?
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-3-1')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-3-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-3-1"><b></b>
+        <div class="sol">
+          <strong>wahr · falsch · wahr · wahr</strong><br>
+          (1) $f_k'(x)=3x^2-3k=0 \Rightarrow x^2=k$: reelle Lösungen genau für $k>0$. ✓<br>
+          (2) Für $k=0$: $f_0(x)=x^3$ – kein Extrempunkt, nur Terrassenpunkt im Ursprung.<br>
+          (3) $f_k''(x)=6x=0 \Rightarrow x_W=0$ unabhängig von $k$; $f_k(0)=0$ → immer $W(0\,|\,0)$. ✓<br>
+          (4) Extremstellen bei $x=\pm\sqrt{k}$: je größer $k$, desto weiter von der $y$-Achse. ✓
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.2 -->
+  <div class="ex" id="ex-3-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.2</div>
+      <h3>Lückentext: Extrempunkte von $g_k(x) = x^3 - 12k\,x$ für $k = 3$</h3>
+      <span class="ex-badge" id="st-3-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Setze $k=3$ ein und rechne wie bei einer gewöhnlichen Funktion.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">k = 3 einsetzen</span><span>$g_3(x) = x^3 - 12 \cdot 3 \cdot x$</span></div>
+        <div class="step-bd">
+          <div class="eq">$g_3(x) = x^3 -$ <input id="f32-1" data-ans="36" data-tol="0"> $x$</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Extremstellen</span><span>$g_3'(x) = 3x^2 - 36 = 0 \;\Rightarrow\; x^2 = 12$</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $x_1 \approx$ <input id="f32-3" data-ans="-3.46" data-tol="0.05"> <span class="eq-hint">(Hochpunkt)</span>
+            <span class="eq-sep"></span>
+            $x_2 \approx$ <input id="f32-4" data-ans="3.46" data-tol="0.05"> <span class="eq-hint">(Tiefpunkt)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Extrempunkte</span><span>$y$-Werte durch Einsetzen in $g_3(x)$ berechnen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $H\!\left(\approx\right.$ <input id="f32-3b" data-ans="-3.46" data-tol="0.05"> $\,\Big|\,\approx$ <input id="f32-5" data-ans="83.1" data-tol="1"> $\left.\right)$
+            <span class="eq-sep"></span>
+            $T\!\left(\approx\right.$ <input id="f32-4b" data-ans="3.46" data-tol="0.05"> $\,\Big|\,\approx$ <input id="f32-6" data-ans="-83.1" data-tol="1"> $\left.\right)$
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h32')">Tipp anzeigen</button>
+      <div class="hint-box" id="h32">
+        <strong>Tipp:</strong> $x^2=12 \Rightarrow x=\pm\sqrt{12}=\pm 2\sqrt{3}\approx\pm 3{,}46$. Dann: $g_3(-2\sqrt{3})=(-2\sqrt{3})^3-36\cdot(-2\sqrt{3})=-24\sqrt{3}+72\sqrt{3}=48\sqrt{3}\approx 83{,}1$.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-3-2',['f32-1','f32-3','f32-4','f32-3b','f32-4b','f32-5','f32-6'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-3-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-3-2"><b></b>
+        <div class="sol">
+          $g_3(x)=x^3-36x$; Extremstellen: $x=\pm 2\sqrt{3}\approx\pm 3{,}46$.<br>
+          $g_3(-2\sqrt{3})=48\sqrt{3}\approx 83{,}1$ → $H\!\left(-2\sqrt{3}\,\Big|\,48\sqrt{3}\right)$<br>
+          $g_3(2\sqrt{3})=-48\sqrt{3}\approx -83{,}1$ → $T\!\left(2\sqrt{3}\,\Big|\,-48\sqrt{3}\right)$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.3 -->
+  <div class="ex" id="ex-3-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.3</div>
+      <h3>Multiple Choice: Für welche $k$ hat $f_k(x) = x^3 - 3kx$ Extrempunkte?</h3>
+      <span class="ex-badge" id="st-3-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Für welche Werte von $k$ hat die Schar <strong>genau zwei</strong> Extrempunkte?</p>
+
+      <div class="mcq" id="mcq-3-3" data-ans="2">
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-3-3')">
+          <input type="radio" name="mcq33"><span class="mcq-letter">(a)</span>
+          <span>Für alle $k \in \mathbb{R}$, da eine Funktion vom Grad 3 stets Extrempunkte hat.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-3-3')">
+          <input type="radio" name="mcq33"><span class="mcq-letter">(b)</span>
+          <span>Für alle $k \geq 0$.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-3-3')">
+          <input type="radio" name="mcq33"><span class="mcq-letter">(c)</span>
+          <span>Für alle $k > 0$.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-3-3')">
+          <input type="radio" name="mcq33"><span class="mcq-letter">(d)</span>
+          <span>Für alle $k \neq 0$.</span>
+        </label>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h33')">Tipp anzeigen</button>
+      <div class="hint-box" id="h33">
+        <strong>Tipp:</strong> $f_k'(x)=3x^2-3k=0 \Rightarrow x^2=k$. Wann hat diese Gleichung genau zwei reelle Lösungen? Was passiert für $k=0$? Was für $k<0$?
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkMCQ('ex-3-3')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-3-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-3-3"><b></b>
+        <div class="sol">
+          <strong>Korrekte Antwort: (c)</strong><br>
+          $x^2=k$ hat genau zwei reelle Lösungen $x=\pm\sqrt{k}$ für $k>0$.<br>
+          $k=0$: $f_0'(x)=3x^2\geq 0$ – kein VZW, nur Terrassenpunkt.<br>
+          $k<0$: $3x^2-3k>0$ für alle $x$ → streng monoton steigend, kein Extremum.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K4: EXTREMSTELLEN ALLGEMEIN
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k4">
+  <div class="ch-head" style="border-left-color:var(--k4)">
+    <h2>Kapitel 4 – Extremstellen allgemein in Abhängigkeit von $k$</h2>
+    <p>Allgemeine Extremformel herleiten · $k$ rückwärts bestimmen · Eigenschaften der Formel</p>
+  </div>
+
+  <!-- 4.1 -->
+  <div class="ex" id="ex-4-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.1</div>
+      <h3>Ankreuzaufgabe: Allgemeine Extremstellen von $f_k(x) = x^3 - 3kx$</h3>
+      <span class="ex-badge" id="st-4-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Aus $f_k'(x) = 3x^2 - 3k = 0$ folgt $x_{1,2} = \pm\sqrt{k}$ (für $k>0$). Kreuze an, ob die Aussage wahr oder falsch ist.</p>
+
+      <table class="ankreuz" id="tbl-4-1" data-ans="W,W,W,F">
+        <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr data-r="0"><td>$f_k''(+\sqrt{k}) = 6\sqrt{k} > 0$, also liegt bei $x = +\sqrt{k}$ ein Tiefpunkt vor.</td>
+            <td><input type="radio" name="r41-0" value="W"></td><td><input type="radio" name="r41-0" value="F"></td></tr>
+          <tr data-r="1"><td>Der allgemeine $y$-Wert des Tiefpunkts ist $f_k(\sqrt{k}) = -2k\sqrt{k}$.</td>
+            <td><input type="radio" name="r41-1" value="W"></td><td><input type="radio" name="r41-1" value="F"></td></tr>
+          <tr data-r="2"><td>Der allgemeine $y$-Wert des Hochpunkts ist $f_k(-\sqrt{k}) = 2k\sqrt{k}$.</td>
+            <td><input type="radio" name="r41-2" value="W"></td><td><input type="radio" name="r41-2" value="F"></td></tr>
+          <tr data-r="3"><td>Der Hochpunkt liegt für alle $k > 0$ bei einer positiven $x$-Koordinate.</td>
+            <td><input type="radio" name="r41-3" value="W"></td><td><input type="radio" name="r41-3" value="F"></td></tr>
+        </tbody>
+      </table>
+
+      <button class="hint-toggle" onclick="toggleHint('h41')">Tipp anzeigen</button>
+      <div class="hint-box" id="h41">
+        <strong>Tipp:</strong> $f_k''(x)=6x$. Setze $x=+\sqrt{k}>0$ ein: Vorzeichen? Für den $y$-Wert des Tiefpunkts: $(\sqrt{k})^3=k\sqrt{k}$, also $f_k(\sqrt{k})=k\sqrt{k}-3k\sqrt{k}=\ldots$ Wo liegt der Hochpunkt – bei $+\sqrt{k}$ oder $-\sqrt{k}$?
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-4-1')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-4-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-4-1"><b></b>
+        <div class="sol">
+          <strong>wahr · wahr · wahr · falsch</strong><br>
+          (1) $f_k''(\sqrt{k})=6\sqrt{k}>0$ für $k>0$ → Tiefpunkt $T\!\left(\sqrt{k}\,\big|\,-2k\sqrt{k}\right)$. ✓<br>
+          (2) $(\sqrt{k})^3-3k\sqrt{k}=k\sqrt{k}-3k\sqrt{k}=-2k\sqrt{k}$. ✓ Probe $k=1$: $T(1\,|\,-2)$ ✓<br>
+          (3) $f_k(-\sqrt{k})=-k\sqrt{k}+3k\sqrt{k}=2k\sqrt{k}$. ✓ Probe $k=1$: $H(-1\,|\,2)$ ✓<br>
+          (4) Hochpunkt liegt bei $x=-\sqrt{k}<0$ – immer auf der <em>negativen</em> $x$-Seite.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.2 -->
+  <div class="ex" id="ex-4-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.2</div>
+      <h3>Lückentext: $k$ aus Tiefpunktlage berechnen</h3>
+      <span class="ex-badge" id="st-4-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Der Tiefpunkt von $f_k(x)=x^3-3kx$ soll bei $x=3$ liegen. Bestimme $k$ und berechne den vollständigen Tiefpunkt.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">k bestimmen</span><span>Tiefpunkt liegt bei $x_T = \sqrt{k}$, gesucht: $\sqrt{k}=3$</span></div>
+        <div class="step-bd">
+          <div class="eq">$k =$ <input id="f42-1" data-ans="9" data-tol="0"></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Tiefpunkt</span><span>$f_9(x) = x^3 - 27x$, setze $x=3$ ein</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $T\!\left(\right.$ <input id="f42-3" data-ans="3" data-tol="0"> $\,\Big|\,$ <input id="f42-2" data-ans="-54" data-tol="0"> $\left.\right)$
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h42')">Tipp anzeigen</button>
+      <div class="hint-box" id="h42">
+        <strong>Tipp:</strong> Wenn $\sqrt{k}=3$, dann quadriere beide Seiten: $k=3^2=9$. Dann $f_9(3)=3^3-3\cdot 9\cdot 3=27-81$.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-4-2',['f42-1','f42-3','f42-2'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-4-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-4-2"><b></b>
+        <div class="sol">
+          $\sqrt{k}=3 \Rightarrow k=9$.<br>
+          $f_9(x)=x^3-27x$; $f_9(3)=27-81=-54$.<br>
+          Tiefpunkt: $T(3\,|\,-54)$.<br>
+          Probe: $f_9'(3)=3\cdot9-27=0$ ✓; $f_9''(3)=18>0$ → Tiefpunkt ✓
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.3 -->
+  <div class="ex" id="ex-4-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.3</div>
+      <h3>Ankreuzaufgabe: Eigenschaften der allgemeinen Extremformel</h3>
+      <span class="ex-badge" id="st-4-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Schar $f_k(x)=x^3-3kx$, Extremstellen: $T\!\left(\sqrt{k}\,\big|\,-2k\sqrt{k}\right)$, $H\!\left(-\sqrt{k}\,\big|\,2k\sqrt{k}\right)$. Wahr oder falsch?</p>
+
+      <table class="ankreuz" id="tbl-4-3" data-ans="F,W,W,F">
+        <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr data-r="0"><td>Der Hochpunkt kann für bestimmte $k>0$ auch bei einer positiven $x$-Koordinate liegen.</td>
+            <td><input type="radio" name="r43-0" value="W"></td><td><input type="radio" name="r43-0" value="F"></td></tr>
+          <tr data-r="1"><td>Für $k=4$ liegt der Tiefpunkt bei $x_T=2$.</td>
+            <td><input type="radio" name="r43-1" value="W"></td><td><input type="radio" name="r43-1" value="F"></td></tr>
+          <tr data-r="2"><td>Der $y$-Wert des Tiefpunkts, $-2k\sqrt{k}$, wächst betragsmäßig mit $k$ stark an.</td>
+            <td><input type="radio" name="r43-2" value="W"></td><td><input type="radio" name="r43-2" value="F"></td></tr>
+          <tr data-r="3"><td>Für $k=1$ und $k=4$ liegt der Hochpunkt jeweils auf der positiven $x$-Seite.</td>
+            <td><input type="radio" name="r43-3" value="W"></td><td><input type="radio" name="r43-3" value="F"></td></tr>
+        </tbody>
+      </table>
+
+      <button class="hint-toggle" onclick="toggleHint('h43')">Tipp anzeigen</button>
+      <div class="hint-box" id="h43">
+        <strong>Tipp:</strong> Hochpunkt liegt bei $x=-\sqrt{k}$ – für alle $k>0$ ist $-\sqrt{k}<0$. Tiefpunkt bei $x=+\sqrt{k}$: für $k=4$ ist $\sqrt{4}=2$. Der $y$-Wert $-2k^{3/2}$: setze $k=1,4,9$ ein und vergleiche.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-4-3')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-4-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-4-3"><b></b>
+        <div class="sol">
+          <strong>falsch · wahr · wahr · falsch</strong><br>
+          (1) Hochpunkt bei $x=-\sqrt{k}<0$ für alle $k>0$ – immer auf der <em>negativen</em> $x$-Seite.<br>
+          (2) $x_T=\sqrt{4}=2$ ✓; $f_4(2)=8-24=-16$ → $T(2\,|\,-16)$.<br>
+          (3) $-2k^{3/2}$: für $k=1{:}\ {-2}$; $k=4{:}\ {-16}$; $k=9{:}\ {-54}$ – wächst stark. ✓<br>
+          (4) Hochpunkt bei $x=-\sqrt{k}$: $k=1\Rightarrow x=-1$; $k=4\Rightarrow x=-2$ – beide negativ.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K5: RECHENAUFGABEN AM BLATT
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k5">
+  <div class="ch-head" style="border-left-color:#8b5cf6">
+    <h2>Kapitel 5 – Rechenaufgaben am Blatt</h2>
+    <p>Klassische Kurvendiskussionen zum selbst Durchrechnen – danach die Lösung aufdecken.</p>
+  </div>
+
+  <!-- 5.1 -->
+  <div class="ex" id="ex-5-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:#8b5cf6">5.1</div>
+      <h3>Vollständige Kurvendiskussion: $f(x) = x^3 + 3x^2$</h3>
+      <span class="ex-badge" id="st-5-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <div class="ex-task">
+        Führe für $f(x) = x^3 + 3x^2,\quad D_f = \mathbb{R}$ eine vollständige Kurvendiskussion durch.<br>
+        Bestimme: Nullstellen · $y$-Achsenabschnitt · Extrempunkte · Wendepunkt · Grenzverhalten.
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h51')">Tipp anzeigen</button>
+      <div class="hint-box" id="h51">
+        <strong>Tipp:</strong> Faktorisiere $f(x)=x^2(x+3)$ für die Nullstellen. Bilde $f'(x)=3x^2+6x=3x(x+2)$ und setze gleich null. Die zweite Ableitung $f''(x)=6x+6$ liefert sowohl die Art der Extrempunkte als auch – durch $f''(x)=0$ – den Wendepunkt.
+      </div>
+
+      <button class="sol-toggle" onclick="toggleSol('sol51','5-1')">Lösung anzeigen</button>
+      <div class="sol-reveal" id="sol51">
+        <h4>Lösung</h4>
+        <p><strong>Ableitungen:</strong> $f'(x)=3x^2+6x=3x(x+2),\quad f''(x)=6x+6$</p>
+        <p style="margin-top:.4rem"><strong>Nullstellen:</strong> $f(x)=x^2(x+3)=0$<br>
+        $x_1=0$ (doppelte NS), $x_2=-3$ (einfache NS) · $y$-Achse: $f(0)=0$</p>
+        <p style="margin-top:.4rem"><strong>Extrempunkte</strong> ($f'=0$ bei $x=0$ und $x=-2$):<br>
+        $f''(-2)=-12+6=-6&lt;0$ → <strong>Hochpunkt $H(-2\,|\,4)$</strong><br>
+        $f''(0)=6&gt;0$ → <strong>Tiefpunkt $T(0\,|\,0)$</strong></p>
+        <p style="margin-top:.4rem"><strong>Wendepunkt</strong> ($f''=0$): $6x+6=0\Rightarrow x=-1;\quad f(-1)=-1+3=2$<br>
+        VZW von $f''$: links $f''&lt;0$, rechts $f''&gt;0$ ✓ → <strong>$W(-1\,|\,2)$</strong></p>
+        <p style="margin-top:.4rem"><strong>Grenzverhalten:</strong> $\displaystyle\lim_{x\to-\infty}f(x)=-\infty,\quad\lim_{x\to+\infty}f(x)=+\infty$</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetSol('sol51','5-1')">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5.2 -->
+  <div class="ex" id="ex-5-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:#8b5cf6">5.2</div>
+      <h3>Funktionenschar: $g_k(x) = x^3 - k\,x^2,\quad k>0$</h3>
+      <span class="ex-badge" id="st-5-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <div class="ex-task">
+        Bestimme für beliebiges $k>0$: Extrempunkte und Wendepunkt von $g_k$.
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h52')">Tipp anzeigen</button>
+      <div class="hint-box" id="h52">
+        <strong>Tipp:</strong> Bilde $g_k'(x)=3x^2-2kx=x(3x-2k)$ – die Nullstellen sind $x=0$ und $x=\tfrac{2k}{3}$. Bestimme mit $g_k''(x)=6x-2k$ die Art der Extremstellen. Der Wendepunkt folgt aus $g_k''(x)=0$.
+      </div>
+
+      <button class="sol-toggle" onclick="toggleSol('sol52','5-2')">Lösung anzeigen</button>
+      <div class="sol-reveal" id="sol52">
+        <h4>Lösung</h4>
+        <p><strong>Ableitungen:</strong> $g_k'(x)=3x^2-2kx=x(3x-2k),\quad g_k''(x)=6x-2k$</p>
+        <p style="margin-top:.4rem"><strong>Extremstellen:</strong> $g_k'=0$ bei $x=0$ und $x=\tfrac{2k}{3}$</p>
+        <p style="margin-top:.35rem">$g_k''(0)=-2k&lt;0$ → <strong>Hochpunkt $H\!\left(0\,\big|\,0\right)$</strong></p>
+        <p style="margin-top:.2rem">$g_k''\!\left(\tfrac{2k}{3}\right)=4k-2k=2k&gt;0$ → <strong>Tiefpunkt $T\!\left(\tfrac{2k}{3}\,\Bigg|\,-\dfrac{4k^3}{27}\right)$</strong></p>
+        <p style="margin-top:.4rem"><strong>Wendepunkt</strong> ($g_k''=0$): $6x-2k=0\Rightarrow x=\tfrac{k}{3};\quad g_k\!\left(\tfrac{k}{3}\right)=-\dfrac{2k^3}{27}$<br>
+        → <strong>$W\!\left(\tfrac{k}{3}\,\Bigg|\,-\dfrac{2k^3}{27}\right)$</strong></p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetSol('sol52','5-2')">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5.3 -->
+  <div class="ex" id="ex-5-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:#8b5cf6">5.3</div>
+      <h3>Ganzrationale Funktion 4. Grades: $f(x) = x^4 - 8x^2$</h3>
+      <span class="ex-badge" id="st-5-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <div class="ex-task">
+        Bestimme alle Extrempunkte und Wendepunkte von $f(x)=x^4-8x^2,\quad D_f=\mathbb{R}$.
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h53')">Tipp anzeigen</button>
+      <div class="hint-box" id="h53">
+        <strong>Tipp:</strong> $f'(x)=4x^3-16x=4x(x^2-4)=0$ liefert drei Extremstellen. Die zweite Ableitung $f''(x)=12x^2-16$ entscheidet über die Art. Für die Wendepunkte: setze $f''(x)=0$ und löse $x^2=\tfrac{4}{3}$ auf.
+      </div>
+
+      <button class="sol-toggle" onclick="toggleSol('sol53','5-3')">Lösung anzeigen</button>
+      <div class="sol-reveal" id="sol53">
+        <h4>Lösung</h4>
+        <p><strong>Ableitungen:</strong> $f'(x)=4x^3-16x=4x(x^2-4),\quad f''(x)=12x^2-16$</p>
+        <p style="margin-top:.4rem"><strong>Extremstellen:</strong> $f'=0$ bei $x=0$ und $x=\pm 2$</p>
+        <p style="margin-top:.3rem">$f''(0)=-16&lt;0$ → <strong>Hochpunkt $H(0\,|\,0)$</strong></p>
+        <p style="margin-top:.2rem">$f''(\pm 2)=48-16=32&gt;0$ → <strong>Tiefpunkte $T(\pm 2\,|\,-16)$</strong></p>
+        <p style="margin-top:.4rem"><strong>Wendepunkte</strong> ($f''=0$): $12x^2=16\Rightarrow x^2=\tfrac{4}{3}\Rightarrow x=\pm\dfrac{2\sqrt{3}}{3}$</p>
+        <p style="margin-top:.2rem">$f\!\left(\pm\tfrac{2\sqrt{3}}{3}\right)=\left(\tfrac{4}{3}\right)^2-8\cdot\tfrac{4}{3}=\tfrac{16}{9}-\tfrac{32}{3}=-\dfrac{80}{9}$</p>
+        <p style="margin-top:.2rem">→ <strong>$W\!\left(\pm\dfrac{2\sqrt{3}}{3}\,\Bigg|\,-\dfrac{80}{9}\right)$</strong></p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetSol('sol53','5-3')">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K6: TEXTAUFGABEN
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k6">
+  <div class="ch-head" style="border-left-color:#0891b2">
+    <h2>Kapitel 6 – Textaufgaben im Sachzusammenhang</h2>
+    <p>Stelle stärkster Zunahme · Stagnation · reale Kontexte mit ganzrationalen Funktionen</p>
+  </div>
+
+  <!-- 6.1 -->
+  <div class="ex" id="ex-6-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:#0891b2">6.1</div>
+      <h3>Wasserstand im Reservoir</h3>
+      <span class="ex-badge" id="st-6-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <div class="text-context">
+        <strong>Kontext</strong>
+        Der Wasserstand eines Reservoirs wird über 4 Stunden modelliert durch
+        $$W(t) = t^3 - 6t^2 + 9t + 1, \quad t \in [0;\,4],\quad W \text{ in m},\ t \text{ in h.}$$
+      </div>
+      <div class="ex-task">
+        <ol style="padding-left:1.3rem;line-height:2.1;">
+          <li>Berechne alle Extrempunkte. Was bedeuten sie im Kontext?</li>
+          <li>Bestimme den Wendepunkt. Zu welchem Zeitpunkt fällt der Wasserstand am schnellsten?</li>
+          <li>Berechne den Wasserstand zu Beginn und am Ende des Beobachtungszeitraums.</li>
+        </ol>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h61')">Tipp anzeigen</button>
+      <div class="hint-box" id="h61">
+        <strong>Tipp:</strong> Bilde $W'(t)=3t^2-12t+9=3(t-1)(t-3)$ und setze gleich null. Der Wendepunkt liefert die Stelle stärkster Ab- oder Zunahme – überprüfe das Vorzeichen von $W'$ am Wendepunkt, um zu entscheiden, ob der Wasserstand dort fällt oder steigt.
+      </div>
+
+      <button class="sol-toggle" onclick="toggleSol('sol61','6-1')">Lösung anzeigen</button>
+      <div class="sol-reveal" id="sol61">
+        <h4>Lösung</h4>
+        <p><strong>Ableitungen:</strong> $W'(t)=3t^2-12t+9=3(t-1)(t-3),\quad W''(t)=6t-12$</p>
+        <p style="margin-top:.4rem"><strong>Extrempunkte:</strong> $W'=0$ bei $t=1$ und $t=3$</p>
+        <p>$W''(1)=6-12=-6&lt;0$ → <strong>Hochpunkt $H(1\,|\,5)$:</strong> lokales Maximum – Wasserstand erreicht nach 1 h den Höchststand von 5 m.</p>
+        <p>$W''(3)=18-12=6&gt;0$ → <strong>Tiefpunkt $T(3\,|\,1)$:</strong> lokales Minimum – nach 3 h tiefster Wasserstand von 1 m.</p>
+        <p style="margin-top:.4rem"><strong>Wendepunkt</strong> ($W''=0$): $6t-12=0\Rightarrow t=2;\quad W(2)=8-24+18+1=3$</p>
+        <p>$W'(2)=3\cdot4-12\cdot2+9=-3&lt;0$ → Wasserstand fällt → <strong>Stelle stärkster Abnahme: $t=2$ h, Wasserstand 3 m.</strong></p>
+        <p style="margin-top:.4rem"><strong>Randwerte:</strong> $W(0)=1$ m, $W(4)=64-96+36+1=5$ m</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetSol('sol61','6-1')">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6.2 -->
+  <div class="ex" id="ex-6-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:#0891b2">6.2</div>
+      <h3>Temperaturverlauf im Tagesverlauf</h3>
+      <span class="ex-badge" id="st-6-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <div class="text-context">
+        <strong>Kontext</strong>
+        Die Temperatur an einem Sommertag wird von 6 bis 12 Uhr modelliert durch
+        $$T(t) = -t^3 + 6t^2 + 10, \quad t \in [0;\,6],\quad T \text{ in °C},\ t \text{ in h nach 6 Uhr.}$$
+      </div>
+      <div class="ex-task">
+        <ol style="padding-left:1.3rem;line-height:2.1;">
+          <li>Bestimme den Hochpunkt. Wann und wie warm ist es am wärmsten?</li>
+          <li>Berechne den Wendepunkt. Zu welchem Zeitpunkt steigt die Temperatur am schnellsten?</li>
+          <li>Berechne die Temperatur bei $t=0$ und $t=6$.</li>
+        </ol>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h62')">Tipp anzeigen</button>
+      <div class="hint-box" id="h62">
+        <strong>Tipp:</strong> $T'(t)=-3t^2+12t=-3t(t-4)$. Die Stelle stärkster Zunahme liegt am Wendepunkt – überprüfe das Vorzeichen von $T'$ dort.
+      </div>
+
+      <button class="sol-toggle" onclick="toggleSol('sol62','6-2')">Lösung anzeigen</button>
+      <div class="sol-reveal" id="sol62">
+        <h4>Lösung</h4>
+        <p><strong>Ableitungen:</strong> $T'(t)=-3t^2+12t=-3t(t-4),\quad T''(t)=-6t+12$</p>
+        <p style="margin-top:.4rem"><strong>Hochpunkt:</strong> $T'=0$ bei $t=0$ (Randpunkt) und $t=4$</p>
+        <p>$T''(4)=-24+12=-12&lt;0$ → <strong>Hochpunkt $H(4\,|\,42)$:</strong> Maximum um 10 Uhr (6 + 4 h) bei 42 °C.</p>
+        <p style="margin-top:.4rem"><strong>Wendepunkt</strong> ($T''=0$): $-6t+12=0\Rightarrow t=2;\quad T(2)=-8+24+10=26$ °C</p>
+        <p>$T'(2)=-12+24=12&gt;0$ → Temperatur steigt → <strong>Stelle stärkster Zunahme: $t=2$ h (8 Uhr), $T=26$ °C.</strong></p>
+        <p style="margin-top:.4rem"><strong>Randwerte:</strong> $T(0)=10$ °C, $T(6)=-216+216+10=10$ °C</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetSol('sol62','6-2')">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6.3 -->
+  <div class="ex" id="ex-6-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:#0891b2">6.3</div>
+      <h3>Förderrate einer Ölquelle</h3>
+      <span class="ex-badge" id="st-6-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <div class="text-context">
+        <strong>Kontext</strong>
+        Die Förderrate einer Ölquelle (in Tausend Barrel pro Tag) wird modelliert durch
+        $$q(t) = t^3 - 12t^2 + 36t, \quad t \in [0;\,8],\quad t \text{ in Tagen.}$$
+      </div>
+      <div class="ex-task">
+        <ol style="padding-left:1.3rem;line-height:2.1;">
+          <li>Berechne Hoch- und Tiefpunkt. Was bedeutet der Tiefpunkt im Kontext?</li>
+          <li>Bestimme den Wendepunkt. Was passiert dort mit der Förderrate?</li>
+          <li>Überprüfe: Kann $q(t)$ als Förderrate sinnvoll interpretiert werden? (Hinweis: Vorzeichen bei $t=7$)</li>
+        </ol>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h63')">Tipp anzeigen</button>
+      <div class="hint-box" id="h63">
+        <strong>Tipp:</strong> $q'(t)=3t^2-24t+36=3(t-2)(t-6)$. Der Tiefpunkt bei $t=6$ liefert $q(6)=0$ – welche Konsequenz hat das im Sachzusammenhang? Der Wendepunkt ist die Stelle, an der die Abnahme der Förderrate am stärksten ist.
+      </div>
+
+      <button class="sol-toggle" onclick="toggleSol('sol63','6-3')">Lösung anzeigen</button>
+      <div class="sol-reveal" id="sol63">
+        <h4>Lösung</h4>
+        <p><strong>Ableitungen:</strong> $q'(t)=3t^2-24t+36=3(t-2)(t-6),\quad q''(t)=6t-24$</p>
+        <p style="margin-top:.4rem"><strong>Extrempunkte:</strong> $q'=0$ bei $t=2$ und $t=6$</p>
+        <p>$q''(2)=12-24=-12&lt;0$ → <strong>Hochpunkt $H(2\,|\,32)$:</strong> Maximale Förderrate 32 000 Barrel/Tag nach 2 Tagen.</p>
+        <p>$q''(6)=36-24=12&gt;0$ → <strong>Tiefpunkt $T(6\,|\,0)$:</strong> Die Förderrate sinkt auf null – <strong>Stagnation</strong> (Quelle kommt zum Stillstand).</p>
+        <p style="margin-top:.4rem"><strong>Wendepunkt</strong> ($q''=0$): $6t-24=0\Rightarrow t=4;\quad q(4)=64-192+144=16$</p>
+        <p>→ <strong>$W(4\,|\,16)$:</strong> Bei $t=4$ nimmt die Förderrate am stärksten ab (stärkste Abnahme der Rate).</p>
+        <p style="margin-top:.4rem"><strong>Vorzeichenprüfung:</strong> $q(7)=343-588+252=7&gt;0$, $q(8)=512-768+288=32&gt;0$ → nach der Stagnation steigt die Förderrate wieder (Modell verlässt den physikalisch sinnvollen Bereich).</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetSol('sol63','6-3')">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer class="footer-nav">
+  <div class="footer-nav-inner">
+    <a class="back-btn" href="index.html">← Mathematik</a>
+    <a class="portal-link" href="../../index.html">Lernportal ↗</a>
+  </div>
+</footer>
+
+<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
+
+<script>
+// ── Theme ──────────────────────────────────────────────────────────────────
+(function(){
+  var r=document.documentElement,b=document.getElementById('themeToggle');
+  function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}
+  a(r.getAttribute('data-theme')||'light');
+  b.addEventListener('click',function(){
+    var n=r.getAttribute('data-theme')==='dark'?'light':'dark';
+    localStorage.setItem('theme',n);a(n);
+    setTimeout(function(){drawStatic();drawSchar(parseFloat(document.getElementById('sl31').value));},40);
+  });
+})();
+
+// ── Progress ───────────────────────────────────────────────────────────────
+var scores={};
+var chMap={'1-1':'k1','1-2':'k1','1-3':'k1','2-1':'k2','2-2':'k2','2-3':'k2',
+           '3-1':'k3','3-2':'k3','3-3':'k3','4-1':'k4','4-2':'k4','4-3':'k4',
+           '5-1':'k5','5-2':'k5','5-3':'k5','6-1':'k6','6-2':'k6','6-3':'k6'};
+
+function markScore(key,val){
+  scores[key]=val;
+  var done=Object.keys(scores).length;
+  document.getElementById('prog-fill').style.width=Math.round(done/18*100)+'%';
+  document.getElementById('prog-label').textContent=done+' von 18 Aufgaben abgeschlossen';
+  var cc={k1:0,k2:0,k3:0,k4:0,k5:0,k6:0};
+  Object.keys(scores).forEach(function(k){var ch=chMap[k];if(ch)cc[ch]++;});
+  ['k1','k2','k3','k4','k5','k6'].forEach(function(ch){
+    document.getElementById('badge-'+ch).textContent=cc[ch]+'/3';
+    if(cc[ch]===3) document.querySelector('[data-ch='+ch+']').classList.add('done');
+  });
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────────────
+function switchTab(ch){
+  document.querySelectorAll('.chapter').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(ch).classList.add('active');
+  document.querySelector('[data-ch='+ch+']').classList.add('active');
+}
+
+// ── Hint toggle ────────────────────────────────────────────────────────────
+function toggleHint(id){
+  var el=document.getElementById(id),btn=el.previousElementSibling;
+  el.classList.toggle('show');
+  btn.textContent=el.classList.contains('show')?'Tipp ausblenden':'Tipp anzeigen';
+}
+
+// ── Solution reveal (Rechenaufgaben / Textaufgaben) ────────────────────────
+function toggleSol(solId,key){
+  var el=document.getElementById(solId);
+  var btn=el.previousElementSibling;
+  el.classList.toggle('show');
+  if(el.classList.contains('show')){
+    btn.textContent='Lösung ausblenden';
+    markScore(key,1);
+    var st=document.getElementById('st-'+key);
+    if(st)st.textContent='✓ Angesehen';
+    if(typeof renderMathInElement!=='undefined')
+      renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  } else {
+    btn.textContent='Lösung anzeigen';
+  }
+}
+
+function resetSol(solId,key){
+  var el=document.getElementById(solId);
+  el.classList.remove('show');
+  var btn=el.previousElementSibling;
+  btn.textContent='Lösung anzeigen';
+  delete scores[key];
+  var done=Object.keys(scores).length;
+  document.getElementById('prog-fill').style.width=Math.round(done/18*100)+'%';
+  document.getElementById('prog-label').textContent=done+' von 18 Aufgaben abgeschlossen';
+  var st=document.getElementById('st-'+key);
+  if(st)st.textContent='nicht bewertet';
+  var cc={k1:0,k2:0,k3:0,k4:0,k5:0,k6:0};
+  Object.keys(scores).forEach(function(k){var ch=chMap[k];if(ch)cc[ch]++;});
+  ['k1','k2','k3','k4','k5','k6'].forEach(function(ch){
+    document.getElementById('badge-'+ch).textContent=cc[ch]+'/3';
+    if(cc[ch]<3) document.querySelector('[data-ch='+ch+']').classList.remove('done');
+  });
+}
+
+// ── Reset ──────────────────────────────────────────────────────────────────
+function resetEx(exId){
+  var ex=document.getElementById(exId);
+  ex.querySelectorAll('input[type=radio]').forEach(function(i){i.checked=false;});
+  ex.querySelectorAll('input:not([type]),input[type=text],.eq input').forEach(function(i){
+    i.value='';i.classList.remove('ok','err');});
+  ex.querySelectorAll('.mcq-opt').forEach(function(o){o.classList.remove('sel','ok','err');});
+  ex.querySelectorAll('.ankreuz tr').forEach(function(r){r.classList.remove('ok-row','err-row');});
+  var key=exId.replace('ex-','');
+  var fb=document.getElementById('fb-'+key);
+  if(fb){fb.className='fb';fb.querySelector('b').textContent='';}
+  var st=document.getElementById('st-'+key);
+  if(st) st.textContent='nicht bewertet';
+}
+
+// ── MCQ ────────────────────────────────────────────────────────────────────
+function selMCQ(el,groupId){
+  document.querySelectorAll('#'+groupId+' .mcq-opt').forEach(function(o){o.classList.remove('sel');});
+  el.classList.add('sel');
+  el.querySelector('input').checked=true;
+}
+
+function checkMCQ(exId){
+  var key=exId.replace('ex-','');
+  var grp=document.getElementById('mcq-'+key);
+  var correct=parseInt(grp.dataset.ans);
+  var opts=grp.querySelectorAll('.mcq-opt');
+  var sel=-1;
+  opts.forEach(function(o,i){if(o.classList.contains('sel'))sel=i;});
+  var fb=document.getElementById('fb-'+key);
+  var st=document.getElementById('st-'+key);
+  if(sel===-1){fb.className='fb warn show';fb.querySelector('b').textContent='Bitte eine Antwort auswählen';return;}
+  opts.forEach(function(o,i){
+    if(i===correct)o.classList.add('ok');
+    else if(i===sel)o.classList.add('err');
+  });
+  var ok=sel===correct;
+  fb.className='fb show '+(ok?'ok':'err');
+  fb.querySelector('b').textContent=ok?'Richtig!':'Leider falsch';
+  st.textContent=ok?'✓ Richtig':'✗ Falsch';
+  markScore(key,ok?1:0);
+  if(typeof renderMathInElement!=='undefined')
+    renderMathInElement(fb,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+
+// ── Ankreuz ────────────────────────────────────────────────────────────────
+function checkAnkreuz(exId){
+  var key=exId.replace('ex-','');
+  var tbl=document.getElementById('tbl-'+key);
+  var answers=tbl.dataset.ans.split(',');
+  var rows=tbl.querySelectorAll('tbody tr');
+  var allOk=true;
+  rows.forEach(function(row,ri){
+    var correct=answers[ri],chosen=null;
+    row.querySelectorAll('input[type=radio]').forEach(function(inp){if(inp.checked)chosen=inp.value;});
+    if(chosen===correct) row.classList.add('ok-row');
+    else{row.classList.add('err-row');allOk=false;}
+  });
+  var fb=document.getElementById('fb-'+key);
+  var st=document.getElementById('st-'+key);
+  fb.className='fb show '+(allOk?'ok':'err');
+  fb.querySelector('b').textContent=allOk?'Alles richtig!':'Einige Zeilen stimmen nicht – sieh die Lösung.';
+  st.textContent=allOk?'✓ Richtig':'✗ Überarbeiten';
+  markScore(key,allOk?1:0);
+  if(typeof renderMathInElement!=='undefined')
+    renderMathInElement(fb,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+
+// ── Fill-in (numerisch) ────────────────────────────────────────────────────
+function checkFill(exId,ids){
+  var key=exId.replace('ex-','');
+  var allOk=true;
+  ids.forEach(function(id){
+    var inp=document.getElementById(id);
+    if(!inp)return;
+    var val=parseFloat(inp.value.replace(',','.'));
+    var ans=parseFloat(inp.dataset.ans);
+    var tol=parseFloat(inp.dataset.tol)||0;
+    if(isNaN(val)||Math.abs(val-ans)>tol){inp.classList.remove('ok');inp.classList.add('err');allOk=false;}
+    else{inp.classList.remove('err');inp.classList.add('ok');}
+  });
+  var fb=document.getElementById('fb-'+key);
+  var st=document.getElementById('st-'+key);
+  fb.className='fb show '+(allOk?'ok':'err');
+  fb.querySelector('b').textContent=allOk?'Alle Werte korrekt!':'Rote Felder prüfen.';
+  st.textContent=allOk?'✓ Richtig':'✗ Überarbeiten';
+  markScore(key,allOk?1:0);
+  if(typeof renderMathInElement!=='undefined')
+    renderMathInElement(fb,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+
+// ── Canvas: f(x)=x³-3x (statisch) ─────────────────────────────────────────
+function drawStatic(){
+  var cv=document.getElementById('cv11');if(!cv)return;
+  var ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  var ox=W/2,oy=H/2,sx=55,sy=50;
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  var bg=dark?'#1a1a1a':'#ffffff';
+  var grid=dark?'#282828':'#ede8de';
+  var ax=dark?'#999':'#888';
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=grid;ctx.lineWidth=1;
+  for(var i=-4;i<=4;i++){ctx.beginPath();ctx.moveTo(ox+i*sx,0);ctx.lineTo(ox+i*sx,H);ctx.stroke();}
+  for(var j=-3;j<=3;j++){ctx.beginPath();ctx.moveTo(0,oy+j*sy);ctx.lineTo(W,oy+j*sy);ctx.stroke();}
+  ctx.strokeStyle=ax;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(W,oy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(ox,0);ctx.lineTo(ox,H);ctx.stroke();
+  ctx.fillStyle=ax;ctx.font='11px DM Mono,monospace';ctx.textAlign='center';
+  for(var i=-4;i<=4;i++){if(i)ctx.fillText(i,ox+i*sx,oy+14);}
+  ctx.textAlign='right';
+  for(var j=-2;j<=2;j++){if(j)ctx.fillText(j,ox-6,oy-j*sy+4);}
+  ctx.textAlign='center';ctx.fillText('x',W-8,oy-6);
+  ctx.textAlign='left';ctx.fillText('y',ox+5,13);
+  function f(x){return x*x*x-3*x;}
+  ctx.strokeStyle='#c8400a';ctx.lineWidth=2.5;ctx.beginPath();
+  var first=true;
+  for(var px=0;px<W;px++){
+    var xi=(px-ox)/sx,yi=f(xi),py=oy-yi*sy;
+    if(first){ctx.moveTo(px,py);first=false;}else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+  var pts=[
+    {cx:ox-sx,cy:oy-2*sy,r:7,col:'#2a6496',lbl:'H(−1|2)',tx:-46,ty:-12},
+    {cx:ox+sx,cy:oy+2*sy,r:7,col:'#2e7d4f',lbl:'T(1|−2)',tx:10,ty:14},
+    {cx:ox,cy:oy,r:6,col:'#8b5cf6',lbl:'W(0|0)',tx:8,ty:-13},
+    {cx:ox-1.732*sx,cy:oy,r:5,col:'#c8400a',lbl:'N₁',tx:-4,ty:-12},
+    {cx:ox+1.732*sx,cy:oy,r:5,col:'#c8400a',lbl:'N₃',tx:6,ty:-12}
+  ];
+  cv._pts=pts.map(function(p){return{cx:p.cx,cy:p.cy,r:p.r*2,tip:p.lbl};});
+  ctx.font='700 12px DM Mono,monospace';
+  pts.forEach(function(p){
+    ctx.fillStyle=p.col;
+    ctx.beginPath();ctx.arc(p.cx,p.cy,p.r,0,2*Math.PI);ctx.fill();
+    ctx.fillText(p.lbl,p.cx+p.tx,p.cy+p.ty);
+  });
+  ctx.fillStyle='#c8400a';ctx.beginPath();ctx.arc(ox,oy,4,0,2*Math.PI);ctx.fill();
+  ctx.fillText('N₂',ox+8,oy+14);
+}
+
+function initHover(){
+  var cv=document.getElementById('cv11');if(!cv)return;
+  var tip=document.createElement('div');
+  tip.style.cssText='position:fixed;background:#1a1208;color:#f7f3ec;font:12px DM Mono,monospace;'
+    +'padding:5px 10px;border-radius:3px;pointer-events:none;display:none;z-index:999;';
+  document.body.appendChild(tip);
+  cv.addEventListener('mousemove',function(e){
+    if(!cv._pts)return;
+    var r=cv.getBoundingClientRect(),sc=cv.width/r.width;
+    var mx=(e.clientX-r.left)*sc,my=(e.clientY-r.top)*sc,found=false;
+    cv._pts.forEach(function(p){
+      if(Math.sqrt((mx-p.cx)**2+(my-p.cy)**2)<p.r){
+        tip.textContent=p.tip;tip.style.display='block';
+        tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-8)+'px';found=true;
+      }
+    });
+    if(!found)tip.style.display='none';
+  });
+  cv.addEventListener('mouseleave',function(){tip.style.display='none';});
+}
+
+// ── Canvas: Schar (interaktiv) ─────────────────────────────────────────────
+function drawSchar(k){
+  var cv=document.getElementById('cv31');if(!cv)return;
+  var ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  var ox=W/2,oy=H/2,sx=52,sy=28;
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  var bg=dark?'#1a1a1a':'#ffffff';
+  var grid=dark?'#282828':'#ede8de';
+  var axC=dark?'#999':'#888';
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=grid;ctx.lineWidth=1;
+  for(var i=-4;i<=4;i++){ctx.beginPath();ctx.moveTo(ox+i*sx,0);ctx.lineTo(ox+i*sx,H);ctx.stroke();}
+  for(var j=-5;j<=5;j++){ctx.beginPath();ctx.moveTo(0,oy+j*sy);ctx.lineTo(W,oy+j*sy);ctx.stroke();}
+  ctx.strokeStyle=axC;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(W,oy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(ox,0);ctx.lineTo(ox,H);ctx.stroke();
+  ctx.fillStyle=axC;ctx.font='11px DM Mono,monospace';ctx.textAlign='center';
+  for(var i=-4;i<=4;i++){if(i)ctx.fillText(i,ox+i*sx,oy+14);}
+  ctx.textAlign='right';
+  [-4,-2,2,4].forEach(function(j){ctx.fillText(j,ox-5,oy-j*sy+4);});
+  function fk(x){return x*x*x-3*k*x;}
+  ctx.strokeStyle='#c8400a';ctx.lineWidth=2.5;ctx.beginPath();
+  var first=true;
+  for(var px=0;px<W;px++){
+    var xi=(px-ox)/sx,yi=fk(xi)/2,py=oy-yi*sy;
+    if(py<-30||py>H+30){first=true;continue;}
+    if(first){ctx.moveTo(px,py);first=false;}else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+  if(k>0.04){
+    var sq=Math.sqrt(k),
+        pxH=ox-sq*sx,pyH=oy-(fk(-sq)/2)*sy,
+        pxT=ox+sq*sx,pyT=oy-(fk(sq)/2)*sy;
+    ctx.fillStyle='#2a6496';ctx.beginPath();ctx.arc(pxH,pyH,6,0,2*Math.PI);ctx.fill();
+    ctx.font='700 11px DM Mono,monospace';ctx.textAlign='right';ctx.fillStyle='#2a6496';ctx.fillText('H',pxH-8,pyH-8);
+    ctx.fillStyle='#2e7d4f';ctx.beginPath();ctx.arc(pxT,pyT,6,0,2*Math.PI);ctx.fill();
+    ctx.textAlign='left';ctx.fillStyle='#2e7d4f';ctx.fillText('T',pxT+8,pyT+8);
+  }
+  ctx.fillStyle='#8b5cf6';ctx.beginPath();ctx.arc(ox,oy,5,0,2*Math.PI);ctx.fill();
+  ctx.font='700 11px DM Mono,monospace';ctx.textAlign='left';ctx.fillStyle='#8b5cf6';ctx.fillText('W',ox+7,oy-8);
+}
+
+function updateSl31(val){
+  var k=parseFloat(val);
+  document.getElementById('sv31').textContent=k.toFixed(1).replace('.',',');
+  drawSchar(k);
+  var leg=document.getElementById('cl31');
+  if(k>0.04){
+    var sq=Math.sqrt(k),yT=(-2*k*sq).toFixed(1).replace('.',','),yH=(2*k*sq).toFixed(1).replace('.',',');
+    leg.textContent='H(−'+sq.toFixed(2).replace('.',',')+' | '+yH+') · T('+sq.toFixed(2).replace('.',',')+' | '+yT+')';
+  } else if(Math.abs(k)<0.04){
+    leg.textContent='k = 0: f₀(x) = x³ — kein Extrempunkt, Terrassenpunkt in W(0 | 0)';
+  } else {
+    leg.textContent='k < 0: streng monoton steigend — kein Extrempunkt';
+  }
+}
+
+window.addEventListener('load',function(){
+  drawStatic();
+  initHover();
+  drawSchar(1);
+});
+</script>
+</body>
+</html>

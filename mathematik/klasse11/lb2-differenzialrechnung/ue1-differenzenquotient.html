@@ -133,6 +133,23 @@ header .bc span { color:#444; }
 .footer-nav-inner { max-width:900px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.8rem; }
 .back-btn { font-family:var(--mono); font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); text-decoration:none; display:inline-flex; align-items:center; gap:.5rem; transition:opacity .2s; }
 .back-btn:hover { opacity:.7; }
+
+/* ── DARK MODE ── */
+[data-theme=dark] nav#mainNav,[data-theme=dark] nav:not(.bc){background:#111;border-top-color:#2e2e2e;}
+[data-theme=dark] nav button:hover{color:var(--ink);}
+[data-theme=dark] .footer-nav{background:#111;}
+[data-theme=dark] .card{background:#1c1c1c;border-color:#2e2e2e;}
+[data-theme=dark] .card.theory{background:#0d1e30;border-color:#1a3a5c;}
+[data-theme=dark] .cwrap{background:#1c1c1c;border-color:#333;}
+[data-theme=dark] input[type=text]{background:#1c1c1c;border-color:#555;color:var(--ink);}
+[data-theme=dark] input[type=text]:focus{border-color:var(--accent2);}
+[data-theme=dark] table.rt th{background:#2a2a2a;}
+[data-theme=dark] .fb.ok{background:#0a1f12;border-color:#1a5c3a;color:#86efac;}
+[data-theme=dark] .fb.err{background:#1f0a0a;border-color:#5c1a1a;color:#fca5a5;}
+[data-theme=dark] .hint{background:#1e1a08;border-left-color:var(--gold);}
+[data-theme=dark] .result-box{background:#0a1f12;border-left-color:#2e7d4f;color:#86efac;}
+[data-theme=dark] .scorebar{background:var(--cream);border-color:#2e2e2e;}
+[data-theme=dark] header .bc span{color:#555;}
 </style>
 <script>
 (function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
@@ -382,16 +399,20 @@ function setupCanvas(canvasId, wrapperId) {
   return { ctx, w, h };
 }
 function drawGrid(ctx, w, h, xMin, xMax, yMin, yMax) {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const clr = dark
+    ? { bg:'#1c1c1c', grid:'#2a2a2a', axis:'#555', lbl:'#777' }
+    : { bg:'#fff',    grid:'#ece8e0', axis:'#bbb', lbl:'#999' };
   const toX = x => (x - xMin) / (xMax - xMin) * w;
   const toY = y => h - (y - yMin) / (yMax - yMin) * h;
-  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
-  ctx.strokeStyle = '#ece8e0'; ctx.lineWidth = 1;
+  ctx.fillStyle = clr.bg; ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = clr.grid; ctx.lineWidth = 1;
   for (let gx = Math.ceil(xMin); gx <= xMax; gx++) { ctx.beginPath(); ctx.moveTo(toX(gx),0); ctx.lineTo(toX(gx),h); ctx.stroke(); }
   for (let gy = Math.ceil(yMin); gy <= yMax; gy++) { ctx.beginPath(); ctx.moveTo(0,toY(gy)); ctx.lineTo(w,toY(gy)); ctx.stroke(); }
-  ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.5;
+  ctx.strokeStyle = clr.axis; ctx.lineWidth = 1.5;
   if (yMin<=0&&0<=yMax) { ctx.beginPath(); ctx.moveTo(0,toY(0)); ctx.lineTo(w,toY(0)); ctx.stroke(); }
   if (xMin<=0&&0<=xMax) { ctx.beginPath(); ctx.moveTo(toX(0),0); ctx.lineTo(toX(0),h); ctx.stroke(); }
-  ctx.fillStyle = '#999'; ctx.font = '10px DM Mono, monospace';
+  ctx.fillStyle = clr.lbl; ctx.font = '10px DM Mono, monospace';
   for (let gx = Math.ceil(xMin); gx <= xMax; gx++) { if (gx===0) continue; ctx.fillText(gx, toX(gx)+2, toY(0)+12); }
   for (let gy = Math.ceil(yMin); gy <= yMax; gy++) { if (gy===0) continue; ctx.fillText(gy, toX(0)+3, toY(gy)-2); }
   return { toX, toY };
@@ -515,7 +536,7 @@ window.addEventListener('resize', () => {
 
 <button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
 <script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
+(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';setTimeout(function(){var id=document.querySelector('.tab.active')?document.querySelector('.tab.active').id:'t1';if(id==='t1')drawSecant();if(id==='t2')drawLimit();},0);}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
 </script>
 </body>
 </html>

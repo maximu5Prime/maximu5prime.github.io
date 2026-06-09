@@ -5,12 +5,12 @@
 #themeToggle {
   position: fixed; top: .75rem; right: .85rem; z-index: 9999;
   width: 1.9rem; height: 1.9rem; border-radius: 50%;
-  cursor: pointer; font-size: .88rem; border: 1px solid;
+  cursor: pointer; font-size: .88rem; border: 2px solid;
   display: flex; align-items: center; justify-content: center;
-  transition: opacity .2s, transform .15s;
-  line-height: 1; padding: 0; opacity: .5;
+  transition: background .2s, border-color .2s, opacity .15s, transform .15s;
+  line-height: 1; padding: 0; opacity: .9;
 }
-#themeToggle:hover { opacity: 1; transform: scale(1.15); }
+#themeToggle:hover { opacity: 1; transform: scale(1.12); }
 
 /* ── Dark-first pages (--bg system): light mode overrides ── */
 html[data-theme="light"] {
@@ -38,14 +38,20 @@ html[data-theme="dark"] header {
   color: var(--ink, inherit) !important;
 }
 
-/* ── Button colors per active theme ── */
-html[data-theme="dark"] #themeToggle {
-  background: var(--surface, #1c1c1c);
-  border-color: var(--text-muted, #555);
-  color: var(--text-muted, #888);
-}
+/* ── Button: immer gegen den dunklen Header sichtbar ── */
 html[data-theme="light"] #themeToggle {
-  background: var(--surface, #f0ede8);
-  border-color: var(--text-muted, #aaa);
-  color: var(--text-muted, #666);
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.6);
+  color: rgba(255,255,255,.95);
+}
+html[data-theme="light"] #themeToggle:hover {
+  background: rgba(255,255,255,.3);
+}
+html[data-theme="dark"] #themeToggle {
+  background: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.45);
+  color: rgba(255,255,255,.9);
+}
+html[data-theme="dark"] #themeToggle:hover {
+  background: rgba(255,255,255,.2);
 }
