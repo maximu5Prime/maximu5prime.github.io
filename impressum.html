@@ -1,91 +1,221 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Impressum – Lernportal</title>
-<link rel="stylesheet" href="static/fonts.css">
-  <link rel="stylesheet" href="static/theme.css">
-<style>
-:root {
-  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
-  --accent:#c8400a; --gold:#c9961a; --line:#d4cfc6;
-  --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7;}
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Impressum – Lernportal</title>
+        <link rel="stylesheet" href="static/fonts.css" />
+        <link rel="stylesheet" href="static/theme.css" />
+        <style>
+            :root {
+                --ink: #1a1208;
+                --paper: #f7f3ec;
+                --cream: #ede8de;
+                --accent: #c8400a;
+                --gold: #c9961a;
+                --line: #d4cfc6;
+                --serif: "Playfair Display", Georgia, serif;
+                --mono: "DM Mono", monospace;
+                --sans: "Source Sans 3", sans-serif;
+            }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family: var(--sans);
+                font-weight: 300;
+                background: var(--paper);
+                color: var(--ink);
+                min-height: 100vh;
+                line-height: 1.7;
+            }
 
-header{background:var(--ink);color:var(--paper);padding:2.5rem 2rem 2rem;}
-.hinner{max-width:720px;margin:0 auto;}
-.bc{font-family:var(--mono);font-size:.68rem;color:#666;display:flex;gap:.4rem;margin-bottom:.9rem;flex-wrap:wrap;}
-.bc a{color:#888;text-decoration:none;}
-.bc a:hover{color:var(--gold);}
-.bc span{color:#444;}
-.klass{font-family:var(--mono);font-size:.75rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:.4rem;}
-header h1{font-family:var(--serif);font-size:clamp(1.6rem,4vw,2.5rem);font-weight:900;line-height:1.1;}
+            header {
+                background: var(--ink);
+                color: var(--paper);
+                padding: 2.5rem 2rem 2rem;
+            }
+            .hinner {
+                max-width: 720px;
+                margin: 0 auto;
+            }
+            .bc {
+                font-family: var(--mono);
+                font-size: 0.68rem;
+                color: #666;
+                display: flex;
+                gap: 0.4rem;
+                margin-bottom: 0.9rem;
+                flex-wrap: wrap;
+            }
+            .bc a {
+                color: #888;
+                text-decoration: none;
+            }
+            .bc a:hover {
+                color: var(--gold);
+            }
+            .bc span {
+                color: #444;
+            }
+            .klass {
+                font-family: var(--mono);
+                font-size: 0.75rem;
+                letter-spacing: 0.18em;
+                color: var(--gold);
+                text-transform: uppercase;
+                margin-bottom: 0.4rem;
+            }
+            header h1 {
+                font-family: var(--serif);
+                font-size: clamp(1.6rem, 4vw, 2.5rem);
+                font-weight: 900;
+                line-height: 1.1;
+            }
 
-main{max-width:720px;margin:0 auto;padding:2.5rem 2rem 5rem;}
-h2{font-family:var(--serif);font-size:1.15rem;font-weight:700;margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:1px solid var(--line);}
-p{margin-bottom:.75rem;font-size:.95rem;}
-a{color:var(--accent);text-decoration:none;}
-a:hover{text-decoration:underline;}
+            main {
+                max-width: 720px;
+                margin: 0 auto;
+                padding: 2.5rem 2rem 5rem;
+            }
+            h2 {
+                font-family: var(--serif);
+                font-size: 1.15rem;
+                font-weight: 700;
+                margin: 2rem 0 0.6rem;
+                padding-bottom: 0.35rem;
+                border-bottom: 1px solid var(--line);
+            }
+            p {
+                margin-bottom: 0.75rem;
+                font-size: 0.95rem;
+            }
+            a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
 
-.footer-nav{background:var(--ink);padding:1rem 2rem;}
-.footer-nav-inner{max-width:720px;margin:0 auto;}
-.back-btn{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
-.back-btn:hover{opacity:.7;}
+            .footer-nav {
+                background: var(--ink);
+                padding: 1rem 2rem;
+            }
+            .footer-nav-inner {
+                max-width: 720px;
+                margin: 0 auto;
+            }
+            .back-btn {
+                font-family: var(--mono);
+                font-size: 0.75rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--gold);
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                transition: opacity 0.2s;
+            }
+            .back-btn:hover {
+                opacity: 0.7;
+            }
+        </style>
+        <script>
+            (function () {
+                var t =
+                    localStorage.getItem("theme") ||
+                    (window.matchMedia("(prefers-color-scheme: dark)").matches
+                        ? "dark"
+                        : "light");
+                document.documentElement.setAttribute("data-theme", t);
+            })();
+        </script>
+    </head>
+    <body>
+        <header>
+            <div class="hinner">
+                <nav class="bc" aria-label="Breadcrumb">
+                    <a href="index.html">Lernportal</a>
+                    <span>/</span>
+                    <span>Impressum</span>
+                </nav>
+                <div class="klass">Rechtliches</div>
+                <h1>Impressum</h1>
+            </div>
+        </header>
 
-  </style>
-<script>
-(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-</script></head>
-<body>
+        <main>
+            <h2>Angaben gemäß § 5 TMG</h2>
+            <p>
+                Maximilian Frisch<br />
+                <!-- ADRESSE EINFÜGEN: -->
+                Saarmühlenweg 18<br />
+                91077 Neunkirchen am Brand
+            </p>
 
-<header>
-  <div class="hinner">
-    <nav class="bc" aria-label="Breadcrumb">
-      <a href="index.html">Lernportal</a>
-      <span>/</span>
-      <span>Impressum</span>
-    </nav>
-    <div class="klass">Rechtliches</div>
-    <h1>Impressum</h1>
-  </div>
-</header>
+            <h2>Kontakt</h2>
+            <p>
+                E-Mail:
+                <a href="mailto:maximilian.frisch@gmx.de"
+                    >maximilian.frisch@gmx.de</a
+                >
+            </p>
 
-<main>
-  <h2>Angaben gemäß § 5 TMG</h2>
-  <p>
-    Maximilian Frisch<br>
-    <!-- ADRESSE EINFÜGEN: -->
-    [Straße und Hausnummer]<br>
-    [PLZ] [Ort]
-  </p>
+            <h2>Inhaltlich verantwortlich</h2>
+            <p>Maximilian Frisch (Anschrift wie oben)</p>
 
-  <h2>Kontakt</h2>
-  <p>E-Mail: <a href="mailto:maximilian.frisch@gmx.de">maximilian.frisch@gmx.de</a></p>
+            <h2>Haftungsausschluss</h2>
+            <p>
+                Die Inhalte dieser Website wurden sorgfältig erstellt. Für die
+                Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird
+                keine Gewähr übernommen. Externe Links wurden zum Zeitpunkt der
+                Verlinkung geprüft; für den Inhalt verlinkter Seiten wird keine
+                Haftung übernommen.
+            </p>
 
-  <h2>Inhaltlich verantwortlich</h2>
-  <p>Maximilian Frisch (Anschrift wie oben)</p>
+            <h2>Urheberrecht</h2>
+            <p>
+                Die auf dieser Website erstellten Inhalte unterliegen dem
+                deutschen Urheberrecht. Vervielfältigung, Bearbeitung und
+                Verbreitung außerhalb der Grenzen des Urheberrechts bedürfen der
+                schriftlichen Zustimmung des Autors.
+            </p>
+        </main>
 
-  <h2>Haftungsausschluss</h2>
-  <p>Die Inhalte dieser Website wurden sorgfältig erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird keine Gewähr übernommen. Externe Links wurden zum Zeitpunkt der Verlinkung geprüft; für den Inhalt verlinkter Seiten wird keine Haftung übernommen.</p>
+        <footer class="footer-nav">
+            <div class="footer-nav-inner">
+                <a class="back-btn" href="index.html">← Lernportal</a>
+            </div>
+        </footer>
 
-  <h2>Urheberrecht</h2>
-  <p>Die auf dieser Website erstellten Inhalte unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung und Verbreitung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des Autors.</p>
-</main>
-
-<footer class="footer-nav">
-  <div class="footer-nav-inner">
-    <a class="back-btn" href="index.html">← Lernportal</a>
-  </div>
-</footer>
-
-
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
-</script>
-</body>
+        <button
+            id="themeToggle"
+            aria-label="Farbschema wechseln"
+            title="Farbschema wechseln"
+        ></button>
+        <script>
+            (function () {
+                var r = document.documentElement,
+                    b = document.getElementById("themeToggle");
+                function a(t) {
+                    r.setAttribute("data-theme", t);
+                    b.textContent = t === "dark" ? "☾" : "☀";
+                }
+                a(r.getAttribute("data-theme") || "light");
+                b.addEventListener("click", function () {
+                    var n =
+                        r.getAttribute("data-theme") === "dark"
+                            ? "light"
+                            : "dark";
+                    localStorage.setItem("theme", n);
+                    a(n);
+                });
+            })();
+        </script>
+    </body>
 </html>
