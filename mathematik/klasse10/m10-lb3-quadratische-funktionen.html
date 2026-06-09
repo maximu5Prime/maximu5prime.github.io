@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quadratische Funktionen – M10 Lernbereich 3</title>
 <link rel="stylesheet" href="../../static/fonts.css">
@@ -118,6 +119,28 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
   #t2, #t3, #t4, #t5 { break-before:page; }
   h2 { break-after:avoid; }
 }
+
+/* ── Dark Mode ── */
+[data-theme=dark] body > nav           { background: var(--cream) !important; }
+[data-theme=dark] body > nav button:hover { color: var(--ink) !important; }
+[data-theme=dark] .card                { background: #1a1a1a; border-color: #2e2e2e; }
+[data-theme=dark] .card.theory         { background: #131a24; }
+[data-theme=dark] .card.warn           { background: #1a1500; }
+[data-theme=dark] .card.formula        { background: #0e1a12; }
+[data-theme=dark] .fbox                { background: #1e1e1e; border-color: #2e2e2e; }
+[data-theme=dark] .step-formula        { background: #141c24; border-color: #1a3a5c; }
+[data-theme=dark] .result-box          { background: #0e1a12; border-color: #1a5c33; }
+[data-theme=dark] .disc-card           { background: #1a1a1a; border-color: #2e2e2e; }
+[data-theme=dark] .disc-card p         { color: #999; }
+[data-theme=dark] .cwrap               { background: #1a1a1a; }
+[data-theme=dark] .hint                { background: #1a1500; }
+[data-theme=dark] .formula-disp        { background: #1e1e1e; border-color: #2e2e2e; }
+[data-theme=dark] table.rt tr:nth-child(even) td { background: #1e1e1e; }
+[data-theme=dark] .sub                 { color: #888; }
+[data-theme=dark] .tag.tb              { background: #1a2a3a; color: #60a5fa; }
+[data-theme=dark] .tag.tr              { background: #2a1515; color: #f87171; }
+[data-theme=dark] .tag.tg              { background: #0f2218; color: #4ade80; }
+[data-theme=dark] .tag.ty              { background: #1a1500; color: #fbbf24; }
 
   </style>
 <script>
@@ -789,6 +812,22 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
 </main>
 
 <script>
+// ── Theme-aware Farben für Canvas ───────────────────────────
+function getThemeColors() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return {
+    bg:        dark ? '#1a1a1a' : '#ffffff',
+    grid:      dark ? '#2a2a2a' : '#eae6de',
+    axis:      dark ? '#777'    : '#555',
+    label:     dark ? '#aaa'    : '#888',
+    axisLabel: dark ? '#999'    : '#777',
+    curve:     '#c8400a',
+    vertex:    dark ? '#5b9cf6' : '#2a6496',
+    intercept: dark ? '#4ade80' : '#2e7d4f',
+    nullst:    '#c8400a',
+  };
+}
+
 // ── Tab / Hint ──────────────────────────────────────────────
 function show(id, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -826,7 +865,9 @@ function drawParabola(canvasId, a, b, c, opts) {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
+  const C = getThemeColors();
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, W, H);
 
   const xMin = -6, xMax = 6;
   const f = x => a * x * x + b * x + c;
@@ -851,7 +892,7 @@ function drawParabola(canvasId, a, b, c, opts) {
   const ox = toX(0), oy = toY(0);
 
   // grid
-  ctx.strokeStyle = '#eae6de'; ctx.lineWidth = 1;
+  ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
   for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
     ctx.beginPath(); ctx.moveTo(toX(x), 0); ctx.lineTo(toX(x), H); ctx.stroke();
   }
@@ -861,21 +902,21 @@ function drawParabola(canvasId, a, b, c, opts) {
   }
 
   // axes
-  ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5;
+  ctx.strokeStyle = C.axis; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W - 10, oy); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(ox, H); ctx.lineTo(ox, 10); ctx.stroke();
 
   // axis arrows
-  ctx.fillStyle = '#555';
+  ctx.fillStyle = C.axis;
   ctx.beginPath(); ctx.moveTo(W - 10, oy - 5); ctx.lineTo(W, oy); ctx.lineTo(W - 10, oy + 5); ctx.fill();
   ctx.beginPath(); ctx.moveTo(ox - 5, 10); ctx.lineTo(ox, 0); ctx.lineTo(ox + 5, 10); ctx.fill();
 
   // tick labels
-  ctx.fillStyle = '#888'; ctx.font = '10px DM Mono, monospace';
+  ctx.fillStyle = C.label; ctx.font = '10px DM Mono, monospace';
   ctx.textAlign = 'center';
   for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
     if (x === 0) continue;
-    ctx.beginPath(); ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
     ctx.moveTo(toX(x), oy - 3); ctx.lineTo(toX(x), oy + 3); ctx.stroke();
     const labelY = oy + 14 < H - 2 ? oy + 14 : oy - 5;
     ctx.fillText(x, toX(x), labelY);
@@ -883,17 +924,17 @@ function drawParabola(canvasId, a, b, c, opts) {
   ctx.textAlign = 'right';
   for (let y = Math.ceil(yMin / yStep) * yStep; y <= yMax; y += yStep) {
     if (y === 0) continue;
-    ctx.beginPath(); ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
     ctx.moveTo(ox - 3, toY(y)); ctx.lineTo(ox + 3, toY(y)); ctx.stroke();
     if (ox - 4 > 18) ctx.fillText(y, ox - 4, toY(y) + 4);
   }
-  ctx.fillStyle = '#777'; ctx.font = 'italic 12px DM Sans, sans-serif';
+  ctx.fillStyle = C.axisLabel; ctx.font = 'italic 12px DM Sans, sans-serif';
   ctx.textAlign = 'left'; ctx.fillText('x', W - 8, oy - 7);
   ctx.fillText('y', ox + 6, 14);
 
   // parabola
   if (Math.abs(a) > 0.001) {
-    ctx.strokeStyle = '#c8400a'; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+    ctx.strokeStyle = C.curve; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
     ctx.beginPath();
     let first = true;
     for (let px = 0; px <= W; px++) {
@@ -910,9 +951,9 @@ function drawParabola(canvasId, a, b, c, opts) {
   if (Math.abs(a) > 0.001) {
     const xS = -b / (2 * a), yS = f(xS);
     if (xS >= xMin - 0.1 && xS <= xMax + 0.1 && toY(yS) > -20 && toY(yS) < H + 20) {
-      ctx.fillStyle = '#2a6496';
+      ctx.fillStyle = C.vertex;
       ctx.beginPath(); ctx.arc(toX(xS), toY(yS), 5, 0, 2 * Math.PI); ctx.fill();
-      ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = '#2a6496';
+      ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = C.vertex;
       const tx = toX(xS) + 8, ty = toY(yS) - 8;
       ctx.textAlign = 'left';
       ctx.fillText('S(' + fmt(xS) + ' | ' + fmt(yS) + ')', tx, ty);
@@ -921,9 +962,9 @@ function drawParabola(canvasId, a, b, c, opts) {
 
   // y-intercept
   if (toY(c) > -10 && toY(c) < H + 10) {
-    ctx.fillStyle = '#2e7d4f';
+    ctx.fillStyle = C.intercept;
     ctx.beginPath(); ctx.arc(ox, toY(c), 5, 0, 2 * Math.PI); ctx.fill();
-    ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = '#2e7d4f';
+    ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = C.intercept;
     ctx.textAlign = 'left';
     ctx.fillText('(0 | ' + fmt(c) + ')', ox + 8, toY(c) - 8);
   }
@@ -931,7 +972,7 @@ function drawParabola(canvasId, a, b, c, opts) {
   // nullstellen
   if (opts && opts.showNullstellen && Math.abs(a) > 0.001) {
     const D = b * b - 4 * a * c;
-    ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = '#c8400a';
+    ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = C.nullst;
     if (D >= 0) {
       const sq = Math.sqrt(D);
       const roots = D === 0 ? [(-b) / (2 * a)] : [(-b + sq) / (2 * a), (-b - sq) / (2 * a)];
@@ -981,6 +1022,9 @@ function updateT3() {
 document.addEventListener('DOMContentLoaded', function () {
   updateT1();
   updateT3();
+  // Canvas neu zeichnen wenn Theme wechselt
+  new MutationObserver(function() { updateT1(); updateT3(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 });
 </script>
 

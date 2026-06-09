@@ -19,6 +19,7 @@ html[data-theme="light"] {
   --border:     #e0dbd4;
   --text:       #1c1a17;
   --text-muted: #8a8078;
+  --accent:     #a07d08;  /* Neon-Gelb (#e8c547) → Dunkelambra; konsistent mit index.html --math */
 }
 html[data-theme="light"] body::before {
   background-image:
@@ -55,3 +56,42 @@ html[data-theme="dark"] #themeToggle {
 html[data-theme="dark"] #themeToggle:hover {
   background: rgba(255,255,255,.2);
 }
+
+/* ── Light-first pages: --ink als Hintergrundfarbe flippt im Dark Mode zu hell ── */
+/* Betrifft: nav.tabs, body > nav, .footer-nav auf allen --ink/--paper-Seiten      */
+html[data-theme="dark"] .tabs,
+html[data-theme="dark"] nav.tabs,
+html[data-theme="dark"] body > nav,
+html[data-theme="dark"] .footer-nav {
+  background: var(--cream) !important;  /* --cream in dark mode = #1c1c1c */
+  border-color: var(--line) !important;
+}
+/* Hover-Text: --paper im Dark Mode = #111 (fast schwarz auf dunklem Hintergrund) */
+html[data-theme="dark"] .tab-btn:hover,
+html[data-theme="dark"] body > nav button:hover {
+  color: var(--ink) !important;  /* --ink in dark mode = #e8e4df */
+}
+
+/* ── Light-first pages: .footer-nav verwendet var(--ink) als Hintergrund ──────────────── */
+/* In Light Mode ist --ink = #1a1208 (dunkel) → Footer bleibt schwarz. Fix: cream/line.  */
+/* In Dark Mode ist bereits html[data-theme=dark] .footer-nav geregelt (s.o.)             */
+html[data-theme="light"] .footer-nav {
+  background: var(--cream) !important;
+  border-top: 1px solid var(--line) !important;
+}
+html[data-theme="light"] .footer-nav .back-btn,
+html[data-theme="light"] .footer-nav .portal-link {
+  color: var(--ink) !important;
+}
+
+/* ── Dark-first pages: Card-Hover-Inversion im Light Mode verhindern ── */
+/* Dark Mode: #1d1d1d korrekt. Light Mode: rgba(0,0,0,.04) subtil, wie index.html */
+html[data-theme="light"] .lb-card:hover,
+html[data-theme="light"] .ue-card:hover {
+  background: rgba(0,0,0,.04) !important;
+}
+
+/* ── Dark-first pages: ue-tag Kontrast im Light Mode ── */
+/* Hellblau #6a9fd4 / Hellgrün #8ab86a auf weiß = ~2.9:1 → auf WCAG-AA-Farben switchen */
+html[data-theme="light"] .ue-tag.type-interaktiv { color: #1d4ed8; border-color: #1d4ed8; }
+html[data-theme="light"] .ue-tag.type-ab         { color: #047857; border-color: #047857; }
