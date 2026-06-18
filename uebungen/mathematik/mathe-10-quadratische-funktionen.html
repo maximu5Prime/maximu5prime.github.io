@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quadratische Funktionen – Übungen Klasse 10</title>
+<link rel="stylesheet" href="../../static/fonts.css">
+<link rel="stylesheet" href="../../static/theme.css">
+<link rel="stylesheet" href="../../static/katex/katex.min.css">
+<script defer src="../../static/katex/katex.min.js"></script>
+<script defer src="../../static/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<style>
+:root {
+  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
+  --accent:#c8400a; --accent2:#2a6496; --gold:#c9961a; --green:#2e7d4f; --line:#d4cfc6;
+  --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
+  --k1:#2a6496; --k1l:#eef4fa;
+  --k2:#c9961a; --k2l:#fdf8ec;
+  --k3:#2e7d4f; --k3l:#edf7f1;
+  --k4:#8b5cf6; --k4l:#f5f3ff;
+  --k5:#c8400a; --k5l:#fdf0eb;
+  --ok:#2e7d4f; --okl:#eaf7ee;
+  --err:#c0392b; --errl:#fdecea;
+  --warn:#92400e; --warnl:#fffbeb;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7;}
+
+/* ── Header ── */
+header{background:var(--ink);color:var(--paper);padding:2.8rem 2rem 2.2rem;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-60px;right:-80px;width:300px;height:300px;border-radius:50%;background:var(--accent);opacity:.1;}
+header::after{content:'';position:absolute;bottom:-40px;left:8%;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.08;}
+.hinner{max-width:900px;margin:0 auto;position:relative;}
+.klass{font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem;}
+header h1{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:900;line-height:1.1;margin-bottom:.8rem;}
+header p{font-size:.95rem;color:#a09888;max-width:560px;}
+.prog-wrap{width:240px;height:5px;background:rgba(255,255,255,.15);border-radius:99px;margin:.9rem 0 .4rem;}
+.prog-fill{height:5px;border-radius:99px;background:#a3e635;transition:width .4s ease;width:0%;}
+#prog-label{font-family:var(--mono);font-size:.75rem;color:#a09888;}
+
+/* ── Tabs ── */
+.tabs{background:var(--ink);border-top:1px solid #2e2e2e;padding:0 1.5rem;display:flex;overflow-x:auto;}
+.tab-btn{font-family:var(--mono);font-size:.73rem;letter-spacing:.07em;text-transform:uppercase;background:none;border:none;
+  color:#777;padding:.85rem 1.1rem;cursor:pointer;border-bottom:3px solid transparent;
+  margin-bottom:-1px;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:color .2s,border-color .2s;}
+.tab-btn:hover{color:var(--paper);}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.dot{width:8px;height:8px;border-radius:50%;background:#444;flex-shrink:0;}
+.tab-btn.done .dot{background:var(--ok);}
+.score-tag{font-size:.7rem;background:#2e2e2e;color:#777;padding:1px 7px;border-radius:99px;}
+.tab-btn.done .score-tag{background:#1e3a2a;color:#6ee7a0;}
+
+/* ── Layout ── */
+main{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+.chapter{display:none;}
+.chapter.active{display:block;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.ch-head{margin-bottom:1.6rem;padding:.75rem 1rem .75rem 1.2rem;
+  border:1px solid var(--line);border-left-width:4px;border-radius:0 2px 2px 0;background:white;}
+.ch-head h2{font-family:var(--serif);font-size:1.35rem;font-weight:700;}
+.ch-head p{font-size:.84rem;color:#888;margin-top:.2rem;font-style:italic;}
+
+.ex{background:white;border:1px solid var(--line);border-radius:2px;
+  margin-bottom:1.1rem;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.04);}
+.ex-head{display:flex;align-items:center;gap:.65rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line);}
+.ex-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-family:var(--mono);font-size:.78rem;font-weight:500;color:#fff;flex-shrink:0;}
+.ex-head h3{font-family:var(--serif);font-size:.93rem;font-weight:700;flex:1;margin:0;}
+.ex-badge{font-family:var(--mono);font-size:.72rem;color:#999;}
+.ex-body{padding:1.1rem 1.3rem;}
+.q{font-size:.91rem;line-height:1.7;margin-bottom:.9rem;}
+
+/* ── Step blocks ── */
+.step{border:1px solid var(--line);border-radius:2px;margin-bottom:.6rem;overflow:hidden;}
+.step-hd{display:flex;align-items:center;gap:.55rem;padding:.4rem .9rem;
+  background:var(--cream);border-bottom:1px solid var(--line);}
+.step-nr{font-family:var(--mono);font-size:.67rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--ink);color:var(--gold);padding:.15rem .5rem;border-radius:2px;white-space:nowrap;}
+.step-hd span:not(.step-nr){font-size:.81rem;color:var(--ink);}
+.step-bd{padding:.65rem 1rem;}
+
+/* Inline-Gleichungszeile */
+.eq{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.3rem 0;font-size:.9rem;line-height:1;}
+.eq input{width:78px;border:1px solid var(--line);border-radius:2px;padding:.32rem .55rem;
+  font-family:var(--mono);font-size:.86rem;background:white;color:var(--ink);outline:none;
+  transition:border-color .15s,background .15s;text-align:center;}
+.eq input.w50{width:50px;}
+.eq input.w110{width:110px;}
+.eq input:focus{border-color:var(--accent2);}
+.eq input.ok{border-color:var(--ok);background:var(--okl);}
+.eq input.err{border-color:var(--err);background:var(--errl);}
+.eq-hint{font-size:.76rem;color:#bbb;font-style:italic;}
+.eq-sep{display:inline-block;width:1px;height:20px;background:var(--line);margin:0 .45rem;vertical-align:middle;}
+
+/* ── Hint ── */
+.hint-toggle{font-family:var(--mono);font-size:.71rem;letter-spacing:.05em;text-transform:uppercase;
+  background:none;border:1px solid var(--gold);color:var(--gold);padding:.35rem .85rem;border-radius:2px;
+  cursor:pointer;transition:background .15s,color .15s;margin-bottom:.65rem;display:inline-block;}
+.hint-toggle:hover{background:var(--gold);color:white;}
+.hint-box{background:#fdf8ec;border-left:3px solid var(--gold);padding:.6rem 1rem;
+  font-size:.83rem;color:#666;border-radius:0 2px 2px 0;margin-bottom:.8rem;line-height:1.6;display:none;}
+.hint-box.show{display:block;}
+.hint-box strong{color:var(--ink);}
+
+/* ── Canvas ── */
+.canvas-wrap{display:flex;justify-content:center;margin:.5rem 0 .8rem;overflow:hidden;}
+canvas{border:1px solid var(--line);border-radius:2px;max-width:100%;}
+.canvas-legend{font-family:var(--mono);font-size:.71rem;color:#888;text-align:center;margin-top:.2rem;line-height:1.5;}
+
+/* ── MCQ ── */
+.mcq{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.85rem;}
+.mcq-opt{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .9rem;
+  border:1px solid var(--line);border-radius:2px;cursor:pointer;
+  font-size:.88rem;line-height:1.55;transition:border-color .15s,background .15s;background:white;}
+.mcq-opt:hover{border-color:var(--accent2);background:var(--k1l);}
+.mcq-opt.sel{border-color:var(--ink);background:var(--cream);}
+.mcq-opt.ok{border-color:var(--ok)!important;background:var(--okl)!important;color:#14532d;}
+.mcq-opt.err{border-color:var(--err)!important;background:var(--errl)!important;color:#7f1d1d;}
+.mcq-opt input[type=radio]{margin-top:3px;flex-shrink:0;accent-color:var(--ink);}
+.mcq-letter{font-family:var(--mono);font-weight:500;color:#888;flex-shrink:0;min-width:18px;}
+
+/* ── Ankreuz ── */
+.ankreuz{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:.85rem;}
+.ankreuz th{font-family:var(--mono);font-size:.71rem;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--ink);color:var(--gold);padding:.45rem .65rem;text-align:center;font-weight:500;}
+.ankreuz th:first-child{text-align:left;}
+.ankreuz td{padding:.55rem .65rem;border-bottom:1px solid var(--line);vertical-align:middle;}
+.ankreuz tr:last-child td{border-bottom:none;}
+.ankreuz td:not(:first-child){text-align:center;}
+.ankreuz input[type=radio]{accent-color:var(--ink);width:15px;height:15px;cursor:pointer;}
+.ankreuz tr.ok-row td:first-child{color:var(--ok);font-weight:600;}
+.ankreuz tr.err-row td:first-child{color:var(--err);font-weight:600;}
+.ankreuz tr.ok-row td:first-child::before{content:'✓ ';}
+.ankreuz tr.err-row td:first-child::before{content:'✗ ';}
+
+/* ── Buttons ── */
+.btn-row{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap;margin-top:.85rem;}
+.btn{font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;
+  padding:.5rem 1.1rem;border-radius:2px;cursor:pointer;border:none;transition:opacity .15s,transform .1s;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--accent);color:white;}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink);}
+
+/* ── Feedback ── */
+.fb{margin-top:.85rem;padding:.75rem 1.1rem;border-radius:2px;font-size:.85rem;line-height:1.65;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:var(--okl);border:1px solid #b7dfca;color:#14532d;}
+.fb.warn{background:var(--warnl);border:1px solid #fde68a;color:var(--warn);}
+.fb.err{background:var(--errl);border:1px solid #f5c6c6;color:#7f1d1d;}
+.fb b{display:block;margin-bottom:4px;font-weight:600;font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;text-transform:uppercase;}
+.fb .sol{margin-top:.55rem;padding:.5rem .85rem;background:rgba(0,0,0,.04);border-radius:2px;font-size:.84rem;line-height:1.7;}
+
+/* ── Sachkontext-Info ── */
+.task-info{background:var(--k1l);border-left:3px solid var(--k1);padding:.65rem 1rem;
+  border-radius:0 2px 2px 0;font-size:.85rem;line-height:1.65;margin-bottom:.9rem;}
+
+/* ── Header Breadcrumb ── */
+header .bc{font-family:var(--mono);font-size:.68rem;color:#666;display:flex;gap:.4rem;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;}
+header .bc a{color:#888;text-decoration:none;}
+header .bc a:hover{color:var(--gold);}
+header .bc span{color:#444;}
+
+/* ── Footer ── */
+.footer-nav{background:var(--ink);padding:1.1rem 2rem;margin-top:3rem;}
+.footer-nav-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
+.back-btn{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
+.back-btn:hover{opacity:.7;}
+.portal-link{font-family:var(--mono);font-size:.68rem;color:#555;text-decoration:none;}
+.portal-link:hover{color:var(--gold);}
+
+/* ── Dark Mode ── */
+[data-theme=dark] .step-hd{background:#252525;}
+[data-theme=dark] .step-nr{background:#333;color:var(--gold);}
+[data-theme=dark] .hint-box{background:#1e1a08;color:var(--ink);}
+[data-theme=dark] .ex{background:#181818;}
+[data-theme=dark] .ch-head{background:#181818;}
+[data-theme=dark] .eq input{background:#1e1e1e;border-color:#555;color:var(--ink);}
+[data-theme=dark] .eq input:focus{border-color:var(--accent2);}
+[data-theme=dark] .eq input.ok{background:#0d2218;border-color:var(--ok);}
+[data-theme=dark] .eq input.err{background:#2a0a0a;border-color:var(--err);}
+[data-theme=dark] .mcq-opt{background:#1e1e1e;border-color:#444;}
+[data-theme=dark] .mcq-opt:hover{background:#252525;border-color:var(--accent2);}
+[data-theme=dark] .mcq-opt.sel{background:#252525;border-color:var(--ink);}
+[data-theme=dark] .mcq-opt.ok{background:#0d2218!important;border-color:var(--ok)!important;color:#86efac!important;}
+[data-theme=dark] .mcq-opt.err{background:#2a0a0a!important;border-color:var(--err)!important;color:#fca5a5!important;}
+[data-theme=dark] .ankreuz th{background:#2a2a2a;}
+[data-theme=dark] .ankreuz tr.ok-row td:first-child{color:#86efac;}
+[data-theme=dark] .ankreuz tr.err-row td:first-child{color:#fca5a5;}
+[data-theme=dark] .fb.ok{background:#0a1f12;border-color:#1a5c3a;color:#86efac;}
+[data-theme=dark] .fb.err{background:#1f0a0a;border-color:#5c1a1a;color:#fca5a5;}
+[data-theme=dark] .fb.warn{background:#1a1400;border-color:#5c4000;color:#fde68a;}
+[data-theme=dark] .fb .sol{background:rgba(255,255,255,.06);color:var(--ink);}
+[data-theme=dark] .btn-ghost{border-color:#555;}
+[data-theme=dark] .task-info{background:#0d1e30;}
+
+@media(max-width:580px){
+  header h1{font-size:1.5rem;}
+  .eq{flex-direction:column;align-items:flex-start;}
+  .eq-sep{display:none;}
+}
+</style>
+<script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+</head>
+<body>
+
+<header>
+  <div class="hinner">
+    <nav class="bc" aria-label="Breadcrumb">
+      <a href="../../index.html">Lernportal</a><span>/</span>
+      <a href="../index.html">Übungen</a><span>/</span>
+      <a href="index.html">Mathematik</a><span>/</span>
+      <span>Quadratische Funktionen</span>
+    </nav>
+    <div class="klass">Mathematik · Klasse 10 · Übungen</div>
+    <h1>Quadratische Funktionen</h1>
+    <p>ClickBoost – Werbestrategie optimieren · Scheitelpunktform · Produktform · Nullstellen · Schnittpunkte</p>
+    <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
+    <p id="prog-label">0 von 15 Aufgaben abgeschlossen</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-ch="k1" onclick="switchTab('k1')">
+    <span class="dot"></span>Scheitelpunktform<span class="score-tag" id="badge-k1">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k2" onclick="switchTab('k2')">
+    <span class="dot"></span>Produktform &amp; Nullstellen<span class="score-tag" id="badge-k2">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k3" onclick="switchTab('k3')">
+    <span class="dot"></span>Interpretation<span class="score-tag" id="badge-k3">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k4" onclick="switchTab('k4')">
+    <span class="dot"></span>Parabel ∩ Gerade<span class="score-tag" id="badge-k4">0/3</span>
+  </button>
+  <button class="tab-btn" data-ch="k5" onclick="switchTab('k5')">
+    <span class="dot"></span>Strategievergleich<span class="score-tag" id="badge-k5">0/3</span>
+  </button>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════
+     K1: SCHEITELPUNKTFORM
+════════════════════════════════════════════════════════ -->
+<div class="chapter active" id="k1">
+  <div class="ch-head" style="border-left-color:var(--k1)">
+    <h2>Kapitel 1 – Scheitelpunktform</h2>
+    <p>Quadratische Ergänzung · Scheitelwert ablesen · wirtschaftliche Interpretation</p>
+  </div>
+
+  <div class="task-info">
+    <strong>Sachkontext:</strong> Das Unternehmen <em>ClickBoost</em> analysiert den Zusammenhang zwischen Werbebudget $x$ (in Tsd. €) und erzieltem Gewinn $G_1(x)$ (in Tsd. €) für Strategie 1 (klassische Medien):<br>
+    $$G_1(x) = -2x^2 + 20x - 32$$
+  </div>
+
+  <!-- 1.1 -->
+  <div class="ex" id="ex-1-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.1</div>
+      <h3>Ankreuzaufgabe: Eigenschaften aus der Normalform</h3>
+      <span class="ex-badge" id="st-1-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist $G_1(x) = -2x^2 + 20x - 32$. Kreuze an, ob die Aussage wahr oder falsch ist.</p>
+
+      <table class="ankreuz" id="tbl-1-1" data-ans="F,W,F,W,W">
+        <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr><td>Der Scheitelpunkt liegt bei $x_S = 10$.</td>
+            <td><input type="radio" name="r11-0" value="W"></td><td><input type="radio" name="r11-0" value="F"></td></tr>
+          <tr><td>Die Parabel öffnet nach unten, da der Leitkoeffizient $a = -2 < 0$ ist.</td>
+            <td><input type="radio" name="r11-1" value="W"></td><td><input type="radio" name="r11-1" value="F"></td></tr>
+          <tr><td>Der Scheitelwert beträgt $G_1(5) = 50$ Tsd. €.</td>
+            <td><input type="radio" name="r11-2" value="W"></td><td><input type="radio" name="r11-2" value="F"></td></tr>
+          <tr><td>Die Symmetrieachse lautet $x = 5$.</td>
+            <td><input type="radio" name="r11-3" value="W"></td><td><input type="radio" name="r11-3" value="F"></td></tr>
+          <tr><td>Der Leitkoeffizient beträgt $a = -2$.</td>
+            <td><input type="radio" name="r11-4" value="W"></td><td><input type="radio" name="r11-4" value="F"></td></tr>
+        </tbody>
+      </table>
+
+      <button class="hint-toggle" onclick="toggleHint('h11')">Tipp anzeigen</button>
+      <div class="hint-box" id="h11">
+        <strong>Tipp:</strong> Die Symmetrieachse (und damit $x_S$) lässt sich mit der Formel $x_S = -\dfrac{b}{2a}$ berechnen. Hier: $a = -2$, $b = 20$. Setze dann $x_S$ in $G_1(x)$ ein, um den Scheitelwert zu erhalten.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-1-1')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-1-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-1-1"><b></b>
+        <div class="sol">
+          <strong>falsch · wahr · falsch · wahr · wahr</strong><br>
+          (1) $x_S = -\dfrac{20}{2 \cdot (-2)} = -\dfrac{20}{-4} = 5$, nicht 10.<br>
+          (2) $a = -2 < 0$ → Parabel öffnet nach unten. ✓<br>
+          (3) $G_1(5) = -2 \cdot 25 + 100 - 32 = -50 + 100 - 32 = 18$ Tsd. €, nicht 50.<br>
+          (4) Symmetrieachse: $x = x_S = 5$. ✓<br>
+          (5) Der Koeffizient vor $x^2$ ist $a = -2$. ✓
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.2 -->
+  <div class="ex" id="ex-1-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.2</div>
+      <h3>Lückentext: Quadratische Ergänzung Schritt für Schritt</h3>
+      <span class="ex-badge" id="st-1-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Forme $G_1(x) = -2x^2 + 20x - 32$ durch quadratische Ergänzung in die Scheitelpunktform um. Fülle die fehlenden Werte ein.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 1</span><span>Leitkoeffizient ausklammern</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $G_1(x) = -2\!\left(x^2 - \right.$
+            <input id="f12-1" data-ans="10" data-tol="0" class="w50">
+            $\left.x\right) - 32$
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 2</span><span>Ergänzen und ausgleichen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $G_1(x) = -2\!\left(x^2 - 10x + \right.$
+            <input id="f12-2" data-ans="25" data-tol="0">
+            $\left.\right) +$
+            <input id="f12-3" data-ans="50" data-tol="0">
+            $- 32$
+          </div>
+          <p class="eq-hint" style="font-size:.78rem;color:#aaa;margin-top:.3rem;">Ergänze $\left(\frac{10}{2}\right)^2 = 25$; addiere $-2 \cdot (-25) = +50$ außerhalb der Klammer.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 3</span><span>Scheitelpunktform</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $G_1(x) = -2\!\left(x - \right.$
+            <input id="f12-4" data-ans="5" data-tol="0" class="w50">
+            $\left.\right)^2 +$
+            <input id="f12-5" data-ans="18" data-tol="0">
+          </div>
+          <div class="eq" style="margin-top:.4rem;">
+            <span style="font-size:.82rem;color:#888;">→ Scheitel: $S\!\left(\right.$</span>
+            <input id="f12-6" data-ans="5" data-tol="0" class="w50">
+            <span style="font-size:.82rem;color:#888;">$\,\Big|\,$</span>
+            <input id="f12-7" data-ans="18" data-tol="0">
+            <span style="font-size:.82rem;color:#888;">$\left.\right)$</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h12')">Tipp anzeigen</button>
+      <div class="hint-box" id="h12">
+        <strong>Tipp:</strong> Der Trick der quadratischen Ergänzung: Man addiert und subtrahiert $\left(\frac{b_\text{innen}}{2}\right)^2$. Da man aber im geklammerten Ausdruck $+25$ ergänzt, muss man außen $-2 \cdot (+25) = -50$ subtrahieren — oder umgekehrt: $-2 \cdot (-25) = +50$ addieren.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-1-2',['f12-1','f12-2','f12-3','f12-4','f12-5','f12-6','f12-7'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-1-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-1-2"><b></b>
+        <div class="sol">
+          $-2(x^2 - 10x) - 32$<br>
+          $= -2(x^2 - 10x + 25) + 50 - 32$<br>
+          $= -2(x-5)^2 + 18$<br>
+          Scheitel $S(5\,|\,18)$: Bei einem Budget von 5 Tsd. € erzielt ClickBoost den maximalen Gewinn von 18 Tsd. €.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.3 -->
+  <div class="ex" id="ex-1-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k1)">1.3</div>
+      <h3>Multiple Choice: Bedeutung des Scheitelpunkts</h3>
+      <span class="ex-badge" id="st-1-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Der Scheitelpunkt von $G_1$ liegt bei $S(5\,|\,18)$. Welche Aussage beschreibt die wirtschaftliche Bedeutung korrekt?</p>
+
+      <div class="mcq" id="mcq-1-3" data-ans="1">
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-3')">
+          <input type="radio" name="mcq13"><span class="mcq-letter">(a)</span>
+          <span>Bei einem Gewinn von 18 Tsd. € wird ein Werbebudget von 5 Tsd. € benötigt – erst dann lohnt sich die Kampagne.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-3')">
+          <input type="radio" name="mcq13"><span class="mcq-letter">(b)</span>
+          <span>Bei einem Werbebudget von 5 Tsd. € erzielt ClickBoost den maximalen Gewinn von 18 Tsd. €. Mehr oder weniger Budget senkt den Gewinn.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-3')">
+          <input type="radio" name="mcq13"><span class="mcq-letter">(c)</span>
+          <span>Bei einem Werbebudget von 5 Tsd. € entstehen Kosten von 18 Tsd. € – das ist der Verlustpunkt.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-1-3')">
+          <input type="radio" name="mcq13"><span class="mcq-letter">(d)</span>
+          <span>Ab einem Budget von 5 Tsd. € beginnt ClickBoost Gewinn zu erzielen. Darunter entstehen Verluste.</span>
+        </label>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h13')">Tipp anzeigen</button>
+      <div class="hint-box" id="h13">
+        <strong>Tipp:</strong> Die $x$-Koordinate des Scheitelpunkts ist das Werbebudget, die $y$-Koordinate ist der Gewinn. Da $a < 0$ (Parabel nach unten geöffnet), handelt es sich um ein <em>Maximum</em>. Die Aussage, ab der der Gewinn beginnt, wäre bei den <em>Nullstellen</em> – nicht beim Scheitel.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkMCQ('ex-1-3')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-1-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-1-3"><b></b>
+        <div class="sol">
+          <strong>Korrekte Antwort: (b)</strong><br>
+          Da die Parabel nach unten geöffnet ist ($a = -2 < 0$), ist der Scheitelpunkt ein <em>Maximum</em>. $x_S = 5$ ist das optimale Budget, $G_1(5) = 18$ der maximale Gewinn. Antwort (d) beschreibt die <em>Nullstellen</em> ($x = 2$ und $x = 8$), nicht den Scheitel.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K2: PRODUKTFORM & NULLSTELLEN
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k2">
+  <div class="ch-head" style="border-left-color:var(--k2)">
+    <h2>Kapitel 2 – Produktform und Nullstellen</h2>
+    <p>Nullstellen via Scheitelpunktmethode · Produktform aufstellen · Gewinnschwellen interpretieren</p>
+  </div>
+
+  <!-- 2.1 -->
+  <div class="ex" id="ex-2-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.1</div>
+      <h3>Lückentext: Nullstellen mit der Scheitelpunktmethode</h3>
+      <span class="ex-badge" id="st-2-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Bestimme die Nullstellen von $G_1(x) = -2(x-5)^2 + 18$, indem du die Scheitelpunktform gleich null setzt. Fülle die fehlenden Werte ein.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 1</span><span>Gleichung aufstellen und umformen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $-2(x-5)^2 + 18 = 0$
+            <span class="eq-sep"></span>
+            $(x-5)^2 =$
+            <input id="f21-1" data-ans="9" data-tol="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 2</span><span>Wurzel ziehen (±)</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $x - 5 = \pm$
+            <input id="f21-2" data-ans="3" data-tol="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 3</span><span>Nullstellen berechnen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $x_1 =$
+            <input id="f21-3" data-ans="2" data-tol="0">
+            <span class="eq-sep"></span>
+            $x_2 =$
+            <input id="f21-4" data-ans="8" data-tol="0">
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h21')">Tipp anzeigen</button>
+      <div class="hint-box" id="h21">
+        <strong>Tipp:</strong> Aus $-2(x-5)^2 + 18 = 0$ folgt: $-2(x-5)^2 = -18$, dann $(x-5)^2 = 9$. Jetzt Wurzel ziehen: $x - 5 = \pm\sqrt{9} = \pm 3$. Die beiden Lösungen erhältst du mit $+$ und $-$.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-2-1',['f21-1','f21-2','f21-3','f21-4'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-2-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-2-1"><b></b>
+        <div class="sol">
+          $-2(x-5)^2 + 18 = 0 \;\Rightarrow\; (x-5)^2 = 9 \;\Rightarrow\; x - 5 = \pm 3$<br>
+          $x_1 = 5 - 3 = 2$ und $x_2 = 5 + 3 = 8$<br>
+          Probe: $G_1(2) = -2(4)+40-32 = 0$ ✓ &nbsp; $G_1(8) = -2(64)+160-32 = -128+128 = 0$ ✓
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.2 -->
+  <div class="ex" id="ex-2-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.2</div>
+      <h3>Lückentext: Produktform aufstellen</h3>
+      <span class="ex-badge" id="st-2-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Die Nullstellen von $G_1$ sind $x_1 = 2$ und $x_2 = 8$, der Leitkoeffizient ist $a = -2$. Stelle die Produktform auf:</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schema</span><span>$G_1(x) = a \cdot (x - x_1)(x - x_2)$</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $G_1(x) = -2 \cdot (x -$
+            <input id="f22-1" data-ans="2" data-tol="0" class="w50">
+            $)(x -$
+            <input id="f22-2" data-ans="8" data-tol="0" class="w50">
+            $)$
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h22')">Tipp anzeigen</button>
+      <div class="hint-box" id="h22">
+        <strong>Tipp:</strong> In der Produktform steht jede Nullstelle als Linearfaktor $(x - x_i)$. Probe: ausmultiplizieren und vergleichen mit der Normalform $-2x^2 + 20x - 32$.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-2-2',['f22-1','f22-2'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-2-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-2-2"><b></b>
+        <div class="sol">
+          $G_1(x) = -2(x-2)(x-8)$<br>
+          Probe: $-2(x^2 - 10x + 16) = -2x^2 + 20x - 32$ ✓ (identisch mit der Normalform)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.3 -->
+  <div class="ex" id="ex-2-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k2)">2.3</div>
+      <h3>Ankreuzaufgabe: Bedeutung der Nullstellen</h3>
+      <span class="ex-badge" id="st-2-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Die Nullstellen von $G_1$ sind $x_1 = 2$ und $x_2 = 8$. Kreuze an, ob die Aussage wahr oder falsch ist.</p>
+
+      <table class="ankreuz" id="tbl-2-3" data-ans="W,W,F,W">
+        <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr><td>ClickBoost ist profitabel, wenn das Werbebudget zwischen 2 und 8 Tsd. € liegt.</td>
+            <td><input type="radio" name="r23-0" value="W"></td><td><input type="radio" name="r23-0" value="F"></td></tr>
+          <tr><td>Bei einem Budget von genau 2 Tsd. € oder 8 Tsd. € deckt der Umsatz gerade die Kosten (Break-even).</td>
+            <td><input type="radio" name="r23-1" value="W"></td><td><input type="radio" name="r23-1" value="F"></td></tr>
+          <tr><td>Bei einem Budget von 5 Tsd. € ist der Gewinn ebenfalls null.</td>
+            <td><input type="radio" name="r23-2" value="W"></td><td><input type="radio" name="r23-2" value="F"></td></tr>
+          <tr><td>Für $x < 2$ oder $x > 8$ entsteht ein Verlust ($G_1 < 0$).</td>
+            <td><input type="radio" name="r23-3" value="W"></td><td><input type="radio" name="r23-3" value="F"></td></tr>
+        </tbody>
+      </table>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-2-3')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-2-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-2-3"><b></b>
+        <div class="sol">
+          <strong>wahr · wahr · falsch · wahr</strong><br>
+          (1) Zwischen den Nullstellen ($2 < x < 8$) ist $G_1 > 0$ → Gewinn. ✓<br>
+          (2) An den Nullstellen gilt $G_1 = 0$ → Break-even-Punkte. ✓<br>
+          (3) $G_1(5) = 18 \neq 0$ – bei $x = 5$ liegt das <em>Maximum</em>, nicht eine Nullstelle.<br>
+          (4) Da die Parabel nach unten geöffnet ist, gilt außerhalb der Nullstellen $G_1 < 0$. ✓
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K3: INTERPRETATION & EIGENSCHAFTEN
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k3">
+  <div class="ch-head" style="border-left-color:var(--k3)">
+    <h2>Kapitel 3 – Interpretation und Eigenschaften</h2>
+    <p>Wertebereich · Symmetrieachse · Gewinnintervall · Maximum</p>
+  </div>
+
+  <!-- 3.1 -->
+  <div class="ex" id="ex-3-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.1</div>
+      <h3>Multiple Choice: Profitables Budget-Intervall</h3>
+      <span class="ex-badge" id="st-3-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Für welches Werbebudget (in Tsd. €) erzielt ClickBoost mit Strategie 1 einen Gewinn ($G_1 > 0$)?</p>
+
+      <div class="mcq" id="mcq-3-1" data-ans="1">
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-3-1')">
+          <input type="radio" name="mcq31"><span class="mcq-letter">(a)</span>
+          <span>$x \in [0;\,5]$ – bis zum maximalen Gewinnpunkt</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-3-1')">
+          <input type="radio" name="mcq31"><span class="mcq-letter">(b)</span>
+          <span>$x \in ]\,2;\,8\,[$ – zwischen den beiden Gewinnschwellen</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-3-1')">
+          <input type="radio" name="mcq31"><span class="mcq-letter">(c)</span>
+          <span>$x \in [5;\,18]$ – ab dem Maximum bis zum Scheitelwert</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-3-1')">
+          <input type="radio" name="mcq31"><span class="mcq-letter">(d)</span>
+          <span>$x \in [2;\,8]$ – nur genau an den Gewinnschwellen selbst</span>
+        </label>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h31')">Tipp anzeigen</button>
+      <div class="hint-box" id="h31">
+        <strong>Tipp:</strong> $G_1 > 0$ bedeutet: Die Parabel liegt <em>oberhalb</em> der $x$-Achse. Das ist genau zwischen den Nullstellen $x_1 = 2$ und $x_2 = 8$. An den Nullstellen selbst gilt $G_1 = 0$ (kein Gewinn), also offenes Intervall.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkMCQ('ex-3-1')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-3-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-3-1"><b></b>
+        <div class="sol">
+          <strong>Korrekte Antwort: (b)</strong><br>
+          $G_1 > 0$ genau für $x \in ]\,2;\,8\,[$ (offenes Intervall, da $G_1(2)=G_1(8)=0$). Antwort (d) nennt das <em>abgeschlossene</em> Intervall $[2;\,8]$ – das wäre $G_1 \geq 0$.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.2 -->
+  <div class="ex" id="ex-3-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.2</div>
+      <h3>Lückentext: Maximum rechnerisch bestimmen</h3>
+      <span class="ex-badge" id="st-3-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Bestimme das Maximum von $G_1(x) = -2(x-5)^2 + 18$ rechnerisch. Da $a = -2 < 0$, liegt ein Maximum vor.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 1</span><span>Optimales Budget aus Scheitelpunktform ablesen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $x_\text{max} =$
+            <input id="f32-1" data-ans="5" data-tol="0" class="w50">
+            <span class="eq-hint">Tsd. €</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 2</span><span>Maximalen Gewinn ablesen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $G_{1,\,\text{max}} = G_1($
+            <input id="f32-2" data-ans="5" data-tol="0" class="w50">
+            $) =$
+            <input id="f32-3" data-ans="18" data-tol="0">
+            <span class="eq-hint">Tsd. €</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h32')">Tipp anzeigen</button>
+      <div class="hint-box" id="h32">
+        <strong>Tipp:</strong> Aus der Scheitelpunktform $G_1(x) = -2(x-5)^2 + 18$ kannst du den Scheitel direkt ablesen: $x_S = 5$ und $G_1(x_S) = 18$. Der Wert $-2(x-5)^2$ ist stets $\leq 0$, daher ist der Maximalwert genau 18 (wenn $(x-5)^2 = 0$).
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-3-2',['f32-1','f32-2','f32-3'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-3-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-3-2"><b></b>
+        <div class="sol">
+          Da $a = -2 < 0$: Parabel nach unten, also Maximum am Scheitel.<br>
+          $x_\text{max} = 5$ Tsd. € | $G_{1,\,\text{max}} = G_1(5) = -2 \cdot 0 + 18 = 18$ Tsd. €<br>
+          <em>Interpretation:</em> Mit einem Werbebudget von 5 Tsd. € erzielt ClickBoost den maximal möglichen Gewinn von 18 Tsd. €.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.3 -->
+  <div class="ex" id="ex-3-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k3)">3.3</div>
+      <h3>Ankreuzaufgabe: Wertebereich, Symmetrie, Öffnung</h3>
+      <span class="ex-badge" id="st-3-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Gegeben ist $G_1(x) = -2(x-5)^2 + 18$. Kreuze an, ob die Aussage wahr oder falsch ist.</p>
+
+      <table class="ankreuz" id="tbl-3-3" data-ans="W,F,W,F">
+        <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr><td>Der maximale Funktionswert von $G_1$ beträgt 18 Tsd. €.</td>
+            <td><input type="radio" name="r33-0" value="W"></td><td><input type="radio" name="r33-0" value="F"></td></tr>
+          <tr><td>Die Symmetrieachse lautet $x = -5$.</td>
+            <td><input type="radio" name="r33-1" value="W"></td><td><input type="radio" name="r33-1" value="F"></td></tr>
+          <tr><td>$G_1$ öffnet nach unten, da $a = -2 < 0$.</td>
+            <td><input type="radio" name="r33-2" value="W"></td><td><input type="radio" name="r33-2" value="F"></td></tr>
+          <tr><td>Der Wertebereich von $G_1$ ist $W = \mathbb{R}$ (alle reellen Zahlen).</td>
+            <td><input type="radio" name="r33-3" value="W"></td><td><input type="radio" name="r33-3" value="F"></td></tr>
+        </tbody>
+      </table>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkAnkreuz('ex-3-3')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-3-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-3-3"><b></b>
+        <div class="sol">
+          <strong>wahr · falsch · wahr · falsch</strong><br>
+          (1) $G_1(5) = 18$ ist der Maximalwert (Scheitelwert). ✓<br>
+          (2) Die Symmetrieachse ist $x = x_S = +5$, nicht $-5$. In der Form $(x-5)^2$ steht ein <em>Minus</em>.<br>
+          (3) $a = -2 < 0$ → Parabel nach unten geöffnet. ✓<br>
+          (4) Da $a < 0$, gibt es ein Maximum bei 18 und die Parabel geht nach unten gegen $-\infty$. Wertebereich: $W = \left]-\infty;\,18\right]$, nicht $\mathbb{R}$.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K4: PARABEL & GERADE (ZIELGEWINN)
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k4">
+  <div class="ch-head" style="border-left-color:var(--k4)">
+    <h2>Kapitel 4 – Parabel und Gerade (Zielgewinn)</h2>
+    <p>Schnittpunkt der Gewinnfunktion mit einer waagerechten Gerade · Budget-Bereiche bestimmen</p>
+  </div>
+
+  <!-- 4.1 -->
+  <div class="ex" id="ex-4-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.1</div>
+      <h3>Lückentext: Für welches Budget gilt $G_1 = 10$ Tsd. €?</h3>
+      <span class="ex-badge" id="st-4-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">ClickBoost plant mit einem Zielgewinn von 10 Tsd. €. Bei welchen Budgets wird dieser Zielgewinn <em>genau</em> erreicht? Verwende die Scheitelpunktform.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 1</span><span>Gleichung aufstellen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $-2(x-5)^2 + 18 = 10$
+            <span class="eq-sep"></span>
+            $-2(x-5)^2 = -8$
+            <span class="eq-sep"></span>
+            $(x-5)^2 =$
+            <input id="f41-1" data-ans="4" data-tol="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 2</span><span>Wurzel ziehen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $x - 5 = \pm$
+            <input id="f41-2" data-ans="2" data-tol="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 3</span><span>Budget-Werte berechnen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $x_1 =$
+            <input id="f41-3" data-ans="3" data-tol="0">
+            <span class="eq-hint">Tsd. €</span>
+            <span class="eq-sep"></span>
+            $x_2 =$
+            <input id="f41-4" data-ans="7" data-tol="0">
+            <span class="eq-hint">Tsd. €</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h41')">Tipp anzeigen</button>
+      <div class="hint-box" id="h41">
+        <strong>Tipp:</strong> Subtrahiere 18 auf beiden Seiten, dann dividiere durch $-2$: $(x-5)^2 = 4$. Ziehe die Wurzel mit $\pm$: $x - 5 = \pm 2$.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-4-1',['f41-1','f41-2','f41-3','f41-4'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-4-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-4-1"><b></b>
+        <div class="sol">
+          $(x-5)^2 = 4 \;\Rightarrow\; x - 5 = \pm 2$<br>
+          $x_1 = 3$ Tsd. € und $x_2 = 7$ Tsd. €<br>
+          Probe: $G_1(3) = -2(9)+60-32 = -18+28 = 10$ ✓ &nbsp; $G_1(7) = -2(49)+140-32 = -98+108 = 10$ ✓
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.2 -->
+  <div class="ex" id="ex-4-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.2</div>
+      <h3>Multiple Choice: Budget-Bereich für $G_1 > 10$ Tsd. €</h3>
+      <span class="ex-badge" id="st-4-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Bei welchem Werbebudget (in Tsd. €) überschreitet der Gewinn $G_1$ den Zielgewinn von 10 Tsd. €?</p>
+
+      <div class="mcq" id="mcq-4-2" data-ans="1">
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-4-2')">
+          <input type="radio" name="mcq42"><span class="mcq-letter">(a)</span>
+          <span>$x \in [0;\,3]$ – bis zum ersten Schnittpunkt mit der Ziellinie</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-4-2')">
+          <input type="radio" name="mcq42"><span class="mcq-letter">(b)</span>
+          <span>$x \in ]\,3;\,7\,[$ – zwischen den beiden Schnittpunkten mit der Ziellinie</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-4-2')">
+          <input type="radio" name="mcq42"><span class="mcq-letter">(c)</span>
+          <span>$x \in ]\,3;\,8\,[$ – bis zur zweiten Gewinnschwelle</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-4-2')">
+          <input type="radio" name="mcq42"><span class="mcq-letter">(d)</span>
+          <span>$x \in ]\,5;\,10\,[$ – ab dem Maximum bis zum Budget-Limit</span>
+        </label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkMCQ('ex-4-2')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-4-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-4-2"><b></b>
+        <div class="sol">
+          <strong>Korrekte Antwort: (b)</strong><br>
+          Da die Parabel nach unten geöffnet ist, liegt sie <em>zwischen</em> den Schnittpunkten $x = 3$ und $x = 7$ <em>oberhalb</em> der Geraden $y = 10$. Also: $G_1 > 10$ für $x \in ]\,3;\,7\,[$. Zum Vergleich: $G_1 > 0$ gilt für $x \in ]\,2;\,8\,[$, da dort die Nullstellen liegen.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.3 -->
+  <div class="ex" id="ex-4-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k4)">4.3</div>
+      <h3>Lückentext: Gewinnschwellen mit dem gleichen Verfahren bestimmen</h3>
+      <span class="ex-badge" id="st-4-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Wende das Verfahren aus 4.1 auf den Zielgewinn 0 an, um die Gewinnschwellen als Kontrolle für Kapitel 2 zu bestimmen.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Gleichung</span><span>$G_1(x) = 0$</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $-2(x-5)^2 + 18 = 0$
+            <span class="eq-sep"></span>
+            $(x-5)^2 =$
+            <input id="f43-1" data-ans="9" data-tol="0">
+          </div>
+          <div class="eq" style="margin-top:.5rem;">
+            $x - 5 = \pm$
+            <input id="f43-2" data-ans="3" data-tol="0">
+            <span class="eq-sep"></span>
+            $x_1 =$
+            <input id="f43-3" data-ans="2" data-tol="0">
+            <span class="eq-hint">Tsd. €</span>
+            <span class="eq-sep"></span>
+            $x_2 =$
+            <input id="f43-4" data-ans="8" data-tol="0">
+            <span class="eq-hint">Tsd. €</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-4-3',['f43-1','f43-2','f43-3','f43-4'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-4-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-4-3"><b></b>
+        <div class="sol">
+          $(x-5)^2 = 9 \;\Rightarrow\; x = 5 \pm 3$<br>
+          $x_1 = 2$ und $x_2 = 8$ ✓ (übereinstimmend mit Kapitel 2)<br>
+          <em>Das Verfahren funktioniert für beliebige Zielgewinne – nicht nur für 0.</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     K5: SCHNITTPUNKT ZWEIER PARABELN
+════════════════════════════════════════════════════════ -->
+<div class="chapter" id="k5">
+  <div class="ch-head" style="border-left-color:var(--k5)">
+    <h2>Kapitel 5 – Strategievergleich: Schnittpunkt zweier Parabeln</h2>
+    <p>Zweite Gewinnfunktion · Schnittpunkte berechnen · Strategie auswählen</p>
+  </div>
+
+  <div class="task-info">
+    ClickBoost evaluiert eine zweite Strategie (Online/Social Media). Die Gewinnfunktion lautet:<br>
+    $$G_2(x) = -x^2 + 8x - 12$$
+    Die Scheitelpunktform wurde bereits bestimmt: $G_2(x) = -(x-4)^2 + 4$.
+  </div>
+
+  <!-- 5.1 -->
+  <div class="ex" id="ex-5-1">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k5)">5.1</div>
+      <h3>Lückentext: Eigenschaften von $G_2$ ablesen</h3>
+      <span class="ex-badge" id="st-5-1">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Lies aus $G_2(x) = -(x-4)^2 + 4$ den Scheitelpunkt ab und bestimme die Nullstellen.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Scheitel</span><span>direkt aus Scheitelpunktform ablesen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $S_2\!\left(\right.$
+            <input id="f51-1" data-ans="4" data-tol="0" class="w50">
+            $\,\Big|\,$
+            <input id="f51-2" data-ans="4" data-tol="0" class="w50">
+            $\left.\right)$
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Nullstellen</span><span>$G_2(x) = 0$ mit Scheitelpunktmethode</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $-(x-4)^2 + 4 = 0$
+            <span class="eq-sep"></span>
+            $(x-4)^2 =$
+            <input id="f51-3" data-ans="4" data-tol="0">
+          </div>
+          <div class="eq" style="margin-top:.5rem;">
+            $x - 4 = \pm$
+            <input id="f51-4" data-ans="2" data-tol="0">
+            <span class="eq-sep"></span>
+            $x_1 =$
+            <input id="f51-5" data-ans="2" data-tol="0" class="w50">
+            <span class="eq-sep"></span>
+            $x_2 =$
+            <input id="f51-6" data-ans="6" data-tol="0" class="w50">
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h51')">Tipp anzeigen</button>
+      <div class="hint-box" id="h51">
+        <strong>Tipp:</strong> In der Form $-(x-4)^2 + 4$ liest du ab: $x_S = 4$ (das Vorzeichen vor der Klammer beachten: steht $-h$, ist $x_S = +h$) und $k = 4$. Für die Nullstellen: $-(x-4)^2 = -4 \;\Rightarrow\; (x-4)^2 = 4$.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-5-1',['f51-1','f51-2','f51-3','f51-4','f51-5','f51-6'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-5-1')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-5-1"><b></b>
+        <div class="sol">
+          $S_2(4\,|\,4)$: Maximaler Gewinn 4 Tsd. € bei Budget 4 Tsd. €.<br>
+          $(x-4)^2 = 4 \;\Rightarrow\; x = 4 \pm 2 \;\Rightarrow\; x_1 = 2,\; x_2 = 6$<br>
+          Strategie 2 ist nur für $2 < x < 6$ profitabel – ein deutlich engeres Fenster als Strategie 1 ($2 < x < 8$).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5.2 -->
+  <div class="ex" id="ex-5-2">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k5)">5.2</div>
+      <h3>Lückentext: Schnittpunkte $G_1 = G_2$ berechnen</h3>
+      <span class="ex-badge" id="st-5-2">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Bei welchen Budgets erzielen beide Strategien den gleichen Gewinn? Berechne die Schnittpunkte von $G_1$ und $G_2$.</p>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 1</span><span>$G_1(x) = G_2(x)$ aufstellen und vereinfachen</span></div>
+        <div class="step-bd">
+          <div class="eq" style="flex-wrap:wrap;gap:.3rem;">
+            <span>$-2x^2 + 20x - 32 = -x^2 + 8x - 12$</span>
+          </div>
+          <div class="eq" style="margin-top:.4rem;">
+            <span>$\Rightarrow$</span>
+            <span>$-x^2 + 12x - 20 = 0$</span>
+            <span class="eq-sep"></span>
+            <span>$\Rightarrow$</span>
+            <span>$x^2 - 12x + 20 = 0$</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 2</span><span>Scheitelpunktmethode anwenden</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $(x - 6)^2 =$
+            <input id="f52-1" data-ans="16" data-tol="0">
+            <span class="eq-hint">Hinweis: $(x-6)^2 = x^2 - 12x + 36$, also $x^2 - 12x + 20 = (x-6)^2 - 16$</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-hd"><span class="step-nr">Schritt 3</span><span>Wurzel ziehen und Lösung berechnen</span></div>
+        <div class="step-bd">
+          <div class="eq">
+            $x - 6 = \pm$
+            <input id="f52-2" data-ans="4" data-tol="0">
+            <span class="eq-sep"></span>
+            $x_1 =$
+            <input id="f52-3" data-ans="2" data-tol="0">
+            <span class="eq-sep"></span>
+            $x_2 =$
+            <input id="f52-4" data-ans="10" data-tol="0">
+          </div>
+        </div>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h52')">Tipp anzeigen</button>
+      <div class="hint-box" id="h52">
+        <strong>Tipp:</strong> Für die Scheitelpunktmethode bei $x^2 - 12x + 20 = 0$: Der Scheitelwert der Hilfsparabel liegt bei $x = 6$ (Hälfte von $-(-12) = 12$). Es gilt $(x-6)^2 = x^2 - 12x + 36$, also $x^2 - 12x + 20 = (x-6)^2 - 16 = 0 \;\Rightarrow\; (x-6)^2 = 16$.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkFill('ex-5-2',['f52-1','f52-2','f52-3','f52-4'])">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-5-2')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-5-2"><b></b>
+        <div class="sol">
+          $x^2 - 12x + 20 = 0 \;\Rightarrow\; (x-6)^2 = 16 \;\Rightarrow\; x = 6 \pm 4$<br>
+          $x_1 = 2$: $G_1(2) = G_2(2) = 0$ ✓ (beide an der gemeinsamen Gewinnschwelle)<br>
+          $x_2 = 10$: $G_1(10) = G_2(10) = -2(100)+200-32 = -32$ ✓ (beide im Verlustbereich)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5.3 -->
+  <div class="ex" id="ex-5-3">
+    <div class="ex-head">
+      <div class="ex-num" style="background:var(--k5)">5.3</div>
+      <h3>Grafik &amp; Multiple Choice: Strategie auswählen</h3>
+      <span class="ex-badge" id="st-5-3">nicht bewertet</span>
+    </div>
+    <div class="ex-body">
+      <p class="q">Der Graph zeigt beide Gewinnfunktionen. Analysiere den Vergleich und wähle die korrekte Aussage.</p>
+
+      <div class="canvas-wrap">
+        <canvas id="cv53" width="500" height="280" aria-label="Graph von G1 und G2 im Vergleich"></canvas>
+      </div>
+      <p class="canvas-legend">Blau: $G_1(x) = -2x^2+20x-32$ (Strategie 1) &nbsp;|&nbsp; Rot: $G_2(x) = -x^2+8x-12$ (Strategie 2)</p>
+
+      <div class="mcq" id="mcq-5-3" data-ans="1">
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-5-3')">
+          <input type="radio" name="mcq53"><span class="mcq-letter">(a)</span>
+          <span>Strategie 2 ist immer profitabler, da die Online-Kampagne günstiger zu schalten ist.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-5-3')">
+          <input type="radio" name="mcq53"><span class="mcq-letter">(b)</span>
+          <span>Für $2 < x < 10$ ist Strategie 1 stets profitabler als Strategie 2. Strategie 2 ist nur bis $x = 6$ profitabel, Strategie 1 bis $x = 8$.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-5-3')">
+          <input type="radio" name="mcq53"><span class="mcq-letter">(c)</span>
+          <span>Beide Strategien sind im gesamten Intervall $[2;\,10]$ gleich profitabel.</span>
+        </label>
+        <label class="mcq-opt" onclick="selMCQ(this,'mcq-5-3')">
+          <input type="radio" name="mcq53"><span class="mcq-letter">(d)</span>
+          <span>Strategie 1 ist immer besser, weil ihr Scheitelwert 18 größer ist als 4 – unabhängig vom Budget.</span>
+        </label>
+      </div>
+
+      <button class="hint-toggle" onclick="toggleHint('h53')">Tipp anzeigen</button>
+      <div class="hint-box" id="h53">
+        <strong>Tipp:</strong> Vergleiche die Graphen im Bereich zwischen den Schnittpunkten $x = 2$ und $x = 10$. Welche Kurve liegt dort <em>oben</em>? Beachte auch: Bei $x = 8$ ist $G_1(8) = 0$, aber $G_2(8) = -64+64-12 = -12 < 0$ – Strategie 2 ist dort bereits im Verlust.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkMCQ('ex-5-3')">Überprüfen</button>
+        <button class="btn btn-ghost" onclick="resetEx('ex-5-3')">Zurücksetzen</button>
+      </div>
+      <div class="fb" id="fb-5-3"><b></b>
+        <div class="sol">
+          <strong>Korrekte Antwort: (b)</strong><br>
+          Zwischen den Schnittpunkten $x = 2$ und $x = 10$ gilt $G_1(x) > G_2(x)$ – Strategie 1 liegt stets oberhalb. Zum Beispiel: $G_1(5) = 18 > G_2(5) = 3$.<br>
+          Profitable Bereiche: $G_1 > 0$ für $x \in ]\,2;\,8\,[$ · $G_2 > 0$ für $x \in ]\,2;\,6\,[$<br>
+          Antwort (d) ist falsch: Der höhere Scheitelwert allein sagt nichts über jeden einzelnen Budget-Wert aus.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer class="footer-nav">
+  <div class="footer-nav-inner">
+    <a class="back-btn" href="index.html">← Mathematik</a>
+    <a class="portal-link" href="../../index.html">Lernportal ↗</a>
+  </div>
+</footer>
+
+<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
+
+<script>
+// ── Theme ──────────────────────────────────────────────────────────────────
+(function(){
+  var r=document.documentElement,b=document.getElementById('themeToggle');
+  function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}
+  a(r.getAttribute('data-theme')||'light');
+  b.addEventListener('click',function(){
+    var n=r.getAttribute('data-theme')==='dark'?'light':'dark';
+    localStorage.setItem('theme',n);a(n);
+    setTimeout(drawQF,40);
+  });
+})();
+
+// ── Progress ───────────────────────────────────────────────────────────────
+var scores={};
+var chMap={
+  '1-1':'k1','1-2':'k1','1-3':'k1',
+  '2-1':'k2','2-2':'k2','2-3':'k2',
+  '3-1':'k3','3-2':'k3','3-3':'k3',
+  '4-1':'k4','4-2':'k4','4-3':'k4',
+  '5-1':'k5','5-2':'k5','5-3':'k5'
+};
+
+function markScore(key,val){
+  scores[key]=val;
+  var done=Object.keys(scores).length;
+  document.getElementById('prog-fill').style.width=Math.round(done/15*100)+'%';
+  document.getElementById('prog-label').textContent=done+' von 15 Aufgaben abgeschlossen';
+  var cc={k1:0,k2:0,k3:0,k4:0,k5:0};
+  Object.keys(scores).forEach(function(k){var ch=chMap[k];if(ch)cc[ch]++;});
+  ['k1','k2','k3','k4','k5'].forEach(function(ch){
+    document.getElementById('badge-'+ch).textContent=cc[ch]+'/3';
+    if(cc[ch]===3)document.querySelector('[data-ch='+ch+']').classList.add('done');
+    else document.querySelector('[data-ch='+ch+']').classList.remove('done');
+  });
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────────────
+function switchTab(ch){
+  document.querySelectorAll('.chapter').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(ch).classList.add('active');
+  document.querySelector('[data-ch='+ch+']').classList.add('active');
+}
+
+// ── Hint toggle ────────────────────────────────────────────────────────────
+function toggleHint(id){
+  var el=document.getElementById(id),btn=el.previousElementSibling;
+  el.classList.toggle('show');
+  btn.textContent=el.classList.contains('show')?'Tipp ausblenden':'Tipp anzeigen';
+}
+
+// ── Reset ──────────────────────────────────────────────────────────────────
+function resetEx(exId){
+  var ex=document.getElementById(exId);
+  ex.querySelectorAll('input[type=radio]').forEach(function(i){i.checked=false;});
+  ex.querySelectorAll('input:not([type]),input[type=text],.eq input').forEach(function(i){
+    i.value='';i.classList.remove('ok','err');});
+  ex.querySelectorAll('.mcq-opt').forEach(function(o){o.classList.remove('sel','ok','err');});
+  ex.querySelectorAll('.ankreuz tr').forEach(function(r){r.classList.remove('ok-row','err-row');});
+  var key=exId.replace('ex-','');
+  var fb=document.getElementById('fb-'+key);
+  if(fb){fb.className='fb';fb.querySelector('b').textContent='';}
+  var st=document.getElementById('st-'+key);
+  if(st)st.textContent='nicht bewertet';
+}
+
+// ── MCQ ────────────────────────────────────────────────────────────────────
+function selMCQ(el,groupId){
+  document.querySelectorAll('#'+groupId+' .mcq-opt').forEach(function(o){o.classList.remove('sel');});
+  el.classList.add('sel');
+  el.querySelector('input').checked=true;
+}
+
+function checkMCQ(exId){
+  var key=exId.replace('ex-','');
+  var grp=document.getElementById('mcq-'+key);
+  var correct=parseInt(grp.dataset.ans);
+  var opts=grp.querySelectorAll('.mcq-opt');
+  var sel=-1;
+  opts.forEach(function(o,i){if(o.classList.contains('sel'))sel=i;});
+  var fb=document.getElementById('fb-'+key);
+  var st=document.getElementById('st-'+key);
+  if(sel===-1){fb.className='fb warn show';fb.querySelector('b').textContent='Bitte eine Antwort auswählen';return;}
+  opts.forEach(function(o,i){
+    if(i===correct)o.classList.add('ok');
+    else if(i===sel)o.classList.add('err');
+  });
+  var ok=sel===correct;
+  fb.className='fb show '+(ok?'ok':'err');
+  fb.querySelector('b').textContent=ok?'Richtig!':'Leider falsch';
+  st.textContent=ok?'✓ Richtig':'✗ Falsch';
+  markScore(key,ok?1:0);
+  if(typeof renderMathInElement!=='undefined')
+    renderMathInElement(fb,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+
+// ── Ankreuz ────────────────────────────────────────────────────────────────
+function checkAnkreuz(exId){
+  var key=exId.replace('ex-','');
+  var tbl=document.getElementById('tbl-'+key);
+  var answers=tbl.dataset.ans.split(',');
+  var rows=tbl.querySelectorAll('tbody tr');
+  var allOk=true;
+  rows.forEach(function(row,ri){
+    var correct=answers[ri],chosen=null;
+    row.querySelectorAll('input[type=radio]').forEach(function(inp){if(inp.checked)chosen=inp.value;});
+    if(chosen===correct)row.classList.add('ok-row');
+    else{row.classList.add('err-row');allOk=false;}
+  });
+  var fb=document.getElementById('fb-'+key);
+  var st=document.getElementById('st-'+key);
+  fb.className='fb show '+(allOk?'ok':'err');
+  fb.querySelector('b').textContent=allOk?'Alles richtig!':'Einige Zeilen stimmen nicht – sieh die Lösung.';
+  st.textContent=allOk?'✓ Richtig':'✗ Überarbeiten';
+  markScore(key,allOk?1:0);
+  if(typeof renderMathInElement!=='undefined')
+    renderMathInElement(fb,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+
+// ── Fill-in ────────────────────────────────────────────────────────────────
+function checkFill(exId,ids){
+  var key=exId.replace('ex-','');
+  var allOk=true;
+  ids.forEach(function(id){
+    var inp=document.getElementById(id);
+    if(!inp)return;
+    var val=parseFloat(inp.value.replace(',','.'));
+    var ans=parseFloat(inp.dataset.ans);
+    var tol=parseFloat(inp.dataset.tol)||0;
+    if(isNaN(val)||Math.abs(val-ans)>tol){inp.classList.remove('ok');inp.classList.add('err');allOk=false;}
+    else{inp.classList.remove('err');inp.classList.add('ok');}
+  });
+  var fb=document.getElementById('fb-'+key);
+  var st=document.getElementById('st-'+key);
+  fb.className='fb show '+(allOk?'ok':'err');
+  fb.querySelector('b').textContent=allOk?'Alle Werte korrekt!':'Rote Felder prüfen.';
+  st.textContent=allOk?'✓ Richtig':'✗ Überarbeiten';
+  markScore(key,allOk?1:0);
+  if(typeof renderMathInElement!=='undefined')
+    renderMathInElement(fb,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+
+// ── Canvas: G1 und G2 ──────────────────────────────────────────────────────
+function drawQF(){
+  var cv=document.getElementById('cv53');
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var W=cv.width,H=cv.height;
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  var bg=dark?'#1a1a1a':'#ffffff';
+  var gridCol=dark?'#282828':'#ede8de';
+  var axCol=dark?'#888':'#777';
+  var textCol=dark?'#aaa':'#555';
+
+  // coordinate mapping: x: 0..10.5, y: -8..22
+  var xMin=0,xMax=10.5,yMin=-8,yMax=22;
+  function cx(x){return (x-xMin)/(xMax-xMin)*W;}
+  function cy(y){return (yMax-y)/(yMax-yMin)*H;}
+
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  // grid
+  ctx.strokeStyle=gridCol;ctx.lineWidth=1;
+  for(var xi=0;xi<=10;xi++){ctx.beginPath();ctx.moveTo(cx(xi),0);ctx.lineTo(cx(xi),H);ctx.stroke();}
+  for(var yi=-5;yi<=20;yi+=5){ctx.beginPath();ctx.moveTo(0,cy(yi));ctx.lineTo(W,cy(yi));ctx.stroke();}
+
+  // axes
+  ctx.strokeStyle=axCol;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(cx(0),0);ctx.lineTo(cx(0),H);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,cy(0));ctx.lineTo(W,cy(0));ctx.stroke();
+
+  // labels
+  ctx.fillStyle=textCol;ctx.font='11px DM Mono,monospace';
+  ctx.textAlign='center';
+  for(var xi=1;xi<=10;xi++){ctx.fillText(xi,cx(xi),cy(0)+14);}
+  ctx.textAlign='right';
+  for(var yi=-5;yi<=20;yi+=5){if(yi!==0)ctx.fillText(yi,cx(0)-4,cy(yi)+4);}
+  ctx.textAlign='left';ctx.fillText('x (Tsd. €)',W-68,cy(0)-6);
+  ctx.textAlign='left';ctx.fillText('G',cx(0)+4,13);
+
+  function g1(x){return -2*x*x+20*x-32;}
+  function g2(x){return -x*x+8*x-12;}
+
+  var fosblue='#2a6496';
+  var fosred='#c8400a';
+
+  // G1 curve
+  ctx.strokeStyle=fosblue;ctx.lineWidth=2.5;ctx.beginPath();
+  var first=true;
+  for(var px=0;px<W;px++){
+    var xv=xMin+(px/W)*(xMax-xMin);
+    var yv=g1(xv);
+    var pyv=cy(yv);
+    if(pyv<-5||pyv>H+5){first=true;continue;}
+    if(first){ctx.moveTo(px,pyv);first=false;}else ctx.lineTo(px,pyv);
+  }
+  ctx.stroke();
+
+  // G2 curve
+  ctx.strokeStyle=fosred;ctx.lineWidth=2.5;ctx.beginPath();
+  first=true;
+  for(var px=0;px<W;px++){
+    var xv=xMin+(px/W)*(xMax-xMin);
+    var yv=g2(xv);
+    var pyv=cy(yv);
+    if(pyv<-5||pyv>H+5){first=true;continue;}
+    if(first){ctx.moveTo(px,pyv);first=false;}else ctx.lineTo(px,pyv);
+  }
+  ctx.stroke();
+
+  ctx.font='700 11px DM Mono,monospace';
+
+  // S1(5|18)
+  ctx.fillStyle=fosblue;
+  ctx.beginPath();ctx.arc(cx(5),cy(18),5,0,2*Math.PI);ctx.fill();
+  ctx.fillText('S₁(5|18)',cx(5)+7,cy(18)+4);
+
+  // S2(4|4)
+  ctx.fillStyle=fosred;
+  ctx.beginPath();ctx.arc(cx(4),cy(4),5,0,2*Math.PI);ctx.fill();
+  ctx.fillText('S₂(4|4)',cx(4)+7,cy(4)-6);
+
+  // Intersection (2|0)
+  ctx.fillStyle='#2e7d4f';
+  ctx.beginPath();ctx.arc(cx(2),cy(0),6,0,2*Math.PI);ctx.fill();
+  ctx.fillStyle=textCol;
+  ctx.textAlign='center';
+  ctx.fillText('(2|0)',cx(2),cy(0)-10);
+
+  // G1 label at x=7
+  ctx.fillStyle=fosblue;
+  ctx.textAlign='left';
+  ctx.fillText('G₁',cx(6.8),cy(g1(6.8))-7);
+
+  // G2 label at x=3
+  ctx.fillStyle=fosred;
+  ctx.fillText('G₂',cx(5.2),cy(g2(5.2))+15);
+
+  // x=8 marker (G1 zero)
+  ctx.strokeStyle=dark?'#3a3a6a':'#c8d8ea';
+  ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(cx(8),cy(0)-4);ctx.lineTo(cx(8),cy(0)+10);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=fosblue;ctx.font='10px DM Mono,monospace';
+  ctx.textAlign='center';ctx.fillText('8',cx(8),cy(0)+20);
+
+  // x=6 marker (G2 zero)
+  ctx.strokeStyle=dark?'#6a2020':'#f5c6b0';
+  ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(cx(6),cy(0)-4);ctx.lineTo(cx(6),cy(0)+10);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=fosred;ctx.font='10px DM Mono,monospace';
+  ctx.textAlign='center';ctx.fillText('6',cx(6),cy(0)+20);
+}
+
+window.addEventListener('load',function(){
+  drawQF();
+  if(typeof renderMathInElement!=='undefined')
+    renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+});
+</script>
+</body>
+</html>
