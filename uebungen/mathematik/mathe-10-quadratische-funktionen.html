@@ -265,7 +265,12 @@ header .bc span{color:#444;}
       <span class="ex-badge" id="st-1-1">nicht bewertet</span>
     </div>
     <div class="ex-body">
-      <p class="q">Gegeben ist $G_1(x) = -2x^2 + 20x - 32$. Kreuze an, ob die Aussage wahr oder falsch ist.</p>
+      <p class="q">Analysiere den Graphen von $G_1$ und kreuze an, ob die Aussage wahr oder falsch ist.</p>
+
+      <div class="canvas-wrap">
+        <canvas id="cv-k1" width="480" height="280" aria-label="Graph von G1 mit Scheitelpunkt"></canvas>
+      </div>
+      <p class="canvas-legend">$G_1(x) = -2x^2 + 20x - 32$ &nbsp;|&nbsp; Roter Punkt: Scheitelpunkt &nbsp;|&nbsp; Gestrichelt: Symmetrieachse</p>
 
       <table class="ankreuz" id="tbl-1-1" data-ans="F,W,F,W,W">
         <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
@@ -549,7 +554,12 @@ header .bc span{color:#444;}
       <span class="ex-badge" id="st-2-3">nicht bewertet</span>
     </div>
     <div class="ex-body">
-      <p class="q">Die Nullstellen von $G_1$ sind $x_1 = 2$ und $x_2 = 8$. Kreuze an, ob die Aussage wahr oder falsch ist.</p>
+      <p class="q">Der Graph zeigt die Gewinnzone. Die Nullstellen von $G_1$ liegen bei $x_1 = 2$ und $x_2 = 8$. Kreuze an, ob die Aussage wahr oder falsch ist.</p>
+
+      <div class="canvas-wrap">
+        <canvas id="cv-k2" width="480" height="280" aria-label="Graph von G1 mit Gewinnzone"></canvas>
+      </div>
+      <p class="canvas-legend">Grün: Bereich $G_1 > 0$ (profitables Werbebudget)</p>
 
       <table class="ankreuz" id="tbl-2-3" data-ans="W,W,F,W">
         <thead><tr><th style="width:66%">Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
@@ -749,7 +759,12 @@ header .bc span{color:#444;}
       <span class="ex-badge" id="st-4-1">nicht bewertet</span>
     </div>
     <div class="ex-body">
-      <p class="q">ClickBoost plant mit einem Zielgewinn von 10 Tsd. €. Bei welchen Budgets wird dieser Zielgewinn <em>genau</em> erreicht? Verwende die Scheitelpunktform.</p>
+      <p class="q">Der Graph zeigt $G_1$ und die Ziellinie $G_1 = 10$. Bei welchen Budgets wird der Zielgewinn von 10 Tsd. € genau erreicht? Berechne die Schnittpunkte mit der Scheitelpunktform.</p>
+
+      <div class="canvas-wrap">
+        <canvas id="cv-k4" width="480" height="280" aria-label="Graph von G1 mit Ziellinie y=10"></canvas>
+      </div>
+      <p class="canvas-legend">Blau: $G_1(x)$ &nbsp;|&nbsp; Violett gestrichelt: Ziellinie $G_1 = 10$ &nbsp;|&nbsp; Lila Fläche: Bereich $G_1 > 10$</p>
 
       <div class="step">
         <div class="step-hd"><span class="step-nr">Schritt 1</span><span>Gleichung aufstellen</span></div>
@@ -1126,7 +1141,7 @@ header .bc span{color:#444;}
   b.addEventListener('click',function(){
     var n=r.getAttribute('data-theme')==='dark'?'light':'dark';
     localStorage.setItem('theme',n);a(n);
-    setTimeout(drawQF,40);
+    setTimeout(function(){drawK1();drawK2();drawK4();drawQF();},40);
   });
 })();
 
@@ -1260,6 +1275,125 @@ function checkFill(exId,ids){
     renderMathInElement(fb,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
 }
 
+// ── Canvas-Hilfsmakro (gemeinsames Grid + Achsen) ──────────────────────────
+function _cv(id){
+  var cv=document.getElementById(id);if(!cv)return null;
+  var ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  var xMin=-0.5,xMax=10.5,yMin=-8,yMax=22;
+  function cx(x){return (x-xMin)/(xMax-xMin)*W;}
+  function cy(y){return (yMax-y)/(yMax-yMin)*H;}
+  var gc=dark?'#282828':'#ede8de',ac=dark?'#888':'#777',tc=dark?'#aaa':'#555';
+  ctx.fillStyle=dark?'#1a1a1a':'#fff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=gc;ctx.lineWidth=1;
+  for(var i=0;i<=10;i++){ctx.beginPath();ctx.moveTo(cx(i),0);ctx.lineTo(cx(i),H);ctx.stroke();}
+  for(var j=-5;j<=20;j+=5){ctx.beginPath();ctx.moveTo(0,cy(j));ctx.lineTo(W,cy(j));ctx.stroke();}
+  ctx.strokeStyle=ac;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(0,cy(0));ctx.lineTo(W,cy(0));ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx(0),0);ctx.lineTo(cx(0),H);ctx.stroke();
+  ctx.fillStyle=tc;ctx.font='11px DM Mono,monospace';
+  ctx.textAlign='center';
+  for(var i=1;i<=10;i++){ctx.fillText(i,cx(i),cy(0)+14);}
+  ctx.textAlign='right';
+  for(var j=-5;j<=15;j+=5){if(j)ctx.fillText(j,cx(0)-4,cy(j)+4);}
+  ctx.fillStyle=tc;ctx.textAlign='left';
+  ctx.fillText('x (Tsd. €)',W-70,cy(0)-6);
+  ctx.textAlign='center';ctx.fillText('G',cx(0)+7,13);
+  return {ctx:ctx,W:W,H:H,cx:cx,cy:cy,dark:dark,tc:tc};
+}
+function _g1(x){return -2*x*x+20*x-32;}
+function _drawCurve(ctx,W,H,xMin,xMax,cx,cy,fn,color,lw){
+  ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.beginPath();
+  var first=true;
+  for(var px=0;px<W;px++){
+    var xv=xMin+(px/W)*(xMax-xMin),py=cy(fn(xv));
+    if(py<-4||py>H+4){first=true;continue;}
+    if(first){ctx.moveTo(px,py);first=false;}else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+}
+
+// ── Canvas K1: G₁ + Scheitelpunkt + Symmetrieachse ─────────────────────────
+function drawK1(){
+  var s=_cv('cv-k1');if(!s)return;
+  var ctx=s.ctx,W=s.W,H=s.H,cx=s.cx,cy=s.cy,tc=s.tc,dark=s.dark;
+  var xMin=-0.5,xMax=10.5;
+  // symmetry axis
+  ctx.strokeStyle=dark?'#2a4060':'#aec8e0';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(cx(5),0);ctx.lineTo(cx(5),H);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#2a6496';ctx.font='11px DM Mono,monospace';
+  ctx.textAlign='center';ctx.fillText('x = 5',cx(5),H-6);
+  // curve
+  _drawCurve(ctx,W,H,xMin,xMax,cx,cy,_g1,'#2a6496',2.5);
+  // vertex S(5|18)
+  ctx.fillStyle='#c8400a';
+  ctx.beginPath();ctx.arc(cx(5),cy(18),6,0,2*Math.PI);ctx.fill();
+  ctx.font='700 11px DM Mono,monospace';ctx.textAlign='left';
+  ctx.fillText('S(5 | 18)',cx(5)+10,cy(18)+4);
+  ctx.fillStyle=tc;ctx.font='10px DM Mono,monospace';
+  ctx.fillText('← Maximum',cx(5)+10,cy(18)+17);
+}
+
+// ── Canvas K2: G₁ + Gewinnzone ─────────────────────────────────────────────
+function drawK2(){
+  var s=_cv('cv-k2');if(!s)return;
+  var ctx=s.ctx,W=s.W,H=s.H,cx=s.cx,cy=s.cy,dark=s.dark;
+  var xMin=-0.5,xMax=10.5;
+  // profit region fill
+  ctx.fillStyle=dark?'rgba(46,125,79,0.2)':'rgba(46,125,79,0.12)';
+  ctx.beginPath();ctx.moveTo(cx(2),cy(0));
+  for(var px=Math.round(cx(2));px<=Math.round(cx(8));px++){
+    var xv=xMin+(px/W)*(xMax-xMin);ctx.lineTo(px,cy(_g1(xv)));
+  }
+  ctx.lineTo(cx(8),cy(0));ctx.closePath();ctx.fill();
+  // curve
+  _drawCurve(ctx,W,H,xMin,xMax,cx,cy,_g1,'#2a6496',2.5);
+  // zeros
+  ctx.fillStyle='#2e7d4f';
+  ctx.beginPath();ctx.arc(cx(2),cy(0),6,0,2*Math.PI);ctx.fill();
+  ctx.beginPath();ctx.arc(cx(8),cy(0),6,0,2*Math.PI);ctx.fill();
+  ctx.font='700 11px DM Mono,monospace';
+  ctx.textAlign='center';
+  ctx.fillText('x₁=2',cx(2),cy(0)-11);
+  ctx.fillText('x₂=8',cx(8),cy(0)-11);
+  // label
+  ctx.fillStyle=dark?'#6ee7a0':'#2e7d4f';
+  ctx.font='700 12px DM Mono,monospace';ctx.textAlign='center';
+  ctx.fillText('Gewinn',cx(5),cy(8));
+  ctx.font='11px DM Mono,monospace';
+  ctx.fillText('G₁ > 0',cx(5),cy(8)+15);
+}
+
+// ── Canvas K4: G₁ + Ziellinie y=10 ────────────────────────────────────────
+function drawK4(){
+  var s=_cv('cv-k4');if(!s)return;
+  var ctx=s.ctx,W=s.W,H=s.H,cx=s.cx,cy=s.cy,dark=s.dark;
+  var xMin=-0.5,xMax=10.5;
+  // target region fill
+  ctx.fillStyle=dark?'rgba(139,92,246,0.18)':'rgba(139,92,246,0.1)';
+  ctx.beginPath();ctx.moveTo(cx(3),cy(10));
+  for(var px=Math.round(cx(3));px<=Math.round(cx(7));px++){
+    var xv=xMin+(px/W)*(xMax-xMin);ctx.lineTo(px,cy(_g1(xv)));
+  }
+  ctx.lineTo(cx(7),cy(10));ctx.closePath();ctx.fill();
+  // target line y=10
+  ctx.strokeStyle='#8b5cf6';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(0,cy(10));ctx.lineTo(W,cy(10));ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#8b5cf6';ctx.font='700 11px DM Mono,monospace';
+  ctx.textAlign='left';ctx.fillText('Zielgewinn: G₁ = 10',W-158,cy(10)-7);
+  // curve
+  _drawCurve(ctx,W,H,xMin,xMax,cx,cy,_g1,'#2a6496',2.5);
+  // intersection points
+  ctx.fillStyle='#8b5cf6';
+  ctx.beginPath();ctx.arc(cx(3),cy(10),5,0,2*Math.PI);ctx.fill();
+  ctx.beginPath();ctx.arc(cx(7),cy(10),5,0,2*Math.PI);ctx.fill();
+  ctx.font='700 11px DM Mono,monospace';ctx.textAlign='center';
+  ctx.fillText('(3|10)',cx(3),cy(10)-10);
+  ctx.fillText('(7|10)',cx(7),cy(10)-10);
+}
+
 // ── Canvas: G1 und G2 ──────────────────────────────────────────────────────
 function drawQF(){
   var cv=document.getElementById('cv53');
@@ -1374,7 +1508,7 @@ function drawQF(){
 }
 
 window.addEventListener('load',function(){
-  drawQF();
+  drawK1();drawK2();drawK4();drawQF();
   if(typeof renderMathInElement!=='undefined')
     renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
 });
