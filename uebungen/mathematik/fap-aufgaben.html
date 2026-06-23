@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAP Aufgabenbrowser – Mathematik FOS Nürnberg</title>
+<link rel="stylesheet" href="../../static/fonts.css">
+<link rel="stylesheet" href="../../static/theme.css">
+<link rel="stylesheet" href="../../static/katex/katex.min.css">
+<style>
+:root {
+  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de; --line:#d4cfc6;
+  --accent:#c8400a; --accent2:#2a6496; --gold:#c9961a;
+  --serif:'Playfair Display',Georgia,serif;
+  --mono:'DM Mono',monospace;
+  --sans:'Source Sans 3',sans-serif;
+  --sb-w:200px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;}
+button{font-family:inherit;cursor:pointer;background:none;border:none;padding:0;}
+
+/* Header */
+header{background:var(--ink);color:var(--paper);padding:1.8rem 1.5rem 1.4rem;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-50px;right:-60px;width:240px;height:240px;border-radius:50%;background:var(--accent);opacity:.1;}
+.hinner{max-width:1380px;margin:0 auto;position:relative;}
+.bc{font-family:var(--mono);font-size:.67rem;color:#666;display:flex;gap:.4rem;align-items:center;margin-bottom:.65rem;flex-wrap:wrap;}
+.bc a{color:#888;text-decoration:none;transition:color .15s;}
+.bc a:hover{color:var(--gold);}
+.bc span{color:#444;}
+.hrow{display:flex;align-items:flex-end;gap:1rem;flex-wrap:wrap;}
+.klass-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem;}
+header h1{font-family:var(--serif);font-size:clamp(1.4rem,3.5vw,2.2rem);font-weight:900;line-height:1.15;}
+header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
+
+/* Layout */
+#wrap{display:grid;grid-template-columns:var(--sb-w) 1fr;max-width:1380px;margin:0 auto;min-height:calc(100vh - 120px);}
+
+/* Sidebar */
+#sb{background:var(--cream);border-right:1px solid var(--line);padding:.7rem .6rem 3rem;overflow-y:auto;position:sticky;top:0;height:calc(100vh - 120px);}
+#q{width:100%;padding:.4rem .55rem;font-family:var(--mono);font-size:.76rem;background:var(--paper);border:1px solid var(--line);border-radius:2px;color:var(--ink);outline:none;margin-bottom:.8rem;}
+#q:focus{border-color:var(--accent);}
+#q::placeholder{color:#bbb;}
+
+.fs{margin-bottom:.4rem;border-top:1px solid var(--line);padding-top:.4rem;}
+.fsh{width:100%;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:#777;padding:.18rem .05rem .28rem;background:none;border:none;cursor:pointer;transition:color .15s;}
+.fsh:hover{color:var(--ink);}
+.fsarr{transition:transform .2s;display:inline-block;font-size:.9em;}
+.fsb{display:flex;flex-wrap:wrap;gap:.28rem;padding:.15rem .05rem .45rem;}
+.fsb.closed{display:none;}
+
+/* ─ Chips: ALL share the same base geometry ─ */
+.chip{
+  display:inline-flex; align-items:center;
+  height:20px; padding:0 7px;
+  font-family:var(--mono); font-size:.68rem; font-weight:500;
+  border-radius:3px; white-space:nowrap; line-height:1;
+  border:1px solid transparent; vertical-align:middle;
+}
+/* Badge colours */
+.ck11  {background:#e6f4ec;color:#1a5c35;border-color:#b8ddc8;}
+.ckmix {background:#fef5e3;color:#7a5800;border-color:#ecd888;}
+.ck12  {background:#fdeee8;color:#7a2200;border-color:#f0c0aa;}
+.ctyp  {background:var(--cream);color:var(--ink);border-color:var(--line);}
+/* Filter chips (interactive) */
+.cbtn{cursor:pointer;background:var(--paper);border-color:var(--line);color:#888;transition:background .12s,color .12s,border-color .12s;}
+.cbtn:hover{border-color:var(--ink);color:var(--ink);}
+.cbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+/* LP buttons: teal when active */
+.clp.on{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+/* Year buttons: gold when active */
+.cyr.on{background:var(--gold);color:#fff;border-color:var(--gold);}
+/* Typ filter: accent when active */
+.ctf.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* Topbar */
+#topbar{display:flex;align-items:center;justify-content:space-between;padding:.6rem .9rem;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:10;}
+#count{font-family:var(--mono);font-size:.74rem;color:#888;}
+.vbtns{display:flex;gap:.28rem;}
+.vbtn{font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;padding:.25rem .5rem;border:1px solid var(--line);border-radius:2px;color:#888;background:var(--paper);transition:background .12s,color .12s;}
+.vbtn:hover{border-color:var(--ink);color:var(--ink);}
+.vbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+/* Grid */
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:.75rem;padding:.85rem;}
+.card{background:#fff;border:1px solid var(--line);border-radius:2px;display:flex;flex-direction:column;position:relative;transition:box-shadow .18s;}
+.card:hover{box-shadow:0 3px 12px rgba(0,0,0,.08);}
+.card.sel{outline:2px solid var(--accent);outline-offset:1px;}
+[data-theme=dark] .card{background:#1e1b16;border-color:#2e2b26;}
+
+.ch{padding:.45rem .65rem .4rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid transparent;}
+.ch.ana{background:#eef4fb;border-color:#c0d8f0;}
+.ch.geo{background:#f0eaf8;border-color:#d4b8ee;}
+[data-theme=dark] .ch.ana{background:#0f1a28;border-color:#1a3050;}
+[data-theme=dark] .ch.geo{background:#180f28;border-color:#301850;}
+.ch-grp{font-family:var(--mono);font-size:.63rem;letter-spacing:.07em;color:#666;text-transform:uppercase;flex:1;}
+.ch-hm{font-family:var(--mono);font-size:.6rem;color:#aaa;background:rgba(0,0,0,.06);padding:.1rem .35rem;border-radius:2px;margin-right:.3rem;}
+.ch-yr{font-family:var(--mono);font-size:.72rem;font-weight:700;}
+
+.cc-wrap{display:inline-flex;align-items:center;margin-right:.3rem;flex-shrink:0;}
+.cc{width:14px;height:14px;cursor:pointer;accent-color:var(--accent);}
+
+.cb{padding:.55rem .65rem .45rem;flex:1;display:flex;flex-direction:column;gap:.38rem;}
+.ctitle{font-size:.81rem;font-weight:600;line-height:1.42;color:var(--ink);}
+.cchips{display:flex;flex-wrap:wrap;gap:.22rem;align-items:center;}
+.cbe-badge{font-family:var(--mono);font-size:.67rem;color:#aaa;margin-left:auto;}
+.ctags{display:flex;flex-wrap:wrap;gap:.15rem;}
+.ctag{font-family:var(--mono);font-size:.6rem;color:#bbb;}
+.ctag::before{content:'#';}
+.cf{display:flex;align-items:center;gap:.28rem;padding:.38rem .55rem;border-top:1px solid var(--line);background:var(--cream);}
+[data-theme=dark] .cf{background:#1a1710;}
+.bview{font-family:var(--mono);font-size:.67rem;padding:.22rem .45rem;border:1px solid var(--line);border-radius:2px;color:var(--ink);background:var(--paper);transition:background .12s,border-color .12s,color .12s;}
+.bview:hover{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.cf-be{font-family:var(--mono);font-size:.7rem;color:#aaa;margin-left:auto;}
+
+/* List View */
+#listview{padding:.85rem;}
+.lt{width:100%;border-collapse:collapse;font-size:.79rem;}
+.lt colgroup col:nth-child(1){width:30px;}
+.lt colgroup col:nth-child(2){width:52px;}
+.lt colgroup col:nth-child(3){width:44px;}
+.lt colgroup col:nth-child(4){width:auto;}
+.lt colgroup col:nth-child(5){width:160px;}
+.lt colgroup col:nth-child(6){width:88px;}
+.lt colgroup col:nth-child(7){width:38px;}
+.lt colgroup col:nth-child(8){width:80px;}
+.lt th{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.06em;color:#888;padding:.38rem .48rem;border-bottom:2px solid var(--line);text-align:left;white-space:nowrap;}
+.lt td{padding:.4rem .48rem;border-bottom:1px solid var(--line);vertical-align:middle;}
+.lt tr:hover td{background:var(--cream);}
+[data-theme=dark] .lt th,.lt td{border-color:#2a2620;}
+[data-theme=dark] .lt tr:hover td{background:#1a1710;}
+.lt-be{text-align:right;font-family:var(--mono);font-size:.7rem;color:#aaa;}
+.lt-act{display:flex;gap:.25rem;}
+.lt-chips{display:flex;flex-wrap:wrap;gap:.2rem;align-items:center;}
+.lcheck{accent-color:var(--accent);}
+.ltitle{font-size:.78rem;font-weight:500;line-height:1.35;}
+
+/* Selection Bar */
+#selbar{position:fixed;bottom:0;left:0;right:0;background:var(--ink);color:var(--paper);
+  display:none;align-items:center;gap:.8rem;padding:.58rem 1.2rem;z-index:300;
+  font-family:var(--mono);font-size:.78rem;flex-wrap:wrap;}
+#sel-info{color:var(--gold);font-weight:700;}
+#sel-be{color:#bbb;font-size:.74rem;}
+.sbtn{font-family:var(--mono);font-size:.7rem;padding:.26rem .6rem;border-radius:2px;border:1px solid;cursor:pointer;transition:background .12s,color .12s;}
+#sbprint{border-color:var(--gold);color:var(--gold);background:transparent;}
+#sbprint:hover{background:var(--gold);color:var(--ink);}
+#sbclear{border-color:#444;color:#888;background:transparent;}
+#sbclear:hover{background:#333;color:#fff;}
+
+/* Overlay */
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.84);z-index:500;display:none;flex-direction:column;}
+#ovh{background:var(--ink);padding:.45rem .9rem;display:flex;align-items:center;gap:.6rem;flex-shrink:0;border-bottom:1px solid #2a2a2a;}
+#ovclose{font-family:var(--mono);font-size:1rem;color:#666;transition:color .15s;width:26px;text-align:center;line-height:1;}
+#ovclose:hover{color:#fff;}
+#ovtitle{font-family:var(--mono);font-size:.76rem;color:#888;flex:1;}
+#ovnav{font-family:var(--mono);font-size:.72rem;color:#555;}
+#ovbody{display:flex;flex:1;overflow:hidden;}
+#ovimgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:.8rem 2.5rem;gap:.4rem;background:#0c0a07;}
+#ovimgs img{max-width:100%;border:1px solid #2a2a2a;}
+#ovprev,#ovnext{position:fixed;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:1.6rem;color:rgba(255,255,255,.3);background:rgba(0,0,0,.25);border:none;padding:.35rem .6rem;cursor:pointer;transition:color .15s,background .15s;z-index:510;border-radius:2px;}
+#ovprev{left:.3rem;}
+#ovnext{right:.3rem;}
+#ovprev:hover,#ovnext:hover{color:#fff;background:rgba(0,0,0,.55);}
+
+#ovpanel{width:270px;background:var(--ink);border-left:1px solid #222;padding:.9rem .8rem;overflow-y:auto;flex-shrink:0;}
+#ovpanel h3{font-family:var(--serif);font-size:.9rem;color:var(--paper);margin-bottom:.65rem;line-height:1.45;}
+.ovlbl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:.2rem;}
+.ovval{font-size:.78rem;color:#bbb;margin-bottom:.6rem;line-height:1.4;}
+.ovchips{display:flex;flex-wrap:wrap;gap:.22rem;margin-bottom:.6rem;}
+#ovtipps-head{width:100%;font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #2a2a2a;padding-top:.55rem;margin-top:.2rem;}
+#ovtipps-list{list-style:none;display:none;flex-direction:column;gap:.35rem;margin-top:.45rem;}
+#ovtipps-list.open{display:flex;}
+#ovtipps-list li{font-size:.75rem;color:#999;line-height:1.45;padding-left:.8rem;position:relative;}
+#ovtipps-list li::before{content:'→';position:absolute;left:0;color:var(--gold);}
+
+/* Empty State */
+#empty{display:none;padding:2.5rem 1rem;text-align:center;color:#aaa;font-family:var(--mono);font-size:.82rem;}
+
+/* Print */
+#printarea{display:none;}
+@media print{
+  body>*:not(#printarea){display:none!important;}
+  #selbar,#ov{display:none!important;}
+  #printarea{display:block;font-family:serif;}
+  .pa-item{page-break-inside:avoid;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1pt solid #ccc;}
+  .pa-tit{font-size:11pt;font-weight:bold;margin-bottom:.35rem;}
+  .pa-meta{font-size:9pt;color:#666;margin-bottom:.5rem;}
+  .pa-img{max-width:100%;display:block;}
+}
+
+/* Footer */
+.fnav{background:var(--ink);padding:.85rem 1.5rem;}
+.fnav-in{max-width:1380px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.backbtn{font-family:var(--mono);font-size:.73rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;transition:opacity .2s;}
+.backbtn:hover{opacity:.7;}
+
+@media(max-width:680px){
+  #wrap{grid-template-columns:1fr;}
+  #sb{height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);}
+  #ovpanel{display:none;}
+  #ovimgs{padding:.6rem 2rem;}
+}
+</style>
+<script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+</head>
+<body>
+
+<header>
+<div class="hinner">
+  <nav class="bc">
+    <a href="../../index.html">Lernportal</a><span>/</span>
+    <a href="../index.html">Übungen</a><span>/</span>
+    <a href="index.html">Mathematik</a><span>/</span>
+    <span>FAP Browser</span>
+  </nav>
+  <div class="hrow">
+    <div>
+      <div class="klass-tag">FAP · Mathematik Technik · FOS Nürnberg</div>
+      <h1>Prüfungsaufgaben Browser</h1>
+      <p>Fachabi 2022–2025 · Filter nach Typ, Lehrplan, Klasse · Mehrfachauswahl + Druckblatt</p>
+    </div>
+  </div>
+</div>
+</header>
+
+<div id="wrap">
+
+<!-- ── Sidebar ─────────────────────────────── -->
+<aside id="sb">
+  <input type="search" id="q" placeholder="Suche in Titeln &amp; Tags …" autocomplete="off">
+
+  <div class="fs">
+    <button class="fsh" onclick="togFs('fach')">Fach <span class="fsarr" id="ar-fach">▾</span></button>
+    <div class="fsb" id="fs-fach">
+      <button class="chip cbtn on" data-g="fach" data-v="" onclick="exclF(this,'fach')">Alle</button>
+      <button class="chip cbtn" data-g="fach" data-v="Analysis" onclick="exclF(this,'fach')">Analysis</button>
+      <button class="chip cbtn" data-g="fach" data-v="Geometrie" onclick="exclF(this,'fach')">Geometrie</button>
+    </div>
+  </div>
+
+  <div class="fs">
+    <button class="fsh" onclick="togFs('lp')">Lehrplan <span class="fsarr" id="ar-lp">▾</span></button>
+    <div class="fsb" id="fs-lp">
+      <button class="chip cbtn clp on" data-lp="alt" onclick="togLp(this)">Alt 17/18</button>
+      <button class="chip cbtn clp on" data-lp="neu" onclick="togLp(this)">Neu 26/27</button>
+    </div>
+  </div>
+
+  <div class="fs">
+    <button class="fsh" onclick="togFs('kl')">Klasse <span class="fsarr" id="ar-kl">▾</span></button>
+    <div class="fsb" id="fs-kl">
+      <button class="chip cbtn on" data-g="kl" data-v="" onclick="exclF(this,'kl')">Alle</button>
+      <button class="chip cbtn" data-g="kl" data-v="11" onclick="exclF(this,'kl')">Kl. 11</button>
+      <button class="chip cbtn" data-g="kl" data-v="11+12" onclick="exclF(this,'kl')">Kl. 11/12</button>
+      <button class="chip cbtn" data-g="kl" data-v="12" onclick="exclF(this,'kl')">Kl. 12</button>
+    </div>
+  </div>
+
+  <div class="fs">
+    <button class="fsh" onclick="togFs('jahr')">Jahr <span class="fsarr" id="ar-jahr">▾</span></button>
+    <div class="fsb" id="fs-jahr"></div>
+  </div>
+
+  <div class="fs">
+    <button class="fsh" onclick="togFs('teil')">Prüfungsteil <span class="fsarr" id="ar-teil">▾</span></button>
+    <div class="fsb" id="fs-teil">
+      <button class="chip cbtn on" data-g="teil" data-v="" onclick="exclF(this,'teil')">Alle</button>
+      <button class="chip cbtn" data-g="teil" data-v="1" onclick="exclF(this,'teil')" title="ohne Hilfsmittel">T1 – oHiMi</button>
+      <button class="chip cbtn" data-g="teil" data-v="2" onclick="exclF(this,'teil')" title="mit Hilfsmittel">T2 – miHiMi</button>
+    </div>
+  </div>
+
+  <div class="fs">
+    <button class="fsh" onclick="togFs('typ')">Aufgabentyp <span class="fsarr" id="ar-typ">▾</span></button>
+    <div class="fsb" id="fs-typ"></div>
+  </div>
+
+  <div style="padding:.65rem .05rem 0;border-top:1px solid var(--line);margin-top:.3rem;">
+    <button onclick="resetAll()" style="font-family:var(--mono);font-size:.68rem;color:#999;text-decoration:underline;cursor:pointer;">Filter zurücksetzen</button>
+  </div>
+</aside>
+
+<!-- ── Main ─────────────────────────────────── -->
+<div id="maincol">
+  <div id="topbar">
+    <span id="count"></span>
+    <div class="vbtns">
+      <button class="vbtn on" id="bgrid" onclick="setView('grid')">⊞ Kacheln</button>
+      <button class="vbtn" id="blist" onclick="setView('list')">☰ Liste</button>
+    </div>
+  </div>
+  <div id="grid"></div>
+  <div id="listview" style="display:none">
+    <table class="lt">
+      <colgroup><col><col><col><col><col><col><col><col></colgroup>
+      <thead><tr>
+        <th></th><th>Jahr</th><th>Teil</th><th>Titel</th>
+        <th>Typen</th><th>Klasse</th><th style="text-align:right">BE</th><th></th>
+      </tr></thead>
+      <tbody id="lbody"></tbody>
+    </table>
+  </div>
+  <div id="empty">Keine Aufgaben gefunden – Filter anpassen?</div>
+</div>
+</div><!-- #wrap -->
+
+<!-- ── Selection Bar ─────────────────────────── -->
+<div id="selbar">
+  <span id="sel-info"></span>
+  <span id="sel-be"></span>
+  <button class="sbtn" id="sbprint" onclick="doPrint()">🖨 Druckblatt</button>
+  <button class="sbtn" id="sbclear" onclick="clearSel()">× Auswahl leeren</button>
+</div>
+
+<!-- ── Fullscreen Overlay ────────────────────── -->
+<div id="ov" role="dialog" aria-modal="true">
+  <div id="ovh">
+    <button id="ovclose" onclick="closeOv()" title="Schließen (ESC)">✕</button>
+    <span id="ovtitle"></span>
+    <span id="ovnav"></span>
+  </div>
+  <div id="ovbody">
+    <button id="ovprev" onclick="ovNav(-1)">‹</button>
+    <div id="ovimgs"></div>
+    <button id="ovnext" onclick="ovNav(1)">›</button>
+    <div id="ovpanel">
+      <h3 id="ovptitle"></h3>
+      <div class="ovlbl">Klasse Alt 17/18 · Neu 26/27</div>
+      <div class="ovval" id="ovkl"></div>
+      <div class="ovlbl">Aufgabentypen</div>
+      <div class="ovchips" id="ovtypen"></div>
+      <div class="ovlbl">AFB · Bewertungseinheiten</div>
+      <div class="ovval" id="ovafbbe"></div>
+      <div class="ovlbl">Lehrplan-Hinweis</div>
+      <div class="ovval" id="ovhint" style="font-size:.73rem;color:#888;"></div>
+      <button id="ovtipps-head" onclick="togOvTipps()">
+        <span>💡 Tipps</span><span id="ovtarr">▾</span>
+      </button>
+      <ul id="ovtipps-list"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── Print Area ─────────────────────────────── -->
+<div id="printarea"></div>
+
+<footer class="fnav">
+  <div class="fnav-in">
+    <a class="backbtn" href="index.html">← Mathematik</a>
+    <a class="backbtn" href="../../index.html" style="font-size:.65rem;color:#555;">Lernportal ↗</a>
+  </div>
+</footer>
+
+<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
+<script>
+(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
+</script>
+
+<script defer src="../../static/katex/katex.min.js"></script>
+<script defer src="../../static/katex/contrib/auto-render.min.js" onload="katexReady=true;renderAll();"></script>
+<script src="fap-data.js"></script>
+<script>
+// ── State ──────────────────────────────────────────────
+const F = {fach:'', kl:'', teil:'', jahre:new Set(), typen:new Set(), q:'', lp:{alt:true,neu:true}};
+const SEL = new Set();
+let VIEW='grid', ovTask=null, ovIdx=0, katexReady=false;
+
+const D = window.FAP_DATA, T = D.tasks;
+const allTypen = [...D.typenAnalysis, ...D.typenGeometrie];
+
+function KaTeX(el) {
+  if(katexReady && window.renderMathInElement)
+    renderMathInElement(el,{delimiters:[{left:'$',right:'$',display:false},{left:'$$',right:'$$',display:true}],throwOnError:false});
+}
+
+// ── Init ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  buildYearChips();
+  buildTypChips();
+  renderAll();
+  document.getElementById('q').addEventListener('input',e=>{F.q=e.target.value.toLowerCase();renderAll();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOv();});
+});
+
+function buildYearChips() {
+  const yrs=[...new Set(T.map(t=>t.year))].sort((a,b)=>b-a);
+  const el=document.getElementById('fs-jahr');
+  yrs.forEach(y=>el.insertAdjacentHTML('beforeend',
+    `<button class="chip cbtn cyr" data-yr="${y}" onclick="togYr(this)">${y}</button>`));
+}
+
+function buildTypChips() {
+  const el=document.getElementById('fs-typ');
+  const list=F.fach==='Analysis'?D.typenAnalysis:F.fach==='Geometrie'?D.typenGeometrie:allTypen;
+  el.innerHTML='';
+  list.forEach(tp=>{
+    const on=F.typen.has(tp.id)?' on':'';
+    el.insertAdjacentHTML('beforeend',
+      `<button class="chip cbtn ctf${on}" data-tid="${tp.id}" onclick="togTyp(this)" title="${tp.desc}">${tp.id} – ${tp.short}</button>`);
+  });
+}
+
+// ── Filter Actions ──────────────────────────────────────
+function exclF(btn,g) {
+  document.querySelectorAll(`[data-g="${g}"]`).forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(g==='fach'){F.fach=btn.dataset.v;F.typen.clear();buildTypChips();}
+  if(g==='kl') F.kl=btn.dataset.v;
+  if(g==='teil')F.teil=btn.dataset.v;
+  renderAll();
+}
+function togLp(btn) {
+  const lp=btn.dataset.lp,other=lp==='alt'?'neu':'alt';
+  if(btn.classList.contains('on')&&!F.lp[other])return;
+  btn.classList.toggle('on');F.lp[lp]=btn.classList.contains('on');
+  renderAll();
+}
+function togYr(btn){
+  const y=parseInt(btn.dataset.yr);btn.classList.toggle('on');
+  if(btn.classList.contains('on'))F.jahre.add(y);else F.jahre.delete(y);
+  renderAll();
+}
+function togTyp(btn){
+  const id=btn.dataset.tid;btn.classList.toggle('on');
+  if(btn.classList.contains('on'))F.typen.add(id);else F.typen.delete(id);
+  renderAll();
+}
+function togFs(id){
+  const b=document.getElementById('fs-'+id),a=document.getElementById('ar-'+id);
+  b.classList.toggle('closed');a.style.transform=b.classList.contains('closed')?'rotate(-90deg)':'';
+}
+function resetAll(){
+  F.fach='';F.kl='';F.teil='';F.jahre.clear();F.typen.clear();F.q='';F.lp={alt:true,neu:true};
+  document.getElementById('q').value='';
+  document.querySelectorAll('[data-g]').forEach(b=>{b.classList.remove('on');if(!b.dataset.v)b.classList.add('on');});
+  document.querySelectorAll('[data-lp]').forEach(b=>b.classList.add('on'));
+  document.querySelectorAll('[data-yr]').forEach(b=>b.classList.remove('on'));
+  buildTypChips();renderAll();
+}
+
+// ── Derived klasse ──────────────────────────────────────
+function effKl(t){
+  if(F.lp.alt&&F.lp.neu){
+    const v=[t.klasse.alt,t.klasse.neu];
+    if(v.includes('12'))return'12';
+    if(v.includes('11+12'))return'11+12';
+    return'11';
+  }
+  return F.lp.alt?t.klasse.alt:t.klasse.neu;
+}
+function klCls(kl){return kl==='11'?'ck11':kl==='12'?'ck12':'ckmix';}
+function klLbl(kl){return kl==='11'?'Kl. 11':kl==='12'?'Kl. 12':'Kl. 11/12';}
+function typDesc(id){return allTypen.find(t=>t.id===id)?.desc||'';}
+function typShort(id){return allTypen.find(t=>t.id===id)?.short||id;}
+function typLabel(id){return allTypen.find(t=>t.id===id)?.label||id;}
+
+// ── Filter ──────────────────────────────────────────────
+function matches(t){
+  if(F.fach&&t.fach!==F.fach)return false;
+  if(F.teil&&String(t.teil)!==F.teil)return false;
+  if(F.jahre.size>0&&!F.jahre.has(t.year))return false;
+  if(F.typen.size>0&&!t.typen.some(tp=>F.typen.has(tp)))return false;
+  if(F.kl&&effKl(t)!==F.kl)return false;
+  if(F.q){const h=(t.titel+' '+(t.tags||[]).join(' ')+' '+t.gruppe+' '+t.year).toLowerCase();if(!h.includes(F.q))return false;}
+  return true;
+}
+
+// ── Render ──────────────────────────────────────────────
+function renderAll(){
+  const vis=T.filter(matches);
+  document.getElementById('count').textContent=`${vis.length} von ${T.length} Aufgaben`;
+  document.getElementById('empty').style.display=vis.length===0?'block':'none';
+  if(VIEW==='grid')renderGrid(vis);else renderList(vis);
+  updSelBar();
+}
+
+function renderGrid(tasks){
+  const el=document.getElementById('grid');el.innerHTML='';
+  tasks.forEach(t=>{
+    const kl=effKl(t),kcl=klCls(kl),klbl=klLbl(kl);
+    const hcl=t.fach==='Analysis'?'ana':'geo';
+    const tChips=t.typen.slice(0,3).map(tp=>`<span class="chip ctyp" title="${typDesc(tp)}">${tp} – ${typShort(tp)}</span>`).join('');
+    const tags=(t.tags||[]).slice(0,4).map(tg=>`<span class="ctag">${tg}</span>`).join('');
+    const hasTipps=t.tipps&&t.tipps.length>0;
+    const selCls=SEL.has(t.id)?' sel':'';
+    const hiMi=t.teil===1?'oHiMi':'miHiMi';
+    el.insertAdjacentHTML('beforeend',`
+<div class="card${selCls}" id="c-${t.id}">
+  <div class="ch ${hcl}">
+    <label class="cc-wrap" title="Auswählen"><input type="checkbox" class="cc" ${SEL.has(t.id)?'checked':''} onchange="togSel('${t.id}',this.checked)"></label>
+    <span class="ch-grp">${t.gruppe}</span>
+    <span class="ch-hm">${hiMi}</span>
+    <span class="ch-yr">${t.year}</span>
+  </div>
+  <div class="cb">
+    <div class="ctitle">${t.titel}</div>
+    <div class="cchips">
+      <span class="chip ${kcl}">${klbl}</span>${tChips}
+      <span class="cbe-badge">${t.be} BE</span>
+    </div>
+    ${tags?`<div class="ctags">${tags}</div>`:''}
+  </div>
+  <div class="cf">
+    <button class="bview" onclick="openOv('${t.id}')">⤢ Aufgabe ansehen</button>
+    <span class="cf-be">${t.be} BE</span>
+  </div>
+</div>`);
+  });
+  KaTeX(el);
+}
+
+function renderList(tasks){
+  const body=document.getElementById('lbody');body.innerHTML='';
+  tasks.forEach(t=>{
+    const kl=effKl(t),kcl=klCls(kl),klbl=klLbl(kl);
+    const tChips=t.typen.map(tp=>`<span class="chip ctyp" title="${typDesc(tp)}">${tp} – ${typShort(tp)}</span>`).join('');
+    const hiMi=t.teil===1?'oHiMi':'miHiMi';
+    body.insertAdjacentHTML('beforeend',`
+<tr>
+  <td><input type="checkbox" class="lcheck" ${SEL.has(t.id)?'checked':''} onchange="togSel('${t.id}',this.checked)"></td>
+  <td style="font-family:var(--mono);font-size:.7rem">${t.year}</td>
+  <td style="font-family:var(--mono);font-size:.65rem;text-align:center;white-space:nowrap" title="${t.teil===1?'ohne Hilfsmittel':'mit Hilfsmittel'}">T${t.teil}<br><span style="color:#aaa">${hiMi}</span></td>
+  <td class="ltitle">${t.titel}</td>
+  <td class="lt-chips">${tChips}</td>
+  <td><span class="chip ${kcl}">${klbl}</span></td>
+  <td class="lt-be">${t.be}</td>
+  <td class="lt-act"><button class="bview" onclick="openOv('${t.id}')">⤢</button></td>
+</tr>`);
+  });
+  KaTeX(document.getElementById('lbody'));
+}
+
+// ── View ────────────────────────────────────────────────
+function setView(v){
+  VIEW=v;
+  document.getElementById('grid').style.display=v==='grid'?'grid':'none';
+  document.getElementById('listview').style.display=v==='list'?'block':'none';
+  document.getElementById('bgrid').classList.toggle('on',v==='grid');
+  document.getElementById('blist').classList.toggle('on',v==='list');
+  renderAll();
+}
+
+// ── Selection ───────────────────────────────────────────
+function togSel(id,checked){
+  if(checked)SEL.add(id);else SEL.delete(id);
+  document.querySelectorAll(`input[onchange*="'${id}'"]`).forEach(cb=>cb.checked=checked);
+  const c=document.getElementById('c-'+id);
+  if(c)c.classList.toggle('sel',checked);
+  updSelBar();
+}
+function clearSel(){
+  [...SEL].forEach(id=>togSel(id,false));
+}
+function updSelBar(){
+  const bar=document.getElementById('selbar'),n=SEL.size;
+  if(n===0){bar.style.display='none';return;}
+  const be=[...SEL].reduce((s,id)=>{const t=T.find(x=>x.id===id);return s+(t?.be||0);},0);
+  bar.style.display='flex';
+  document.getElementById('sel-info').textContent=`${n} Aufgabe${n!==1?'n':''} ausgewählt`;
+  document.getElementById('sel-be').textContent=`${be} BE`;
+}
+
+// ── Print ───────────────────────────────────────────────
+function doPrint(){
+  const pa=document.getElementById('printarea');pa.innerHTML='';
+  [...SEL].forEach(id=>{
+    const t=T.find(x=>x.id===id);if(!t)return;
+    const imgs=t.imgs.map(src=>`<img class="pa-img" src="${src}" alt="">`).join('');
+    pa.insertAdjacentHTML('beforeend',`<div class="pa-item"><div class="pa-tit">${t.titel}</div><div class="pa-meta">${t.gruppe} · ${t.year} · ${t.be} BE</div>${imgs}</div>`);
+  });
+  window.print();
+}
+
+// ── Overlay ─────────────────────────────────────────────
+function openOv(id){
+  ovTask=T.find(t=>t.id===id);if(!ovTask)return;
+  ovIdx=0;
+  document.getElementById('ov').style.display='flex';
+  document.body.style.overflow='hidden';
+  fillOv();
+}
+function fillOv(){
+  const t=ovTask;
+  const area=document.getElementById('ovimgs');area.innerHTML='';
+  t.imgs.forEach((src,i)=>{
+    const img=document.createElement('img');img.src=src;img.alt=t.titel;
+    img.style.display=i===ovIdx?'block':'none';area.appendChild(img);
+  });
+  const multi=t.imgs.length>1;
+  document.getElementById('ovprev').style.display=multi?'':'none';
+  document.getElementById('ovnext').style.display=multi?'':'none';
+  document.getElementById('ovnav').textContent=multi?`Bild ${ovIdx+1}/${t.imgs.length}`:'';
+  document.getElementById('ovtitle').textContent=`${t.gruppe} · ${t.year}`;
+  document.getElementById('ovkl').textContent=`Alt: Kl. ${t.klasse.alt} · Neu: Kl. ${t.klasse.neu}`;
+  document.getElementById('ovtypen').innerHTML=t.typen.map(tp=>
+    `<span class="chip ctyp" title="${typDesc(tp)}">${tp} – ${typLabel(tp)}</span>`).join('');
+  document.getElementById('ovafbbe').textContent=`AFB ${t.afb.join('+')} · ${t.be} BE`;
+  document.getElementById('ovhint').textContent=t.k_hinweis||'';
+  document.getElementById('ovtipps-list').innerHTML=(t.tipps||[]).map(s=>`<li>${s}</li>`).join('');
+  document.getElementById('ovtipps-list').classList.remove('open');
+  document.getElementById('ovtarr').textContent='▾';
+  // Set title via textContent first, then re-render with KaTeX
+  document.getElementById('ovptitle').textContent=t.titel;
+  KaTeX(document.getElementById('ovpanel'));
+}
+function ovNav(d){
+  const imgs=ovTask.imgs;ovIdx=(ovIdx+d+imgs.length)%imgs.length;
+  document.querySelectorAll('#ovimgs img').forEach((img,i)=>img.style.display=i===ovIdx?'block':'none');
+  document.getElementById('ovnav').textContent=imgs.length>1?`Bild ${ovIdx+1}/${imgs.length}`:'';
+}
+function closeOv(){document.getElementById('ov').style.display='none';document.body.style.overflow='';}
+function togOvTipps(){
+  const el=document.getElementById('ovtipps-list');el.classList.toggle('open');
+  document.getElementById('ovtarr').textContent=el.classList.contains('open')?'▴':'▾';
+}
+</script>
+</body>
+</html>
