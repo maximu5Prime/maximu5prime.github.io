@@ -608,6 +608,636 @@ window.FAP_DATA = {
         "Dachneigungswinkel: $\\cos\\alpha=\\dfrac{|\\vec{n}_D\\cdot\\vec{n}_{Boden}|}{|\\vec{n}_D|\\cdot 1}$.",
         "Schnittgerade $Z\\cap G$: LGS aus beiden Ebenengleichungen, Parameter wählen."
       ]
-    }
+    },
+
+    // ── FABI 2013–2021 ──────────────────────────────────────────────────
+    {
+      id: "2013_T2_AI",
+      year: 2013, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "Für den Flächeninhalt A (in m ) der Fläche, die Algen an der Oberfläche eines 50 m2 großen Klärbeckens …",
+      typen: ["TG", "PB", "IN", "EF"],
+      afb: [1, 2, 3], be: 25,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis I. Seiten 2–3.",
+      tags: ["Angeben", "Aufstellen", "Berechnen", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2013_T2_AI_1.png", "fap-aufgaben/2013_T2_AI_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Bestimmen Sie den Parameterwert a so, dass die zugehörige Funktion fa eine stetig behebbare Definitionslücke besitzt. St.",
+        "Berechnen Sie die Parameterwerte a so, dass der Graph Ga genau zwei Punkte mit waagrechter Tangente besitzt. [."
+      ]
+    },
+    {
+      id: "2013_T2_AII",
+      year: 2013, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "Die Geschwindigkeit v (in —) eines Fallschirmspringers bei ungeöffnetem Fall- s t e3-l schirm kann …",
+      typen: ["KD", "IN", "EF", "GL"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis II. Seiten 4–5.",
+      tags: ["Angeben", "Begruenden", "Berechnen", "Beschreiben", "Erlaeutern"],
+      imgs: ["fap-aufgaben/2013_T2_AII_1.png", "fap-aufgaben/2013_T2_AII_2.png"],
+      tipps: [
+        "Integral: Stammfunktion $F(x)$ bilden, $[F(x)]_a^b = F(b)-F(a)$ auswerten.",
+        "Berechnen Sie die Nullstelle von f und untersuchen Sie das Verhalten der Funktionswerte f(x) an den Rändern der Definiti.",
+        "Untersuchen Sie das Krümmungsverhalten des Graphen von f und berechnen Sie die exakten Koordinaten des Wendepu."
+      ]
+    },
+    {
+      id: "2013_T2_GI",
+      year: 2013, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie",
+      titel: "Bestimmen Sie eine Gleichung der Ebene F in Koordinatenform, auf der alle Punkte C^ m liegen. [ …",
+      typen: ["GE", "LB", "AB", "SW", "KO"],
+      afb: [2], be: 50,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Geometrie. Seiten 6–7.",
+      tags: ["Aufstellen", "Berechnen", "Beschreiben", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2013_T2_GI_1.png", "fap-aufgaben/2013_T2_GI_2.png"],
+      tipps: [
+        "Abstand Punkt–Ebene: $d = \\frac{|ax_1+bx_2+cx_3-d|}{|\\vec{n}|}$ (Hessische Normalform).",
+        "Bestimmen Sie eine Gleichung der Ebene F in Koordinatenform, auf der alle Punkte C^ m liegen. [ Mögliches Ergebnis: F: x.",
+        "Die Ebene F schneidet die X] -Achse im Punkt Sj und die x 2 -Achse im Punkt S 2 . Diese Punkte bilden mit dem ."
+      ]
+    },
+    {
+      id: "2014_T2_AI",
+      year: 2014, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "In einem Fluss nimmt das Wasser beim Fließen Sauerstoff aus der Luft auf. Außer- dem wird im Wasser …",
+      typen: ["KD", "IN", "EF", "GL"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis I. Seiten 2–3.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Markieren", "Zeichnen"],
+      imgs: ["fap-aufgaben/2014_T2_AI_1.png", "fap-aufgaben/2014_T2_AI_2.png"],
+      tipps: [
+        "Integral: Stammfunktion $F(x)$ bilden, $[F(x)]_a^b = F(b)-F(a)$ auswerten.",
+        "Zeigen Sie, dass gilt: Df =IR\\ {-2;2}.",
+        "Zeigen Sie, dass Gr punktsymmetrisch zum Ursprung verläuft."
+      ]
+    },
+    {
+      id: "2014_T2_AII",
+      year: 2014, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "Der Verlauf einer Hochspannungsleitung Q y zwischen den Punkten Q und R wird für x E [ -11 0; 11 0] …",
+      typen: ["KD", "TG", "IN", "EF"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis II. Seiten 4–5.",
+      tags: ["Angeben", "Begruenden", "Berechnen", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2014_T2_AII_1.png", "fap-aufgaben/2014_T2_AII_2.png"],
+      tipps: [
+        "Integral: Stammfunktion $F(x)$ bilden, $[F(x)]_a^b = F(b)-F(a)$ auswerten.",
+        "Zeigen Sie, dass gilt: fa (x) = (x + a) · (x -a). x·(x+1-a).",
+        "Bestimmen Sie Lage und Alt der Definitionslücken von fa in Abhängigkeit von a."
+      ]
+    },
+    {
+      id: "2014_T2_GI",
+      year: 2014, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie I",
+      titel: "Ein Fluglotse beobachtet zwei Flugzeuge gleichzeitig, deren jeweilige Positionen F 1 bzw. F2 sich in …",
+      typen: ["GE", "LB", "AB", "KO"],
+      afb: [2], be: 50,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Geometrie I. Seiten 6–7.",
+      tags: ["Bestimmen", "Ermitteln", "Nachweisen", "Zeigen"],
+      imgs: ["fap-aufgaben/2014_T2_GI.png"],
+      tipps: [
+        "Abstand Punkt–Ebene: $d = \\frac{|ax_1+bx_2+cx_3-d|}{|\\vec{n}|}$ (Hessische Normalform).",
+        "Ermitteln Sie eine Gleichung der Schnittgeraden s der Ebenen E und F. [ Mögliches Ergebnis: s: X~ [ n+ A. { ;i} A. e IR .",
+        "Bestimmen Sie alle Werte von k, für die die drei Ebenen E, Fund Gk jeweils keinen gemeinsamen Punkt haben."
+      ]
+    },
+    {
+      id: "2014_T2_GII",
+      year: 2014, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie II",
+      titel: "Die Ebene E schneidet die Koordinatenachsen in den Punkten X, Y und Z. Bestim- men Sie das Volumen der …",
+      typen: ["VL", "GE", "LB", "SW", "KO"],
+      afb: [2], be: 25,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Geometrie II. Seiten 6–7.",
+      tags: ["Berechnen", "Bestimmen", "Untersuchen"],
+      imgs: ["fap-aufgaben/2014_T2_GII.png"],
+      tipps: [
+        "Schnittwinkel: $\\cos\\varphi = \\frac{|\\vec{n}_1\\cdot\\vec{n}_2|}{|\\vec{n}_1|\\cdot|\\vec{n}_2|}$.",
+        "Die Ebene E schneidet die Koordinatenachsen in den Punkten X, Y und Z. Bestim- men Sie das Volumen der Pyramide OXYZ.",
+        "Berechnen Sie den Wert des Parameters k so, dass der Flächeninhalt F(k) des Drei- ecks ABkC minimal wird. Hinw."
+      ]
+    },
+    {
+      id: "2015_T2_AI",
+      year: 2015, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "Gegeben sind nun die reellen Funktionen g mit g : x  ln  2 +  und f mit  3 f : x  g(x) − g(− x) …",
+      typen: ["KD", "PB", "IN", "EF"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis I. Seiten 2–3.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Ermitteln", "Nachweisen"],
+      imgs: ["fap-aufgaben/2015_T2_AI_1.png", "fap-aufgaben/2015_T2_AI_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Bestimmen Sie das Verhalten von g / (x) an den Rändern der Definitionsmenge.",
+        "Geben Sie mit Hilfe der Ergebnisse aus 1.1. und 1.2 für jeden der abgebildeten Graphen G1 , G 2 und G 3 eine k."
+      ]
+    },
+    {
+      id: "2015_T2_AII",
+      year: 2015, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "Gegeben ist die reelle Funktion g : x  ln ( f (x) ) mit der Funktion f aus 1.4.0 und der maximalen …",
+      typen: ["KD", "IN", "EF"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis II. Seiten 4–5.",
+      tags: ["Angeben", "Begruenden", "Berechnen", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2015_T2_AII_1.png", "fap-aufgaben/2015_T2_AII_2.png"],
+      tipps: [
+        "Kurvendiskussion: $f'(x)$ berechnen, Extrempunkte bei $f'(x_0)=0$ mit $f''(x_0)\\neq 0$.",
+        "Geben Sie die maximale Definitionsmenge Dfa an und bestimmen Sie die Art der Definitionslücke von f a in Abhängigkeit vo.",
+        "Ermitteln Sie für a > 0 die Art und die Abszisse aller relativen Extrempunkte des Graphen von f a . / x 2 − 4x."
+      ]
+    },
+    {
+      id: "2015_T2_GI",
+      year: 2015, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie I",
+      titel: "Beim Bau einer neuen Zahnradbahn ist ein Bergmassiv zu untertunneln (siehe Schnittskizze – nicht …",
+      typen: ["GE", "LB", "SW"],
+      afb: [2], be: 50,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Geometrie I. Seiten 6–7.",
+      tags: ["Aufstellen", "Ermitteln", "Nachweisen", "Untersuchen"],
+      imgs: ["fap-aufgaben/2015_T2_GI_1.png", "fap-aufgaben/2015_T2_GI_2.png"],
+      tipps: [
+        "Schnittwinkel: $\\cos\\varphi = \\frac{|\\vec{n}_1\\cdot\\vec{n}_2|}{|\\vec{n}_1|\\cdot|\\vec{n}_2|}$.",
+        "Stellen Sie eine Gleichung der Ebene F in Koordinatenform auf. [ Mögliches Teilergebnis: F : x1 + 2x 3 − 1 =0 ].",
+        "Untersuchen Sie, ob sich die Ebenen E a und F senkrecht schneiden können, und für welchen Wert von a die Ebene."
+      ]
+    },
+    {
+      id: "2016_T2_AI",
+      year: 2016, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "Seit Beginn des 20. Jahrhunderts führt der vom Menschen verursachte zusätzliche Ausstoß von …",
+      typen: ["KD", "TG", "PB", "IN", "EF", "GL"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis I. Seiten 2–3.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Ermitteln", "Untersuchen"],
+      imgs: ["fap-aufgaben/2016_T2_AI_1.png", "fap-aufgaben/2016_T2_AI_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Bestimmen Sie in Abhängigkeit von a die Anzahl der Nullstellen von fa .",
+        "Seit Beginn des 20. Jahrhunderts führt der vom Menschen verursachte zusätzliche Ausstoß von Kohlenstoffdioxid ."
+      ]
+    },
+    {
+      id: "2016_T2_AII",
+      year: 2016, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "In einer Box werden Mehlwürmer als Futter für Schildkröten gezüchtet. Der Bestand der Mehlwürmer in …",
+      typen: ["KD", "TG", "PB", "IN", "EF", "GL"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis II. Seiten 4–5.",
+      tags: ["Angeben", "Berechnen", "Beschreiben", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2016_T2_AII_1.png", "fap-aufgaben/2016_T2_AII_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Bestimmen Sie die maximale Definitionsmenge Df . Geben Sie die Definitionslücke von f und ihre Art genau an.",
+        "Bestimmen Sie die maximalen Monotonieintervalle von f und ermitteln Sie mithilfe dieser Monotonieintervalle di."
+      ]
+    },
+    {
+      id: "2016_T2_GI",
+      year: 2016, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie I",
+      titel: "Bestimmen Sie eine Gleichung der Ebene E in Normalenform.",
+      typen: ["VL", "GE", "AB", "KO"],
+      afb: [2], be: 50,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Geometrie I. Seiten 6–7.",
+      tags: ["Berechnen", "Bestimmen", "Ermitteln", "Untersuchen"],
+      imgs: ["fap-aufgaben/2016_T2_GI_1.png", "fap-aufgaben/2016_T2_GI_2.png"],
+      tipps: [
+        "Abstand Punkt–Ebene: $d = \\frac{|ax_1+bx_2+cx_3-d|}{|\\vec{n}|}$ (Hessische Normalform).",
+        "Bestimmen Sie eine Gleichung der Ebene E in Normalenform.",
+        "Die Gerade g geht durch den Punkt A und schneidet die Ebene E im Punkt Pa. Ermitteln Sie eine Gleichung von g."
+      ]
+    },
+    {
+      id: "2017_T2_AI",
+      year: 2017, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "Gegeben sind nun die reellen Funktionen fa : x   4 in der vom 1  0,25  x 2 Parameter a  IR …",
+      typen: ["TG", "PB", "IN", "EF", "GL"],
+      afb: [1, 2, 3], be: 25,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis I. Seiten 2–3.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Ermitteln", "Markieren"],
+      imgs: ["fap-aufgaben/2017_T2_AI_1.png", "fap-aufgaben/2017_T2_AI_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Ermitteln Sie das Verhalten der Funktionswerte f(x) an den Rändern der Definitionsmenge und geben Sie Art und Gleichung .",
+        "Bestimmen Sie die maximalen Krümmungsintervalle von Gf . x2  4 [ Mögliches Teilergebnis: f / (x)  ]   1  ."
+      ]
+    },
+    {
+      id: "2017_T2_AII",
+      year: 2017, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "Unter der Tageslänge versteht man die Dauer von Sonnenaufgang bis Sonnenuntergang. Sie ist von der …",
+      typen: ["KD", "TG", "PB", "IN", "EF", "GL"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis II. Seiten 4–5.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Ermitteln", "Untersuchen"],
+      imgs: ["fap-aufgaben/2017_T2_AII_1.png", "fap-aufgaben/2017_T2_AII_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Bestimmen Sie das Verhalten der Funktionswerte von f für x  ¥ . Geben Sie Art und Gleichung der Asymptote des Graphen v.",
+        "Untersuchen Sie das Monotonieverhalten der Funktion f und ermitteln Sie damit Koordinaten und Art des Extrempu."
+      ]
+    },
+    {
+      id: "2017_T2_GI",
+      year: 2017, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie I",
+      titel: "Im IR 3 sind die Geraden gq und h gegeben:  0  3q  1   1 1 gq : x   1   λ   2q  mit q, …",
+      typen: ["VL", "GE", "LB", "AB", "SW"],
+      afb: [2], be: 50,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Geometrie I. Seiten 6–7.",
+      tags: ["Berechnen", "Bestimmen", "Ermitteln", "Untersuchen"],
+      imgs: ["fap-aufgaben/2017_T2_GI_1.png", "fap-aufgaben/2017_T2_GI_2.png"],
+      tipps: [
+        "Abstand Punkt–Ebene: $d = \\frac{|ax_1+bx_2+cx_3-d|}{|\\vec{n}|}$ (Hessische Normalform).",
+        "Bestimmen Sie den Wert des Parameters p, für den die Vektoren a, b und cp eine Basis des IR 3 bilden.    .",
+        "Im IR 3 sind die Geraden gq und h gegeben:  0  3q  1   1 1 gq : x   1   λ   2q  mit q, λ  I."
+      ]
+    },
+    {
+      id: "2018_T2_AI",
+      year: 2018, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "Ein Tierarzt verabreicht einer Kuh ein Medikament, dessen Wirkstoff über das Blut auch in die Milch …",
+      typen: ["KD", "TG", "IN", "EF"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis I. Seiten 2–3.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Ermitteln", "Markieren"],
+      imgs: ["fap-aufgaben/2018_T2_AI_1.png", "fap-aufgaben/2018_T2_AI_2.png"],
+      tipps: [
+        "Integral: Stammfunktion $F(x)$ bilden, $[F(x)]_a^b = F(b)-F(a)$ auswerten.",
+        "Untersuchen Sie das Verhalten der Funktionswerte von f an den Rändern der Definitionsmenge. Geben Sie Art und Gleichung .",
+        "Geben Sie die Nullstellen von f an und zeichnen Sie mithilfe der bisherigen Ergebnisse und weiterer geeigneter."
+      ]
+    },
+    {
+      id: "2018_T2_AII",
+      year: 2018, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "Gegeben ist die Schar der Funktionen fk durch fk : x ֏ ⋅ mit k ∈ IR in 2 x+k ihrem maximalen …",
+      typen: ["KD", "TG", "PB", "IN", "EF", "GL"],
+      afb: [1, 2], be: 25,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Analysis II. Seiten 4–5.",
+      tags: ["Angeben", "Begruenden", "Berechnen", "Bestimmen", "Entscheiden"],
+      imgs: ["fap-aufgaben/2018_T2_AII_1.png", "fap-aufgaben/2018_T2_AII_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Untersuchen Sie f auf Nullstellen und bestimmen Sie die Gleichungen aller Asymptoten von Gf .",
+        "F ist eine Stammfunktion von f mit DF = ]−1; ∞[ . Ihr Graph sei GF und verläuft durch den Ursprung. Bestimmen ."
+      ]
+    },
+    {
+      id: "2018_T2_GI",
+      year: 2018, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie I",
+      titel: "Ein Speichenreflektor für ein Fahrrad beruht auf dem Prinzip eines Tripelspiegels. Dieser reflektiert …",
+      typen: ["VL", "GE", "AB", "SW", "KO"],
+      afb: [2], be: 50,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "Älteres LP 17/18, T2 – Geometrie I. Seiten 6–7.",
+      tags: ["Angeben", "Berechnen", "Ermitteln", "Zeigen"],
+      imgs: ["fap-aufgaben/2018_T2_GI_1.png", "fap-aufgaben/2018_T2_GI_2.png"],
+      tipps: [
+        "Abstand Punkt–Ebene: $d = \\frac{|ax_1+bx_2+cx_3-d|}{|\\vec{n}|}$ (Hessische Normalform).",
+        "Es gibt einen Vektor im IR 3 , der sich nicht als Linearkombination der Vektoren a , b und c bilden lässt."
+      ]
+    },
+    {
+      id: "2019_T1_Ana",
+      year: 2019, teil: 1,
+      fach: "Analysis", gruppe: "T1 – Analysis",
+      titel: "Die ganzrationale Funktion 4. Grades p und die lineare Funktion h sind auf Dp = Dh = IR definiert. In …",
+      typen: ["TG", "EF", "GL"],
+      afb: [1, 2], be: 20,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T1 – T1 – Analysis. Klasse 11.",
+      tags: ["Angeben", "Begruenden", "Bestimmen", "Ermitteln", "Nennen"],
+      imgs: ["fap-aufgaben/2019_T1_Ana_1.png", "fap-aufgaben/2019_T1_Ana_2.png"],
+      tipps: [
+        "Tangente: $t(x) = f'(x_0)\\,(x-x_0)+f(x_0)$. Steigung = Wert der Ableitung an der Stelle.",
+        "Die ganzrationale Funktion 4. Grades p und die lineare Funktion h sind auf Dp = Dh = IR definiert. In der nachfolgenden .",
+        "Begründen Sie ohne Rechnung, wie viele reelle Lösungen die Gleichung h(p ( x ) ) = 0 besitzt."
+      ]
+    },
+    {
+      id: "2019_T1_Geo",
+      year: 2019, teil: 1,
+      fach: "Geometrie", gruppe: "T1 – Geometrie",
+      titel: "In einem kartesischen Koordinatensystem des IR 3 sind die Punkte A (1 3 − 2 ) , Bk (k 2 − 1) und Ck ( 4 …",
+      typen: ["VL", "GE"],
+      afb: [1, 2], be: 20,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T1 – T1 – Geometrie. Klasse 11.",
+      tags: ["Bestimmen", "Zeichnen"],
+      imgs: ["fap-aufgaben/2019_T1_Geo.png"],
+      tipps: [
+        "Geradengleichung: $\\vec{x}=\\vec{p}+t\\cdot\\vec{v}$. Ebene: Normalenvektor bestimmen und Punktprobe.",
+        "In einem kartesischen Koordinatensystem des IR 3 sind die Punkte A (1 3 − 2 ) , Bk (k 2 − 1) und Ck ( 4 k + 2 − 1) mit k.",
+        "Bestimmen Sie für k = 1 eine Gleichung der Ebene E in Koordinatenform, in der die Punkte A , B1 und C1 liegen."
+      ]
+    },
+    {
+      id: "2019_T2_AI",
+      year: 2019, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "Der Graph Gf einer auf Df = IR definierten Funktion f : x ax 4 + bx3 + c mit a,b, c IR und a  0 …",
+      typen: ["KD", "PB", "IN", "EF", "GL"],
+      afb: [1, 2, 3], be: 17,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T2 – Analysis I. Klasse 11.",
+      tags: ["Berechnen", "Bestimmen", "Beurteilen", "Ermitteln", "Zeichnen"],
+      imgs: ["fap-aufgaben/2019_T2_AI_1.png", "fap-aufgaben/2019_T2_AI_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Der Graph Gf einer auf Df = IR definierten Funktion f : x ax 4 + bx3 + c mit a,b, c IR und a  0 besitzt die beiden Wen.",
+        "Bestimmen Sie die Art und Koordinaten des relativen Extrempunktes von G f ."
+      ]
+    },
+    {
+      id: "2019_T2_AII",
+      year: 2019, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "Gegeben ist die Funktion fa : x mit ihrer Definitionsmenge   Dfa = IR und a IR .",
+      typen: ["TG", "IN", "EF"],
+      afb: [1, 2, 3], be: 16,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Analysis II. Klasse 12.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Ermitteln", "Interpretieren"],
+      imgs: ["fap-aufgaben/2019_T2_AII_1.png", "fap-aufgaben/2019_T2_AII_2.png"],
+      tipps: [
+        "Integral: Stammfunktion $F(x)$ bilden, $[F(x)]_a^b = F(b)-F(a)$ auswerten.",
+        "Gegeben ist die Funktion fa : x mit ihrer Definitionsmenge   Dfa = IR und a IR .",
+        "Bestimmen Sie diejenigen Werte für a , für die der Graph der Funktion fa eine Wendetangente mit der Steigung −."
+      ]
+    },
+    {
+      id: "2019_T2_GI",
+      year: 2019, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie I",
+      titel: "Familie Brunner besitzt ein Grundstück mit einer Rasenfläche in Hanglage. Um sich aufgrund seines …",
+      typen: ["GE", "LB"],
+      afb: [2], be: 16,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Geometrie I. Klasse 11.",
+      tags: ["Berechnen", "Bestimmen", "Ermitteln", "Erstellen"],
+      imgs: ["fap-aufgaben/2019_T2_GI.png"],
+      tipps: [
+        "Geradengleichung: $\\vec{x}=\\vec{p}+t\\cdot\\vec{v}$. Ebene: Normalenvektor bestimmen und Punktprobe.",
+        "Familie Brunner besitzt ein Grundstück mit einer Rasenfläche in Hanglage. Um sich aufgrund seines fortgeschrittenen Alte.",
+        "Dem Datenblatt eines Mähroboters des Modells Steinbock entnimmt Herr Brunner, dass die korrekte Funktionsweise."
+      ]
+    },
+    {
+      id: "2019_T2_GII",
+      year: 2019, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie II",
+      titel: "In einem kartesischen Koordinatensystem des IR3 sind die Ebenen E und F mit E: x1 + 2x2 − x3 = 2 und F: …",
+      typen: ["GE", "SW"],
+      afb: [2], be: 15,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Geometrie II. Klasse 11.",
+      tags: ["Berechnen", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2019_T2_GII.png"],
+      tipps: [
+        "Schnittwinkel: $\\cos\\varphi = \\frac{|\\vec{n}_1\\cdot\\vec{n}_2|}{|\\vec{n}_1|\\cdot|\\vec{n}_2|}$.",
+        "In einem kartesischen Koordinatensystem des IR3 sind die Ebenen E und F mit E: x1 + 2x2 − x3 = 2 und F: 3x1 + 4x2 + x3 =.",
+        "Ermitteln Sie eine Gleichung der Geraden s , in der sich die Ebenen E und F schneiden."
+      ]
+    },
+    {
+      id: "2020_T1_Ana",
+      year: 2020, teil: 1,
+      fach: "Analysis", gruppe: "T1 – Analysis",
+      titel: "Die Abbildung rechts zeigt einen Ausschnitt des Graphen G H einer ganzrationalen Funktion H vierten …",
+      typen: ["KD", "PB", "IN", "EF"],
+      afb: [1, 2], be: 20,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T1 – T1 – Analysis. Klasse 11.",
+      tags: ["Angeben", "Begruenden", "Bestimmen", "Ermitteln", "Nachweisen"],
+      imgs: ["fap-aufgaben/2020_T1_Ana.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Die Abbildung rechts zeigt einen Ausschnitt des Graphen G H einer ganzrationalen Funktion H vierten Grades. H ist eine S.",
+        "Begründen Sie, ob die folgenden Aussagen jeweils wahr oder falsch sind. (a) Für die Wertemenge Wh der Funktion."
+      ]
+    },
+    {
+      id: "2020_T1_Geo",
+      year: 2020, teil: 1,
+      fach: "Geometrie", gruppe: "T1 – Geometrie",
+      titel: "Für die Vektoren ak , b und c mit k ∈IR im IR 3 gilt:  −1  1     ak =  0  und b× c =  2   …",
+      typen: ["VL", "GE", "LB", "AB", "KO"],
+      afb: [1, 2], be: 20,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T1 – T1 – Geometrie. Klasse 11.",
+      tags: ["Angeben", "Begruenden", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2020_T1_Geo.png"],
+      tipps: [
+        "Abstand Punkt–Ebene: $d = \\frac{|ax_1+bx_2+cx_3-d|}{|\\vec{n}|}$ (Hessische Normalform).",
+        "Für die Vektoren ak , b und c mit k ∈IR im IR 3 gilt:  −1  1     ak =  0  und b× c =  2   2k   −2    .",
+        "Ermitteln Sie, für welchen Wert für k die Vektoren ak , b und c linear abhängig sind."
+      ]
+    },
+    {
+      id: "2020_T2_AI",
+      year: 2020, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "Gegeben ist die reelle Funktion fk : x ֏ ( x + 3) ( x − 3)( x − 2k ) mit k ∈ IR und x ∈ IR. Der …",
+      typen: ["KD", "TG", "PB", "IN", "EF"],
+      afb: [1, 2, 3], be: 17,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T2 – Analysis I. Klasse 11.",
+      tags: ["Berechnen", "Bestimmen", "Ermitteln", "Interpretieren", "Zeichnen"],
+      imgs: ["fap-aufgaben/2020_T2_AI_1.png", "fap-aufgaben/2020_T2_AI_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Gegeben ist die reelle Funktion fk : x ֏ ( x + 3) ( x − 3)( x − 2k ) mit k ∈ IR und x ∈ IR. Der zugehörige Graph wird mi.",
+        "Auf einer Plantage mit Ölpalmen ist ein Pilzbefall ausgebrochen, welcher zur Blattwelke der befallenen Ölpalme."
+      ]
+    },
+    {
+      id: "2020_T2_AII",
+      year: 2020, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "( ) Der Graph der reellen Funktion h: x ֏ ⋅ −x3 + 3x 2 +9x + 5 mit der Definitionsmenge  7  Dh =  − ; …",
+      typen: ["PB", "IN", "EF", "GL"],
+      afb: [1, 2, 3], be: 16,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Analysis II. Klasse 12.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Ermitteln", "Interpretieren"],
+      imgs: ["fap-aufgaben/2020_T2_AII_1.png", "fap-aufgaben/2020_T2_AII_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "( ) Der Graph der reellen Funktion h: x ֏ ⋅ −x3 + 3x 2 +9x + 5 mit der Definitionsmenge  7  Dh =  − ; 5 ⊂ IR beschre.",
+        "Die Funktion h besitzt an der Stelle x1 = −1 eine doppelte Nullstelle. Zeichnen Sie mithilfe dieser Informatio."
+      ]
+    },
+    {
+      id: "2020_T2_GI",
+      year: 2020, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie I",
+      titel: "Das Zelt eines Jugendzirkus weist die Form eines regelmäßigen Prismas mit aufgesetzter Pyramide auf und …",
+      typen: ["GE", "LB", "SW", "KO"],
+      afb: [1, 2], be: 16,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Geometrie I. Klasse 11.",
+      tags: ["Angeben", "Berechnen", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2020_T2_GI_1.png", "fap-aufgaben/2020_T2_GI_2.png"],
+      tipps: [
+        "Schnittwinkel: $\\cos\\varphi = \\frac{|\\vec{n}_1\\cdot\\vec{n}_2|}{|\\vec{n}_1|\\cdot|\\vec{n}_2|}$.",
+        "Das Zelt eines Jugendzirkus weist die Form eines regelmäßigen Prismas mit aufgesetzter Pyramide auf und wird modellhaft .",
+        "Für das Zelt und die Zirkuswagen wird eine Stellfläche benötigt, die 2,5-mal so groß ist wie die Grundfläche d."
+      ]
+    },
+    {
+      id: "2020_T2_GII",
+      year: 2020, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie II",
+      titel: "Auf der südlichen Dachfläche ist ein Sonnenkollektor angebracht, der durch das Rechteck IJPN dargestellt …",
+      typen: ["VL", "GE", "LB"],
+      afb: [2], be: 15,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Geometrie II. Klasse 11.",
+      tags: ["Berechnen", "Bestimmen", "Erlaeutern", "Ermitteln", "Untersuchen"],
+      imgs: ["fap-aufgaben/2020_T2_GII.png"],
+      tipps: [
+        "Geradengleichung: $\\vec{x}=\\vec{p}+t\\cdot\\vec{v}$. Ebene: Normalenvektor bestimmen und Punktprobe.",
+        "Auf der südlichen Dachfläche ist ein Sonnenkollektor angebracht, der durch das Rechteck IJPN dargestellt wird. Die Kante.",
+        "Berechnen Sie den prozentualen Anteil der südlichen Dachfläche, die vom Sonnenkollektor bedeckt ist."
+      ]
+    },
+    {
+      id: "2021_T1_Ana",
+      year: 2021, teil: 1,
+      fach: "Analysis", gruppe: "T1 – Analysis",
+      titel: "Die ganzrationale Funktion f mit ihrer Definitionsmenge Df  IR hat den Grad drei. Nebenstehende …",
+      typen: ["EF", "GL"],
+      afb: [1, 2], be: 20,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T1 – T1 – Analysis. Klasse 11.",
+      tags: ["Angeben", "Begruenden", "Bestimmen", "Ermitteln"],
+      imgs: ["fap-aufgaben/2021_T1_Ana_1.png", "fap-aufgaben/2021_T1_Ana_2.png"],
+      tipps: [
+        "Kurvendiskussion: $f'(x)$ berechnen, Extrempunkte bei $f'(x_0)=0$ mit $f''(x_0)\\neq 0$.",
+        "Die ganzrationale Funktion f mit ihrer Definitionsmenge Df  IR hat den Grad drei. Nebenstehende Abbildung zeigt einen A.",
+        "Bestimmen Sie eine Funktionsgleichung von f . Hinweis: Ganzzahlige Werte können der Abbildung in 2.0 entnommen."
+      ]
+    },
+    {
+      id: "2021_T1_Geo",
+      year: 2021, teil: 1,
+      fach: "Geometrie", gruppe: "T1 – Geometrie",
+      titel: "In einem kartesischen Koordinatensystem des IR³ sind die Ebene E:  x2  x3  5 und der Punkt P(4|2|4) …",
+      typen: ["VL", "GE", "LB"],
+      afb: [2], be: 20,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T1 – T1 – Geometrie. Klasse 11.",
+      tags: ["Angeben", "Begruenden", "Berechnen", "Bestimmen", "Ueberpruefen"],
+      imgs: ["fap-aufgaben/2021_T1_Geo.png"],
+      tipps: [
+        "Geradengleichung: $\\vec{x}=\\vec{p}+t\\cdot\\vec{v}$. Ebene: Normalenvektor bestimmen und Punktprobe.",
+        "In einem kartesischen Koordinatensystem des IR³ sind die Ebene E:  x2  x3  5 und der Punkt P(4|2|4) gegeben.",
+        "Für den Punkt Q gilt: OQ  OP  2  PL Berechnen Sie die Koordinaten des Punktes Q. Fertigen Sie ohne Verwendu."
+      ]
+    },
+    {
+      id: "2021_T2_AI",
+      year: 2021, teil: 2,
+      fach: "Analysis", gruppe: "Analysis I",
+      titel: "Ein Architekt plant in eine dreieckige Grundstücksfläche eine rechteckige Fläche BCDE zur Bebauung. Die …",
+      typen: ["KD", "PB", "IN", "EF"],
+      afb: [2, 3], be: 17,
+      klasse: { alt: "11", neu: "11" },
+      k_hinweis: "LP 17/18, T2 – Analysis I. Klasse 11.",
+      tags: ["Begruenden", "Berechnen", "Bestimmen", "Ermitteln", "Interpretieren"],
+      imgs: ["fap-aufgaben/2021_T2_AI_1.png", "fap-aufgaben/2021_T2_AI_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Ein Architekt plant in eine dreieckige Grundstücksfläche eine rechteckige Fläche BCDE zur Bebauung. Die Grundstücksfläch.",
+        "Bestimmen Sie die Maßzahl A(a) des Flächeninhalts der Bebauungsfläche in Abhängigkeit des Abstands a.  2 2 ."
+      ]
+    },
+    {
+      id: "2021_T2_AII",
+      year: 2021, teil: 2,
+      fach: "Analysis", gruppe: "Analysis II",
+      titel: "Gegeben ist die Funktion f : x  1 3 4  x  4x2  4x mit ihrer Definitionsmenge Df  IR .",
+      typen: ["KD", "TG", "PB", "IN", "EF"],
+      afb: [1, 2], be: 16,
+      klasse: { alt: "12", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Analysis II. Klasse 12.",
+      tags: ["Begruenden", "Berechnen", "Bestimmen", "Ermitteln", "Zeichnen"],
+      imgs: ["fap-aufgaben/2021_T2_AII_1.png", "fap-aufgaben/2021_T2_AII_2.png"],
+      tipps: [
+        "Schar: Parameter durch Ableitungsbedingung bestimmen – $f'(x_0)=m$ nach $a$ auflösen.",
+        "Gegeben ist die Funktion f : x  1 3 4  x  4x2  4x mit ihrer Definitionsmenge Df  IR .",
+        "Die Funktion f besitzt die Nullstellen x1  0, x2  2 2  2 und x3  2 2  2 . Zeichnen Sie mithilfe dieser I."
+      ]
+    },
+    {
+      id: "2021_T2_GI",
+      year: 2021, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie I",
+      titel: "Lesen Sie die Koordinaten der Punkte A, B und C aus der Zeichnung ab. Ermitteln Sie rechnerisch die …",
+      typen: ["GE", "LB", "SW"],
+      afb: [2], be: 16,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Geometrie I. Klasse 11.",
+      tags: ["Berechnen", "Erlaeutern", "Ermitteln"],
+      imgs: ["fap-aufgaben/2021_T2_GI.png"],
+      tipps: [
+        "Schnittwinkel: $\\cos\\varphi = \\frac{|\\vec{n}_1\\cdot\\vec{n}_2|}{|\\vec{n}_1|\\cdot|\\vec{n}_2|}$.",
+        "Lesen Sie die Koordinaten der Punkte A, B und C aus der Zeichnung ab. Ermitteln Sie rechnerisch die Koordinaten des Punk.",
+        "Berechnen Sie den Winkel, unter dem die Gerade DF auf die Ebene K trifft. Runden Sie Ihr Ergebnis auf zwei Nac."
+      ]
+    },
+    {
+      id: "2021_T2_GII",
+      year: 2021, teil: 2,
+      fach: "Geometrie", gruppe: "Geometrie II",
+      titel: "Eine Skulptur aus Leichtmetall in einer Kunsthalle hat die Form eines nicht symmetrischen Trapezes ABCD, …",
+      typen: ["GE", "LB", "SW"],
+      afb: [2], be: 15,
+      klasse: { alt: "11", neu: "12" },
+      k_hinweis: "LP 17/18, T2 – Geometrie II. Klasse 11.",
+      tags: ["Berechnen", "Bestimmen", "Erlaeutern", "Ermitteln"],
+      imgs: ["fap-aufgaben/2021_T2_GII.png"],
+      tipps: [
+        "Schnittwinkel: $\\cos\\varphi = \\frac{|\\vec{n}_1\\cdot\\vec{n}_2|}{|\\vec{n}_1|\\cdot|\\vec{n}_2|}$.",
+        "Eine Skulptur aus Leichtmetall in einer Kunsthalle hat die Form eines nicht symmetrischen Trapezes ABCD, aus dem ein Dre.",
+        "Berechnen Sie den Neigungswinkel der Trapezfläche ABCD gegenüber dem Hallenboden. Runden Sie Ihr Ergebnis auf ."
+      ]
+    },
   ]
 };

@@ -156,8 +156,8 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 #ovtitle{font-family:var(--mono);font-size:.76rem;color:#888;flex:1;}
 #ovnav{font-family:var(--mono);font-size:.72rem;color:#555;}
 #ovbody{display:flex;flex:1;overflow:hidden;}
-#ovimgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:.8rem 2.5rem;gap:.4rem;background:#0c0a07;}
-#ovimgs img{max-width:100%;border:1px solid #2a2a2a;}
+#ovimgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:stretch;padding:.8rem 0;gap:.4rem;background:#0c0a07;}
+#ovimgs img{width:100%;height:auto;display:block;border:1px solid #2a2a2a;}
 #ovprev,#ovnext{position:fixed;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:1.6rem;color:rgba(255,255,255,.3);background:rgba(0,0,0,.25);border:none;padding:.35rem .6rem;cursor:pointer;transition:color .15s,background .15s;z-index:510;border-radius:2px;}
 #ovprev{left:.3rem;}
 #ovnext{right:.3rem;}
@@ -183,10 +183,12 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
   body>*:not(#printarea){display:none!important;}
   #selbar,#ov{display:none!important;}
   #printarea{display:block;font-family:serif;}
+  .pa-header{font-size:10pt;text-align:center;margin-bottom:1cm;padding-bottom:.4cm;border-bottom:1pt solid #aaa;}
   .pa-item{page-break-inside:avoid;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1pt solid #ccc;}
   .pa-tit{font-size:11pt;font-weight:bold;margin-bottom:.35rem;}
-  .pa-meta{font-size:9pt;color:#666;margin-bottom:.5rem;}
-  .pa-img{max-width:100%;display:block;}
+  .pa-figure{margin:.4cm 0 0;page-break-inside:avoid;}
+  .pa-caption{font-family:monospace;font-size:8pt;color:#555;margin-bottom:.15cm;}
+  .pa-img{width:100%;display:block;}
 }
 
 /* Footer */
@@ -199,7 +201,7 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
   #wrap{grid-template-columns:1fr;}
   #sb{height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);}
   #ovpanel{display:none;}
-  #ovimgs{padding:.6rem 2rem;}
+  #ovimgs{padding:.6rem 0;}
 }
 </style>
 <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -564,12 +566,17 @@ function updSelBar(){
 // ── Print ───────────────────────────────────────────────
 function doPrint(){
   const pa=document.getElementById('printarea');pa.innerHTML='';
+  const dateStr=new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+  pa.insertAdjacentHTML('beforeend',`<div class="pa-header">Fachabitur Prüfungen &nbsp;·&nbsp; ${dateStr}</div>`);
   [...SEL].forEach(id=>{
     const t=T.find(x=>x.id===id);if(!t)return;
-    const imgs=t.imgs.map(src=>`<img class="pa-img" src="${src}" alt="">`).join('');
-    pa.insertAdjacentHTML('beforeend',`<div class="pa-item"><div class="pa-tit">${t.titel}</div><div class="pa-meta">${t.gruppe} · ${t.year} · ${t.be} BE</div>${imgs}</div>`);
+    const hiMi=t.teil===1?'T1 – oHiMi':'T2 – miHiMi';
+    const fachLbl=t.fach==='Analysis'?'Analysis':'Lineare Algebra und analytische Geometrie';
+    const imgs=t.imgs.map(src=>`<figure class="pa-figure"><figcaption class="pa-caption">${t.year} · ${hiMi} · ${fachLbl}</figcaption><img class="pa-img" src="${src}" alt=""></figure>`).join('');
+    pa.insertAdjacentHTML('beforeend',`<div class="pa-item"><div class="pa-tit">${t.titel}</div>${imgs}</div>`);
   });
-  window.print();
+  KaTeX(pa);
+  setTimeout(()=>window.print(),300);
 }
 
 // ── Overlay ─────────────────────────────────────────────
