@@ -63,6 +63,10 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 .ckmix {background:#fef5e3;color:#7a5800;border-color:#ecd888;}
 .ck12  {background:#fdeee8;color:#7a2200;border-color:#f0c0aa;}
 .ctyp  {background:var(--cream);color:var(--ink);border-color:var(--line);}
+/* AFB badges */
+.cafb1 {background:#edf7ee;color:#1a5c35;border-color:#b8ddc8;}
+.cafb2 {background:#fef5e3;color:#7a5800;border-color:#ecd888;}
+.cafb3 {background:#fdeee8;color:#7a2200;border-color:#f0c0aa;}
 /* Filter chips (interactive) */
 .cbtn{cursor:pointer;background:var(--paper);border-color:var(--line);color:#888;transition:background .12s,color .12s,border-color .12s;}
 .cbtn:hover{border-color:var(--ink);color:var(--ink);}
@@ -83,7 +87,7 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 .vbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
 
 /* Grid */
-#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:.75rem;padding:.85rem;}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.75rem;padding:.85rem;}
 .card{background:#fff;border:1px solid var(--line);border-radius:2px;display:flex;flex-direction:column;position:relative;transition:box-shadow .18s;}
 .card:hover{box-shadow:0 3px 12px rgba(0,0,0,.08);}
 .card.sel{outline:2px solid var(--accent);outline-offset:1px;}
@@ -101,8 +105,8 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 .cc-wrap{display:inline-flex;align-items:center;margin-right:.3rem;flex-shrink:0;}
 .cc{width:14px;height:14px;cursor:pointer;accent-color:var(--accent);}
 
-.cb{padding:.55rem .65rem .45rem;flex:1;display:flex;flex-direction:column;gap:.38rem;}
-.ctitle{font-size:.81rem;font-weight:600;line-height:1.42;color:var(--ink);}
+.cb{padding:.55rem .65rem .45rem;flex:1;display:flex;flex-direction:column;gap:.3rem;}
+.ctitle{font-size:.84rem;font-weight:600;line-height:1.35;color:var(--ink);}
 .cchips{display:flex;flex-wrap:wrap;gap:.22rem;align-items:center;}
 .cbe-badge{font-family:var(--mono);font-size:.67rem;color:#aaa;margin-left:auto;}
 .ctags{display:flex;flex-wrap:wrap;gap:.15rem;}
@@ -112,23 +116,25 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 [data-theme=dark] .cf{background:#1a1710;}
 .bview{font-family:var(--mono);font-size:.67rem;padding:.22rem .45rem;border:1px solid var(--line);border-radius:2px;color:var(--ink);background:var(--paper);transition:background .12s,border-color .12s,color .12s;}
 .bview:hover{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-.cf-be{font-family:var(--mono);font-size:.7rem;color:#aaa;margin-left:auto;}
+.cf-be{font-family:var(--mono);font-size:.7rem;color:#aaa;margin-left:auto;display:none;}
 
 /* List View */
 #listview{padding:.85rem;}
-.lt{width:100%;border-collapse:collapse;font-size:.79rem;}
+.lt{width:100%;border-collapse:collapse;font-size:.81rem;}
 .lt colgroup col:nth-child(1){width:30px;}
 .lt colgroup col:nth-child(2){width:52px;}
-.lt colgroup col:nth-child(3){width:44px;}
-.lt colgroup col:nth-child(4){width:auto;}
-.lt colgroup col:nth-child(5){width:160px;}
-.lt colgroup col:nth-child(6){width:88px;}
+.lt colgroup col:nth-child(3){width:42px;}
+.lt colgroup col:nth-child(4){width:50px;}
+.lt colgroup col:nth-child(5){width:auto;}
+.lt colgroup col:nth-child(6){width:130px;}
 .lt colgroup col:nth-child(7){width:38px;}
-.lt colgroup col:nth-child(8){width:80px;}
+.lt colgroup col:nth-child(8){width:38px;}
+.cfach-ana{background:#eef4fb;color:#2a5f9e;border-color:#c0d8f0;}
+.cfach-geo{background:#f0eaf8;color:#6b3fa0;border-color:#d4b8ee;}
 .lt th{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.06em;color:#888;padding:.38rem .48rem;border-bottom:2px solid var(--line);text-align:left;white-space:nowrap;}
 .lt td{padding:.4rem .48rem;border-bottom:1px solid var(--line);vertical-align:middle;}
 .lt tr:hover td{background:var(--cream);}
-[data-theme=dark] .lt th,.lt td{border-color:#2a2620;}
+[data-theme=dark] .lt th,[data-theme=dark] .lt td{border-color:#2a2620;}
 [data-theme=dark] .lt tr:hover td{background:#1a1710;}
 .lt-be{text-align:right;font-family:var(--mono);font-size:.7rem;color:#aaa;}
 .lt-act{display:flex;gap:.25rem;}
@@ -150,11 +156,11 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 
 /* Overlay */
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.84);z-index:500;display:none;flex-direction:column;}
-#ovh{background:var(--ink);padding:.45rem .9rem;display:flex;align-items:center;gap:.6rem;flex-shrink:0;border-bottom:1px solid #2a2a2a;}
-#ovclose{font-family:var(--mono);font-size:1rem;color:#666;transition:color .15s;width:26px;text-align:center;line-height:1;}
-#ovclose:hover{color:#fff;}
-#ovtitle{font-family:var(--mono);font-size:.76rem;color:#888;flex:1;}
-#ovnav{font-family:var(--mono);font-size:.72rem;color:#555;}
+#ovh{background:var(--cream);padding:.45rem .9rem;display:flex;align-items:center;gap:.6rem;flex-shrink:0;border-bottom:1px solid var(--line);}
+#ovclose{font-family:var(--mono);font-size:1rem;color:var(--ink);opacity:.55;transition:opacity .15s;width:26px;text-align:center;line-height:1;}
+#ovclose:hover{opacity:1;}
+#ovtitle{font-family:var(--mono);font-size:.76rem;color:var(--ink);opacity:.65;flex:1;}
+#ovnav{font-family:var(--mono);font-size:.72rem;color:var(--ink);opacity:.5;}
 #ovbody{display:flex;flex:1;overflow:hidden;}
 #ovimgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:stretch;padding:.8rem 0;gap:.4rem;background:#0c0a07;}
 #ovimgs img{width:100%;height:auto;display:block;border:1px solid #2a2a2a;}
@@ -163,16 +169,19 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 #ovnext{right:.3rem;}
 #ovprev:hover,#ovnext:hover{color:#fff;background:rgba(0,0,0,.55);}
 
-#ovpanel{width:270px;background:var(--ink);border-left:1px solid #222;padding:.9rem .8rem;overflow-y:auto;flex-shrink:0;}
-#ovpanel h3{font-family:var(--serif);font-size:.9rem;color:var(--paper);margin-bottom:.65rem;line-height:1.45;}
-.ovlbl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:.2rem;}
-.ovval{font-size:.78rem;color:#bbb;margin-bottom:.6rem;line-height:1.4;}
+#ovpanel-tog{font-family:var(--mono);font-size:.8rem;color:var(--ink);opacity:.55;transition:opacity .15s;width:22px;text-align:center;line-height:1;flex-shrink:0;}
+#ovpanel-tog:hover{opacity:1;}
+#ovpanel{width:270px;background:var(--cream);border-right:1px solid var(--line);padding:.9rem .8rem;overflow-y:auto;flex-shrink:0;transition:width .2s,padding .2s,opacity .2s;}
+#ovpanel.collapsed{width:0;padding:0;opacity:0;overflow:hidden;}
+#ovpanel h3{font-family:var(--serif);font-size:.9rem;color:var(--ink);margin-bottom:.65rem;line-height:1.45;}
+.ovlbl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);opacity:.5;margin-bottom:.2rem;}
+.ovval{font-size:.84rem;color:var(--ink);opacity:.8;margin-bottom:.6rem;line-height:1.4;}
 .ovchips{display:flex;flex-wrap:wrap;gap:.22rem;margin-bottom:.6rem;}
-#ovtipps-head{width:100%;font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #2a2a2a;padding-top:.55rem;margin-top:.2rem;}
+#ovtipps-head{width:100%;font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:.55rem;margin-top:.2rem;}
 #ovtipps-list{list-style:none;display:none;flex-direction:column;gap:.35rem;margin-top:.45rem;}
 #ovtipps-list.open{display:flex;}
-#ovtipps-list li{font-size:.75rem;color:#999;line-height:1.45;padding-left:.8rem;position:relative;}
-#ovtipps-list li::before{content:'→';position:absolute;left:0;color:var(--gold);}
+#ovtipps-list li{font-size:.78rem;color:var(--ink);opacity:.7;line-height:1.45;padding-left:.8rem;position:relative;}
+#ovtipps-list li::before{content:'→';position:absolute;left:0;color:var(--gold);opacity:1;}
 
 /* Empty State */
 #empty{display:none;padding:2.5rem 1rem;text-align:center;color:#aaa;font-family:var(--mono);font-size:.82rem;}
@@ -180,9 +189,10 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 /* Print */
 #printarea{display:none;}
 @media print{
-  body>*:not(#printarea){display:none!important;}
-  #selbar,#ov{display:none!important;}
-  #printarea{display:block;font-family:serif;}
+  @page{margin:1.5cm;}
+  html,body{height:auto!important;overflow:visible!important;}
+  body>*{display:none!important;}
+  #printarea{display:block!important;font-family:serif;margin:0;padding:0;}
   .pa-header{font-size:10pt;text-align:center;margin-bottom:1cm;padding-bottom:.4cm;border-bottom:1pt solid #aaa;}
   .pa-item{page-break-inside:avoid;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1pt solid #ccc;}
   .pa-tit{font-size:11pt;font-weight:bold;margin-bottom:.35rem;}
@@ -200,7 +210,8 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 @media(max-width:680px){
   #wrap{grid-template-columns:1fr;}
   #sb{height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);}
-  #ovpanel{display:none;}
+  #ovpanel{width:0;padding:0;opacity:0;overflow:hidden;}
+  #ovpanel-tog{display:none;}
   #ovimgs{padding:.6rem 0;}
 }
 </style>
@@ -230,7 +241,7 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 
 <!-- ── Sidebar ─────────────────────────────── -->
 <aside id="sb">
-  <input type="search" id="q" placeholder="Suche in Titeln &amp; Tags …" autocomplete="off">
+  <input type="search" id="q" placeholder="Aufgabentext, Tipps, Tags durchsuchen …" autocomplete="off">
 
   <div class="fs">
     <button class="fsh" onclick="togFs('fach')">Fach <span class="fsarr" id="ar-fach">▾</span></button>
@@ -278,6 +289,16 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
     <div class="fsb" id="fs-typ"></div>
   </div>
 
+  <div class="fs">
+    <button class="fsh" onclick="togFs('afb')">AFB <span class="fsarr" id="ar-afb">▾</span></button>
+    <div class="fsb" id="fs-afb">
+      <button class="chip cbtn on" data-g="afb" data-v="" onclick="exclF(this,'afb')">Alle</button>
+      <button class="chip cbtn cafb1" data-g="afb" data-v="1" onclick="exclF(this,'afb')">AFB I</button>
+      <button class="chip cbtn cafb2" data-g="afb" data-v="2" onclick="exclF(this,'afb')">AFB II</button>
+      <button class="chip cbtn cafb3" data-g="afb" data-v="3" onclick="exclF(this,'afb')">AFB III</button>
+    </div>
+  </div>
+
   <div style="padding:.65rem .05rem 0;border-top:1px solid var(--line);margin-top:.3rem;">
     <button onclick="resetAll()" style="font-family:var(--mono);font-size:.68rem;color:#999;text-decoration:underline;cursor:pointer;">Filter zurücksetzen</button>
   </div>
@@ -297,8 +318,8 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
     <table class="lt">
       <colgroup><col><col><col><col><col><col><col><col></colgroup>
       <thead><tr>
-        <th></th><th>Jahr</th><th>Teil</th><th>Titel</th>
-        <th>Typen</th><th>Klasse</th><th style="text-align:right">BE</th><th></th>
+        <th></th><th>Jahr</th><th>Fach</th><th>Teil</th><th>Titel</th>
+        <th>AFB · Klasse</th><th style="text-align:right">BE</th><th></th>
       </tr></thead>
       <tbody id="lbody"></tbody>
     </table>
@@ -319,13 +340,11 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 <div id="ov" role="dialog" aria-modal="true">
   <div id="ovh">
     <button id="ovclose" onclick="closeOv()" title="Schließen (ESC)">✕</button>
+    <button id="ovpanel-tog" onclick="togOvPanel()" title="Info ein-/ausblenden">◀</button>
     <span id="ovtitle"></span>
     <span id="ovnav"></span>
   </div>
   <div id="ovbody">
-    <button id="ovprev" onclick="ovNav(-1)">‹</button>
-    <div id="ovimgs"></div>
-    <button id="ovnext" onclick="ovNav(1)">›</button>
     <div id="ovpanel">
       <h3 id="ovptitle"></h3>
       <div class="ovlbl">Klasse Alt 17/18 · Neu 26/27</div>
@@ -335,12 +354,15 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
       <div class="ovlbl">AFB · Bewertungseinheiten</div>
       <div class="ovval" id="ovafbbe"></div>
       <div class="ovlbl">Lehrplan-Hinweis</div>
-      <div class="ovval" id="ovhint" style="font-size:.73rem;color:#888;"></div>
+      <div class="ovval" id="ovhint" style="font-size:.73rem;opacity:.7;"></div>
       <button id="ovtipps-head" onclick="togOvTipps()">
         <span>💡 Tipps</span><span id="ovtarr">▾</span>
       </button>
       <ul id="ovtipps-list"></ul>
     </div>
+    <button id="ovprev" onclick="ovNav(-1)">‹</button>
+    <div id="ovimgs"></div>
+    <button id="ovnext" onclick="ovNav(1)">›</button>
   </div>
 </div>
 
@@ -364,7 +386,7 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 <script src="fap-data.js"></script>
 <script>
 // ── State ──────────────────────────────────────────────
-const F = {fach:'', kl:'', teil:'', jahre:new Set(), typen:new Set(), q:'', lp:{alt:true,neu:true}};
+const F = {fach:'', kl:'', teil:'', afb:'', jahre:new Set(), typen:new Set(), q:'', lp:{alt:true,neu:true}};
 const SEL = new Set();
 let VIEW='grid', ovTask=null, ovIdx=0, katexReady=false;
 
@@ -408,8 +430,9 @@ function exclF(btn,g) {
   document.querySelectorAll(`[data-g="${g}"]`).forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   if(g==='fach'){F.fach=btn.dataset.v;F.typen.clear();buildTypChips();}
-  if(g==='kl') F.kl=btn.dataset.v;
+  if(g==='kl')  F.kl=btn.dataset.v;
   if(g==='teil')F.teil=btn.dataset.v;
+  if(g==='afb') F.afb=btn.dataset.v;
   renderAll();
 }
 function togLp(btn) {
@@ -433,7 +456,7 @@ function togFs(id){
   b.classList.toggle('closed');a.style.transform=b.classList.contains('closed')?'rotate(-90deg)':'';
 }
 function resetAll(){
-  F.fach='';F.kl='';F.teil='';F.jahre.clear();F.typen.clear();F.q='';F.lp={alt:true,neu:true};
+  F.fach='';F.kl='';F.teil='';F.afb='';F.jahre.clear();F.typen.clear();F.q='';F.lp={alt:true,neu:true};
   document.getElementById('q').value='';
   document.querySelectorAll('[data-g]').forEach(b=>{b.classList.remove('on');if(!b.dataset.v)b.classList.add('on');});
   document.querySelectorAll('[data-lp]').forEach(b=>b.classList.add('on'));
@@ -457,6 +480,27 @@ function typDesc(id){return allTypen.find(t=>t.id===id)?.desc||'';}
 function typShort(id){return allTypen.find(t=>t.id===id)?.short||id;}
 function typLabel(id){return allTypen.find(t=>t.id===id)?.label||id;}
 
+// ── Hilfsfunktionen ─────────────────────────────────────
+function grpLabel(t){
+  if(t.gruppe.startsWith('T1')||t.gruppe.startsWith('T2'))return t.gruppe;
+  const pre=t.teil===1?'T1':'T2';
+  const roman=t.gruppe.match(/\b(II|I)\b/)?.[0]||'';
+  return `${pre} – ${t.fach}${roman?' '+roman:''}`;
+}
+const ROM={1:'I',2:'II',3:'III'};
+function afbLabel(afb){
+  if(!afb||!afb.length)return'';
+  const s=[...afb].sort((a,b)=>a-b);
+  if(s.length===3)return'AFB I–III';
+  if(s.length===2&&s[1]-s[0]===1)return`AFB ${ROM[s[0]]}+${ROM[s[1]]}`;
+  return s.map(a=>`AFB ${ROM[a]}`).join(' ');
+}
+function afbCls(afb){return afb&&afb.length?`cafb${Math.min(...afb)}`:'';}
+function afbChip(afb,be){
+  const lbl=afbLabel(afb);
+  return lbl?`<span class="chip ${afbCls(afb)}" title="AFB ${(afb||[]).join('+')} · ${be} BE">${lbl}</span>`:'';
+}
+
 // ── Filter ──────────────────────────────────────────────
 function matches(t){
   if(F.fach&&t.fach!==F.fach)return false;
@@ -464,7 +508,12 @@ function matches(t){
   if(F.jahre.size>0&&!F.jahre.has(t.year))return false;
   if(F.typen.size>0&&!t.typen.some(tp=>F.typen.has(tp)))return false;
   if(F.kl&&effKl(t)!==F.kl)return false;
-  if(F.q){const h=(t.titel+' '+(t.tags||[]).join(' ')+' '+t.gruppe+' '+t.year).toLowerCase();if(!h.includes(F.q))return false;}
+  if(F.afb&&!(t.afb||[]).map(String).includes(F.afb))return false;
+  if(F.q){
+    const h=(t.titel+' '+(t.tags||[]).join(' ')+' '+t.fach+' '+grpLabel(t)+' '+t.year
+      +' '+(t.tipps||[]).join(' ')+' '+(t.k_hinweis||'')+' '+(t.text||'')).toLowerCase();
+    if(!h.includes(F.q))return false;
+  }
   return true;
 }
 
@@ -482,55 +531,53 @@ function renderGrid(tasks){
   tasks.forEach(t=>{
     const kl=effKl(t),kcl=klCls(kl),klbl=klLbl(kl);
     const hcl=t.fach==='Analysis'?'ana':'geo';
-    const tChips=t.typen.slice(0,3).map(tp=>`<span class="chip ctyp" title="${typDesc(tp)}">${tp} – ${typShort(tp)}</span>`).join('');
-    const tags=(t.tags||[]).slice(0,4).map(tg=>`<span class="ctag">${tg}</span>`).join('');
-    const hasTipps=t.tipps&&t.tipps.length>0;
     const selCls=SEL.has(t.id)?' sel':'';
     const hiMi=t.teil===1?'oHiMi':'miHiMi';
+    const typTitle=t.typen.slice(0,2).map(tp=>typLabel(tp)).join(' · ')||t.gruppe;
+    const aChip=afbChip(t.afb,t.be);
     el.insertAdjacentHTML('beforeend',`
 <div class="card${selCls}" id="c-${t.id}">
   <div class="ch ${hcl}">
     <label class="cc-wrap" title="Auswählen"><input type="checkbox" class="cc" ${SEL.has(t.id)?'checked':''} onchange="togSel('${t.id}',this.checked)"></label>
-    <span class="ch-grp">${t.gruppe}</span>
+    <span class="ch-grp">${grpLabel(t)}</span>
     <span class="ch-hm">${hiMi}</span>
     <span class="ch-yr">${t.year}</span>
   </div>
   <div class="cb">
-    <div class="ctitle">${t.titel}</div>
+    <div class="ctitle">${typTitle}</div>
     <div class="cchips">
-      <span class="chip ${kcl}">${klbl}</span>${tChips}
+      <span class="chip ${kcl}">${klbl}</span>${aChip}
       <span class="cbe-badge">${t.be} BE</span>
     </div>
-    ${tags?`<div class="ctags">${tags}</div>`:''}
   </div>
   <div class="cf">
     <button class="bview" onclick="openOv('${t.id}')">⤢ Aufgabe ansehen</button>
-    <span class="cf-be">${t.be} BE</span>
   </div>
 </div>`);
   });
-  KaTeX(el);
 }
 
 function renderList(tasks){
   const body=document.getElementById('lbody');body.innerHTML='';
   tasks.forEach(t=>{
     const kl=effKl(t),kcl=klCls(kl),klbl=klLbl(kl);
-    const tChips=t.typen.map(tp=>`<span class="chip ctyp" title="${typDesc(tp)}">${tp} – ${typShort(tp)}</span>`).join('');
     const hiMi=t.teil===1?'oHiMi':'miHiMi';
+    const typTitle=t.typen.slice(0,2).map(tp=>typLabel(tp)).join(' · ')||t.gruppe;
+    const aChip=afbChip(t.afb,t.be);
+    const fachCl=t.fach==='Analysis'?'cfach-ana':'cfach-geo';
+    const fachBadge=t.fach==='Analysis'?'ANA':'GEO';
     body.insertAdjacentHTML('beforeend',`
 <tr>
   <td><input type="checkbox" class="lcheck" ${SEL.has(t.id)?'checked':''} onchange="togSel('${t.id}',this.checked)"></td>
   <td style="font-family:var(--mono);font-size:.7rem">${t.year}</td>
-  <td style="font-family:var(--mono);font-size:.65rem;text-align:center;white-space:nowrap" title="${t.teil===1?'ohne Hilfsmittel':'mit Hilfsmittel'}">T${t.teil}<br><span style="color:#aaa">${hiMi}</span></td>
-  <td class="ltitle">${t.titel}</td>
-  <td class="lt-chips">${tChips}</td>
-  <td><span class="chip ${kcl}">${klbl}</span></td>
+  <td><span class="chip ${fachCl}" style="font-size:.61rem;padding:0 5px">${fachBadge}</span></td>
+  <td style="font-family:var(--mono);font-size:.65rem;text-align:center;white-space:nowrap" title="${t.teil===1?'ohne Hilfsmittel':'mit Hilfsmittel'}">T${t.teil}<br><span style="opacity:.55">${hiMi}</span></td>
+  <td class="ltitle">${grpLabel(t)} · ${typTitle}</td>
+  <td class="lt-chips">${aChip}<span class="chip ${kcl}" style="margin-top:.1rem">${klbl}</span></td>
   <td class="lt-be">${t.be}</td>
   <td class="lt-act"><button class="bview" onclick="openOv('${t.id}')">⤢</button></td>
 </tr>`);
   });
-  KaTeX(document.getElementById('lbody'));
 }
 
 // ── View ────────────────────────────────────────────────
@@ -566,6 +613,8 @@ function updSelBar(){
 // ── Print ───────────────────────────────────────────────
 function doPrint(){
   const pa=document.getElementById('printarea');pa.innerHTML='';
+  // Move #printarea to front so no empty first page in Chromium
+  document.body.prepend(pa);
   const dateStr=new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
   pa.insertAdjacentHTML('beforeend',`<div class="pa-header">Fachabitur Prüfungen &nbsp;·&nbsp; ${dateStr}</div>`);
   [...SEL].forEach(id=>{
@@ -576,7 +625,7 @@ function doPrint(){
     pa.insertAdjacentHTML('beforeend',`<div class="pa-item"><div class="pa-tit">${t.titel}</div>${imgs}</div>`);
   });
   KaTeX(pa);
-  setTimeout(()=>window.print(),300);
+  setTimeout(()=>{window.print();document.body.appendChild(pa);},300);
 }
 
 // ── Overlay ─────────────────────────────────────────────
@@ -620,6 +669,12 @@ function closeOv(){document.getElementById('ov').style.display='none';document.b
 function togOvTipps(){
   const el=document.getElementById('ovtipps-list');el.classList.toggle('open');
   document.getElementById('ovtarr').textContent=el.classList.contains('open')?'▴':'▾';
+}
+function togOvPanel(){
+  const p=document.getElementById('ovpanel');
+  const btn=document.getElementById('ovpanel-tog');
+  p.classList.toggle('collapsed');
+  btn.textContent=p.classList.contains('collapsed')?'▶':'◀';
 }
 </script>
 </body>
