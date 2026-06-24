@@ -185,19 +185,34 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 #ovnext{right:.3rem;}
 #ovprev:hover,#ovnext:hover{color:#fff;background:rgba(0,0,0,.55);}
 
-#ovpanel-tog{font-family:var(--mono);font-size:.8rem;color:var(--ink);opacity:.55;transition:opacity .15s;width:22px;text-align:center;line-height:1;flex-shrink:0;}
-#ovpanel-tog:hover{opacity:1;}
+#ovpanel-tog{font-family:var(--mono);font-size:.65rem;letter-spacing:.04em;color:var(--ink);opacity:.65;padding:.2rem .5rem;border:1px solid var(--line);border-radius:2px;transition:background .12s,color .12s,opacity .15s;flex-shrink:0;white-space:nowrap;}
+#ovpanel-tog:hover{opacity:1;background:var(--ink);color:var(--paper);border-color:var(--ink);}
+#ovpanel-tog.open{background:var(--ink);color:var(--paper);border-color:var(--ink);opacity:1;}
 #ovpanel{width:270px;background:var(--cream);border-right:1px solid var(--line);padding:.9rem .8rem;overflow-y:auto;flex-shrink:0;transition:width .2s,padding .2s,opacity .2s;}
 #ovpanel.collapsed{width:0;padding:0;opacity:0;overflow:hidden;}
 #ovpanel h3{font-family:var(--serif);font-size:.9rem;color:var(--ink);margin-bottom:.65rem;line-height:1.45;}
 .ovlbl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);opacity:.5;margin-bottom:.2rem;}
 .ovval{font-size:.84rem;color:var(--ink);opacity:.8;margin-bottom:.6rem;line-height:1.4;}
 .ovchips{display:flex;flex-wrap:wrap;gap:.22rem;margin-bottom:.6rem;}
-#ovtipps-head{width:100%;font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:.55rem;margin-top:.2rem;}
-#ovtipps-list{list-style:none;display:none;flex-direction:column;gap:.35rem;margin-top:.45rem;}
-#ovtipps-list.open{display:flex;}
-#ovtipps-list li{font-size:.78rem;color:var(--ink);opacity:.7;line-height:1.45;padding-left:.8rem;position:relative;}
-#ovtipps-list li::before{content:'→';position:absolute;left:0;color:var(--gold);opacity:1;}
+/* Kachel Typbeschreibung */
+.ctypdesc{font-size:.69rem;color:#aaa;line-height:1.3;margin-top:.1rem;}
+
+/* Overlay-Panel Sektionen */
+.ov-sec-head{width:100%;font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink);opacity:.7;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:.45rem 0 .3rem;border-top:1px solid var(--line);margin-top:.4rem;}
+.ov-sec-head:hover{opacity:1;}
+.ov-sec-body{padding:.1rem 0 .2rem;}
+
+/* Tipps: Unteraufgaben-Akkordeon */
+.tipp-sub{margin-bottom:.2rem;}
+.tipp-sub-head{width:100%;font-family:var(--mono);font-size:.63rem;color:var(--gold);cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:.28rem 0;border-bottom:1px solid var(--line);background:none;}
+.tipp-sub-head:hover{opacity:.8;}
+.tipp-sub-list{list-style:none;padding:.3rem 0 .15rem .7rem;display:flex;flex-direction:column;gap:.3rem;}
+.tipp-sub-list li{font-size:.77rem;color:var(--ink);opacity:.7;line-height:1.45;padding-left:.75rem;position:relative;}
+.tipp-sub-list li::before{content:'→';position:absolute;left:0;color:var(--gold);}
+.ovtipps-flat{list-style:none;display:flex;flex-direction:column;gap:.3rem;padding:.2rem 0 .1rem;}
+.ovtipps-flat li{font-size:.77rem;color:var(--ink);opacity:.7;line-height:1.45;padding-left:.75rem;position:relative;}
+.ovtipps-flat li::before{content:'→';position:absolute;left:0;color:var(--gold);}
+.ov-notipp{font-family:var(--mono);font-size:.68rem;color:#bbb;padding:.3rem 0;}
 
 /* Empty State */
 #empty{display:none;padding:2.5rem 1rem;text-align:center;color:#aaa;font-family:var(--mono);font-size:.82rem;}
@@ -366,25 +381,36 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 <div id="ov" role="dialog" aria-modal="true">
   <div id="ovh">
     <button id="ovclose" onclick="closeOv()" title="Schließen (ESC)">✕</button>
-    <button id="ovpanel-tog" onclick="togOvPanel()" title="Info ein-/ausblenden">◀</button>
+    <button id="ovpanel-tog" onclick="togOvPanel()" title="Info ein-/ausblenden">▶ Info</button>
     <span id="ovtitle"></span>
     <span id="ovnav"></span>
   </div>
   <div id="ovbody">
-    <div id="ovpanel">
+    <div id="ovpanel" class="collapsed">
       <h3 id="ovptitle"></h3>
-      <div class="ovlbl">Klasse Alt 17/18 · Neu 26/27</div>
-      <div class="ovval" id="ovkl"></div>
-      <div class="ovlbl">Aufgabentypen</div>
-      <div class="ovchips" id="ovtypen"></div>
-      <div class="ovlbl">AFB · Bewertungseinheiten</div>
-      <div class="ovval" id="ovafbbe"></div>
-      <div class="ovlbl">Lehrplan-Hinweis</div>
-      <div class="ovval" id="ovhint" style="font-size:.73rem;opacity:.7;"></div>
-      <button id="ovtipps-head" onclick="togOvTipps()">
-        <span>💡 Tipps</span><span id="ovtarr">▾</span>
-      </button>
-      <ul id="ovtipps-list"></ul>
+
+      <div id="ov-sec-sum">
+        <button class="ov-sec-head" onclick="togOvSec('sum')">
+          <span>≡ Zusammenfassung</span><span id="ov-arr-sum">▾</span>
+        </button>
+        <div id="ov-sec-sum-body" class="ov-sec-body" style="display:none">
+          <div class="ovlbl">Klasse Alt 17/18 · Neu 26/27</div>
+          <div class="ovval" id="ovkl"></div>
+          <div class="ovlbl">Aufgabentypen</div>
+          <div class="ovchips" id="ovtypen"></div>
+          <div class="ovlbl">AFB · Bewertungseinheiten</div>
+          <div class="ovval" id="ovafbbe"></div>
+          <div class="ovlbl">Lehrplan-Hinweis</div>
+          <div class="ovval" id="ovhint" style="font-size:.73rem;opacity:.7;"></div>
+        </div>
+      </div>
+
+      <div id="ov-sec-tipps">
+        <button class="ov-sec-head" onclick="togOvSec('tipps')">
+          <span>💡 Tipps</span><span id="ov-arr-tipps">▾</span>
+        </button>
+        <div id="ov-sec-tipps-body" class="ov-sec-body" style="display:none"></div>
+      </div>
     </div>
     <button id="ovprev" onclick="ovNav(-1)">‹</button>
     <div id="ovimgs"></div>
@@ -589,6 +615,8 @@ function renderGrid(tasks){
     const hiMi=t.teil===1?'oHiMi':'miHiMi';
     const typTitle=t.typen.slice(0,2).map(tp=>typLabel(tp)).join(' · ')||t.gruppe;
     const aChip=afbChip(t.afb,t.be);
+    const rawDesc=typDesc(t.typen[0])||'';
+    const shortDesc=rawDesc.length>80?rawDesc.slice(0,79)+'…':rawDesc;
     el.insertAdjacentHTML('beforeend',`
 <div class="card${selCls}" id="c-${t.id}">
   <div class="ch ${hcl}">
@@ -599,6 +627,7 @@ function renderGrid(tasks){
   </div>
   <div class="cb">
     <div class="ctitle">${typTitle}</div>
+    ${shortDesc?`<div class="ctypdesc">${shortDesc}</div>`:''}
     <div class="cchips">
       <span class="chip ${kcl}">${klbl}</span>${aChip}
       <span class="cbe-badge">${t.be} BE</span>
@@ -688,6 +717,12 @@ function openOv(id){
   ovIdx=0;
   document.getElementById('ov').style.display='flex';
   document.body.style.overflow='hidden';
+  // Panel immer collapsed beim Öffnen
+  const panel=document.getElementById('ovpanel');
+  const tog=document.getElementById('ovpanel-tog');
+  panel.classList.add('collapsed');
+  tog.textContent='▶ Info';
+  tog.classList.remove('open');
   fillOv();
 }
 function fillOv(){
@@ -702,15 +737,40 @@ function fillOv(){
   document.getElementById('ovnext').style.display=multi?'':'none';
   document.getElementById('ovnav').textContent=multi?`Bild ${ovIdx+1}/${t.imgs.length}`:'';
   document.getElementById('ovtitle').textContent=`${t.gruppe} · ${t.year}`;
+
+  // Zusammenfassung befüllen (Sektion bleibt collapsed bis Knopf gedrückt)
   document.getElementById('ovkl').textContent=`Alt: Kl. ${t.klasse.alt} · Neu: Kl. ${t.klasse.neu}`;
   document.getElementById('ovtypen').innerHTML=t.typen.map(tp=>
     `<span class="chip ctyp" title="${typDesc(tp)}">${tp} – ${typLabel(tp)}</span>`).join('');
   document.getElementById('ovafbbe').textContent=`AFB ${t.afb.join('+')} · ${t.be} BE`;
   document.getElementById('ovhint').textContent=t.k_hinweis||'';
-  document.getElementById('ovtipps-list').innerHTML=(t.tipps||[]).map(s=>`<li>${s}</li>`).join('');
-  document.getElementById('ovtipps-list').classList.remove('open');
-  document.getElementById('ovtarr').textContent='▾';
-  // Set title via textContent first, then re-render with KaTeX
+
+  // Tipps befüllen: subs-Struktur falls vorhanden, sonst flat → generische subs
+  const tippsEl=document.getElementById('ov-sec-tipps-body');
+  const effectiveSubs=t.subs && t.subs.length>0
+    ? t.subs
+    : (t.tipps||[]).map((tip,i)=>({label:`Hinweis ${i+1}`,tipps:[tip]}));
+
+  if(effectiveSubs.length>0){
+    tippsEl.innerHTML=effectiveSubs.map((s,i)=>`
+<div class="tipp-sub">
+  <button class="tipp-sub-head" onclick="togTippSub(${i})">
+    <span>${s.label}</span><span id="tsa-${i}">▾</span>
+  </button>
+  <ul class="tipp-sub-list" id="tsb-${i}" style="display:none">
+    ${s.tipps.map(tip=>`<li>${tip}</li>`).join('')}
+  </ul>
+</div>`).join('');
+  } else {
+    tippsEl.innerHTML='<p class="ov-notipp">Keine Tipps vorhanden.</p>';
+  }
+
+  // Sektionen collapsed zurücksetzen
+  document.getElementById('ov-sec-sum-body').style.display='none';
+  document.getElementById('ov-arr-sum').textContent='▾';
+  document.getElementById('ov-sec-tipps-body').style.display='none';
+  document.getElementById('ov-arr-tipps').textContent='▾';
+
   document.getElementById('ovptitle').textContent=t.titel;
   KaTeX(document.getElementById('ovpanel'));
 }
@@ -720,15 +780,33 @@ function ovNav(d){
   document.getElementById('ovnav').textContent=imgs.length>1?`Bild ${ovIdx+1}/${imgs.length}`:'';
 }
 function closeOv(){document.getElementById('ov').style.display='none';document.body.style.overflow='';}
-function togOvTipps(){
-  const el=document.getElementById('ovtipps-list');el.classList.toggle('open');
-  document.getElementById('ovtarr').textContent=el.classList.contains('open')?'▴':'▾';
-}
+
 function togOvPanel(){
   const p=document.getElementById('ovpanel');
   const btn=document.getElementById('ovpanel-tog');
   p.classList.toggle('collapsed');
-  btn.textContent=p.classList.contains('collapsed')?'▶':'◀';
+  const open=!p.classList.contains('collapsed');
+  btn.textContent=open?'◀ Info':'▶ Info';
+  btn.classList.toggle('open',open);
+  if(open)KaTeX(p);
+}
+
+function togOvSec(sec){
+  const body=document.getElementById(`ov-sec-${sec}-body`);
+  const arr=document.getElementById(`ov-arr-${sec}`);
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  arr.textContent=open?'▴':'▾';
+  if(open)KaTeX(body);
+}
+
+function togTippSub(i){
+  const list=document.getElementById(`tsb-${i}`);
+  const arr=document.getElementById(`tsa-${i}`);
+  const open=list.style.display==='none';
+  list.style.display=open?'flex':'none';
+  arr.textContent=open?'▴':'▾';
+  if(open)KaTeX(list);
 }
 </script>
 </body>
