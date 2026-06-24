@@ -78,8 +78,24 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 /* Typ filter: accent when active */
 .ctf.on{background:var(--accent);color:#fff;border-color:var(--accent);}
 
+/* Klasse-Slider */
+.kl-slider-wrap{padding:.3rem .05rem .45rem;width:100%;}
+#kl-slider{width:100%;cursor:pointer;accent-color:var(--accent2);margin:0;}
+.kl-slider-labs{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.58rem;color:#888;margin-top:.15rem;}
+.kl-cur-wrap{text-align:center;margin-top:.3rem;}
+.kl-cur{font-family:var(--mono);font-size:.7rem;font-weight:600;color:var(--paper);background:var(--accent2);border-radius:2px;padding:.1rem .45rem;display:inline-block;}
+
+/* BE-Fortschrittsbalken */
+#be-bar{padding:.28rem .9rem .32rem;border-bottom:1px solid var(--line);background:var(--cream);}
+.be-bar-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;color:#888;margin-bottom:.18rem;align-items:center;}
+.be-bar-row strong{color:var(--accent2);}
+#be-pct-label{font-size:.62rem;font-weight:700;color:var(--accent2);}
+.be-bar-track{height:5px;background:var(--line);border-radius:3px;overflow:hidden;}
+.be-bar-fill{height:100%;background:var(--accent2);border-radius:3px;transition:width .3s;}
+
 /* Topbar */
 #topbar{display:flex;align-items:center;justify-content:space-between;padding:.6rem .9rem;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:10;}
+#be-bar{position:sticky;top:2.45rem;z-index:9;}
 #count{font-family:var(--mono);font-size:.74rem;color:#888;}
 .vbtns{display:flex;gap:.28rem;}
 .vbtn{font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;padding:.25rem .5rem;border:1px solid var(--line);border-radius:2px;color:#888;background:var(--paper);transition:background .12s,color .12s;}
@@ -261,12 +277,15 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
   </div>
 
   <div class="fs">
-    <button class="fsh" onclick="togFs('kl')">Klasse <span class="fsarr" id="ar-kl">▾</span></button>
-    <div class="fsb" id="fs-kl">
-      <button class="chip cbtn on" data-g="kl" data-v="" onclick="exclF(this,'kl')">Alle</button>
-      <button class="chip cbtn" data-g="kl" data-v="11" onclick="exclF(this,'kl')">Kl. 11</button>
-      <button class="chip cbtn" data-g="kl" data-v="11+12" onclick="exclF(this,'kl')">Kl. 11/12</button>
-      <button class="chip cbtn" data-g="kl" data-v="12" onclick="exclF(this,'kl')">Kl. 12</button>
+    <button class="fsh" onclick="togFs('kl')">Klasse / Wissensstand <span class="fsarr" id="ar-kl">▾</span></button>
+    <div class="fsb" id="fs-kl" style="flex-direction:column;gap:0;">
+      <div class="kl-slider-wrap">
+        <input type="range" id="kl-slider" min="0" max="2" step="1" value="1">
+        <div class="kl-slider-labs">
+          <span>Kl. 11</span><span>Alle</span><span>Kl. 12</span>
+        </div>
+        <div class="kl-cur-wrap"><span class="kl-cur" id="kl-cur">Alle</span></div>
+      </div>
     </div>
   </div>
 
@@ -312,6 +331,13 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
       <button class="vbtn on" id="bgrid" onclick="setView('grid')">⊞ Kacheln</button>
       <button class="vbtn" id="blist" onclick="setView('list')">☰ Liste</button>
     </div>
+  </div>
+  <div id="be-bar">
+    <div class="be-bar-row">
+      <span>Kl.-11-Wissen lösbar: <strong id="be-kl11">–</strong> von <strong id="be-total">–</strong> BE</span>
+      <span id="be-pct-label">–</span>
+    </div>
+    <div class="be-bar-track"><div class="be-bar-fill" id="be-bar-fill" style="width:0%"></div></div>
   </div>
   <div id="grid"></div>
   <div id="listview" style="display:none">
@@ -402,6 +428,7 @@ function KaTeX(el) {
 document.addEventListener('DOMContentLoaded', function() {
   buildYearChips();
   buildTypChips();
+  initKlSlider();
   renderAll();
   document.getElementById('q').addEventListener('input',e=>{F.q=e.target.value.toLowerCase();renderAll();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOv();});
@@ -461,6 +488,8 @@ function resetAll(){
   document.querySelectorAll('[data-g]').forEach(b=>{b.classList.remove('on');if(!b.dataset.v)b.classList.add('on');});
   document.querySelectorAll('[data-lp]').forEach(b=>b.classList.add('on'));
   document.querySelectorAll('[data-yr]').forEach(b=>b.classList.remove('on'));
+  const sl=document.getElementById('kl-slider');
+  if(sl){sl.value=1;document.getElementById('kl-cur').textContent='Alle';}
   buildTypChips();renderAll();
 }
 
@@ -517,6 +546,30 @@ function matches(t){
   return true;
 }
 
+// ── Klasse-Slider ───────────────────────────────────────
+const KL_VALS=['11','','12'];
+const KL_LBLS=['Kl. 11','Alle','Kl. 12'];
+function initKlSlider(){
+  const sl=document.getElementById('kl-slider');
+  sl.addEventListener('input',()=>{
+    const i=parseInt(sl.value);
+    F.kl=KL_VALS[i];
+    document.getElementById('kl-cur').textContent=KL_LBLS[i];
+    renderAll();
+  });
+}
+
+// ── BE-Fortschrittsbalken ───────────────────────────────
+function updBeBar(vis){
+  const totalBE=vis.reduce((s,t)=>s+(t.be||0),0);
+  const kl11BE=vis.filter(t=>effKl(t)==='11').reduce((s,t)=>s+(t.be||0),0);
+  const pct=totalBE>0?Math.round(kl11BE/totalBE*100):0;
+  document.getElementById('be-kl11').textContent=kl11BE;
+  document.getElementById('be-total').textContent=totalBE;
+  document.getElementById('be-pct-label').textContent=pct+'%';
+  document.getElementById('be-bar-fill').style.width=pct+'%';
+}
+
 // ── Render ──────────────────────────────────────────────
 function renderAll(){
   const vis=T.filter(matches);
@@ -524,6 +577,7 @@ function renderAll(){
   document.getElementById('empty').style.display=vis.length===0?'block':'none';
   if(VIEW==='grid')renderGrid(vis);else renderList(vis);
   updSelBar();
+  updBeBar(vis);
 }
 
 function renderGrid(tasks){
