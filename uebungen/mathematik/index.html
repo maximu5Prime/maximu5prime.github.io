@@ -10,131 +10,168 @@
 <style>
 :root {
   --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
-  --accent:#c8400a; --accent2:#2a6496; --gold:#c9961a; --line:#d4cfc6;
+  --accent:#c8400a; --gold:#c9961a; --line:#d4cfc6;
   --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 [hidden]{display:none!important;}
-body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7;}
+
+/* ── Full-viewport flex layout (desktop) ── */
+html,body{height:100%;}
+body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);}
+
+@media(min-width:660px){
+  body{display:flex;flex-direction:column;overflow:hidden;}
+  #mm-accordion{display:none;}
+  footer{flex-shrink:0;}
+}
+@media(max-width:659px){
+  #mm-wrap{display:none;}
+  #mm-accordion{display:block;}
+  body{min-height:100vh;}
+}
 
 /* ── Header ── */
-header{background:var(--ink);color:var(--paper);padding:2.8rem 2rem 2.2rem;position:relative;overflow:hidden;}
-header::before{content:'';position:absolute;top:-60px;right:-80px;width:300px;height:300px;border-radius:50%;background:var(--accent);opacity:.1;}
-header::after{content:'';position:absolute;bottom:-40px;left:8%;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.08;}
+header{
+  flex-shrink:0;
+  background:var(--ink);color:var(--paper);
+  padding:1.4rem 2rem 1.1rem;
+  position:relative;overflow:hidden;
+}
+header::before{content:'';position:absolute;top:-50px;right:-60px;width:220px;height:220px;border-radius:50%;background:var(--accent);opacity:.1;}
 .hinner{max-width:960px;margin:0 auto;position:relative;}
-.klass{font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem;}
-header h1{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:900;line-height:1.1;margin-bottom:.6rem;}
-header p{font-size:.95rem;color:#a09888;max-width:560px;}
-header .bc{font-family:var(--mono);font-size:.68rem;color:#666;display:flex;gap:.4rem;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;}
+.klass{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem;}
+header h1{font-family:var(--serif);font-size:clamp(1.4rem,4vw,2rem);font-weight:900;line-height:1.15;margin-bottom:.2rem;}
+header .bc{font-family:var(--mono);font-size:.66rem;color:#666;display:flex;gap:.35rem;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;}
 header .bc a{color:#888;text-decoration:none;transition:color .15s;}
 header .bc a:hover{color:var(--gold);}
 header .bc span{color:#444;}
 
-/* ── Main layout ── */
-main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 5rem;}
-
-/* ── Filter bar ── */
-.filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1.2rem;}
-.filter-bar .bar-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-right:.3rem;}
+/* ── Controls bar (filter + banner) ── */
+#controls{
+  flex-shrink:0;
+  padding:.6rem 1.4rem;
+  border-bottom:1px solid var(--line);
+  background:var(--paper);
+  display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;
+}
+.bar-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#aaa;}
 .mm-filter-btn{
-  font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;
   border:1.5px solid var(--line);border-radius:2px;background:transparent;color:#999;
-  padding:.3rem .75rem;cursor:pointer;transition:all .15s;
+  padding:.25rem .65rem;cursor:pointer;transition:all .15s;
 }
 .mm-filter-btn:hover{border-color:var(--ink);color:var(--ink);}
 .mm-filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-[data-theme=dark] .mm-filter-btn:hover{border-color:var(--ink);color:var(--ink);}
 [data-theme=dark] .mm-filter-btn.active{background:var(--cream);color:var(--ink);border-color:var(--line);}
-
-/* Level-specific active colors */
 .mm-filter-btn.active[data-level="vorklasse"]{background:#7c3aed;border-color:#7c3aed;color:#fff;}
 .mm-filter-btn.active[data-level="kl10"]{background:#2a6496;border-color:#2a6496;color:#fff;}
 .mm-filter-btn.active[data-level="kl11"]{background:#c8400a;border-color:#c8400a;color:#fff;}
 .mm-filter-btn.active[data-level="kl12"]{background:#2e7d4f;border-color:#2e7d4f;color:#fff;}
 
-/* ── Path banner ── */
+.controls-sep{width:1px;height:1.2rem;background:var(--line);flex-shrink:0;}
+
 .path-banner{
-  background:var(--cream);border:1.5px solid var(--line);border-radius:3px;
-  padding:.9rem 1.2rem;margin-bottom:1.4rem;
-  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;
+  display:flex;align-items:center;gap:.8rem;
 }
-.path-banner .banner-text{font-size:.9rem;color:var(--ink);flex:1;}
-.path-banner .banner-text strong{font-family:var(--serif);font-weight:700;}
-.path-banner .banner-start{
-  font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;
+.banner-text{font-size:.82rem;color:var(--ink);}
+.banner-text strong{font-family:var(--serif);font-weight:700;}
+.banner-start{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;
   background:var(--ink);color:var(--paper);border:none;border-radius:2px;
-  padding:.45rem 1rem;cursor:pointer;transition:opacity .15s;white-space:nowrap;
+  padding:.3rem .8rem;cursor:pointer;transition:opacity .15s;white-space:nowrap;
 }
-.path-banner .banner-start:hover{opacity:.8;}
-[data-theme=dark] .path-banner{background:var(--cream);border-color:var(--line);}
-[data-theme=dark] .path-banner .banner-start{background:var(--paper);color:var(--ink);}
+.banner-start:hover{opacity:.8;}
+[data-theme=dark] .banner-start{background:var(--cream);color:var(--ink);}
 
-/* ── SVG mindmap container ── */
-#mm-svg-container{
-  overflow:auto;border:1px solid var(--line);border-radius:3px;
-  background:var(--paper);max-height:min(820px,78vh);cursor:grab;
-  -webkit-overflow-scrolling:touch;
+/* ── SVG container ── */
+#mm-wrap{
+  flex:1;
+  overflow:hidden;
+  position:relative;
+  background:var(--paper);
+  cursor:grab;
+  min-height:300px;
 }
-#mm-svg-container:active{cursor:grabbing;}
-#mm-svg-container svg{display:block;}
+#mm-wrap:active{cursor:grabbing;}
+#mm-svg{width:100%;height:100%;display:block;}
 
-/* SVG node styles (used via class on SVG elements) */
-.mm-connector{stroke:var(--line);stroke-width:1.5px;fill:none;}
-.mm-rect{fill:var(--cream);stroke:var(--line);stroke-width:1px;}
-.mm-leaf .mm-rect{fill:white;stroke:var(--line);}
-.mm-soon .mm-rect{stroke-dasharray:5 3;fill:var(--cream);}
-.mm-available{cursor:pointer;}
-.mm-available .mm-rect:hover{fill:var(--cream)!important;}
-.mm-label{font-family:'Playfair Display',Georgia,serif;font-size:13.5px;font-weight:700;fill:var(--ink);}
-.mm-branch .mm-label{font-size:13px;}
-.mm-root .mm-label{font-size:14px;font-weight:900;}
-.mm-sub{font-family:'DM Mono',monospace;font-size:10px;fill:#888;}
-.mm-soon .mm-label{fill:#aaa;}
-/* Dark mode: increase contrast significantly */
+/* SVG node styles */
+.mm-connector{stroke:var(--line);stroke-width:1.8px;fill:none;transition:opacity .2s;}
+.mm-rect{fill:var(--cream);stroke:var(--line);stroke-width:1px;transition:opacity .2s;}
+.mm-leaf .mm-rect{fill:white;}
+.mm-root .mm-rect{fill:var(--ink);}
+.mm-soon .mm-rect{stroke-dasharray:5 3;}
+.mm-clickable{cursor:pointer;}
+.mm-clickable .mm-rect:hover{fill:#e0ddd4 !important;}
+.mm-root.mm-clickable .mm-rect:hover{fill:#2a2010 !important;}
+.mm-label{font-family:'Playfair Display',Georgia,serif;font-size:13px;font-weight:700;fill:var(--ink);}
+.mm-root .mm-label{fill:var(--paper);font-size:14px;font-weight:900;}
+.mm-sub{font-family:'DM Mono',monospace;font-size:9.5px;fill:#888;}
+.mm-soon .mm-label{fill:#bbb;}
+.mm-soon .mm-sub{fill:#bbb;}
+.mm-badge{font-family:'DM Mono',monospace;font-size:8px;font-weight:600;fill:#fff;}
+
+/* Dark mode */
 [data-theme=dark] .mm-connector{stroke:#484848;}
 [data-theme=dark] .mm-rect{fill:#252525;stroke:#444;}
-[data-theme=dark] .mm-branch .mm-rect,[data-theme=dark] .mm-root .mm-rect{fill:#2a2a2a;stroke:#484848;}
+[data-theme=dark] .mm-branch .mm-rect{fill:#2a2a2a;stroke:#484848;}
 [data-theme=dark] .mm-leaf .mm-rect{fill:#1e1e1e;stroke:#404040;}
+[data-theme=dark] .mm-root .mm-rect{fill:#e8e4df;}
+[data-theme=dark] .mm-root .mm-label{fill:#1a1208;}
+[data-theme=dark] .mm-clickable .mm-rect:hover{fill:#333 !important;}
+[data-theme=dark] .mm-root.mm-clickable .mm-rect:hover{fill:#d5d0ca !important;}
 [data-theme=dark] .mm-soon .mm-rect{fill:#222;stroke:#444;}
-[data-theme=dark] .mm-available .mm-rect:hover{fill:#303030!important;}
 [data-theme=dark] .mm-sub{fill:#666;}
 
-/* Fading when level filter active */
-.mm-node[data-active="0"]{opacity:0.18;pointer-events:none;}
-.mm-connector[data-active="0"]{opacity:0.1;}
+/* Filter fading */
+.mm-node[data-active="0"]{opacity:.14;pointer-events:none;}
+.mm-connector[data-active="0"]{opacity:.08;}
 
-/* ── Mobile accordion (< 660px) ── */
-@media(max-width:659px){
-  #mm-svg-container{display:none;}
-  #mm-accordion{display:block;}
+/* ── Zoom controls ── */
+.zoom-btns{
+  position:absolute;bottom:.8rem;right:.8rem;
+  display:flex;flex-direction:column;gap:2px;z-index:10;
 }
-@media(min-width:660px){
-  #mm-accordion{display:none;}
+.zoom-btn{
+  width:30px;height:30px;
+  font-family:var(--mono);font-size:14px;
+  background:var(--paper);border:1px solid var(--line);border-radius:2px;
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  opacity:.7;transition:opacity .15s;
 }
-#mm-accordion{margin-top:.5rem;}
+.zoom-btn:hover{opacity:1;}
+[data-theme=dark] .zoom-btn{background:var(--cream);border-color:#444;}
+
+/* ── Mobile accordion ── */
+#mm-accordion{padding:1rem 1.4rem 4rem;max-width:680px;}
 #mm-accordion details{border-bottom:1px solid var(--line);}
 #mm-accordion summary{
   font-family:var(--serif);font-size:1rem;font-weight:700;
-  padding:.7rem 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;
+  padding:.65rem 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;
 }
 #mm-accordion summary::after{content:'›';font-family:var(--mono);color:#aaa;transition:transform .2s;}
 #mm-accordion details[open] summary::after{transform:rotate(90deg);}
-#mm-accordion .acc-sub{font-family:var(--serif);font-size:.9rem;font-weight:700;padding:.5rem 0 .3rem .8rem;color:#888;}
-#mm-accordion ul{list-style:none;padding-left:1.4rem;margin-bottom:.6rem;}
-#mm-accordion li{padding:.25rem 0;}
-#mm-accordion li a{color:var(--ink);text-decoration:none;font-size:.92rem;display:flex;gap:.5rem;align-items:baseline;}
-#mm-accordion li a::before{content:'→';font-family:var(--mono);font-size:.75rem;color:#aaa;flex-shrink:0;}
+#mm-accordion .acc-branch-link{
+  font-family:var(--mono);font-size:.7rem;color:var(--accent);text-decoration:none;
+  display:inline-block;margin-left:.5rem;
+}
+#mm-accordion .acc-sub{font-family:var(--serif);font-size:.9rem;font-weight:700;padding:.45rem 0 .2rem .8rem;color:#888;}
+#mm-accordion ul{list-style:none;padding-left:1.3rem;margin-bottom:.5rem;}
+#mm-accordion li{padding:.22rem 0;}
+#mm-accordion li a{color:var(--ink);text-decoration:none;font-size:.9rem;display:flex;gap:.5rem;align-items:baseline;}
+#mm-accordion li a::before{content:'→';font-family:var(--mono);font-size:.72rem;color:#aaa;flex-shrink:0;}
 #mm-accordion li a:hover{color:var(--accent);}
-#mm-accordion li.acc-soon{color:#bbb;font-size:.88rem;font-style:italic;padding:.25rem 0;}
+#mm-accordion li.acc-soon{color:#bbb;font-size:.86rem;font-style:italic;padding:.22rem 0;}
 #mm-accordion li[data-active="0"]{opacity:0.3;}
 
 /* ── Footer ── */
-.footer-nav{background:var(--ink);padding:1.1rem 2rem;margin-top:3rem;}
-.footer-nav-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
-.back-btn{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
+.footer-nav{flex-shrink:0;background:var(--ink);padding:.8rem 1.4rem;}
+.footer-nav-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:.8rem;}
+.back-btn{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;transition:opacity .2s;}
 .back-btn:hover{opacity:.7;}
-.portal-link{font-family:var(--mono);font-size:.68rem;color:#555;text-decoration:none;transition:color .15s;}
+.portal-link{font-family:var(--mono);font-size:.65rem;color:#555;text-decoration:none;transition:color .15s;}
 .portal-link:hover{color:var(--gold);}
 </style>
 <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -150,38 +187,38 @@ main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 5rem;}
     </nav>
     <div class="klass">Mathematik · FOS Nürnberg · Themenübersicht</div>
     <h1>Themenübersicht</h1>
-    <p>Wähle dein Thema oder starte einen geführten Pfad für deine Jahrgangsstufe.</p>
   </div>
 </header>
 
-<main>
-
-  <!-- Filter bar -->
-  <div class="filter-bar" role="group" aria-label="Nach Jahrgangsstufe filtern">
-    <span class="bar-label">Filtern:</span>
-    <button class="mm-filter-btn active" data-level="">Alle</button>
-    <button class="mm-filter-btn" data-level="vorklasse">Vorklasse</button>
-    <button class="mm-filter-btn" data-level="kl10">Klasse 10</button>
-    <button class="mm-filter-btn" data-level="kl11">Klasse 11</button>
-    <button class="mm-filter-btn" data-level="kl12">Abitur</button>
-  </div>
-
-  <!-- Path banner (shown when a level is selected) -->
+<!-- Filter + Banner bar -->
+<div id="controls">
+  <span class="bar-label">Stufe:</span>
+  <button class="mm-filter-btn active" data-level="">Alle</button>
+  <button class="mm-filter-btn" data-level="vorklasse">Vorklasse</button>
+  <button class="mm-filter-btn" data-level="kl10">Klasse 10</button>
+  <button class="mm-filter-btn" data-level="kl11">Klasse 11</button>
+  <button class="mm-filter-btn" data-level="kl12">Abitur</button>
+  <div class="controls-sep" id="banner-sep" hidden></div>
   <div class="path-banner" id="path-banner" hidden role="status">
-    <span class="banner-text">
-      Geführter Pfad für <strong id="banner-label"></strong>:
-      <strong id="banner-count"></strong> Übungen in Lehrplanreihenfolge
-    </span>
+    <span class="banner-text">Pfad <strong id="banner-label"></strong>: <strong id="banner-count"></strong> Übungen</span>
     <button class="banner-start" id="banner-start">Pfad starten →</button>
   </div>
+</div>
 
-  <!-- SVG mindmap (desktop) -->
-  <div id="mm-svg-container" aria-label="Themen-Mindmap Mathematik"></div>
+<!-- SVG Mindmap (desktop) -->
+<div id="mm-wrap" aria-label="Themen-Mindmap Mathematik">
+  <svg id="mm-svg" aria-hidden="true">
+    <g id="zoom-layer"></g>
+  </svg>
+  <div class="zoom-btns" aria-hidden="true">
+    <button class="zoom-btn" id="btn-zoom-in" title="Vergrößern">+</button>
+    <button class="zoom-btn" id="btn-reset" title="Ansicht zurücksetzen">⟳</button>
+    <button class="zoom-btn" id="btn-zoom-out" title="Verkleinern">−</button>
+  </div>
+</div>
 
-  <!-- Accordion (mobile) -->
-  <nav id="mm-accordion" aria-label="Themenübersicht"></nav>
-
-</main>
+<!-- Mobile accordion -->
+<nav id="mm-accordion" aria-label="Themenübersicht"></nav>
 
 <footer class="footer-nav">
   <div class="footer-nav-inner">
@@ -197,262 +234,395 @@ main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 5rem;}
 <script>
 (function () {
   var T = window.MATHE_TOPICS;
-  if (!T) { console.error('topics.js fehlt'); return; }
+  if (!T) { console.error('topics.js nicht geladen'); return; }
+
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // ── Layout constants ─────────────────────────────────────────────
+  var NW   = 170;   // node rect width
+  var NH_L = 54;    // leaf node height
+  var NH_B = 38;    // branch node height
+  var NH_R = 44;    // root node height
+  var STEP = 196;   // x-distance per depth level
+  var LH   = 60;    // y-slot per leaf
+  var PAD  = 32;    // outer padding
 
   // ── Lookup maps ──────────────────────────────────────────────────
   var levelMap = {};
   T.levels.forEach(function (l) { levelMap[l.id] = l; });
 
   var nodeMap = {};
-  function collectNodes(node) {
-    nodeMap[node.id] = node;
-    if (node.children) node.children.forEach(collectNodes);
+  function collectNodes(n) {
+    nodeMap[n.id] = n;
+    if (n.children) n.children.forEach(collectNodes);
   }
   collectNodes(T.tree);
 
-  // ── SVG layout constants ─────────────────────────────────────────
-  var LW = 210;     // x-step per depth level
-  var LH = 60;      // y-step per leaf slot
-  var NW = 180;     // node rect width
-  var NH_L = 50;    // leaf node height
-  var NH_B = 38;    // branch node height
-  var PX = 16;      // horizontal padding
-  var PY = 24;      // vertical padding
-  var NS = 'http://www.w3.org/2000/svg';
-
-  function nh(node) { return node.children ? NH_B : NH_L; }
-
-  // ── Assign layout positions (mutates node objects) ───────────────
-  function layoutTree(node, depth, ctr) {
-    node._d = depth;
-    node._x = PX + depth * LW;
-    var h = nh(node);
-    if (!node.children) {
-      node._cy = PY + ctr.n * LH + LH / 2;
-      node._y  = node._cy - h / 2;
-      ctr.n++;
-    } else {
-      node.children.forEach(function (c) { layoutTree(c, depth + 1, ctr); });
-      var firstCY = node.children[0]._cy;
-      var lastCY  = node.children[node.children.length - 1]._cy;
-      node._cy = (firstCY + lastCY) / 2;
-      node._y  = node._cy - h / 2;
-    }
+  // ── Helpers ──────────────────────────────────────────────────────
+  function nh(n) {
+    if (n.id === 'root') return NH_R;
+    return n.children ? NH_B : NH_L;
   }
 
-  // ── Text wrapping helper (splits at space near midpoint) ─────────
-  function wrapLabel(label, maxChars) {
-    if (label.length <= maxChars) return [label, ''];
+  function isLeaf(n)  { return !n.children; }
+  function hasExercise(n) { return !!(n.exercise && n.exercise.url); }
+
+  function countLeaves(n) {
+    if (!n.children) return 1;
+    return n.children.reduce(function(s, c) { return s + countLeaves(c); }, 0);
+  }
+
+  function hasLevelDescendant(n, levelId) {
+    if (!n.children) return n.levels && n.levels.indexOf(levelId) >= 0 && n.status === 'available';
+    return n.children.some(function(c) { return hasLevelDescendant(c, levelId); });
+  }
+
+  function wrapLabel(label, max) {
+    if (label.length <= max) return [label, ''];
     var mid = Math.floor(label.length / 2);
-    var sp  = label.lastIndexOf(' ', mid + 4);
+    var sp  = label.lastIndexOf(' ', mid + 5);
     if (sp < 2) sp = label.indexOf(' ', mid);
-    if (sp < 0) return [label.substring(0, maxChars - 1) + '…', ''];
+    if (sp < 0) return [label.substring(0, max - 1) + '…', ''];
     return [label.substring(0, sp), label.substring(sp + 1)];
   }
 
-  // ── Helper: does node (or any descendant) belong to levelId? ─────
-  function hasLevelDescendant(node, levelId) {
-    if (!node.children) {
-      return node.levels && node.levels.indexOf(levelId) >= 0 && node.status === 'available';
-    }
-    return node.children.some(function (c) { return hasLevelDescendant(c, levelId); });
-  }
-
-  // ── Create SVG element helper ────────────────────────────────────
   function el(tag, attrs, cls) {
     var e = document.createElementNS(NS, tag);
     if (cls) e.setAttribute('class', cls);
-    if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (attrs) Object.keys(attrs).forEach(function(k) { e.setAttribute(k, attrs[k]); });
     return e;
   }
 
-  // ── Render a single node <g> ─────────────────────────────────────
-  function renderNode(node, currentLevel) {
-    var isLeaf   = !node.children;
-    var isSoon   = node.status === 'coming-soon';
-    var isAvail  = node.status === 'available';
-    var nodeH    = nh(node);
-    var cls      = 'mm-node';
-    if (!isLeaf && node.id === 'root') cls += ' mm-root';
-    else if (!isLeaf) cls += ' mm-branch';
-    else cls += ' mm-leaf';
-    if (isSoon)  cls += ' mm-soon';
-    if (isLeaf && isAvail) cls += ' mm-available';
+  // ── Bidirectional layout ─────────────────────────────────────────
+  // Assigns _cx, _cy, _x, _y, _dir to each node.
+  // Left branch grows left from root; right branch grows right.
+  function doLayout(node, cx, topY, availH, dir) {
+    node._cx  = cx;
+    node._cy  = topY + availH / 2;
+    node._x   = cx - NW / 2;
+    node._y   = node._cy - nh(node) / 2;
+    node._dir = dir;
+    if (node.children) {
+      var sign = (dir === 'left') ? -1 : 1;
+      var childCX = cx + sign * STEP;
+      var leafY = topY;
+      node.children.forEach(function(child) {
+        var childLeaves = countLeaves(child);
+        var childH = childLeaves * LH;
+        doLayout(child, childCX, leafY, childH, dir);
+        leafY += childH;
+      });
+    }
+  }
+
+  function buildLayout() {
+    var leftBranch  = T.tree.children[0]; // Funktionen
+    var rightBranch = T.tree.children[1]; // Geometrie
+    var leftLeaves  = countLeaves(leftBranch);
+    var rightLeaves = countLeaves(rightBranch);
+    var maxLeaves   = Math.max(leftLeaves, rightLeaves);
+
+    // Root at center of the taller side
+    var CX = PAD + 3 * STEP + NW / 2;  // = 32 + 588 + 85 = 705
+    var CY = PAD + maxLeaves * LH / 2; // = 32 + 330 = 362
+
+    T.tree._cx = CX;
+    T.tree._cy = CY;
+    T.tree._x  = CX - NW / 2;
+    T.tree._y  = CY - NH_R / 2;
+    T.tree._dir = 'center';
+
+    // Left branch: centered at CY
+    var leftH = leftLeaves * LH;
+    doLayout(leftBranch, CX - STEP, CY - leftH / 2, leftH, 'left');
+
+    // Right branch: centered at CY
+    var rightH = rightLeaves * LH;
+    doLayout(rightBranch, CX + STEP, CY - rightH / 2, rightH, 'right');
+
+    // Compute actual bounding box
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    function bounds(n) {
+      minX = Math.min(minX, n._x);
+      maxX = Math.max(maxX, n._x + NW);
+      minY = Math.min(minY, n._y);
+      maxY = Math.max(maxY, n._y + nh(n));
+      if (n.children) n.children.forEach(bounds);
+    }
+    bounds(T.tree);
+
+    return {
+      W: maxX - minX + 2 * PAD,
+      H: maxY - minY + 2 * PAD,
+      offX: PAD - minX,
+      offY: PAD - minY
+    };
+  }
+
+  // Apply coordinate offset to all nodes
+  function applyOffset(node, offX, offY) {
+    node._x  += offX;
+    node._cx += offX;
+    node._y  += offY;
+    node._cy += offY;
+    if (node.children) node.children.forEach(function(c) { applyOffset(c, offX, offY); });
+  }
+
+  // ── SVG connector path ───────────────────────────────────────────
+  function connectorPath(parent, child) {
+    var x1, x2;
+    var y1 = parent._cy, y2 = child._cy;
+
+    if (child._dir === 'left') {
+      x1 = parent._x;            // parent left edge
+      x2 = child._x + NW;        // child right edge
+    } else {
+      x1 = parent._x + NW;       // parent right edge
+      x2 = child._x;             // child left edge
+    }
+    var mx = (x1 + x2) / 2;
+    return 'M ' + x1 + ' ' + y1 +
+           ' C ' + mx + ' ' + y1 +
+           ' ' + mx + ' ' + y2 +
+           ' ' + x2 + ' ' + y2;
+  }
+
+  // ── Render single node ───────────────────────────────────────────
+  function renderNode(node) {
+    var leaf = isLeaf(node);
+    var soon = node.status === 'coming-soon';
+    var root = node.id === 'root';
+    var hasEx = hasExercise(node);
+    var nodeH = nh(node);
+
+    var cls = 'mm-node';
+    if (root)       cls += ' mm-root';
+    else if (!leaf) cls += ' mm-branch';
+    else            cls += ' mm-leaf';
+    if (soon)  cls += ' mm-soon';
+    if (hasEx) cls += ' mm-clickable';
 
     var g = el('g', { 'data-id': node.id }, cls);
     if (node.levels) g.setAttribute('data-levels', node.levels.join(','));
 
-    // Active state for filter
-    if (currentLevel && isLeaf) {
-      g.setAttribute('data-active', node.levels && node.levels.indexOf(currentLevel) >= 0 ? '1' : '0');
-    }
-
     // Background rect
-    g.appendChild(el('rect', {
-      x: node._x, y: node._y, width: NW, height: nodeH, rx: 3, class: 'mm-rect'
-    }));
+    g.appendChild(el('rect', { x: node._x, y: node._y, width: NW, height: nodeH, rx: 3, class: 'mm-rect' }));
 
-    // Left accent bar (leaf only)
-    if (isLeaf && node.levels && node.levels.length) {
-      var accentColor = isSoon ? '#bbb' : levelMap[node.levels[0]].color;
-      var accent = el('rect', {
-        x: node._x, y: node._y, width: 4, height: nodeH, rx: 2
-      });
-      accent.style.fill = accentColor;
+    // Accent bar: left side for right-dir and center, right side for left-dir
+    if (!root && !soon && node.levels && node.levels.length) {
+      var color = levelMap[node.levels[0]] ? levelMap[node.levels[0]].color : '#999';
+      var barX = (node._dir === 'left') ? node._x + NW - 4 : node._x;
+      var accent = el('rect', { x: barX, y: node._y, width: 4, height: nodeH, rx: 2 });
+      accent.style.fill = color;
       g.appendChild(accent);
     }
+    // Branch accent (no level → use generic ink)
+    if (!leaf && !root && !soon && !(node.levels && node.levels.length)) {
+      // no accent bar for branch nodes without a level assignment
+    }
 
-    // Label text (possibly 2 lines)
-    var lines = isLeaf ? wrapLabel(node.label, 21) : wrapLabel(node.label, 19);
-    var hasSubtitle = isLeaf && node.subtitle;
-    var twoLines = lines[1] !== '';
-    var textX = node._x + (isLeaf ? 12 : 10);
+    // Label text
+    var wrapMax = root ? 14 : 21;
+    var lines = wrapLabel(node.label, wrapMax);
+    var hasSub = leaf && node.subtitle;
+    var twoLine = lines[1] !== '';
+    var textX = node._x + (leaf ? 10 : 8);
     var labelY;
-    if (twoLines) {
-      labelY = hasSubtitle ? node._y + nodeH / 2 - 15 : node._y + nodeH / 2 - 8;
+    if (twoLine) {
+      labelY = hasSub ? node._y + nodeH / 2 - 14 : node._y + nodeH / 2 - 7;
     } else {
-      labelY = hasSubtitle ? node._y + nodeH / 2 - 5 : node._y + nodeH / 2 + 5;
+      labelY = hasSub ? node._y + nodeH / 2 - 4 : node._y + nodeH / 2 + 5;
+    }
+    // Root: center text
+    if (root) {
+      textX = node._cx - (lines[0].length * 4.2);
+      labelY = node._cy + 5;
     }
 
     var t1 = el('text', { x: textX, y: labelY, class: 'mm-label' });
     t1.textContent = lines[0];
     g.appendChild(t1);
 
-    if (twoLines) {
+    if (twoLine) {
       var t2 = el('text', { x: textX, y: labelY + 15, class: 'mm-label' });
       t2.textContent = lines[1];
       g.appendChild(t2);
     }
 
-    // Subtitle
-    if (hasSubtitle) {
-      var subY = twoLines ? node._y + nodeH - 8 : node._y + nodeH / 2 + 13;
+    if (hasSub) {
+      var subY = twoLine ? node._y + nodeH - 8 : node._y + nodeH / 2 + 13;
       var sub = el('text', { x: textX, y: subY, class: 'mm-sub' });
       sub.textContent = node.subtitle;
       g.appendChild(sub);
     }
 
+    // Exercise icon indicator (→ mark on branch nodes with exercise)
+    if (!leaf && !root && hasEx) {
+      var iconX = (node._dir === 'left') ? node._x + 6 : node._x + NW - 16;
+      var iconEl = el('text', { x: iconX, y: node._y + nodeH / 2 + 4, class: 'mm-sub' });
+      iconEl.textContent = '↗';
+      iconEl.style.fontSize = '10px';
+      g.appendChild(iconEl);
+    }
+
     // Tooltip
     var tip = document.createElementNS(NS, 'title');
-    tip.textContent = node.label + (node.topics && node.topics.length ? ' — ' + node.topics.join(' · ') : '');
+    var tipTxt = node.label;
+    if (node.topics && node.topics.length) tipTxt += ' — ' + node.topics.join(' · ');
+    if (hasEx) tipTxt += ' (Klicken zum Öffnen)';
+    tip.textContent = tipTxt;
     g.appendChild(tip);
-
-    // Click handler
-    if (isLeaf && isAvail) {
-      g.addEventListener('click', function () { handleClick(node); });
-    }
 
     return g;
   }
 
-  // ── Build full SVG ───────────────────────────────────────────────
-  function buildSVG(currentLevel) {
-    var ctr = { n: 0 };
-    layoutTree(T.tree, 0, ctr);
+  // ── Build full SVG content ───────────────────────────────────────
+  var CONTENT_W, CONTENT_H;
 
-    var svgH = PY * 2 + ctr.n * LH;
-    var svgW = PX + 3 * LW + NW + PX;  // 4 depth levels (0-3): leaves at depth 3
+  function buildSVGContent() {
+    var layout = buildLayout();
+    applyOffset(T.tree, layout.offX, layout.offY);
+    CONTENT_W = layout.W;
+    CONTENT_H = layout.H;
 
-    var svg = el('svg', {
-      viewBox: '0 0 ' + svgW + ' ' + svgH,
-      width: svgW, height: svgH,
-      'aria-hidden': 'true'
-    });
+    var layer = document.getElementById('zoom-layer');
+    layer.innerHTML = '';
 
-    // Connectors (drawn first, behind nodes)
-    var allNodes = Object.values ? Object.values(nodeMap) : Object.keys(nodeMap).map(function(k){return nodeMap[k];});
-    allNodes.forEach(function (node) {
+    // Collect all nodes
+    var allNodes = Object.keys(nodeMap).map(function(k) { return nodeMap[k]; });
+
+    // Draw connectors first (behind nodes)
+    allNodes.forEach(function(node) {
       if (!node.children) return;
-      node.children.forEach(function (child) {
-        var x1 = node._x + NW;
-        var y1 = node._cy;
-        var x2 = child._x;
-        var y2 = child._cy;
-        var mx = (x1 + x2) / 2;
+      node.children.forEach(function(child) {
         var path = el('path', {
-          d: 'M ' + x1 + ' ' + y1 + ' C ' + mx + ' ' + y1 + ' ' + mx + ' ' + y2 + ' ' + x2 + ' ' + y2,
+          d: connectorPath(node, child),
           class: 'mm-connector',
+          'data-from': node.id,
           'data-to': child.id
         });
-        if (currentLevel) {
-          var active = hasLevelDescendant(child, currentLevel) ? '1' : '0';
-          path.setAttribute('data-active', active);
-        }
-        svg.appendChild(path);
+        layer.appendChild(path);
       });
     });
 
-    // Nodes
-    allNodes.forEach(function (node) {
-      svg.appendChild(renderNode(node, currentLevel));
-    });
-
-    return svg;
-  }
-
-  // ── Build mobile accordion ───────────────────────────────────────
-  function buildAccordion(currentLevel) {
-    var acc = document.getElementById('mm-accordion');
-    acc.innerHTML = '';
-
-    function makeLeafItem(node) {
-      var li = document.createElement('li');
-      li.setAttribute('data-id', node.id);
-      if (node.levels) li.setAttribute('data-levels', node.levels.join(','));
-      if (currentLevel && node.levels) {
-        li.setAttribute('data-active', node.levels.indexOf(currentLevel) >= 0 ? '1' : '0');
+    // Draw nodes
+    allNodes.forEach(function(node) {
+      var g = renderNode(node);
+      if (hasExercise(node)) {
+        g.addEventListener('click', function(e) {
+          if (dragMoved) return;
+          handleClick(node);
+        });
       }
-      if (node.status === 'coming-soon') {
-        li.className = 'acc-soon';
-        li.textContent = node.label + ' (in Vorbereitung)';
-      } else {
-        var a = document.createElement('a');
-        a.href = '#';
-        a.textContent = node.label + (node.subtitle ? ' — ' + node.subtitle : '');
-        a.addEventListener('click', function (e) { e.preventDefault(); handleClick(node); });
-        li.appendChild(a);
-      }
-      return li;
-    }
-
-    function makeBranchDetails(node, isTopLevel) {
-      if (!node.children) return null;
-      var details = document.createElement('details');
-      if (isTopLevel) details.setAttribute('open', '');
-      var summary = document.createElement('summary');
-      summary.textContent = node.label;
-      details.appendChild(summary);
-
-      node.children.forEach(function (child) {
-        if (child.children) {
-          // sub-branch
-          var subLabel = document.createElement('div');
-          subLabel.className = 'acc-sub';
-          subLabel.textContent = child.label;
-          details.appendChild(subLabel);
-          var ul = document.createElement('ul');
-          child.children.forEach(function (leaf) {
-            ul.appendChild(makeLeafItem(leaf));
-          });
-          details.appendChild(ul);
-        } else {
-          var ul2 = document.createElement('ul');
-          ul2.appendChild(makeLeafItem(child));
-          details.appendChild(ul2);
-        }
-      });
-      return details;
-    }
-
-    T.tree.children.forEach(function (branch) {
-      var d = makeBranchDetails(branch, true);
-      if (d) acc.appendChild(d);
+      layer.appendChild(g);
     });
   }
 
-  // ── Handle node click ────────────────────────────────────────────
+  // ── Zoom / Pan ───────────────────────────────────────────────────
+  var svg      = document.getElementById('mm-svg');
+  var zoomLayer = document.getElementById('zoom-layer');
+  var zoom = 1, panX = 0, panY = 0;
+  var isDragging = false, dragMoved = false;
+  var dragStart = null;
+
+  function applyTransform() {
+    zoomLayer.setAttribute('transform',
+      'translate(' + panX.toFixed(2) + ',' + panY.toFixed(2) + ') scale(' + zoom.toFixed(4) + ')');
+  }
+
+  function clampZoom(z) { return Math.min(Math.max(z, 0.18), 4); }
+
+  function zoomAt(factor, cx, cy) {
+    var newZoom = clampZoom(zoom * factor);
+    panX = cx - (cx - panX) * (newZoom / zoom);
+    panY = cy - (cy - panY) * (newZoom / zoom);
+    zoom = newZoom;
+    applyTransform();
+  }
+
+  function fitView() {
+    var rect = svg.getBoundingClientRect();
+    var w = rect.width, h = rect.height;
+    if (!w || !h || !CONTENT_W || !CONTENT_H) return;
+    var scale = Math.min(w / CONTENT_W, h / CONTENT_H) * 0.92;
+    zoom = scale;
+    panX = (w - CONTENT_W * scale) / 2;
+    panY = (h - CONTENT_H * scale) / 2;
+    applyTransform();
+  }
+
+  // Mouse wheel zoom
+  svg.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    var factor = e.deltaY < 0 ? 1.14 : 1 / 1.14;
+    var rect = svg.getBoundingClientRect();
+    zoomAt(factor, e.clientX - rect.left, e.clientY - rect.top);
+  }, { passive: false });
+
+  // Mouse drag
+  svg.addEventListener('mousedown', function(e) {
+    if (e.button !== 0) return;
+    isDragging = true;
+    dragMoved  = false;
+    dragStart  = { x: e.clientX - panX, y: e.clientY - panY };
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    var dx = e.clientX - panX - dragStart.x;
+    var dy = e.clientY - panY - dragStart.y;
+    if (Math.abs(dx) + Math.abs(dy) > 3) dragMoved = true;
+    panX = e.clientX - dragStart.x;
+    panY = e.clientY - dragStart.y;
+    applyTransform();
+  });
+  document.addEventListener('mouseup', function() { isDragging = false; });
+
+  // Touch pan + pinch
+  var lastTouches = null;
+  svg.addEventListener('touchstart', function(e) {
+    lastTouches = Array.from(e.touches).map(function(t) { return { x: t.clientX, y: t.clientY }; });
+    dragMoved = false;
+  }, { passive: true });
+  svg.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    var touches = Array.from(e.touches).map(function(t) { return { x: t.clientX, y: t.clientY }; });
+    var rect = svg.getBoundingClientRect();
+    if (touches.length === 1 && lastTouches && lastTouches.length === 1) {
+      panX += touches[0].x - lastTouches[0].x;
+      panY += touches[0].y - lastTouches[0].y;
+      dragMoved = true;
+      applyTransform();
+    } else if (touches.length === 2 && lastTouches && lastTouches.length >= 2) {
+      var oldD = Math.hypot(lastTouches[0].x - lastTouches[1].x, lastTouches[0].y - lastTouches[1].y);
+      var newD = Math.hypot(touches[0].x - touches[1].x, touches[0].y - touches[1].y);
+      if (oldD > 0) {
+        var cx = (touches[0].x + touches[1].x) / 2 - rect.left;
+        var cy = (touches[0].y + touches[1].y) / 2 - rect.top;
+        zoomAt(newD / oldD, cx, cy);
+        dragMoved = true;
+      }
+    }
+    lastTouches = touches;
+  }, { passive: false });
+  svg.addEventListener('touchend', function() { lastTouches = null; });
+
+  // Zoom buttons
+  document.getElementById('btn-zoom-in').addEventListener('click', function() {
+    var r = svg.getBoundingClientRect();
+    zoomAt(1.25, r.width / 2, r.height / 2);
+  });
+  document.getElementById('btn-zoom-out').addEventListener('click', function() {
+    var r = svg.getBoundingClientRect();
+    zoomAt(1 / 1.25, r.width / 2, r.height / 2);
+  });
+  document.getElementById('btn-reset').addEventListener('click', fitView);
+
+  // ── Click handler ────────────────────────────────────────────────
+  var currentLevel = null;
+
   function handleClick(node) {
-    if (currentLevel) {
+    // Leaf node in guided path context → enter guided path at this position
+    if (isLeaf(node) && currentLevel && node.status === 'available') {
       var path = T.paths[currentLevel] || [];
       var idx = path.indexOf(node.id);
       if (idx >= 0) {
@@ -461,60 +631,162 @@ main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 5rem;}
         return;
       }
     }
-    location.href = node.exercise.url;
+    // Direct link
+    if (node.exercise && node.exercise.url) {
+      location.href = node.exercise.url;
+    }
+  }
+
+  // ── Filter ───────────────────────────────────────────────────────
+  function applyFilter(levelId) {
+    currentLevel = levelId || null;
+
+    document.querySelectorAll('.mm-filter-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-level') === (levelId || ''));
+    });
+
+    updateBanner(levelId);
+
+    // Update SVG node/connector visibility in place (preserves zoom)
+    if (currentLevel) {
+      document.querySelectorAll('.mm-node').forEach(function(g) {
+        var node = nodeMap[g.getAttribute('data-id')];
+        if (!node) return;
+        var active = isLeaf(node)
+          ? (node.levels && node.levels.indexOf(currentLevel) >= 0 && node.status === 'available')
+          : hasLevelDescendant(node, currentLevel);
+        g.setAttribute('data-active', active ? '1' : '0');
+      });
+      document.querySelectorAll('.mm-connector').forEach(function(path) {
+        var child = nodeMap[path.getAttribute('data-to')];
+        var active = child ? hasLevelDescendant(child, currentLevel) : false;
+        path.setAttribute('data-active', active ? '1' : '0');
+      });
+    } else {
+      document.querySelectorAll('[data-active]').forEach(function(e) { e.removeAttribute('data-active'); });
+    }
+
+    buildAccordion(currentLevel);
   }
 
   // ── Path banner ──────────────────────────────────────────────────
   function updateBanner(levelId) {
     var banner = document.getElementById('path-banner');
-    if (!levelId) { banner.hidden = true; return; }
+    var sep    = document.getElementById('banner-sep');
+    if (!levelId) { banner.hidden = true; sep.hidden = true; return; }
     var path = T.paths[levelId] || [];
+    var availCount = path.filter(function(id) {
+      return nodeMap[id] && nodeMap[id].status === 'available';
+    }).length;
     document.getElementById('banner-label').textContent = levelMap[levelId].label;
-    document.getElementById('banner-count').textContent = path.length;
+    document.getElementById('banner-count').textContent = availCount;
     banner.hidden = false;
-    document.getElementById('banner-start').onclick = function () {
+    sep.hidden = false;
+    document.getElementById('banner-start').onclick = function() {
       localStorage.setItem('mathe_path', JSON.stringify({ level: levelId, idx: 0 }));
       location.href = 'guided-viewer.html?level=' + levelId + '&idx=0';
     };
   }
 
-  // ── Filter: re-render SVG & accordion ───────────────────────────
-  var currentLevel = null;
+  // ── Mobile accordion ─────────────────────────────────────────────
+  function buildAccordion(levelId) {
+    var acc = document.getElementById('mm-accordion');
+    acc.innerHTML = '';
 
-  function applyFilter(levelId) {
-    currentLevel = levelId || null;
+    function leafItem(node) {
+      var li = document.createElement('li');
+      li.setAttribute('data-id', node.id);
+      if (node.levels) li.setAttribute('data-levels', node.levels.join(','));
+      if (levelId && node.levels) {
+        li.setAttribute('data-active', node.levels.indexOf(levelId) >= 0 ? '1' : '0');
+      }
+      if (node.status === 'coming-soon') {
+        li.className = 'acc-soon';
+        li.textContent = node.label + ' (bald verfügbar)';
+      } else {
+        var a = document.createElement('a');
+        a.href = '#';
+        a.textContent = node.label + (node.subtitle ? ' — ' + node.subtitle : '');
+        a.addEventListener('click', function(e) { e.preventDefault(); handleClick(node); });
+        li.appendChild(a);
+      }
+      return li;
+    }
 
-    // Update buttons
-    document.querySelectorAll('.mm-filter-btn').forEach(function (btn) {
-      btn.classList.toggle('active', btn.getAttribute('data-level') === (levelId || ''));
+    function branchDetails(node, open) {
+      if (!node.children) return null;
+      var details = document.createElement('details');
+      if (open) details.setAttribute('open', '');
+      var summary = document.createElement('summary');
+      summary.textContent = node.label;
+      // Add exercise link on summary for branch nodes with exercises
+      if (hasExercise(node)) {
+        var aLink = document.createElement('a');
+        aLink.className = 'acc-branch-link';
+        aLink.href = node.exercise.url;
+        aLink.textContent = '↗ öffnen';
+        aLink.addEventListener('click', function(e) { e.stopPropagation(); });
+        summary.appendChild(aLink);
+      }
+      details.appendChild(summary);
+
+      node.children.forEach(function(child) {
+        if (child.children) {
+          var subLabel = document.createElement('div');
+          subLabel.className = 'acc-sub';
+          subLabel.textContent = child.label;
+          if (hasExercise(child)) {
+            var aL = document.createElement('a');
+            aL.className = 'acc-branch-link';
+            aL.href = child.exercise.url;
+            aL.textContent = '↗';
+            subLabel.appendChild(aL);
+          }
+          details.appendChild(subLabel);
+          var ul = document.createElement('ul');
+          child.children.forEach(function(leaf) { ul.appendChild(leafItem(leaf)); });
+          details.appendChild(ul);
+        } else {
+          var ul2 = document.createElement('ul');
+          ul2.appendChild(leafItem(child));
+          details.appendChild(ul2);
+        }
+      });
+      return details;
+    }
+
+    T.tree.children.forEach(function(branch, i) {
+      var d = branchDetails(branch, true);
+      if (d) acc.appendChild(d);
     });
-
-    // Rebuild SVG
-    var container = document.getElementById('mm-svg-container');
-    container.innerHTML = '';
-    container.appendChild(buildSVG(currentLevel));
-
-    // Rebuild accordion
-    buildAccordion(currentLevel);
-
-    // Banner
-    updateBanner(currentLevel);
   }
 
   // ── Init ─────────────────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', function () {
-    applyFilter(null);
+  document.addEventListener('DOMContentLoaded', function() {
+    // Build SVG once
+    buildSVGContent();
 
-    document.querySelectorAll('.mm-filter-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
+    // Fit to viewport after paint
+    requestAnimationFrame(function() {
+      requestAnimationFrame(fitView);
+    });
+
+    // Initial accordion
+    buildAccordion(null);
+
+    // Filter button clicks
+    document.querySelectorAll('.mm-filter-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
         var lvl = btn.getAttribute('data-level') || '';
-        // Toggle off if already active
-        if (currentLevel === (lvl || null)) {
-          applyFilter(null);
-        } else {
-          applyFilter(lvl || null);
-        }
+        applyFilter(currentLevel === (lvl || null) ? null : (lvl || null));
       });
+    });
+
+    // Re-fit on window resize (debounced)
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(fitView, 120);
     });
   });
 
