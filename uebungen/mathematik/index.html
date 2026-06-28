@@ -2,138 +2,185 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mathematik – Übungen</title>
+<title>Mathematik – Themenübersicht</title>
 <link rel="stylesheet" href="../../static/fonts.css">
-  <link rel="stylesheet" href="../../static/theme.css">
+<link rel="stylesheet" href="../../static/theme.css">
 <style>
 :root {
   --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
-  --accent:#c8400a; --accent2:#2a6496; --gold:#c9961a; --green:#2e7d4f; --line:#d4cfc6;
+  --accent:#c8400a; --accent2:#2a6496; --gold:#c9961a; --line:#d4cfc6;
   --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
+[hidden]{display:none!important;}
 body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7;}
 
+/* ── Header ── */
 header{background:var(--ink);color:var(--paper);padding:2.8rem 2rem 2.2rem;position:relative;overflow:hidden;}
 header::before{content:'';position:absolute;top:-60px;right:-80px;width:300px;height:300px;border-radius:50%;background:var(--accent);opacity:.1;}
 header::after{content:'';position:absolute;bottom:-40px;left:8%;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.08;}
-.hinner{max-width:900px;margin:0 auto;position:relative;}
+.hinner{max-width:960px;margin:0 auto;position:relative;}
 .klass{font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem;}
 header h1{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:900;line-height:1.1;margin-bottom:.6rem;}
 header p{font-size:.95rem;color:#a09888;max-width:560px;}
-
-main{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
-h2{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;margin:2.2rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--line);}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
-.card{background:white;border:1px solid var(--line);border-radius:2px;padding:1.4rem 1.5rem;
-  text-decoration:none;color:var(--ink);display:block;transition:box-shadow .2s,transform .15s;
-  border-left:4px solid var(--accent);}
-.card:hover{box-shadow:0 4px 14px rgba(0,0,0,.09);transform:translateY(-2px);}
-.card-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;}
-.card h3{font-family:var(--serif);font-size:1.1rem;font-weight:700;margin-bottom:.3rem;}
-.card p{font-size:.86rem;color:#888;line-height:1.55;}
-.card-meta{margin-top:.9rem;font-family:var(--mono);font-size:.75rem;color:var(--line);display:flex;gap:1rem;}
-.card-meta span{color:#aaa;}
-
-/* Breadcrumb im Header */
 header .bc{font-family:var(--mono);font-size:.68rem;color:#666;display:flex;gap:.4rem;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;}
 header .bc a{color:#888;text-decoration:none;transition:color .15s;}
 header .bc a:hover{color:var(--gold);}
 header .bc span{color:#444;}
 
+/* ── Main layout ── */
+main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 5rem;}
+
+/* ── Filter bar ── */
+.filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1.2rem;}
+.filter-bar .bar-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-right:.3rem;}
+.mm-filter-btn{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  border:1.5px solid var(--line);border-radius:2px;background:transparent;color:#999;
+  padding:.3rem .75rem;cursor:pointer;transition:all .15s;
+}
+.mm-filter-btn:hover{border-color:var(--ink);color:var(--ink);}
+.mm-filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+[data-theme=dark] .mm-filter-btn:hover{border-color:var(--ink);color:var(--ink);}
+[data-theme=dark] .mm-filter-btn.active{background:var(--cream);color:var(--ink);border-color:var(--line);}
+
+/* Level-specific active colors */
+.mm-filter-btn.active[data-level="vorklasse"]{background:#7c3aed;border-color:#7c3aed;color:#fff;}
+.mm-filter-btn.active[data-level="kl10"]{background:#2a6496;border-color:#2a6496;color:#fff;}
+.mm-filter-btn.active[data-level="kl11"]{background:#c8400a;border-color:#c8400a;color:#fff;}
+.mm-filter-btn.active[data-level="kl12"]{background:#2e7d4f;border-color:#2e7d4f;color:#fff;}
+
+/* ── Path banner ── */
+.path-banner{
+  background:var(--cream);border:1.5px solid var(--line);border-radius:3px;
+  padding:.9rem 1.2rem;margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;
+}
+.path-banner .banner-text{font-size:.9rem;color:var(--ink);flex:1;}
+.path-banner .banner-text strong{font-family:var(--serif);font-weight:700;}
+.path-banner .banner-start{
+  font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--ink);color:var(--paper);border:none;border-radius:2px;
+  padding:.45rem 1rem;cursor:pointer;transition:opacity .15s;white-space:nowrap;
+}
+.path-banner .banner-start:hover{opacity:.8;}
+[data-theme=dark] .path-banner{background:var(--cream);border-color:var(--line);}
+[data-theme=dark] .path-banner .banner-start{background:var(--paper);color:var(--ink);}
+
+/* ── SVG mindmap container ── */
+#mm-svg-container{
+  overflow:auto;border:1px solid var(--line);border-radius:3px;
+  background:var(--paper);max-height:min(820px,78vh);cursor:grab;
+  -webkit-overflow-scrolling:touch;
+}
+#mm-svg-container:active{cursor:grabbing;}
+#mm-svg-container svg{display:block;}
+
+/* SVG node styles (used via class on SVG elements) */
+.mm-connector{stroke:var(--line);stroke-width:1.5px;fill:none;}
+.mm-rect{fill:var(--cream);stroke:var(--line);stroke-width:1px;}
+.mm-leaf .mm-rect{fill:white;stroke:var(--line);}
+.mm-soon .mm-rect{stroke-dasharray:5 3;fill:var(--cream);}
+.mm-available{cursor:pointer;}
+.mm-available .mm-rect:hover{fill:var(--cream)!important;}
+.mm-label{font-family:'Playfair Display',Georgia,serif;font-size:13.5px;font-weight:700;fill:var(--ink);}
+.mm-branch .mm-label{font-size:13px;}
+.mm-root .mm-label{font-size:14px;font-weight:900;}
+.mm-sub{font-family:'DM Mono',monospace;font-size:10px;fill:#888;}
+.mm-soon .mm-label{fill:#aaa;}
+/* Dark mode: increase contrast significantly */
+[data-theme=dark] .mm-connector{stroke:#484848;}
+[data-theme=dark] .mm-rect{fill:#252525;stroke:#444;}
+[data-theme=dark] .mm-branch .mm-rect,[data-theme=dark] .mm-root .mm-rect{fill:#2a2a2a;stroke:#484848;}
+[data-theme=dark] .mm-leaf .mm-rect{fill:#1e1e1e;stroke:#404040;}
+[data-theme=dark] .mm-soon .mm-rect{fill:#222;stroke:#444;}
+[data-theme=dark] .mm-available .mm-rect:hover{fill:#303030!important;}
+[data-theme=dark] .mm-sub{fill:#666;}
+
+/* Fading when level filter active */
+.mm-node[data-active="0"]{opacity:0.18;pointer-events:none;}
+.mm-connector[data-active="0"]{opacity:0.1;}
+
+/* ── Mobile accordion (< 660px) ── */
+@media(max-width:659px){
+  #mm-svg-container{display:none;}
+  #mm-accordion{display:block;}
+}
+@media(min-width:660px){
+  #mm-accordion{display:none;}
+}
+#mm-accordion{margin-top:.5rem;}
+#mm-accordion details{border-bottom:1px solid var(--line);}
+#mm-accordion summary{
+  font-family:var(--serif);font-size:1rem;font-weight:700;
+  padding:.7rem 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;
+}
+#mm-accordion summary::after{content:'›';font-family:var(--mono);color:#aaa;transition:transform .2s;}
+#mm-accordion details[open] summary::after{transform:rotate(90deg);}
+#mm-accordion .acc-sub{font-family:var(--serif);font-size:.9rem;font-weight:700;padding:.5rem 0 .3rem .8rem;color:#888;}
+#mm-accordion ul{list-style:none;padding-left:1.4rem;margin-bottom:.6rem;}
+#mm-accordion li{padding:.25rem 0;}
+#mm-accordion li a{color:var(--ink);text-decoration:none;font-size:.92rem;display:flex;gap:.5rem;align-items:baseline;}
+#mm-accordion li a::before{content:'→';font-family:var(--mono);font-size:.75rem;color:#aaa;flex-shrink:0;}
+#mm-accordion li a:hover{color:var(--accent);}
+#mm-accordion li.acc-soon{color:#bbb;font-size:.88rem;font-style:italic;padding:.25rem 0;}
+#mm-accordion li[data-active="0"]{opacity:0.3;}
+
+/* ── Footer ── */
 .footer-nav{background:var(--ink);padding:1.1rem 2rem;margin-top:3rem;}
-.footer-nav-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
+.footer-nav-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
 .back-btn{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
 .back-btn:hover{opacity:.7;}
 .portal-link{font-family:var(--mono);font-size:.68rem;color:#555;text-decoration:none;transition:color .15s;}
 .portal-link:hover{color:var(--gold);}
-
-@media(max-width:560px){.grid{grid-template-columns:1fr;}}
-
-[data-theme=dark] .card{background:#1e1e1e;}
-[data-theme=dark] .card h3{color:var(--ink);}
-[data-theme=dark] .card p{color:#a09888;}
-[data-theme=dark] .card .card-meta span{color:#666;}
-
-  </style>
-<script>
-(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-</script></head>
+</style>
+<script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+</head>
 <body>
 
 <header>
   <div class="hinner">
     <nav class="bc" aria-label="Breadcrumb">
-      <a href="../../index.html">Lernportal</a>
-      <span>/</span>
-      <a href="../index.html">Übungen</a>
-      <span>/</span>
+      <a href="../../index.html">Lernportal</a><span>/</span>
+      <a href="../index.html">Übungen</a><span>/</span>
       <span>Mathematik</span>
     </nav>
-    <div class="klass">Mathematik · FOS Nürnberg · Übungen</div>
-    <h1>Interaktive Übungen</h1>
-    <p>Selbsttests und Prüfungsvorbereitung – mit automatischer Auswertung</p>
+    <div class="klass">Mathematik · FOS Nürnberg · Themenübersicht</div>
+    <h1>Themenübersicht</h1>
+    <p>Wähle dein Thema oder starte einen geführten Pfad für deine Jahrgangsstufe.</p>
   </div>
 </header>
 
 <main>
-  <h2>Vorklasse / Klasse 10</h2>
-  <div class="grid">
-    <a class="card" href="mathe-vorklasse-uebungen.html">
-      <div class="card-tag">Vorklasse · 12 Aufgaben</div>
-      <h3>Prüfungsvorbereitung</h3>
-      <p>Zuordnungen &amp; Funktionen · Lineare Gleichungssysteme · Funktionenscharen · Quadratische Funktionen</p>
-      <div class="card-meta">
-        <span>4 Kapitel</span>
-        <span>Ankreuz · Lückentext · MC</span>
-      </div>
-    </a>
-    <a class="card" href="mathe-10-quadratische-funktionen.html">
-      <div class="card-tag">Klasse 10 · 15 Aufgaben</div>
-      <h3>Quadratische Funktionen</h3>
-      <p>Scheitelpunktform · Produktform · Nullstellen · Schnittpunkte · Sachkontext Werbebudget</p>
-      <div class="card-meta">
-        <span>5 Kapitel</span>
-        <span>Ankreuz · Lückentext · MC · Canvas</span>
-      </div>
-    </a>
+
+  <!-- Filter bar -->
+  <div class="filter-bar" role="group" aria-label="Nach Jahrgangsstufe filtern">
+    <span class="bar-label">Filtern:</span>
+    <button class="mm-filter-btn active" data-level="">Alle</button>
+    <button class="mm-filter-btn" data-level="vorklasse">Vorklasse</button>
+    <button class="mm-filter-btn" data-level="kl10">Klasse 10</button>
+    <button class="mm-filter-btn" data-level="kl11">Klasse 11</button>
+    <button class="mm-filter-btn" data-level="kl12">Abitur</button>
   </div>
 
-  <h2>Klasse 11</h2>
-  <div class="grid">
-    <a class="card" href="mathe-11-kurvendiskussion.html">
-      <div class="card-tag">Klasse 11 · 18 Aufgaben</div>
-      <h3>Kurvendiskussion</h3>
-      <p>Graph lesen · Vollständige Kurvendiskussion · Funktionenscharen · Rechenaufgaben · Textaufgaben im Sachzusammenhang</p>
-      <div class="card-meta">
-        <span>6 Kapitel</span>
-        <span>Ankreuz · Lückentext · MC · Canvas</span>
-      </div>
-    </a>
-    <div class="card" style="border-left-color:var(--line);opacity:.5;cursor:default;">
-      <div class="card-tag">In Vorbereitung</div>
-      <h3>Differentialrechnung</h3>
-      <p>Ableitungsregeln · Tangenten · Extremwerte</p>
-      <div class="card-meta"><span>demnächst</span></div>
-    </div>
+  <!-- Path banner (shown when a level is selected) -->
+  <div class="path-banner" id="path-banner" hidden role="status">
+    <span class="banner-text">
+      Geführter Pfad für <strong id="banner-label"></strong>:
+      <strong id="banner-count"></strong> Übungen in Lehrplanreihenfolge
+    </span>
+    <button class="banner-start" id="banner-start">Pfad starten →</button>
   </div>
 
-  <h2>Abiturprüfungsvorbereitung</h2>
-  <div class="grid">
-    <a class="card" href="fap-aufgaben.html" style="border-left-color:var(--accent2);">
-      <div class="card-tag">FAP 2022–2025 · 34 Aufgaben</div>
-      <h3>FAP Aufgabenbrowser</h3>
-      <p>Fachabi-Prüfungsaufgaben mit Lehrplan-Einordnung: filterbar nach Typ, Jahr, Klasse (alt/neu), Prüfungsteil</p>
-      <div class="card-meta">
-        <span>Analysis + Geometrie</span>
-        <span>Filter · Bilder · Druckblatt</span>
-      </div>
-    </a>
-  </div>
+  <!-- SVG mindmap (desktop) -->
+  <div id="mm-svg-container" aria-label="Themen-Mindmap Mathematik"></div>
+
+  <!-- Accordion (mobile) -->
+  <nav id="mm-accordion" aria-label="Themenübersicht"></nav>
+
 </main>
 
 <footer class="footer-nav">
@@ -143,10 +190,335 @@ header .bc span{color:#444;}
   </div>
 </footer>
 
-
 <button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
+<script>(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();</script>
+
+<script src="topics.js"></script>
 <script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
+(function () {
+  var T = window.MATHE_TOPICS;
+  if (!T) { console.error('topics.js fehlt'); return; }
+
+  // ── Lookup maps ──────────────────────────────────────────────────
+  var levelMap = {};
+  T.levels.forEach(function (l) { levelMap[l.id] = l; });
+
+  var nodeMap = {};
+  function collectNodes(node) {
+    nodeMap[node.id] = node;
+    if (node.children) node.children.forEach(collectNodes);
+  }
+  collectNodes(T.tree);
+
+  // ── SVG layout constants ─────────────────────────────────────────
+  var LW = 210;     // x-step per depth level
+  var LH = 60;      // y-step per leaf slot
+  var NW = 180;     // node rect width
+  var NH_L = 50;    // leaf node height
+  var NH_B = 38;    // branch node height
+  var PX = 16;      // horizontal padding
+  var PY = 24;      // vertical padding
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function nh(node) { return node.children ? NH_B : NH_L; }
+
+  // ── Assign layout positions (mutates node objects) ───────────────
+  function layoutTree(node, depth, ctr) {
+    node._d = depth;
+    node._x = PX + depth * LW;
+    var h = nh(node);
+    if (!node.children) {
+      node._cy = PY + ctr.n * LH + LH / 2;
+      node._y  = node._cy - h / 2;
+      ctr.n++;
+    } else {
+      node.children.forEach(function (c) { layoutTree(c, depth + 1, ctr); });
+      var firstCY = node.children[0]._cy;
+      var lastCY  = node.children[node.children.length - 1]._cy;
+      node._cy = (firstCY + lastCY) / 2;
+      node._y  = node._cy - h / 2;
+    }
+  }
+
+  // ── Text wrapping helper (splits at space near midpoint) ─────────
+  function wrapLabel(label, maxChars) {
+    if (label.length <= maxChars) return [label, ''];
+    var mid = Math.floor(label.length / 2);
+    var sp  = label.lastIndexOf(' ', mid + 4);
+    if (sp < 2) sp = label.indexOf(' ', mid);
+    if (sp < 0) return [label.substring(0, maxChars - 1) + '…', ''];
+    return [label.substring(0, sp), label.substring(sp + 1)];
+  }
+
+  // ── Helper: does node (or any descendant) belong to levelId? ─────
+  function hasLevelDescendant(node, levelId) {
+    if (!node.children) {
+      return node.levels && node.levels.indexOf(levelId) >= 0 && node.status === 'available';
+    }
+    return node.children.some(function (c) { return hasLevelDescendant(c, levelId); });
+  }
+
+  // ── Create SVG element helper ────────────────────────────────────
+  function el(tag, attrs, cls) {
+    var e = document.createElementNS(NS, tag);
+    if (cls) e.setAttribute('class', cls);
+    if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    return e;
+  }
+
+  // ── Render a single node <g> ─────────────────────────────────────
+  function renderNode(node, currentLevel) {
+    var isLeaf   = !node.children;
+    var isSoon   = node.status === 'coming-soon';
+    var isAvail  = node.status === 'available';
+    var nodeH    = nh(node);
+    var cls      = 'mm-node';
+    if (!isLeaf && node.id === 'root') cls += ' mm-root';
+    else if (!isLeaf) cls += ' mm-branch';
+    else cls += ' mm-leaf';
+    if (isSoon)  cls += ' mm-soon';
+    if (isLeaf && isAvail) cls += ' mm-available';
+
+    var g = el('g', { 'data-id': node.id }, cls);
+    if (node.levels) g.setAttribute('data-levels', node.levels.join(','));
+
+    // Active state for filter
+    if (currentLevel && isLeaf) {
+      g.setAttribute('data-active', node.levels && node.levels.indexOf(currentLevel) >= 0 ? '1' : '0');
+    }
+
+    // Background rect
+    g.appendChild(el('rect', {
+      x: node._x, y: node._y, width: NW, height: nodeH, rx: 3, class: 'mm-rect'
+    }));
+
+    // Left accent bar (leaf only)
+    if (isLeaf && node.levels && node.levels.length) {
+      var accentColor = isSoon ? '#bbb' : levelMap[node.levels[0]].color;
+      var accent = el('rect', {
+        x: node._x, y: node._y, width: 4, height: nodeH, rx: 2
+      });
+      accent.style.fill = accentColor;
+      g.appendChild(accent);
+    }
+
+    // Label text (possibly 2 lines)
+    var lines = isLeaf ? wrapLabel(node.label, 21) : wrapLabel(node.label, 19);
+    var hasSubtitle = isLeaf && node.subtitle;
+    var twoLines = lines[1] !== '';
+    var textX = node._x + (isLeaf ? 12 : 10);
+    var labelY;
+    if (twoLines) {
+      labelY = hasSubtitle ? node._y + nodeH / 2 - 15 : node._y + nodeH / 2 - 8;
+    } else {
+      labelY = hasSubtitle ? node._y + nodeH / 2 - 5 : node._y + nodeH / 2 + 5;
+    }
+
+    var t1 = el('text', { x: textX, y: labelY, class: 'mm-label' });
+    t1.textContent = lines[0];
+    g.appendChild(t1);
+
+    if (twoLines) {
+      var t2 = el('text', { x: textX, y: labelY + 15, class: 'mm-label' });
+      t2.textContent = lines[1];
+      g.appendChild(t2);
+    }
+
+    // Subtitle
+    if (hasSubtitle) {
+      var subY = twoLines ? node._y + nodeH - 8 : node._y + nodeH / 2 + 13;
+      var sub = el('text', { x: textX, y: subY, class: 'mm-sub' });
+      sub.textContent = node.subtitle;
+      g.appendChild(sub);
+    }
+
+    // Tooltip
+    var tip = document.createElementNS(NS, 'title');
+    tip.textContent = node.label + (node.topics && node.topics.length ? ' — ' + node.topics.join(' · ') : '');
+    g.appendChild(tip);
+
+    // Click handler
+    if (isLeaf && isAvail) {
+      g.addEventListener('click', function () { handleClick(node); });
+    }
+
+    return g;
+  }
+
+  // ── Build full SVG ───────────────────────────────────────────────
+  function buildSVG(currentLevel) {
+    var ctr = { n: 0 };
+    layoutTree(T.tree, 0, ctr);
+
+    var svgH = PY * 2 + ctr.n * LH;
+    var svgW = PX + 3 * LW + NW + PX;  // 4 depth levels (0-3): leaves at depth 3
+
+    var svg = el('svg', {
+      viewBox: '0 0 ' + svgW + ' ' + svgH,
+      width: svgW, height: svgH,
+      'aria-hidden': 'true'
+    });
+
+    // Connectors (drawn first, behind nodes)
+    var allNodes = Object.values ? Object.values(nodeMap) : Object.keys(nodeMap).map(function(k){return nodeMap[k];});
+    allNodes.forEach(function (node) {
+      if (!node.children) return;
+      node.children.forEach(function (child) {
+        var x1 = node._x + NW;
+        var y1 = node._cy;
+        var x2 = child._x;
+        var y2 = child._cy;
+        var mx = (x1 + x2) / 2;
+        var path = el('path', {
+          d: 'M ' + x1 + ' ' + y1 + ' C ' + mx + ' ' + y1 + ' ' + mx + ' ' + y2 + ' ' + x2 + ' ' + y2,
+          class: 'mm-connector',
+          'data-to': child.id
+        });
+        if (currentLevel) {
+          var active = hasLevelDescendant(child, currentLevel) ? '1' : '0';
+          path.setAttribute('data-active', active);
+        }
+        svg.appendChild(path);
+      });
+    });
+
+    // Nodes
+    allNodes.forEach(function (node) {
+      svg.appendChild(renderNode(node, currentLevel));
+    });
+
+    return svg;
+  }
+
+  // ── Build mobile accordion ───────────────────────────────────────
+  function buildAccordion(currentLevel) {
+    var acc = document.getElementById('mm-accordion');
+    acc.innerHTML = '';
+
+    function makeLeafItem(node) {
+      var li = document.createElement('li');
+      li.setAttribute('data-id', node.id);
+      if (node.levels) li.setAttribute('data-levels', node.levels.join(','));
+      if (currentLevel && node.levels) {
+        li.setAttribute('data-active', node.levels.indexOf(currentLevel) >= 0 ? '1' : '0');
+      }
+      if (node.status === 'coming-soon') {
+        li.className = 'acc-soon';
+        li.textContent = node.label + ' (in Vorbereitung)';
+      } else {
+        var a = document.createElement('a');
+        a.href = '#';
+        a.textContent = node.label + (node.subtitle ? ' — ' + node.subtitle : '');
+        a.addEventListener('click', function (e) { e.preventDefault(); handleClick(node); });
+        li.appendChild(a);
+      }
+      return li;
+    }
+
+    function makeBranchDetails(node, isTopLevel) {
+      if (!node.children) return null;
+      var details = document.createElement('details');
+      if (isTopLevel) details.setAttribute('open', '');
+      var summary = document.createElement('summary');
+      summary.textContent = node.label;
+      details.appendChild(summary);
+
+      node.children.forEach(function (child) {
+        if (child.children) {
+          // sub-branch
+          var subLabel = document.createElement('div');
+          subLabel.className = 'acc-sub';
+          subLabel.textContent = child.label;
+          details.appendChild(subLabel);
+          var ul = document.createElement('ul');
+          child.children.forEach(function (leaf) {
+            ul.appendChild(makeLeafItem(leaf));
+          });
+          details.appendChild(ul);
+        } else {
+          var ul2 = document.createElement('ul');
+          ul2.appendChild(makeLeafItem(child));
+          details.appendChild(ul2);
+        }
+      });
+      return details;
+    }
+
+    T.tree.children.forEach(function (branch) {
+      var d = makeBranchDetails(branch, true);
+      if (d) acc.appendChild(d);
+    });
+  }
+
+  // ── Handle node click ────────────────────────────────────────────
+  function handleClick(node) {
+    if (currentLevel) {
+      var path = T.paths[currentLevel] || [];
+      var idx = path.indexOf(node.id);
+      if (idx >= 0) {
+        localStorage.setItem('mathe_path', JSON.stringify({ level: currentLevel, idx: idx }));
+        location.href = 'guided-viewer.html?level=' + currentLevel + '&idx=' + idx;
+        return;
+      }
+    }
+    location.href = node.exercise.url;
+  }
+
+  // ── Path banner ──────────────────────────────────────────────────
+  function updateBanner(levelId) {
+    var banner = document.getElementById('path-banner');
+    if (!levelId) { banner.hidden = true; return; }
+    var path = T.paths[levelId] || [];
+    document.getElementById('banner-label').textContent = levelMap[levelId].label;
+    document.getElementById('banner-count').textContent = path.length;
+    banner.hidden = false;
+    document.getElementById('banner-start').onclick = function () {
+      localStorage.setItem('mathe_path', JSON.stringify({ level: levelId, idx: 0 }));
+      location.href = 'guided-viewer.html?level=' + levelId + '&idx=0';
+    };
+  }
+
+  // ── Filter: re-render SVG & accordion ───────────────────────────
+  var currentLevel = null;
+
+  function applyFilter(levelId) {
+    currentLevel = levelId || null;
+
+    // Update buttons
+    document.querySelectorAll('.mm-filter-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-level') === (levelId || ''));
+    });
+
+    // Rebuild SVG
+    var container = document.getElementById('mm-svg-container');
+    container.innerHTML = '';
+    container.appendChild(buildSVG(currentLevel));
+
+    // Rebuild accordion
+    buildAccordion(currentLevel);
+
+    // Banner
+    updateBanner(currentLevel);
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function () {
+    applyFilter(null);
+
+    document.querySelectorAll('.mm-filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var lvl = btn.getAttribute('data-level') || '';
+        // Toggle off if already active
+        if (currentLevel === (lvl || null)) {
+          applyFilter(null);
+        } else {
+          applyFilter(lvl || null);
+        }
+      });
+    });
+  });
+
+})();
 </script>
 </body>
 </html>
