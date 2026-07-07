@@ -390,6 +390,95 @@ a.card:hover .card-title { color: var(--accent); }
   margin-bottom: var(--sp-4);
 }
 
+/* Zeilen-Karten für LB-/UE-Listen:
+   <a class="row-card"><div class="row-num">1</div>
+   <div class="row-body">…</div><div class="row-side">…</div></a> */
+.row-list { display: grid; gap: var(--sp-3); }
+
+.row-card {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .2s, background .2s;
+}
+a.row-card:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+}
+a.row-card:hover .row-arrow { opacity: 1; transform: none; }
+a.row-card:hover .row-num   { opacity: 1; }
+
+.row-num {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--accent);
+  opacity: .35;
+  line-height: 1;
+  padding: 1.5rem 0 1.5rem 1.4rem;
+  transition: opacity .15s;
+}
+.row-body {
+  padding: 1.4rem 1.1rem 1.4rem 1.2rem;
+  border-left: 1px solid var(--line);
+}
+.row-id {
+  font-family: var(--font-mono);
+  font-size: .63rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: .35rem;
+}
+.row-title {
+  font-family: var(--font-sans);
+  font-size: .98rem;
+  font-weight: 500;
+  margin-bottom: .45rem;
+  line-height: 1.35;
+}
+.row-desc {
+  font-size: .8rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.row-tags {
+  margin-top: .8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.row-tags .tag { margin: 0; }
+.row-side {
+  padding: 1.4rem 1.4rem 1.4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .6rem;
+  min-width: 90px;
+}
+.row-side .tag { margin: 0; white-space: nowrap; }
+.row-arrow {
+  font-size: 1rem;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: opacity .15s, transform .15s;
+}
+
+/* Tag-Zeile unter Seiten-Headern */
+.tag-row {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+  margin-top: 1.1rem;
+}
+.tag-row .tag { margin: 0; }
+
 /* Platzhalter für leere Bereiche (Stub-Seiten) */
 .empty {
   border: 1px dashed var(--line-strong);
@@ -421,6 +510,10 @@ a.card:hover .card-title { color: var(--accent); }
 .tag--physik   { color: var(--c-physik);   border-color: currentColor; }
 .tag--kit      { color: var(--c-kit);      border-color: currentColor; }
 .tag--projekte { color: var(--c-projekte); border-color: currentColor; }
+
+/* Material-Typ-Tags in UE-Listen */
+.tag--interaktiv { color: var(--c-physik); border-color: currentColor; }
+.tag--ab         { color: var(--c-kit);    border-color: currentColor; }
 
 .pill {
   display: inline-block;
@@ -792,6 +885,9 @@ input[type=range]:focus-visible {
   }
   .card { padding: 1.2rem 1.3rem; }
   .task { padding: 1.1rem 1.2rem; }
+  .row-card { grid-template-columns: 44px 1fr; }
+  .row-side { display: none; }
+  .row-num { padding: 1.2rem 0 1.2rem 1rem; font-size: 1.4rem; }
   .site-footer-inner {
     flex-direction: column;
     align-items: flex-start;
