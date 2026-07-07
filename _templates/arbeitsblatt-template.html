@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>$title$</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+<link rel="stylesheet" href="file://$fontdir$/katex/katex.min.css">
+<script defer src="file://$fontdir$/katex/katex.min.js"></script>
+<script defer src="file://$fontdir$/katex/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[
     {left:'\\\\[',right:'\\\\]',display:true},
     {left:'\\\\(',right:'\\\\)',display:false}
@@ -18,12 +18,7 @@ $if(fontdir)$
 @font-face{font-family:'DM Sans';font-weight:300;src:url('file://$fontdir$/DMSans-300.woff2') format('woff2')}
 @font-face{font-family:'DM Sans';font-weight:400;src:url('file://$fontdir$/DMSans-400.woff2') format('woff2')}
 @font-face{font-family:'DM Sans';font-weight:500;src:url('file://$fontdir$/DMSans-500.woff2') format('woff2')}
-@font-face{font-family:'Playfair Display';font-weight:400;src:url('file://$fontdir$/PlayfairDisplay-400.woff2') format('woff2')}
-@font-face{font-family:'Playfair Display';font-weight:700;src:url('file://$fontdir$/PlayfairDisplay-700.woff2') format('woff2')}
-@font-face{font-family:'Playfair Display';font-weight:900;src:url('file://$fontdir$/PlayfairDisplay-900.woff2') format('woff2')}
-@font-face{font-family:'Source Sans 3';font-weight:300;src:url('file://$fontdir$/SourceSans3-300.woff2') format('woff2')}
-@font-face{font-family:'Source Sans 3';font-weight:400;src:url('file://$fontdir$/SourceSans3-400.woff2') format('woff2')}
-@font-face{font-family:'Source Sans 3';font-weight:600;src:url('file://$fontdir$/SourceSans3-600.woff2') format('woff2')}
+@font-face{font-family:'DM Serif Display';font-weight:400;src:url('file://$fontdir$/DMSerifDisplay-400.woff2') format('woff2')}
 $endif$
 
 :root {
@@ -35,9 +30,9 @@ $endif$
   --gold:   #c9961a;
   --green:  #2e7d4f;
   --line:   #d4cfc6;
-  --serif:  'Playfair Display', Georgia, serif;
+  --serif:  'DM Serif Display', Georgia, serif;
   --mono:   'DM Mono', 'Courier New', monospace;
-  --sans:   'Source Sans 3', Helvetica, sans-serif;
+  --sans:   'DM Sans', Helvetica, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

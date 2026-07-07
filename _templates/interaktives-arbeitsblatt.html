@@ -1,439 +1,135 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-subject="[FACH-SLUG: mathematik | physik | kit]">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>[THEMA] – [FACH] [JGST]</title>
-  <!-- Pfade anpassen je nach Tiefe, z.B. aus mathematik/klasse11/: ../../static/ -->
-  <link rel="stylesheet" href="../../static/fonts.css">
-  <link rel="stylesheet" href="../../static/theme.css">
-  <link rel="stylesheet" href="../../static/katex/katex.min.css">
-  <script defer src="../../static/katex/katex.min.js"></script>
-  <script defer src="../../static/katex/contrib/auto-render.min.js"
-    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
-  <!-- FOUC-Prävention: Theme vor dem Rendern setzen -->
-  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
-  <style>
-    :root {
-      --ink: #1a1208;
-      --paper: #f7f3ec;
-      --cream: #ede8de;
-      --accent: #c8400a;    /* Rot für Aufgaben/Übungen */
-      --accent2: #2a6496;   /* Blau für Theorie */
-      --gold: #c9961a;
-      --green: #2e7d4f;
-      --line: #d4cfc6;
-      --serif: 'Playfair Display', Georgia, serif;
-      --mono: 'DM Mono', monospace;
-      --sans: 'Source Sans 3', sans-serif;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; }
-
-    /* ── Header ── */
-    header { background: var(--ink); color: var(--paper); padding: 2.8rem 2rem 2.2rem; position: relative; overflow: hidden; }
-    header::before { content:''; position:absolute; top:-60px; right:-80px; width:300px; height:300px; border-radius:50%; background:var(--accent); opacity:.1; }
-    .hinner { max-width: 900px; margin: 0 auto; position: relative; }
-    .klass { font-family:var(--mono); font-size:.78rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.5rem; }
-    header h1 { font-family:var(--serif); font-size:clamp(1.8rem,5vw,3.2rem); font-weight:900; line-height:1.1; margin-bottom:.8rem; }
-    header h1 span { color:var(--accent); }
-    header p { font-size:.95rem; color:#a09888; max-width:560px; }
-
-    /* ── Tab-Navigation ── */
-    nav { background:var(--ink); border-top:1px solid #2e2e2e; padding:0 1.5rem; display:flex; overflow-x:auto; gap:0; }
-    nav button { font-family:var(--mono); font-size:.75rem; letter-spacing:.07em; text-transform:uppercase; background:none; border:none; color:#777; padding:.8rem 1.2rem; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
-    nav button:hover { color:var(--paper); }   /* dark mode fix via theme.css */
-    nav button.active { color:var(--gold); border-bottom-color:var(--gold); }
-
-    /* ── Inhalt ── */
-    main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 5rem; }
-    .tab { display:none; }
-    .tab.active { display:block; animation: fu .3s ease; }
-    @keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
-
-    h2 { font-family:var(--serif); font-size:1.85rem; font-weight:700; margin-bottom:.3rem; }
-    h2 .num { font-family:var(--mono); font-size:.95rem; color:var(--accent); margin-right:.4rem; }
-    .sub { color:#999; font-size:.88rem; font-style:italic; margin-bottom:1.8rem; }
-    h3 { font-family:var(--serif); font-size:1.05rem; margin-bottom:.6rem; }
-
-    /* ── Karten ── */
-    .card { background:white; border:1px solid var(--line); border-radius:2px; padding:1.5rem 1.7rem; margin-bottom:1.4rem; box-shadow:0 2px 6px rgba(0,0,0,.04); }
-    .card.theory { border-left:4px solid var(--accent2); background:#f0f5fa; }  /* Theorie: blau */
-    .card.ex     { border-left:4px solid var(--accent); }                        /* Aufgabe: rot */
-    .card.info   { border-left:4px solid var(--gold); background:#fffbea; }     /* Hinweis: gold */
-
-    /* ── Formelbox ── */
-    .fbox { background:var(--cream); border:1px solid var(--line); border-radius:2px; padding:1rem 1.4rem; margin:.9rem 0; text-align:center; font-size:1.05rem; overflow-x:auto; }
-    .fbox .katex-display { margin: 0; }
-
-    /* ── Tags ── */
-    .tag { display:inline-block; font-family:var(--mono); font-size:.7rem; padding:.18rem .55rem; border-radius:20px; margin-right:.3rem; margin-bottom:.3rem; }
-    .tb { background:#dbeafe; color:#1e40af; }
-    .tr { background:#fee2e2; color:#991b1b; }
-    .tg { background:#d1fae5; color:#065f46; }
-
-    /* ── Eingabe & Buttons ── */
-    input[type=text] { font-family:var(--mono); font-size:.88rem; padding:.45rem .7rem; border:1px solid var(--line); border-radius:2px; background:white; color:var(--ink); outline:none; }
-    input[type=text]:focus { border-color:var(--accent2); }
-    .btn { font-family:var(--mono); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; padding:.5rem 1.1rem; border:none; border-radius:2px; cursor:pointer; }
-    .bp { background:var(--accent); color:white; }
-    .bs { background:var(--accent2); color:white; }
-    .bh { background:none; border:1px dashed var(--gold); color:var(--gold); font-family:var(--mono); font-size:.73rem; padding:.3rem .65rem; border-radius:2px; cursor:pointer; }
-
-    /* ── Feedback ── */
-    .fb { font-family:var(--mono); font-size:.83rem; padding:.45rem .85rem; border-radius:2px; margin-top:.6rem; display:none; }
-    .fb.show { display:inline-block; }
-    .fb.ok  { background:#eaf7ee; color:var(--green); border:1px solid #b7dfca; }
-    .fb.err { background:#fdecea; color:#c0392b; border:1px solid #f5c6c6; }
-
-    /* ── Hinweis (aufklappbar) ── */
-    .hint { background:#fffbea; border-left:3px solid var(--gold); padding:.65rem 1rem; font-size:.87rem; margin:.7rem 0; display:none; }
-    .hint.open { display:block; }
-
-    /* ── Multiple Choice ── */
-    .qopts { display:flex; flex-direction:column; gap:.45rem; margin-top:.7rem; }
-    .qopt { background:white; border:1px solid var(--line); padding:.5rem .9rem; border-radius:2px; cursor:pointer; font-size:.92rem; text-align:left; transition:border-color .2s,background .2s; }
-    .qopt:hover:not([disabled]) { border-color:var(--accent2); background:#f0f5fa; }
-    .qopt.correct { border-color:var(--green)!important; background:#eaf7ee!important; color:var(--green)!important; }
-    .qopt.wrong   { border-color:#c0392b!important; background:#fdecea!important; color:#c0392b!important; }
-
-    /* ── Punktestand ── */
-    .scorebar { display:flex; align-items:center; gap:1rem; background:var(--cream); border:1px solid var(--line); padding:.75rem 1.1rem; border-radius:2px; margin-bottom:1.8rem; font-family:var(--mono); font-size:.83rem; }
-
-    /* ── Canvas-Wrapper ── */
-    .cwrap { width:100%; height:300px; border:1px solid var(--line); background:white; margin:.8rem 0; position:relative; }
-    .cwrap canvas { position:absolute; top:0; left:0; }
-
-    /* ── Breadcrumb im Header ── */
-    header .bc { font-family:var(--mono); font-size:.68rem; color:#666; display:flex; gap:.4rem; align-items:center; margin-bottom:.9rem; flex-wrap:wrap; }
-    header .bc a { color:#888; text-decoration:none; transition:color .15s; }
-    header .bc a:hover { color:var(--gold); }
-    header .bc span { color:#444; }
-
-    /* ── Footer Navigation ── */
-    .footer-nav { background:var(--ink); padding:1rem 2rem; margin-top:3rem; }
-    .footer-nav-inner { max-width:900px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.8rem; }
-    .back-btn { font-family:var(--mono); font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); text-decoration:none; display:inline-flex; align-items:center; gap:.5rem; transition:opacity .2s; }
-    .back-btn:hover { opacity:.7; }
-    .portal-link { font-family:var(--mono); font-size:.68rem; color:#555; text-decoration:none; transition:color .15s; }
-    .portal-link:hover { color:var(--gold); }
-
-    /* ══════════════════════════════════════
-       PRINT — Chromium headless
-       chromium --headless --no-pdf-header-footer --print-to-pdf=out.pdf file://$(realpath datei.html)
-    ══════════════════════════════════════ */
-    @media print {
-      @page { size: A4; margin: 1.5cm 2cm 2cm 2cm; }
-
-      /* Chrome ausblenden */
-      nav, .footer-nav, .scorebar { display: none !important; }
-
-      /* Interaktive Steuerelemente ausblenden */
-      .srow, input[type=range], .vd,
-      button, input[type=text], select,
-      .fb, .fbox-dyn, .hint { display: none !important; }
-
-      /* Alle Tabs zeigen */
-      .tab { display: block !important; }
-
-      /* Schritte in Step-by-Step alle zeigen */
-      .step { display: block !important; opacity: 1 !important; }
-
-      /* Grafiken/Canvas anzeigen (beforeprint-Listener neu zeichnen lassen) */
-      .cwrap { display: block !important; max-width: 100%; }
-      canvas { display: block !important; }
-
-      /* Quiz- und Spielboxen ausblenden */
-      #rqBox, #gmGame, #derivOut { display: none !important; }
-
-      /* Seitenumbrüche: jeden Tab auf neuer Seite beginnen */
-      /* Anpassen: #t2, #t3, #t4 … je nach Anzahl Tabs */
-      #t2, #t3, #t4, #t5 { break-before: page; }
-      h2 { break-after: avoid; }
-      .card.theory { break-inside: avoid; }
-      .card { box-shadow: none; border: 1px solid #ddd; padding: .65rem .9rem; margin-bottom: .45rem; }
-
-      /* Kompaktes Layout */
-      body { font-size: 10pt; line-height: 1.45; background: white; }
-      main { padding: .4rem 0; }
-      p { margin: .2rem 0 .35rem; }
-      h3 { font-size: 1rem; margin: .15rem 0 .3rem; }
-      .fbox { padding: .45rem .7rem; margin: .35rem 0; }
-
-      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .print-header { display: flex !important; }
-    }
-
-    /* ── Dark Mode ─────────────────────────────────────────────────────────── */
-    /* theme.css regelt: nav/tabs/footer-nav Hintergrund + Hover-Textfarbe     */
-    [data-theme=dark] .card                { background: #1a1a1a; border-color: #2e2e2e; }
-    [data-theme=dark] .card.theory         { background: #131a24; }
-    [data-theme=dark] .card.info           { background: #1a1500; }
-    [data-theme=dark] .fbox                { background: #1e1e1e; border-color: #2e2e2e; }
-    [data-theme=dark] .cwrap               { background: #1a1a1a; }
-    [data-theme=dark] .hint                { background: #1a1500; }
-    [data-theme=dark] .scorebar            { background: #1e1e1e; border-color: #2e2e2e; }
-    [data-theme=dark] .fb.ok               { background: #0e1a12; border-color: #1a5c33; color: #86efac; }
-    [data-theme=dark] .fb.err              { background: #2a0a0a; border-color: #5c1a1a; color: #fca5a5; }
-    [data-theme=dark] input[type=text]     { background: #1e1e1e; border-color: #555; color: var(--ink); }
-    [data-theme=dark] input[type=text]:focus { border-color: var(--accent2); }
-    [data-theme=dark] .qopt                { background: #1e1e1e; border-color: #444; }
-    [data-theme=dark] .qopt:hover:not([disabled]) { background: #252525; border-color: var(--accent2); }
-    [data-theme=dark] .tag.tb              { background: #1a2a3a; color: #60a5fa; }
-    [data-theme=dark] .tag.tr              { background: #2a1515; color: #f87171; }
-    [data-theme=dark] .tag.tg              { background: #0f2218; color: #4ade80; }
-    [data-theme=dark] .sub                 { color: #888; }
-
-    /* Im Browser versteckt, im Druck sichtbar */
-    .print-header {
-      display: none;
-      gap: 2rem;
-      margin: 1rem 2rem 0;
-      font-family: var(--mono);
-      font-size: .85rem;
-      color: var(--ink);
-    }
-    .print-header span { border-bottom: 1px solid #999; min-width: 5cm; display: inline-block; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[THEMA] – [FACH] [JGST]</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<!-- Nur einbinden, wenn die Seite Canvas-Applets enthält: -->
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
 </head>
 <body>
 
-<header>
-  <div class="hinner">
-    <!-- ── Breadcrumb: Pfade an Dateiposition anpassen ── -->
-    <!-- z.B. aus mathematik/klasse11/: ../../index.html = Lernportal -->
-    <nav class="bc" aria-label="Breadcrumb">
-      <a href="[PFAD_ZU_ROOT]/index.html">Lernportal</a>
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
       <span>/</span>
-      <a href="[PFAD_ZU_FACH]/index.html">[Fach · Jgst.]</a>
+      <a href="/[fach]/klasse[jgst]/">[FACH] · Jgst. [JGST]</a>
       <span>/</span>
-      <span>[Aktuelles Thema]</span>
+      <a href="/[fach]/klasse[jgst]/lb[n]-[thema]/">[LERNBEREICH]</a>
+      <span>/</span>
+      <span>[THEMA]</span>
     </nav>
-    <div class="klass">[FACH] · FOS · [LERNBEREICH-TITEL]</div>
-    <h1>[HAUPTTITEL] <span>[UNTERTITEL]</span></h1>
-    <p>Interaktives Arbeitsblatt · [KURZBESCHREIBUNG]</p>
+    <p class="kicker">[FACHKÜRZEL] [JGST] · LB [N] · UE [N]</p>
+    <h1 class="site-title">[THEMA]<br><em>[UNTERTITEL]</em></h1>
+    <p class="site-sub">[Kurzbeschreibung: worum geht es in dieser Übungseinheit?]</p>
   </div>
 </header>
 
-<!-- Nur im Druck sichtbar -->
-<div class="print-header">
-  <div>Name: <span>&nbsp;</span></div>
-  <div>Datum: <span style="min-width:3cm">&nbsp;</span></div>
-</div>
-
-<!-- Tab-Navigation: Tabs nach Bedarf anpassen/ergänzen -->
-<nav id="mainNav">
-  <button class="active" onclick="showTab('t1',this)">① [TAB 1 TITEL]</button>
-  <button onclick="showTab('t2',this)">② [TAB 2 TITEL]</button>
-  <button onclick="showTab('t3',this)">③ Aufgaben</button>
+<nav class="tabs container container--narrow" id="mainNav">
+  <button class="tab-btn active" onclick="showTab('t1',this)">① [Abschnitt 1]</button>
+  <button class="tab-btn" onclick="showTab('t2',this)">② [Abschnitt 2]</button>
+  <button class="tab-btn" onclick="showTab('t3',this)">③ Übungen</button>
 </nav>
 
-<main>
+<main class="container container--narrow">
 
-<!-- ══════════ TAB 1: THEORIE ══════════ -->
-<div class="tab active" id="t1">
-  <h2><span class="num">01</span>[TITEL TAB 1]</h2>
-  <p class="sub">[Kurze Einleitung / Lernziel]</p>
+<!-- ══════════════════════ TAB 1: Theorie ══════════════════════ -->
+<div class="tab-panel active" id="t1">
+  <h2><span class="num">01</span>[Abschnitt 1]</h2>
+  <p class="subtitle">[Kurzer Untertitel]</p>
 
-  <!-- Theorie-Karte -->
-  <div class="card theory">
-    <h3>[Theorietitel]</h3>
-    <p>[Erklärtext. Formeln mit $...$ inline oder $$...$$ als Block]</p>
-    <div class="fbox">
-      $$[FORMEL]$$
+  <div class="card card--theory">
+    <h3>[Grundidee / Merksatz]</h3>
+    <p>[Erklärender Text mit Formel.]</p>
+    <div class="formula">
+      $$[Formel]$$
     </div>
-    <p>[Weiterer Erklärtext]</p>
+    <p>[Weitere Erläuterung.]</p>
   </div>
 
-  <!-- Interaktive Aufgabe (optional) -->
-  <div class="card ex">
-    <h3>[Aufgabentitel]</h3>
-    <p>[Aufgabenstellung mit $f(x) = ...$]</p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a_t1" placeholder="Deine Antwort">
-      <button class="btn bp" onclick="checkInput('a_t1', ['ANTWORT'], 'fb_t1', 'HINWEIS')">Prüfen</button>
-      <button class="bh" onclick="toggleHint('h_t1')">💡 Hinweis</button>
-    </div>
-    <div class="hint" id="h_t1">[Hinweistext mit $...$]</div>
-    <div class="fb" id="fb_t1"></div>
-  </div>
-
-  <!-- GeoGebra-Einbettung (optional) -->
-  <!--
+  <!-- Interaktives Canvas-Applet (nur falls benötigt) -->
   <div class="card">
-    <h3>Interaktive Visualisierung</h3>
-    <iframe src="https://www.geogebra.org/material/iframe/id/[GEOGEBRA-ID]/width/700/height/400/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
-      width="100%" height="400px" style="border:1px solid var(--line);" allowfullscreen></iframe>
-  </div>
-  -->
-</div>
-
-<!-- ══════════ TAB 2: VERTIEFUNG ══════════ -->
-<div class="tab" id="t2">
-  <h2><span class="num">02</span>[TITEL TAB 2]</h2>
-  <p class="sub">[Kurze Einleitung]</p>
-
-  <div class="card theory">
-    <h3>[Theorietitel]</h3>
-    <p>[Inhalt]</p>
-  </div>
-
-  <!-- Multiple-Choice-Quiz (Beispiel) -->
-  <div class="card ex">
-    <h3>Quiz: [Quiztitel]</h3>
-    <div id="quizBox"></div>
-    <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-top:1rem;">
-      <button class="btn bp" onclick="nextQuestion()">Nächste Frage →</button>
-      <span id="quizScore" style="font-family:var(--mono);font-size:.83rem;color:#888;">0 / 0 richtig</span>
+    <h3>[Interaktive Exploration]</h3>
+    <div class="slider-row" style="display:flex;align-items:center;gap:.9rem;margin:.6rem 0;flex-wrap:wrap;">
+      <label style="font-family:var(--font-mono);font-size:.82rem;color:var(--muted);">[Parameter] =</label>
+      <input type="range" id="s1" min="-3" max="3" step="0.1" value="1" oninput="redraw()">
+      <span id="s1-val" style="font-family:var(--font-mono);"></span>
     </div>
+    <div class="canvas-wrap" id="wPlot"><canvas id="cPlot"></canvas></div>
+    <div class="formula formula--dyn" id="plotResult">[Ergebnis] = …</div>
+  </div>
+
+  <div class="task">
+    <p><strong>Aufgabe:</strong> [Aufgabenstellung]</p>
+    <button class="btn btn--ghost" onclick="document.getElementById('h1').classList.toggle('open')">Tipp anzeigen</button>
+    <div class="hint" id="h1">[Lösungshinweis]</div>
   </div>
 </div>
 
-<!-- ══════════ TAB 3: AUFGABEN ══════════ -->
-<div class="tab" id="t3">
-  <h2><span class="num">03</span>Aufgaben</h2>
-  <p class="sub">Teste dein Wissen</p>
+<!-- ══════════════════════ TAB 2 ══════════════════════ -->
+<div class="tab-panel" id="t2">
+  <h2><span class="num">02</span>[Abschnitt 2]</h2>
+  <p class="subtitle">[Kurzer Untertitel]</p>
 
-  <div class="scorebar">
-    <span>Punkte:</span>
-    <span id="starBar">☆☆☆☆☆</span>
-    <span id="scoreNum" style="font-family:var(--mono);color:#888;">0 / 5</span>
+  <div class="card card--theory">
+    <p>[Theorie zu Abschnitt 2.]</p>
   </div>
+</div>
 
-  <!-- Aufgabe 1 -->
-  <div class="card ex">
-    <span class="tag tb">[Thema]</span>
-    <h3>Aufgabe 1</h3>
-    <p>[Aufgabenstellung]</p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a1" placeholder="Ergebnis">
-      <button class="btn bp" onclick="checkTask(1,['ANTWORT'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah1')">💡</button>
-    </div>
-    <div class="hint" id="ah1">[Lösungshinweis]</div>
-    <div class="fb" id="fb1"></div>
+<!-- ══════════════════════ TAB 3: Übungen ══════════════════════ -->
+<div class="tab-panel" id="t3">
+  <h2><span class="num">03</span>Übungen</h2>
+  <p class="subtitle">[Kurzer Untertitel]</p>
+
+  <div class="task">
+    <p><strong>1.</strong> [Übungsaufgabe 1]</p>
+    <button class="btn btn--ghost" onclick="document.getElementById('ah1').classList.toggle('open')">Lösung anzeigen</button>
+    <div class="hint" id="ah1">[Lösung 1]</div>
   </div>
-
-  <!-- Weitere Aufgaben nach gleichem Schema -->
-
 </div>
 
 </main>
 
-<!-- ── Footer Navigation: Pfade anpassen ── -->
-<footer class="footer-nav">
-  <div class="footer-nav-inner">
-    <a class="back-btn" href="[PFAD_ZU_FACH]/index.html">← [Fach · Jgst.]</a>
-    <a class="portal-link" href="[PFAD_ZU_ROOT]/index.html">Lernportal ↗</a>
+<footer class="site-footer">
+  <div class="container container--narrow site-footer-inner">
+    <a href="/[fach]/klasse[jgst]/lb[n]-[thema]/">← LB [N] · [LERNBEREICH]</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
   </div>
 </footer>
 
 <script>
-// ── Tab-Wechsel ──
 function showTab(id, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('#mainNav .tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
 }
 
-// ── Hinweis ein-/ausblenden ──
-function toggleHint(id) {
-  const el = document.getElementById(id);
-  el.classList.toggle('open');
-  if (el.classList.contains('open') && window.renderMathInElement) {
-    renderMathInElement(el, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError:false });
-  }
+// ── Canvas-Applet (Beispiel, an die eigene Funktion anpassen) ──
+function f(x) { return x; }
+function redraw() {
+  const cv = document.getElementById('cPlot');
+  if (!cv) return;
+  const { ctx, w, h } = Plot.setup('cPlot', 'wPlot');
+  const view = { xMin: -5, xMax: 5, yMin: -5, yMax: 5 };
+  const map = Plot.grid(ctx, w, h, view);
+  Plot.curve(ctx, f, map, view);
 }
-
-// ── Texteingabe prüfen ──
-function checkInput(inputId, correctAnswers, feedbackId, hint) {
-  const raw = document.getElementById(inputId).value.trim().replace(',','.').toLowerCase();
-  const ok = correctAnswers.map(a => a.toLowerCase().replace(',','.')).includes(raw);
-  showFB(feedbackId, ok, hint);
-}
-
-// ── Aufgaben mit Punktestand ──
-let taskDone = new Set(), taskScore = 0, taskTotal = 5; // taskTotal anpassen!
-function checkTask(n, correctAnswers) {
-  if (taskDone.has(n)) return;
-  const raw = document.getElementById('a'+n).value.trim().replace(',','.').toLowerCase();
-  const ok  = correctAnswers.map(a => a.toLowerCase()).includes(raw);
-  showFB('fb'+n, ok, 'Überprüfe deine Rechnung.');
-  if (ok) {
-    taskDone.add(n); taskScore++;
-    document.getElementById('scoreNum').textContent = taskScore + ' / ' + taskTotal;
-    document.getElementById('starBar').textContent  = '★'.repeat(taskScore) + '☆'.repeat(taskTotal - taskScore);
-  }
-}
-
-// ── Feedback anzeigen ──
-function showFB(id, ok, hint) {
-  const el = document.getElementById(id);
-  el.textContent = ok ? '✓ Richtig!' : '✗ Nicht ganz. ' + hint;
-  el.className = 'fb show ' + (ok ? 'ok' : 'err');
-}
-
-// ── Multiple-Choice-Quiz ──
-// Fragen hier befüllen:
-const quizData = [
-  { q: '$[FRAGE 1]$', correct: '$[ANTWORT]$', opts: ['$[A]$','$[B]$','$[C]$','$[D]$'] },
-  { q: '$[FRAGE 2]$', correct: '$[ANTWORT]$', opts: ['$[A]$','$[B]$','$[C]$','$[D]$'] },
-];
-let qIdx = 0, qC = 0, qT = 0;
-
-function renderQuestion() {
-  const q = quizData[qIdx % quizData.length];
-  const box = document.getElementById('quizBox');
-  if (!box) return;
-  box.innerHTML =
-    '<p style="margin-bottom:.6rem;">Berechne: <strong>' + q.q + '</strong></p>' +
-    '<div class="qopts">' +
-    q.opts.map((o,i) =>
-      '<button class="qopt" id="qopt'+i+'" onclick="answerQuiz('+i+')">' + o + '</button>'
-    ).join('') +
-    '</div><div class="fb" id="qFB"></div>';
-  box._correct = q.correct;
-  box._opts = q.opts;
-  if (window.renderMathInElement) renderMathInElement(box, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
-}
-
-function answerQuiz(chosen) {
-  const box = document.getElementById('quizBox');
-  const ok = box._opts[chosen].replace(/\s/g,'') === box._correct.replace(/\s/g,'');
-  qT++;
-  if (ok) qC++;
-  box._opts.forEach((o,i) => {
-    const btn = document.getElementById('qopt'+i);
-    btn.disabled = true;
-    if (o.replace(/\s/g,'') === box._correct.replace(/\s/g,'')) btn.classList.add('correct');
-    else if (i === chosen && !ok) btn.classList.add('wrong');
-  });
-  document.getElementById('quizScore').textContent = qC + ' / ' + qT + ' richtig';
-  const fb = document.getElementById('qFB');
-  fb.textContent = ok ? '✓ Korrekt!' : '✗ Richtig wäre: ' + box._correct;
-  fb.className = 'fb show ' + (ok ? 'ok' : 'err');
-}
-
-function nextQuestion() { qIdx++; renderQuestion(); }
-
-// ── Init ──
-window.addEventListener('load', () => {
-  renderQuestion();
-});
-
-// ── Vor dem Druck: alle Tabs einblenden → Canvas kann korrekte Breite messen ──
-window.addEventListener('beforeprint', () => {
-  document.querySelectorAll('.tab').forEach(t => t.style.display = 'block');
-  void document.body.offsetWidth; // Layout-Reflow erzwingen
-  // Falls Canvas vorhanden: hier Zeichenfunktionen aufrufen, z.B.:
-  // drawMyCanvas();
-});
+window.addEventListener('load', redraw);
+if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
 </script>
 
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
-</script>
 </body>
 </html>
