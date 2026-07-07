@@ -1,97 +1,855 @@
-/* theme.css — Dark/Light mode toggle, shared across all pages.
-   Inline JS (FOUC script + toggle logic) stays per-page. */
+/* ═══════════════════════════════════════════════════════════════════════
+   theme.css — Design-System „Modern Editorial"
+   FOS/BOS-Lernportal · maximu5prime.github.io
 
-/* ── Toggle Button (fixed, top-right) ── */
-#themeToggle {
-  position: fixed; top: .75rem; right: .85rem; z-index: 9999;
-  width: 1.9rem; height: 1.9rem; border-radius: 50%;
-  cursor: pointer; font-size: .88rem; border: 2px solid;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .2s, border-color .2s, opacity .15s, transform .15s;
-  line-height: 1; padding: 0; opacity: .9;
-}
-#themeToggle:hover { opacity: 1; transform: scale(1.12); }
+   Ein zentrales Stylesheet für alle Seiten. Ruhig, hochwertig:
+   große Serif-Headlines (DM Serif Display), viel Weißraum,
+   1px-Linien statt Schatten, Mono-Tags in Uppercase,
+   dezente Fach-Akzentfarben.
 
-/* ── Dark-first pages (--bg system): light mode overrides ── */
-html[data-theme="light"] {
-  --bg:         #f7f4f0;
-  --surface:    #ffffff;
-  --border:     #e0dbd4;
-  --text:       #1c1a17;
-  --text-muted: #8a8078;
-  --accent:     #a07d08;  /* Neon-Gelb (#e8c547) → Dunkelambra; konsistent mit index.html --math */
-}
-html[data-theme="light"] body::before {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
-}
+   Theme-Mechanik:
+   - Light-Tokens als :root-Default
+   - Dark-Tokens DOPPELT hinterlegt (Media-Query + explizites data-theme)
+     → beide Blöcke SYNCHRON halten, siehe Marker unten!
+   - Fach-Akzent via data-subject am <html> oder an jedem Element
+   ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Light-first pages (--ink/--paper system): dark mode overrides ── */
-html[data-theme="dark"] {
-  --ink:   #e8e4df;
-  --paper: #111111;
-  --cream: #1c1c1c;
-  --line:  #2e2e2e;
-}
-html[data-theme="dark"] header {
-  background: var(--paper, transparent) !important;
-  color: var(--ink, inherit) !important;
-}
 
-/* ── Button: immer gegen den dunklen Header sichtbar ── */
-html[data-theme="light"] #themeToggle {
-  background: rgba(255,255,255,.18);
-  border-color: rgba(255,255,255,.6);
-  color: rgba(255,255,255,.95);
-}
-html[data-theme="light"] #themeToggle:hover {
-  background: rgba(255,255,255,.3);
-}
-html[data-theme="dark"] #themeToggle {
-  background: rgba(255,255,255,.1);
-  border-color: rgba(255,255,255,.45);
-  color: rgba(255,255,255,.9);
-}
-html[data-theme="dark"] #themeToggle:hover {
-  background: rgba(255,255,255,.2);
-}
+/* ── 1 · Tokens: Light (Default) ─────────────────────────────────────── */
 
-/* ── Light-first pages: --ink als Hintergrundfarbe flippt im Dark Mode zu hell ── */
-/* Betrifft: nav.tabs, body > nav, .footer-nav auf allen --ink/--paper-Seiten      */
-html[data-theme="dark"] .tabs,
-html[data-theme="dark"] nav.tabs,
-html[data-theme="dark"] body > nav,
-html[data-theme="dark"] .footer-nav {
-  background: var(--cream) !important;  /* --cream in dark mode = #1c1c1c */
-  border-color: var(--line) !important;
-}
-/* Hover-Text: --paper im Dark Mode = #111 (fast schwarz auf dunklem Hintergrund) */
-html[data-theme="dark"] .tab-btn:hover,
-html[data-theme="dark"] body > nav button:hover {
-  color: var(--ink) !important;  /* --ink in dark mode = #e8e4df */
-}
+:root {
+  color-scheme: light;
 
-/* ── Light-first pages: .footer-nav verwendet var(--ink) als Hintergrund ──────────────── */
-/* In Light Mode ist --ink = #1a1208 (dunkel) → Footer bleibt schwarz. Fix: cream/line.  */
-/* In Dark Mode ist bereits html[data-theme=dark] .footer-nav geregelt (s.o.)             */
-html[data-theme="light"] .footer-nav {
-  background: var(--cream) !important;
-  border-top: 1px solid var(--line) !important;
-}
-html[data-theme="light"] .footer-nav .back-btn,
-html[data-theme="light"] .footer-nav .portal-link {
-  color: var(--ink) !important;
-}
+  /* Flächen & Linien */
+  --bg:          #faf7f2;   /* warmes Papierweiß */
+  --surface:     #ffffff;
+  --surface-2:   #f1ede6;
+  --line:        #e2dcd2;
+  --line-strong: #c8c1b5;
 
-/* ── Dark-first pages: Card-Hover-Inversion im Light Mode verhindern ── */
-/* Dark Mode: #1d1d1d korrekt. Light Mode: rgba(0,0,0,.04) subtil, wie index.html */
-html[data-theme="light"] .lb-card:hover,
-html[data-theme="light"] .ue-card:hover {
-  background: rgba(0,0,0,.04) !important;
+  /* Text */
+  --text:  #1c1a17;
+  --muted: #6e6961;
+  --faint: #a39d93;
+
+  /* Akzent (neutral; Fach überschreibt via data-subject) */
+  --accent:          #1c1a17;
+  --accent-contrast: #ffffff;
+  --accent-soft: color-mix(in srgb, var(--accent) 9%, transparent);
+
+  /* Fachfarben */
+  --c-math:     #a07d08;
+  --c-physik:   #1d4ed8;
+  --c-kit:      #047857;
+  --c-projekte: #7c3aed;
+
+  /* Status */
+  --ok:       #2e7d4f;
+  --err:      #c0392b;
+  --ok-soft:  color-mix(in srgb, var(--ok) 10%, transparent);
+  --err-soft: color-mix(in srgb, var(--err) 10%, transparent);
+
+  /* Plot-Farben (Canvas-Applets, via Plot.colors() gelesen) */
+  --plot-grid:    #ece7dd;
+  --plot-axis:    #b3ac9f;
+  --plot-label:   #8b857a;
+  --plot-curve:   #2a6496;   /* Primärkurve (Blau) */
+  --plot-curve-2: #c8400a;   /* Sekante / Markierung (Rotorange) */
+  --plot-curve-3: #2e7d4f;   /* Tangente / Zweitkurve (Grün) */
+
+  /* Typografie */
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+  --font-mono:  'DM Mono', ui-monospace, monospace;
+
+  --fs-display: clamp(2.4rem, 1.2rem + 4.5vw, 4rem);
+  --fs-h1:      clamp(1.9rem, 1.3rem + 2vw, 2.6rem);
+  --fs-h2:      1.45rem;
+  --fs-h3:      1.1rem;
+  --fs-body:    1.0625rem;
+  --fs-small:   .9rem;
+  --fs-tag:     .72rem;
+  --lh:         1.65;
+
+  /* Layout */
+  --container:        1100px;
+  --container-narrow: 880px;
+  --sp-1: .25rem;
+  --sp-2: .5rem;
+  --sp-3: 1rem;
+  --sp-4: 1.5rem;
+  --sp-5: 2.5rem;
+  --sp-6: 4rem;
+  --r: 3px;                  /* editorial: fast eckig; Pills = 999px */
 }
 
-/* ── Dark-first pages: ue-tag Kontrast im Light Mode ── */
-/* Hellblau #6a9fd4 / Hellgrün #8ab86a auf weiß = ~2.9:1 → auf WCAG-AA-Farben switchen */
-html[data-theme="light"] .ue-tag.type-interaktiv { color: #1d4ed8; border-color: #1d4ed8; }
-html[data-theme="light"] .ue-tag.type-ab         { color: #047857; border-color: #047857; }
+
+/* ── 2 · Tokens: Dark ────────────────────────────────────────────────────
+   ⚠ SYNCHRON HALTEN: Dieser Block existiert ZWEIMAL —
+   (a) Media-Query für System-Dark ohne gespeicherten Override,
+   (b) :root[data-theme="dark"] für den expliziten Toggle.
+   Jede Änderung in BEIDEN Blöcken nachziehen!
+   ─────────────────────────────────────────────────────────────────────── */
+
+/* (a) System-Präferenz dark, kein Light-Override gespeichert */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --bg:          #121110;
+    --surface:     #1a1917;
+    --surface-2:   #22201d;
+    --line:        #2d2a26;
+    --line-strong: #48443d;
+
+    --text:  #ece8e1;
+    --muted: #98918a;
+    --faint: #6b665f;
+
+    --accent:          #ece8e1;
+    --accent-contrast: #121110;
+
+    --c-math:     #e8c547;
+    --c-physik:   #7ba3f0;
+    --c-kit:      #34d399;
+    --c-projekte: #c084fc;
+
+    --ok:  #5fbd83;
+    --err: #e5786a;
+
+    --plot-grid:    #262320;
+    --plot-axis:    #57524a;
+    --plot-label:   #8b857a;
+    --plot-curve:   #7ba3f0;
+    --plot-curve-2: #ff8a5b;
+    --plot-curve-3: #5fd39a;
+  }
+}
+
+/* (b) Expliziter Dark-Toggle — identische Kopie von (a), synchron halten! */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg:          #121110;
+  --surface:     #1a1917;
+  --surface-2:   #22201d;
+  --line:        #2d2a26;
+  --line-strong: #48443d;
+
+  --text:  #ece8e1;
+  --muted: #98918a;
+  --faint: #6b665f;
+
+  --accent:          #ece8e1;
+  --accent-contrast: #121110;
+
+  --c-math:     #e8c547;
+  --c-physik:   #7ba3f0;
+  --c-kit:      #34d399;
+  --c-projekte: #c084fc;
+
+  --ok:  #5fbd83;
+  --err: #e5786a;
+
+  --plot-grid:    #262320;
+  --plot-axis:    #57524a;
+  --plot-label:   #8b857a;
+  --plot-curve:   #7ba3f0;
+  --plot-curve-2: #ff8a5b;
+  --plot-curve-3: #5fd39a;
+}
+
+
+/* ── 3 · Fach-Akzent-Mapping ─────────────────────────────────────────────
+   Am <html> für ganze Seiten, an beliebigen Elementen für einzelne
+   Karten (z. B. Fach-Karten auf der Startseite). */
+
+[data-subject="mathematik"] { --accent: var(--c-math); }
+[data-subject="physik"]     { --accent: var(--c-physik); }
+[data-subject="kit"]        { --accent: var(--c-kit); }
+[data-subject="projekte"]   { --accent: var(--c-projekte); }
+
+
+/* ── 4 · Reset & Base ────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh);
+  min-height: 100vh;
+}
+
+img, canvas, svg, video { max-width: 100%; }
+
+a { color: inherit; }
+
+::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.15;
+}
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+/* Nummern-Präfix in Überschriften: <h2><span class="num">01</span>…</h2> */
+.num {
+  font-family: var(--font-mono);
+  font-size: .62em;
+  color: var(--accent);
+  margin-right: .45em;
+  letter-spacing: .05em;
+}
+
+
+/* ── 5 · Layout ──────────────────────────────────────────────────────── */
+
+.container {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+.container--narrow { max-width: var(--container-narrow); }
+
+main.container {
+  padding-top: var(--sp-5);
+  padding-bottom: var(--sp-6);
+}
+
+.stack { display: grid; gap: var(--sp-3); }
+
+
+/* ── 6 · Header, Breadcrumb, Kicker ──────────────────────────────────── */
+
+.site-header {
+  padding: 3.2rem 0 2.2rem;
+  border-bottom: 1px solid var(--line);
+}
+.site-header--compact { padding: 2.2rem 0 1.9rem; }
+
+.site-title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-display);
+  line-height: 1.05;
+  letter-spacing: -.02em;
+}
+.site-header--compact .site-title { font-size: var(--fs-h1); }
+
+.site-title em,
+.site-title span {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.site-sub {
+  margin-top: .7rem;
+  color: var(--muted);
+  font-size: .95rem;
+  max-width: 620px;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--accent);
+  margin-bottom: .6rem;
+}
+.kicker--muted { color: var(--muted); }
+
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--faint);
+  display: flex;
+  gap: .45rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+}
+.breadcrumb a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .15s;
+}
+.breadcrumb a:hover { color: var(--accent); }
+
+/* Abschnitts-Label mit auslaufender 1px-Linie */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  color: var(--muted);
+  margin: var(--sp-5) 0 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+
+/* ── 7 · Theme-Toggle (von site.js injiziert) ────────────────────────── */
+
+.theme-toggle {
+  position: fixed;
+  top: .9rem;
+  right: .9rem;
+  z-index: 100;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: .95rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color .15s, border-color .15s;
+}
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+
+/* ── 8 · Karten ──────────────────────────────────────────────────────── */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-3);
+}
+.card-grid--wide {
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 1.5rem 1.7rem;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .2s, background .2s;
+}
+a.card { display: block; }
+a.card:hover,
+.card--hover:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+}
+
+.card--theory { border-left: 2px solid var(--plot-curve); }
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  margin-bottom: .35rem;
+}
+a.card:hover .card-title { color: var(--accent); }
+
+.card-desc {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  line-height: 1.55;
+}
+.card-meta {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--faint);
+  margin-top: 1rem;
+}
+
+/* Aufgaben-Box (Arbeitsblätter) */
+.task {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--r);
+  padding: 1.4rem 1.6rem;
+  margin-bottom: var(--sp-4);
+}
+
+/* Platzhalter für leere Bereiche (Stub-Seiten) */
+.empty {
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r);
+  padding: var(--sp-6) var(--sp-4);
+  text-align: center;
+  color: var(--muted);
+}
+.empty .kicker { color: var(--faint); margin-bottom: .8rem; }
+
+
+/* ── 9 · Tags & Pills ────────────────────────────────────────────────── */
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  padding: .16rem .55rem;
+  margin-right: .3rem;
+  margin-bottom: .3rem;
+}
+.tag--accent   { color: var(--accent);     border-color: currentColor; }
+.tag--math     { color: var(--c-math);     border-color: currentColor; }
+.tag--physik   { color: var(--c-physik);   border-color: currentColor; }
+.tag--kit      { color: var(--c-kit);      border-color: currentColor; }
+.tag--projekte { color: var(--c-projekte); border-color: currentColor; }
+
+.pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  padding: .3rem .8rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.pill:hover {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+
+/* ── 10 · Buttons ────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: .55rem 1.2rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--r);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity .15s, transform .1s;
+}
+.btn:hover  { opacity: .85; }
+.btn:active { transform: scale(.98); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--line-strong);
+}
+.btn--ghost:hover {
+  opacity: 1;
+  border-color: var(--accent);
+}
+
+
+/* ── 11 · Formulare ──────────────────────────────────────────────────── */
+
+.input {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  padding: .5rem .75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color .15s;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.input::placeholder { color: var(--faint); }
+
+/* Slider */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 180px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line-strong);
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  cursor: pointer;
+}
+input[type=range]::-moz-range-thumb {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  cursor: pointer;
+}
+input[type=range]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  flex-wrap: wrap;
+  margin: .7rem 0;
+}
+.slider-row label {
+  font-family: var(--font-mono);
+  font-size: .85rem;
+  min-width: 70px;
+}
+.slider-value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--accent);
+  min-width: 55px;
+}
+
+
+/* ── 12 · Tabellen ───────────────────────────────────────────────────── */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  margin: .8rem 0;
+}
+.table th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: left;
+  padding: .55rem .8rem;
+  border-bottom: 1px solid var(--line-strong);
+}
+.table td {
+  padding: .6rem .8rem;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: .85rem;
+}
+.table tbody tr:nth-child(even) td { background: var(--surface-2); }
+
+
+/* ── 13 · Arbeitsblatt-Bausteine ─────────────────────────────────────── */
+
+/* Formelbox (KaTeX-Display) */
+.formula {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 1rem 1.4rem;
+  margin: .9rem 0;
+  text-align: center;
+  overflow-x: auto;
+}
+.formula .katex-display { margin: 0; }
+
+/* Dynamische Ergebniszeile (per JS befüllt) */
+.formula--dyn {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  padding: .8rem 1.2rem;
+}
+
+/* Hinweis, per JS aufklappbar (.open) */
+.hint {
+  display: none;
+  background: var(--accent-soft);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: .65rem 1rem;
+  font-size: .9rem;
+  margin: .7rem 0;
+  overflow-x: auto;
+}
+.hint.open { display: block; }
+
+/* Statischer Hinweis (immer sichtbar) */
+.note {
+  background: var(--accent-soft);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: .65rem 1rem;
+  font-size: .9rem;
+  margin: .7rem 0;
+  overflow-x: auto;
+}
+
+/* Lösung als <details class="solution"> */
+.solution {
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface-2);
+  margin-top: 1rem;
+}
+.solution summary {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  cursor: pointer;
+  padding: .6rem 1rem;
+  transition: color .15s;
+  user-select: none;
+}
+.solution summary:hover { color: var(--accent); }
+.solution[open] summary {
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+}
+.solution-body {
+  padding: .9rem 1.2rem;
+  overflow-x: auto;
+}
+
+/* Feedback nach Antwort-Prüfung */
+.feedback {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: .83rem;
+  padding: .45rem .85rem;
+  border-radius: var(--r);
+  margin-top: .6rem;
+}
+.feedback.show { display: inline-block; }
+.feedback.ok {
+  background: var(--ok-soft);
+  color: var(--ok);
+  border: 1px solid color-mix(in srgb, var(--ok) 40%, transparent);
+}
+.feedback.err {
+  background: var(--err-soft);
+  color: var(--err);
+  border: 1px solid color-mix(in srgb, var(--err) 40%, transparent);
+}
+
+/* Ergebnis-Box (Schritt-für-Schritt-Abschluss) */
+.result-box {
+  background: var(--ok-soft);
+  border-left: 2px solid var(--ok);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: .7rem 1rem;
+  margin-top: .6rem;
+  overflow-x: auto;
+}
+
+/* Punkte-Leiste */
+.scorebar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: .7rem 1.1rem;
+  margin-bottom: 1.8rem;
+  font-family: var(--font-mono);
+  font-size: .85rem;
+}
+.stars {
+  font-size: 1.1rem;
+  letter-spacing: .12em;
+  color: var(--accent);
+}
+
+/* Canvas-Applets */
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  margin: .8rem 0;
+  overflow: hidden;
+}
+.canvas-wrap canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+/* ── 14 · Tabs ───────────────────────────────────────────────────────── */
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  margin-bottom: var(--sp-4);
+}
+.tab-btn {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--muted);
+  padding: .85rem 1.1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active {
+  display: block;
+  animation: fade-up .3s ease;
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* ── 15 · Footer ─────────────────────────────────────────────────────── */
+
+.site-footer {
+  margin-top: var(--sp-6);
+  border-top: 1px solid var(--line);
+  padding: 1.6rem 0 2rem;
+}
+.site-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--faint);
+}
+.site-footer-links {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.site-footer a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .15s;
+}
+.site-footer a:hover { color: var(--accent); }
+
+
+/* ── 16 · Responsive (einheitlicher Breakpoint: 640px) ───────────────── */
+
+@media (max-width: 640px) {
+  .container { padding-inline: 1.1rem; }
+  .site-header { padding: 2.2rem 0 1.6rem; }
+  main.container {
+    padding-top: var(--sp-4);
+    padding-bottom: var(--sp-5);
+  }
+  .card { padding: 1.2rem 1.3rem; }
+  .task { padding: 1.1rem 1.2rem; }
+  .site-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .6rem;
+  }
+  input[type=range] { width: 140px; }
+}
+
+
+/* ── 17 · Print ──────────────────────────────────────────────────────── */
+
+@media print {
+  @page { size: A4; margin: 1.5cm 2cm 2cm 2cm; }
+
+  :root, :root[data-theme="dark"] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f4f2ee;
+    --text: #000000;
+    --muted: #444444;
+    --faint: #777777;
+    --line: #cccccc;
+    --line-strong: #999999;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+
+  .theme-toggle,
+  .tabs,
+  .breadcrumb,
+  .site-footer { display: none !important; }
+
+  .tab-panel { display: block !important; }
+
+  .task, .card, .solution { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+
+  a { text-decoration: none; color: inherit; }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+
+/* ── 18 · Reduced Motion ─────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
