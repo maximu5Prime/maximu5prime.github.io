@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>[FACH] – Jahrgangsstufe [JGST]</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../static/fonts.css">
+  <link rel="stylesheet" href="../../static/theme.css">
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #171717;
+      --border: #2a2a2a;
+      --text: #f0ede8;
+      --text-muted: #888;
+      --accent: #e8c547; /* Dark Mode: Mathe=#e8c547 | Physik=#5b9cf6 | KIT=#6ee7b7 */
+    }
+    /* Light Mode: --accent darkenen für Kontrast auf hellem Hintergrund */
+    html[data-theme="light"] {
+      --accent: #a07d08; /* Mathe | für Physik=#1d4ed8, KIT=#047857 anpassen */
+    }
+    /* Light Mode: Hover subtil statt Inversion (Dark Mode: #1d1d1d bleibt korrekt) */
+    html[data-theme="light"] .lb-card:hover { background: rgba(0,0,0,.04) !important; }
+    html[data-theme="light"] .ue-card:hover { background: rgba(0,0,0,.04) !important; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; position: relative; z-index: 1; }
+
+    .breadcrumb { padding: 1.5rem 0 0; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: #333; }
+
+    header { padding: 2rem 0 2.5rem; border-bottom: 1px solid var(--border); }
+    .fach-tag { font-family: 'DM Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 0.6rem; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; }
+    h1 em { font-style: italic; color: var(--accent); }
+    .header-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; max-width: 620px; }
+    .header-badges { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.75rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
+    .badge.highlight { border-color: var(--accent); color: var(--accent); }
+
+    .section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin: 2.5rem 0 1rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .lernbereich-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+
+    .lb-card { background: var(--surface); display: grid; grid-template-columns: 56px 1fr auto; align-items: start; text-decoration: none; color: inherit; transition: background 0.15s; }
+    .lb-card:hover { background: #1d1d1d; }
+    .lb-card:hover .lb-arrow { opacity: 1; transform: translateX(0); }
+    .lb-card:hover .lb-num { opacity: 1; }
+
+    .lb-num { padding: 1.5rem 0 1.5rem 1.4rem; font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--accent); line-height: 1; opacity: 0.28; transition: opacity 0.15s; }
+    .lb-content { padding: 1.4rem 1rem 1.4rem 1.2rem; border-left: 1px solid var(--border); }
+    .lb-id { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--text-muted); margin-bottom: 0.3rem; letter-spacing: 0.12em; }
+    .lb-title { font-size: 0.98rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.35; }
+    .lb-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; }
+    .lb-tags { margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .lb-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 0.18rem 0.5rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
+
+    .lb-meta { padding: 1.4rem 1.4rem 1.4rem 1rem; display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; min-width: 80px; }
+    .lb-hours { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--text-muted); white-space: nowrap; border: 1px solid var(--border); padding: 0.22rem 0.55rem; border-radius: 2rem; }
+    .lb-arrow { font-size: 1rem; color: var(--accent); opacity: 0; transform: translateX(-5px); transition: opacity 0.15s, transform 0.15s; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    header { animation: fadeUp 0.4s ease both; }
+    .lernbereich-list { animation: fadeUp 0.4s 0.1s ease both; }
+
+    @media (max-width: 580px) {
+      .lb-card { grid-template-columns: 40px 1fr; }
+      .lb-meta { display: none; }
+    }
+
+    footer { margin-top: 3rem; padding: 1.5rem 0; border-top: 1px solid var(--border); }
+    .back-btn { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .back-btn:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="../../index.html">Lernportal</a>
+    <span>/</span>
+    <a href="#">[FACH]</a>
+    <span>/</span>
+    Jahrgangsstufe [JGST]
+  </nav>
+
+  <header>
+    <div class="fach-tag">[SYMBOL] [FACH] · Jahrgangsstufe [JGST]</div>
+    <h1>Lernbereiche<br><em>Übersicht</em></h1>
+    <p class="header-meta">
+      Alle [N] Lernbereiche gemäß Fachlehrplan · [FACH] [JGST] ([RICHTUNG]) · gültig ab [JAHR].
+    </p>
+    <div class="header-badges">
+      <span class="badge highlight">[N] Lernbereiche</span>
+      <span class="badge">ca. [GESAMT] Std. gesamt</span>
+      <!-- Weitere Badges: Themengebiete -->
+      <span class="badge">[THEMA 1]</span>
+      <span class="badge">[THEMA 2]</span>
+    </div>
+  </header>
+
+  <p class="section-label">Lernbereiche</p>
+
+  <div class="lernbereich-list">
+
+    <!-- LERNBEREICH 1 — Kopieren und anpassen -->
+    <a class="lb-card" href="[DATEINAME]-1-[THEMA].html">
+      <div class="lb-num">1</div>
+      <div class="lb-content">
+        <div class="lb-id">[FACHKÜRZEL] [JGST] · Lernbereich 1</div>
+        <div class="lb-title">[TITEL LERNBEREICH 1]</div>
+        <div class="lb-desc">[Kurzbeschreibung der Inhalte und Kompetenzen]</div>
+        <div class="lb-tags">
+          <span class="lb-tag">[Tag 1]</span>
+          <span class="lb-tag">[Tag 2]</span>
+          <span class="lb-tag">[Tag 3]</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. [N] Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- LERNBEREICH 2 -->
+    <a class="lb-card" href="[DATEINAME]-2-[THEMA].html">
+      <div class="lb-num">2</div>
+      <div class="lb-content">
+        <div class="lb-id">[FACHKÜRZEL] [JGST] · Lernbereich 2</div>
+        <div class="lb-title">[TITEL LERNBEREICH 2]</div>
+        <div class="lb-desc">[Kurzbeschreibung]</div>
+        <div class="lb-tags">
+          <span class="lb-tag">[Tag 1]</span>
+          <span class="lb-tag">[Tag 2]</span>
+        </div>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-hours">ca. [N] Std.</span>
+        <span class="lb-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Weitere Lernbereiche nach gleichem Schema einfügen -->
+
+  </div>
+
+  <footer>
+    <a class="back-btn" href="../../index.html">← Zurück zur Startseite</a>
+  </footer>
+
+</div>
+
+<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
+<script>
+(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
+</script>
+</body>
+</html>

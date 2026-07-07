@@ -1,6 +1,6 @@
 # FAP-Browser – Technische Notizen
 
-**Dateien:** `fap-aufgaben.html` · `fap-data.js` · `fap-aufgaben/` (PNG-Bilder)
+**Dateien:** `uebungen/mathematik/fap-aufgaben.html` · `uebungen/mathematik/fap-data.js` · `uebungen/mathematik/fap-aufgaben/` (PNG-Bilder) — dieses Dokument und `fap-crop.py` liegen in `tools/`
 
 ---
 
