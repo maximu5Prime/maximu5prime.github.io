@@ -1,182 +1,72 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-subject="mathematik">
 <head>
 <meta charset="UTF-8">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quadratische Funktionen – M10 Lernbereich 3</title>
-<link rel="stylesheet" href="../../static/fonts.css">
-  <link rel="stylesheet" href="../../static/theme.css">
-<link rel="stylesheet" href="../../static/katex/katex.min.css">
-<script defer src="../../static/katex/katex.min.js"></script>
-<script defer src="../../static/katex/contrib/auto-render.min.js"
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
 <style>
-:root {
-  --ink: #1a1208;
-  --paper: #f7f3ec;
-  --cream: #ede8de;
-  --accent: #c8400a;
-  --accent2: #2a6496;
-  --gold: #c9961a;
-  --green: #2e7d4f;
-  --line: #d4cfc6;
-  --serif: 'DM Serif Display', Georgia, serif;
-  --mono: 'DM Mono', monospace;
-  --sans: 'DM Sans', sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.7; }
-
-header { background: var(--ink); color: var(--paper); padding: 2.8rem 2rem 2.2rem; position: relative; overflow: hidden; }
-header::before { content:''; position:absolute; top:-60px; right:-80px; width:300px; height:300px; border-radius:50%; background:var(--accent); opacity:.1; }
-header::after  { content:''; position:absolute; bottom:-40px; left:8%; width:180px; height:180px; border-radius:50%; background:var(--gold); opacity:.08; }
-.hinner { max-width: 900px; margin: 0 auto; position: relative; }
-.klass { font-family:var(--mono); font-size:.78rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.5rem; }
-.klass a { color: var(--gold); text-decoration: none; }
-.klass a:hover { text-decoration: underline; }
-header h1 { font-family:var(--serif); font-size:clamp(1.8rem,5vw,3rem); line-height:1.1; margin-bottom:.8rem; }
-header h1 span { color:var(--accent); }
-header p { font-size:.95rem; color:#a09888; max-width:580px; }
-
-nav { background:var(--ink); border-top:1px solid #2e2e2e; padding:0 1.5rem; display:flex; overflow-x:auto; gap:0; }
-nav button { font-family:var(--mono); font-size:.75rem; letter-spacing:.07em; text-transform:uppercase; background:none; border:none; color:#777; padding:.8rem 1.2rem; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
-nav button:hover { color:var(--paper); }
-nav button.active { color:var(--gold); border-bottom-color:var(--gold); }
-
-main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 5rem; }
-.tab { display:none; }
-.tab.active { display:block; animation: fu .3s ease; }
-@keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
-
-h2 { font-family:var(--serif); font-size:1.8rem; font-weight:700; margin-bottom:.3rem; }
-h2 .num { font-family:var(--mono); font-size:.95rem; color:var(--accent); margin-right:.4rem; }
-.sub { color:#999; font-size:.88rem; font-style:italic; margin-bottom:1.8rem; }
-h3 { font-family:var(--serif); font-size:1.05rem; margin-bottom:.6rem; }
-
-.card { background:white; border:1px solid var(--line); border-radius:2px; padding:1.5rem 1.7rem; margin-bottom:1.2rem; box-shadow:0 2px 6px rgba(0,0,0,.04); }
-.card.theory { border-left:4px solid var(--accent2); background:#f0f5fa; }
-.card.ex     { border-left:4px solid var(--accent); }
-.card.warn   { border-left:4px solid var(--gold); background:#fffdf0; }
-.card.formula { border-left:4px solid var(--green); background:#f0faf5; }
-
-.fbox { background:var(--cream); border:1px solid var(--line); border-radius:2px; padding:.9rem 1.4rem; margin:.9rem 0; text-align:center; overflow-x:auto; }
-.fbox .katex-display { margin:0; }
-.fbox .katex { font-size:1.1em; }
-
-.step-formula { background:var(--cream); border-left:3px solid var(--accent2); padding:.55rem 1rem; margin:.45rem 0; border-radius:0 2px 2px 0; overflow-x:auto; }
-.result-box { padding:.65rem 1rem; background:#eaf7ee; border-left:3px solid var(--green); margin-top:.5rem; border-radius:0 2px 2px 0; overflow-x:auto; }
-
-ol.ex-list { padding-left:1.4rem; }
-ol.ex-list li { margin:.85rem 0; }
-ol.ex-list li .ex-stem { font-weight:500; }
-
-.bh { font-family:var(--mono); font-size:.72rem; padding:.3rem .75rem; border:1px dashed var(--gold); color:var(--gold); background:none; border-radius:2px; cursor:pointer; margin-top:.5rem; transition:background .15s; }
-.bh:hover { background:#fffbea; }
-.hint { background:#fffbea; border-left:3px solid var(--gold); padding:.65rem 1rem; font-size:.87rem; margin:.5rem 0 .2rem; display:none; overflow-x:auto; }
-.hint.open { display:block; }
-
-table.rt { width:100%; border-collapse:collapse; font-size:.88rem; margin:.8rem 0; }
-table.rt th { font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; background:var(--ink); color:var(--gold); padding:.5rem .8rem; text-align:left; }
-table.rt td { padding:.55rem .8rem; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:.84rem; }
-table.rt tr:nth-child(even) td { background:var(--cream); }
-
-.disc-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:.7rem; margin:.9rem 0; }
-@media(max-width:600px){ .disc-grid { grid-template-columns:1fr; } }
-.disc-card { background:white; border:1px solid var(--line); border-radius:2px; padding:.9rem 1.1rem; text-align:center; }
-.disc-card .dk { font-family:var(--mono); font-size:1.5rem; font-weight:700; margin-bottom:.3rem; }
-.disc-card .dk.pos { color:var(--green); }
-.disc-card .dk.zero { color:var(--gold); }
-.disc-card .dk.neg { color:var(--accent); }
-.disc-card p { font-size:.82rem; color:#555; }
-
-.tag { display:inline-block; font-family:var(--mono); font-size:.7rem; padding:.18rem .55rem; border-radius:20px; margin-right:.3rem; margin-bottom:.3rem; }
-.tb { background:#dbeafe; color:#1e40af; }
-.tr { background:#fee2e2; color:#991b1b; }
-.tg { background:#d1fae5; color:#065f46; }
-.ty { background:#fef9c3; color:#854d0e; }
-
-.section-label { font-family:var(--mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.18em; color:#999; margin: 1.8rem 0 .8rem; display:flex; align-items:center; gap:.8rem; }
-.section-label::after { content:''; flex:1; height:1px; background:var(--line); }
-
-/* Canvas + Slider */
-.cwrap { width:100%; border:1px solid var(--line); background:white; display:block; border-radius:2px; }
-.srow { display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap; font-family:var(--mono); font-size:.82rem; margin:.5rem 0; }
-.srow label { display:flex; align-items:center; gap:.5rem; }
-input[type=range] { -webkit-appearance:none; width:120px; height:4px; border-radius:3px; background:var(--line); outline:none; }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; height:15px; border-radius:50%; background:var(--accent); cursor:pointer; }
-.vd { font-family:var(--mono); font-size:.88rem; color:var(--accent); display:inline-block; min-width:36px; }
-.formula-disp { background:var(--cream); border:1px solid var(--line); padding:.45rem 1rem; text-align:center; font-family:var(--mono); font-size:.88rem; margin:.5rem 0; border-radius:2px; }
-
-@media print {
-  @page { size: A4; margin: 1.5cm 2cm 2cm 2cm; }
-  nav, header .klass, .bh { display:none !important; }
-  .hint { display:block !important; }
-  .tab { display:block !important; }
-  body { font-size:10pt; line-height:1.45; background:white; }
-  main { padding:.4rem 0; }
-  .card { box-shadow:none; padding:.65rem .9rem; margin-bottom:.4rem; }
-  #t2, #t3, #t4, #t5 { break-before:page; }
-  h2 { break-after:avoid; }
-}
-
-/* ── Dark Mode ── */
-[data-theme=dark] body > nav           { background: var(--cream) !important; }
-[data-theme=dark] body > nav button:hover { color: var(--ink) !important; }
-[data-theme=dark] .card                { background: #1a1a1a; border-color: #2e2e2e; }
-[data-theme=dark] .card.theory         { background: #131a24; }
-[data-theme=dark] .card.warn           { background: #1a1500; }
-[data-theme=dark] .card.formula        { background: #0e1a12; }
-[data-theme=dark] .fbox                { background: #1e1e1e; border-color: #2e2e2e; }
-[data-theme=dark] .step-formula        { background: #141c24; border-color: #1a3a5c; }
-[data-theme=dark] .result-box          { background: #0e1a12; border-color: #1a5c33; }
-[data-theme=dark] .disc-card           { background: #1a1a1a; border-color: #2e2e2e; }
-[data-theme=dark] .disc-card p         { color: #999; }
-[data-theme=dark] .cwrap               { background: #1a1a1a; }
-[data-theme=dark] .hint                { background: #1a1500; }
-[data-theme=dark] .formula-disp        { background: #1e1e1e; border-color: #2e2e2e; }
-[data-theme=dark] table.rt tr:nth-child(even) td { background: #1e1e1e; }
-[data-theme=dark] .sub                 { color: #888; }
-[data-theme=dark] .tag.tb              { background: #1a2a3a; color: #60a5fa; }
-[data-theme=dark] .tag.tr              { background: #2a1515; color: #f87171; }
-[data-theme=dark] .tag.tg              { background: #0f2218; color: #4ade80; }
-[data-theme=dark] .tag.ty              { background: #1a1500; color: #fbbf24; }
-
-  </style>
-<script>
-(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-</script></head>
+  .disc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.7rem; margin:.9rem 0; }
+  @media (max-width:640px) { .disc-grid { grid-template-columns:1fr; } }
+  .disc-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:.9rem 1.1rem; text-align:center; }
+  .disc-card .dk { font-family:var(--font-mono); font-size:1.5rem; font-weight:700; margin-bottom:.3rem; }
+  .disc-card .dk.pos  { color:var(--ok); }
+  .disc-card .dk.zero { color:var(--c-math); }
+  .disc-card .dk.neg  { color:var(--err); }
+  .disc-card p { font-size:.82rem; color:var(--muted); }
+  ol.ex-list { padding-left:1.4rem; }
+  ol.ex-list li { margin:.85rem 0; }
+  ol.ex-list li .ex-stem { font-weight:500; }
+  .cwrap { width:100%; height:auto; max-width:100%; border:1px solid var(--line); background:var(--surface); border-radius:var(--r); display:block; }
+</style>
+</head>
 <body>
 
-<header>
-  <div class="hinner">
-    <div class="klass"><a href="index.html">← Mathematik · Jgst. 10</a> &nbsp;/&nbsp; Lernbereich 3</div>
-    <h1>Quadratische<br><span>Funktionen</span></h1>
-    <p>Allgemeine Form · Scheitelpunktform · Schnittpunkte mit Achsen und anderen Funktionen</p>
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse10/">Mathematik · Jgst. 10</a>
+      <span>/</span>
+      <span>Lernbereich 3</span>
+    </nav>
+    <p class="kicker">M 10 · Lernbereich 3</p>
+    <h1 class="site-title">Quadratische<br><em>Funktionen</em></h1>
+    <p class="site-sub">Allgemeine Form · Scheitelpunktform · Schnittpunkte mit Achsen und anderen Funktionen</p>
   </div>
 </header>
 
-<nav>
-  <button class="active" onclick="show('t1',this)">1 · Allgemeine Form</button>
-  <button onclick="show('t2',this)">2 · Scheitelpunktform</button>
-  <button onclick="show('t3',this)">3 · Schnittpunkte mit Achsen</button>
-  <button onclick="show('t4',this)">4 · Schnittpunkte zweier Funktionen</button>
-  <button onclick="show('t5',this)">5 · Gemischte Übungen</button>
+<nav class="tabs container container--narrow" id="mainNav">
+  <button class="tab-btn active" onclick="show('t1',this)">1 · Allgemeine Form</button>
+  <button class="tab-btn" onclick="show('t2',this)">2 · Scheitelpunktform</button>
+  <button class="tab-btn" onclick="show('t3',this)">3 · Schnittpunkte mit Achsen</button>
+  <button class="tab-btn" onclick="show('t4',this)">4 · Schnittpunkte zweier Funktionen</button>
+  <button class="tab-btn" onclick="show('t5',this)">5 · Gemischte Übungen</button>
 </nav>
 
-<main>
+<main class="container container--narrow">
 
 <!-- ═══════════════════════════════════════════════════════════
      TAB 1 — ALLGEMEINE FORM
 ════════════════════════════════════════════════════════════════ -->
-<div class="tab active" id="t1">
+<div class="tab-panel active" id="t1">
   <h2><span class="num">1</span>Allgemeine Form</h2>
-  <p class="sub">Grundstruktur quadratischer Funktionen und ihre Parameter</p>
+  <p class="subtitle">Grundstruktur quadratischer Funktionen und ihre Parameter</p>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Die allgemeine Form</h3>
-    <div class="fbox">$$f(x) = ax^2 + bx + c \qquad (a \neq 0)$$</div>
-    <table class="rt">
+    <div class="formula">$$f(x) = ax^2 + bx + c \qquad (a \neq 0)$$</div>
+    <table class="table">
       <tr><th>Parameter</th><th>Bedeutung</th><th>Beispiel</th></tr>
       <tr><td>$a$</td><td>Öffnungsrichtung &amp; Stauchung/Streckung</td><td>$a>0$: oben offen &nbsp;|&nbsp; $a<0$: unten offen</td></tr>
       <tr><td>$|a|$</td><td>Weite der Parabel</td><td>$|a|$ groß → schmal, $|a|$ klein → breit</td></tr>
@@ -185,82 +75,82 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
     </table>
   </div>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Beispiel</h3>
     <p>$f(x) = 2x^2 - 5x + 3$</p>
-    <div class="step-formula">$a = 2, \quad b = -5, \quad c = 3$</div>
+    <div class="formula formula--step">$a = 2, \quad b = -5, \quad c = 3$</div>
     <p style="margin-top:.6rem">$a = 2 > 0$ → Parabel öffnet sich <strong>nach oben</strong>, ist schmaler als die Normalparabel.<br>
     y-Achsenabschnitt: $f(0) = 3$ → Punkt $(0\,|\,3)$</p>
   </div>
 
-  <div class="card" style="padding:1.2rem 1.7rem;">
+  <div class="card">
     <h3>Interaktiver Graph</h3>
-    <p style="font-size:.85rem; color:#555; margin-bottom:.7rem">Verändere die Schieberegler und beobachte die Auswirkungen auf die Parabel. Scheitelpunkt (blau) und y-Achsenabschnitt (grün) werden automatisch markiert.</p>
-    <div class="srow">
-      <label>a = <span class="vd" id="va1">1</span><input type="range" id="sa1" min="-3" max="3" step="0.5" value="1" oninput="updateT1()"></label>
-      <label>b = <span class="vd" id="vb1">0</span><input type="range" id="sb1" min="-6" max="6" step="0.5" value="0" oninput="updateT1()"></label>
-      <label>c = <span class="vd" id="vc1">0</span><input type="range" id="sc1" min="-6" max="6" step="0.5" value="0" oninput="updateT1()"></label>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.7rem">Verändere die Schieberegler und beobachte die Auswirkungen auf die Parabel. Scheitelpunkt (blau) und y-Achsenabschnitt (grün) werden automatisch markiert.</p>
+    <div class="slider-row">
+      <label>a = <span class="slider-value" id="va1">1</span></label><input type="range" id="sa1" min="-3" max="3" step="0.5" value="1" oninput="updateT1()">
+      <label>b = <span class="slider-value" id="vb1">0</span></label><input type="range" id="sb1" min="-6" max="6" step="0.5" value="0" oninput="updateT1()">
+      <label>c = <span class="slider-value" id="vc1">0</span></label><input type="range" id="sc1" min="-6" max="6" step="0.5" value="0" oninput="updateT1()">
     </div>
-    <div class="formula-disp" id="fd1">f(x) = x²</div>
+    <div class="formula formula--dyn" id="fd1">f(x) = x²</div>
     <canvas class="cwrap" id="cv1" width="840" height="300"></canvas>
   </div>
 
   <p class="section-label">Aufgaben</p>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 1 — Parameter ablesen</h3>
     <p>Lies $a$, $b$ und $c$ ab. Bestimme außerdem die Öffnungsrichtung und den y-Achsenabschnitt.</p>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">$f(x) = 3x^2 - 5x + 2$</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$a = 3,\ b = -5,\ c = 2$ &nbsp;|&nbsp; öffnet <strong>nach oben</strong> &nbsp;|&nbsp; y-AS: $(0\,|\,2)$</div>
       </li>
       <li>
         <span class="ex-stem">$g(x) = -x^2 + 4x$</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$a = -1,\ b = 4,\ c = 0$ &nbsp;|&nbsp; öffnet <strong>nach unten</strong> &nbsp;|&nbsp; y-AS: $(0\,|\,0)$</div>
       </li>
       <li>
         <span class="ex-stem">$h(x) = 2x^2 + x - 7$</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$a = 2,\ b = 1,\ c = -7$ &nbsp;|&nbsp; öffnet <strong>nach oben</strong> &nbsp;|&nbsp; y-AS: $(0\,|\,-7)$</div>
       </li>
       <li>
         <span class="ex-stem">$k(x) = -\tfrac{1}{2}x^2 + 3x - 1$</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$a = -\frac{1}{2},\ b = 3,\ c = -1$ &nbsp;|&nbsp; öffnet <strong>nach unten</strong>, breiter als Normalparabel &nbsp;|&nbsp; y-AS: $(0\,|\,-1)$</div>
       </li>
       <li>
         <span class="ex-stem">$m(x) = 4x^2 - 8x$</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$a = 4,\ b = -8,\ c = 0$ &nbsp;|&nbsp; öffnet <strong>nach oben</strong>, schmaler als Normalparabel &nbsp;|&nbsp; y-AS: $(0\,|\,0)$</div>
       </li>
     </ol>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 2 — Funktionswerte berechnen</h3>
     <p>Gegeben: $f(x) = 2x^2 - 4x + 1$. Berechne die folgenden Funktionswerte.</p>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">$f(0)$</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$f(0) = 2 \cdot 0 - 4 \cdot 0 + 1 = 1$</div>
       </li>
       <li>
         <span class="ex-stem">$f(3)$</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$f(3) = 2 \cdot 9 - 4 \cdot 3 + 1 = 18 - 12 + 1 = 7$</div>
       </li>
       <li>
         <span class="ex-stem">$f(-2)$</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$f(-2) = 2 \cdot 4 - 4 \cdot (-2) + 1 = 8 + 8 + 1 = 17$</div>
       </li>
       <li>
         <span class="ex-stem">Für welchen x-Wert gilt $f(x) = 1$? (Hinweis: Gleichung aufstellen!)</span>
-        <br><button class="bh" onclick="tog(this)">Lösung</button>
+        <br><button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $2x^2 - 4x + 1 = 1 \Rightarrow 2x^2 - 4x = 0 \Rightarrow 2x(x-2) = 0$<br>
           $x_1 = 0$ oder $x_2 = 2$
@@ -273,16 +163,16 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
 <!-- ═══════════════════════════════════════════════════════════
      TAB 2 — SCHEITELPUNKTFORM
 ════════════════════════════════════════════════════════════════ -->
-<div class="tab" id="t2">
+<div class="tab-panel" id="t2">
   <h2><span class="num">2</span>Scheitelpunktform</h2>
-  <p class="sub">Scheitelpunkt ablesen, umformen und umrechnen</p>
+  <p class="subtitle">Scheitelpunkt ablesen, umformen und umrechnen</p>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Die Scheitelpunktform</h3>
-    <div class="fbox">$$f(x) = a(x - x_S)^2 + y_S$$</div>
+    <div class="formula">$$f(x) = a(x - x_S)^2 + y_S$$</div>
     <p>Der <strong>Scheitelpunkt</strong> $S(x_S\,|\,y_S)$ ist direkt ablesbar.<br>
     Achtung: Das Vorzeichen vor $x_S$ ändert sich! Bei $f(x) = a(x \mathbf{+} 3)^2 + 1$ ist $x_S = \mathbf{-}3$.</p>
-    <table class="rt" style="margin-top:1rem">
+    <table class="table" style="margin-top:1rem">
       <tr><th>Scheitelpunktform</th><th>Scheitelpunkt</th></tr>
       <tr><td>$f(x) = 2(x-3)^2 + 5$</td><td>$S(3\,|\,5)$</td></tr>
       <tr><td>$f(x) = -(x+1)^2 - 2$</td><td>$S(-1\,|\,-2)$</td></tr>
@@ -290,73 +180,73 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
     </table>
   </div>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Normalform → Scheitelpunktform (Quadratische Ergänzung)</h3>
     <p>Ziel: $ax^2 + bx + c$ umformen in $a(x - x_S)^2 + y_S$</p>
     <p style="margin-top:.8rem"><strong>Vorgehen:</strong></p>
-    <ol style="padding-left:1.4rem; margin-top:.4rem; font-size:.93rem; line-height:1.9">
+    <ol style="padding-left:1.4rem;margin-top:.4rem;font-size:.93rem;line-height:1.9">
       <li>Falls $a \neq 1$: $a$ ausklammern</li>
       <li>Quadratische Ergänzung: den Term $\left(\frac{b}{2a}\right)^2$ addieren und subtrahieren</li>
       <li>Binomische Formel erkennen und zusammenfassen</li>
     </ol>
     <p style="margin-top:1rem"><strong>Gemerkte Formeln:</strong></p>
-    <div class="fbox">$$x_S = -\frac{b}{2a}, \qquad y_S = c - \frac{b^2}{4a}$$</div>
-    <p style="font-size:.85rem; color:#666">Diese Formeln kann man auch direkt anwenden, wenn man die Herleitung kennt.</p>
-    <p style="margin-top:.7rem; font-size:.9rem"><strong>Alternative für $y_S$:</strong> Den berechneten Wert $x_S$ direkt in die Funktion einsetzen:</p>
-    <div class="fbox" style="margin:.5rem 0">$$y_S = f(x_S)$$</div>
-    <p style="font-size:.85rem; color:#666">Das ist oft die schnellere Methode — besonders wenn $x_S$ eine Dezimalzahl ist.</p>
+    <div class="formula">$$x_S = -\frac{b}{2a}, \qquad y_S = c - \frac{b^2}{4a}$$</div>
+    <p style="font-size:.85rem;color:var(--muted)">Diese Formeln kann man auch direkt anwenden, wenn man die Herleitung kennt.</p>
+    <p style="margin-top:.7rem;font-size:.9rem"><strong>Alternative für $y_S$:</strong> Den berechneten Wert $x_S$ direkt in die Funktion einsetzen:</p>
+    <div class="formula" style="margin:.5rem 0">$$y_S = f(x_S)$$</div>
+    <p style="font-size:.85rem;color:var(--muted)">Das ist oft die schnellere Methode — besonders wenn $x_S$ eine Dezimalzahl ist.</p>
   </div>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Beispiel — Herleitung Schritt für Schritt</h3>
     <p>$f(x) = 2x^2 - 8x + 3$</p>
-    <div class="step-formula">$= 2\left(x^2 - 4x\right) + 3$ &emsp; <span style="color:#888; font-size:.85rem">[$a = 2$ ausklammern]</span></div>
-    <div class="step-formula">$= 2\left(x^2 - 4x + 4 - 4\right) + 3$ &emsp; <span style="color:#888; font-size:.85rem">[Ergänze $\left(\frac{4}{2}\right)^2 = 4$]</span></div>
-    <div class="step-formula">$= 2\left(x - 2\right)^2 - 8 + 3$ &emsp; <span style="color:#888; font-size:.85rem">[Binomische Formel, $-4$ aus der Klammer heraus: $2 \cdot (-4) = -8$]</span></div>
+    <div class="formula formula--step">$= 2\left(x^2 - 4x\right) + 3$ &emsp; <span style="color:var(--muted);font-size:.85rem">[$a = 2$ ausklammern]</span></div>
+    <div class="formula formula--step">$= 2\left(x^2 - 4x + 4 - 4\right) + 3$ &emsp; <span style="color:var(--muted);font-size:.85rem">[Ergänze $\left(\frac{4}{2}\right)^2 = 4$]</span></div>
+    <div class="formula formula--step">$= 2\left(x - 2\right)^2 - 8 + 3$ &emsp; <span style="color:var(--muted);font-size:.85rem">[Binomische Formel, $-4$ aus der Klammer heraus: $2 \cdot (-4) = -8$]</span></div>
     <div class="result-box">$f(x) = 2(x-2)^2 - 5 \quad \Rightarrow \quad S(2\,|\,-5)$</div>
   </div>
 
   <p class="section-label">Aufgaben</p>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 3 — Scheitelpunkt ablesen</h3>
     <p>Lies den Scheitelpunkt direkt aus der Scheitelpunktform ab.</p>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">$f(x) = (x - 5)^2 + 3$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$S(5\,|\,3)$</div>
       </li>
       <li>
         <span class="ex-stem">$g(x) = 3(x + 2)^2 - 7$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$S(-2\,|\,-7)$ &nbsp; Achtung: $+2$ in der Klammer → $x_S = -2$!</div>
       </li>
       <li>
         <span class="ex-stem">$h(x) = -(x - 1)^2 + 6$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$S(1\,|\,6)$ &nbsp; Parabel öffnet nach unten ($a = -1$), Scheitelpunkt ist Maximum.</div>
       </li>
       <li>
         <span class="ex-stem">$k(x) = 2(x + 4)^2$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$S(-4\,|\,0)$ &nbsp; Der Scheitel liegt auf der x-Achse.</div>
       </li>
       <li>
         <span class="ex-stem">$m(x) = -\tfrac{1}{2}(x - 3)^2 + 9$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$S(3\,|\,9)$ &nbsp; Parabel öffnet nach unten, Scheitelpunkt ist globales Maximum.</div>
       </li>
     </ol>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 4 — Normalform → Scheitelpunktform</h3>
     <p>Forme durch quadratische Ergänzung um und lies den Scheitelpunkt ab.</p>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">$f(x) = x^2 - 6x + 5$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= x^2 - 6x + 9 - 9 + 5 = (x-3)^2 - 4$<br>
           $\Rightarrow f(x) = (x-3)^2 - 4, \quad S(3\,|\,-4)$
@@ -364,7 +254,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">$g(x) = x^2 + 4x - 1$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= x^2 + 4x + 4 - 4 - 1 = (x+2)^2 - 5$<br>
           $\Rightarrow g(x) = (x+2)^2 - 5, \quad S(-2\,|\,-5)$
@@ -372,7 +262,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">$h(x) = 2x^2 - 4x + 7$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= 2(x^2 - 2x) + 7 = 2(x^2 - 2x + 1 - 1) + 7 = 2(x-1)^2 - 2 + 7$<br>
           $\Rightarrow h(x) = 2(x-1)^2 + 5, \quad S(1\,|\,5)$
@@ -380,7 +270,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">$k(x) = -x^2 + 2x + 3$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= -(x^2 - 2x) + 3 = -(x^2 - 2x + 1 - 1) + 3 = -(x-1)^2 + 1 + 3$<br>
           $\Rightarrow k(x) = -(x-1)^2 + 4, \quad S(1\,|\,4)$
@@ -388,7 +278,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">$m(x) = 3x^2 + 6x - 9$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= 3(x^2 + 2x) - 9 = 3(x^2 + 2x + 1 - 1) - 9 = 3(x+1)^2 - 3 - 9$<br>
           $\Rightarrow m(x) = 3(x+1)^2 - 12, \quad S(-1\,|\,-12)$
@@ -397,34 +287,34 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
     </ol>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 5 — Scheitelpunktform → Normalform</h3>
     <p>Multipliziere aus und ordne nach Potenzen.</p>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">$f(x) = (x - 3)^2 + 2$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= x^2 - 6x + 9 + 2 = x^2 - 6x + 11$
         </div>
       </li>
       <li>
         <span class="ex-stem">$g(x) = 2(x + 1)^2 - 5$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= 2(x^2 + 2x + 1) - 5 = 2x^2 + 4x + 2 - 5 = 2x^2 + 4x - 3$
         </div>
       </li>
       <li>
         <span class="ex-stem">$h(x) = -(x - 2)^2 + 4$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= -(x^2 - 4x + 4) + 4 = -x^2 + 4x - 4 + 4 = -x^2 + 4x$
         </div>
       </li>
       <li>
         <span class="ex-stem">$k(x) = 3(x + 2)^2 - 1$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= 3(x^2 + 4x + 4) - 1 = 3x^2 + 12x + 12 - 1 = 3x^2 + 12x + 11$
         </div>
@@ -436,39 +326,39 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
 <!-- ═══════════════════════════════════════════════════════════
      TAB 3 — SCHNITTPUNKTE MIT ACHSEN
 ════════════════════════════════════════════════════════════════ -->
-<div class="tab" id="t3">
+<div class="tab-panel" id="t3">
   <h2><span class="num">3</span>Schnittpunkte mit den Achsen</h2>
-  <p class="sub">y-Achsenabschnitt, Nullstellen und die allgemeine Lösungsformel</p>
+  <p class="subtitle">y-Achsenabschnitt, Nullstellen und die allgemeine Lösungsformel</p>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Schnittpunkt mit der y-Achse</h3>
     <p>Setze $x = 0$ ein:</p>
-    <div class="fbox">$$f(0) = a \cdot 0 + b \cdot 0 + c = c \quad \Rightarrow \quad \text{Punkt } (0\,|\,c)$$</div>
+    <div class="formula">$$f(0) = a \cdot 0 + b \cdot 0 + c = c \quad \Rightarrow \quad \text{Punkt } (0\,|\,c)$$</div>
     <p>Der y-Achsenabschnitt ist also immer direkt als $c$ ablesbar.</p>
   </div>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Nullstellen — Schnittpunkte mit der x-Achse</h3>
     <p>Setze $f(x) = 0$ und löse:</p>
-    <div class="fbox">$$ax^2 + bx + c = 0$$</div>
+    <div class="formula">$$ax^2 + bx + c = 0$$</div>
     <p>Zur Lösung verwenden wir die <strong>Lösungsformel für quadratische Gleichungen</strong>:</p>
-    <div class="card formula" style="margin:.9rem 0 .5rem">
-      <div class="fbox" style="border:none; background:transparent; font-size:1.1rem">
+    <div class="card card--ok" style="margin:.9rem 0 .5rem">
+      <div class="formula" style="border:none;background:transparent;font-size:1.1rem">
         $$x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
       </div>
-      <p style="text-align:center; font-family:var(--mono); font-size:.78rem; color:var(--green)">▲ Diese Formel gilt immer — für beliebige Werte von a, b, c</p>
-      <p style="text-align:center; font-size:.83rem; color:#777; margin-top:.4rem">Auch bekannt als: <strong>Mitternachtsformel</strong> (MNF) &nbsp;·&nbsp; <strong>abc-Formel</strong></p>
+      <p style="text-align:center;font-family:var(--font-mono);font-size:.78rem;color:var(--ok)">▲ Diese Formel gilt immer — für beliebige Werte von a, b, c</p>
+      <p style="text-align:center;font-size:.83rem;color:var(--muted);margin-top:.4rem">Auch bekannt als: <strong>Mitternachtsformel</strong> (MNF) &nbsp;·&nbsp; <strong>abc-Formel</strong></p>
     </div>
   </div>
 
-  <div class="card warn">
+  <div class="card card--warn">
     <h3>Hinweis zur pq-Formel</h3>
-    <span class="tag ty">Wichtig</span>
+    <span class="tag tag--accent">Wichtig</span>
     <p style="margin-top:.5rem">Die pq-Formel ($x = -\frac{p}{2} \pm \sqrt{\left(\frac{p}{2}\right)^2 - q}$) funktioniert <strong>nur</strong> bei Gleichungen der Form $x^2 + px + q = 0$, also wenn der Koeffizient vor $x^2$ genau $1$ ist.</p>
     <p style="margin-top:.6rem">Bei $2x^2 - 5x + 3 = 0$ müsste man erst durch 2 dividieren — das ist fehleranfällig. Die <strong>abc-Formel funktioniert immer direkt</strong> und sollte daher ab sofort immer verwendet werden.</p>
   </div>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Die Diskriminante $D = b^2 - 4ac$</h3>
     <p>Vor dem Rechnen kann man mit $D$ die Anzahl der Nullstellen bestimmen:</p>
     <div class="disc-grid">
@@ -487,87 +377,87 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
     </div>
   </div>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Beispiel — Nullstellen mit der abc-Formel</h3>
     <p>$f(x) = 2x^2 - 5x + 3$ &nbsp; mit &nbsp; $a = 2,\ b = -5,\ c = 3$</p>
-    <div class="step-formula">$D = b^2 - 4ac = (-5)^2 - 4 \cdot 2 \cdot 3 = 25 - 24 = 1 > 0$ &nbsp;→&nbsp; zwei Nullstellen</div>
-    <div class="step-formula">$x_{1,2} = \dfrac{-(-5) \pm \sqrt{1}}{2 \cdot 2} = \dfrac{5 \pm 1}{4}$</div>
+    <div class="formula formula--step">$D = b^2 - 4ac = (-5)^2 - 4 \cdot 2 \cdot 3 = 25 - 24 = 1 > 0$ &nbsp;→&nbsp; zwei Nullstellen</div>
+    <div class="formula formula--step">$x_{1,2} = \dfrac{-(-5) \pm \sqrt{1}}{2 \cdot 2} = \dfrac{5 \pm 1}{4}$</div>
     <div class="result-box">$x_1 = \dfrac{6}{4} = \dfrac{3}{2} = 1{,}5 \qquad x_2 = \dfrac{4}{4} = 1$</div>
     <p style="margin-top:.7rem">Schnittpunkte mit der x-Achse: $(1\,|\,0)$ und $(1{,}5\,|\,0)$</p>
   </div>
 
-  <div class="card" style="padding:1.2rem 1.7rem;">
+  <div class="card">
     <h3>Nullstellen im Graph</h3>
-    <p style="font-size:.85rem; color:#555; margin-bottom:.7rem">Verändere $a$, $b$, $c$ und beobachte, wie $D$ die Anzahl der Schnittpunkte mit der x-Achse bestimmt. Nullstellen sind rot markiert.</p>
-    <div class="srow">
-      <label>a = <span class="vd" id="va3">2</span><input type="range" id="sa3" min="-3" max="3" step="0.5" value="2" oninput="updateT3()"></label>
-      <label>b = <span class="vd" id="vb3">-5</span><input type="range" id="sb3" min="-8" max="8" step="0.5" value="-5" oninput="updateT3()"></label>
-      <label>c = <span class="vd" id="vc3">3</span><input type="range" id="sc3" min="-8" max="8" step="0.5" value="3" oninput="updateT3()"></label>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.7rem">Verändere $a$, $b$, $c$ und beobachte, wie $D$ die Anzahl der Schnittpunkte mit der x-Achse bestimmt. Nullstellen sind rot markiert.</p>
+    <div class="slider-row">
+      <label>a = <span class="slider-value" id="va3">2</span></label><input type="range" id="sa3" min="-3" max="3" step="0.5" value="2" oninput="updateT3()">
+      <label>b = <span class="slider-value" id="vb3">-5</span></label><input type="range" id="sb3" min="-8" max="8" step="0.5" value="-5" oninput="updateT3()">
+      <label>c = <span class="slider-value" id="vc3">3</span></label><input type="range" id="sc3" min="-8" max="8" step="0.5" value="3" oninput="updateT3()">
     </div>
-    <div class="formula-disp" id="fd3"></div>
+    <div class="formula formula--dyn" id="fd3"></div>
     <canvas class="cwrap" id="cv3" width="840" height="300"></canvas>
   </div>
 
   <p class="section-label">Aufgaben</p>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 6 — y-Achsenabschnitt bestimmen</h3>
     <p>Gib den Schnittpunkt mit der y-Achse an.</p>
     <ol class="ex-list">
-      <li>$f(x) = x^2 - 3x + 7$<button class="bh" onclick="tog(this)">Lösung</button><div class="hint">$f(0) = 7 \Rightarrow (0\,|\,7)$</div></li>
-      <li>$g(x) = -2x^2 + 5x$<button class="bh" onclick="tog(this)">Lösung</button><div class="hint">$g(0) = 0 \Rightarrow (0\,|\,0)$. Die Parabel verläuft durch den Ursprung.</div></li>
-      <li>$h(x) = 4x^2 - 1$<button class="bh" onclick="tog(this)">Lösung</button><div class="hint">$h(0) = -1 \Rightarrow (0\,|\,-1)$</div></li>
-      <li>$k(x) = -x^2 - 4x + 12$<button class="bh" onclick="tog(this)">Lösung</button><div class="hint">$k(0) = 12 \Rightarrow (0\,|\,12)$</div></li>
+      <li>$f(x) = x^2 - 3x + 7$<button class="btn btn--ghost" onclick="tog(this)">Lösung</button><div class="hint">$f(0) = 7 \Rightarrow (0\,|\,7)$</div></li>
+      <li>$g(x) = -2x^2 + 5x$<button class="btn btn--ghost" onclick="tog(this)">Lösung</button><div class="hint">$g(0) = 0 \Rightarrow (0\,|\,0)$. Die Parabel verläuft durch den Ursprung.</div></li>
+      <li>$h(x) = 4x^2 - 1$<button class="btn btn--ghost" onclick="tog(this)">Lösung</button><div class="hint">$h(0) = -1 \Rightarrow (0\,|\,-1)$</div></li>
+      <li>$k(x) = -x^2 - 4x + 12$<button class="btn btn--ghost" onclick="tog(this)">Lösung</button><div class="hint">$k(0) = 12 \Rightarrow (0\,|\,12)$</div></li>
     </ol>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 7 — Nullstellen mit der abc-Formel</h3>
     <p>Bestimme die Nullstellen mit der abc-Formel. Berechne zuerst $D$.</p>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">$f(x) = x^2 - 5x + 6$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=1,\, b=-5,\, c=6$ &nbsp;|&nbsp; $D = 25 - 24 = 1$<br>
           $x_{1,2} = \frac{5 \pm 1}{2}$ &nbsp;→&nbsp; $x_1 = 3,\; x_2 = 2$
         </div>
       </li>
       <li>
-        <span class="ex-stem">$g(x) = 2x^2 + 4x - 6$ &nbsp; <span class="tag tr">a ≠ 1</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$g(x) = 2x^2 + 4x - 6$ &nbsp; <span class="tag" style="color:var(--err);border-color:currentColor;">a ≠ 1</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=2,\, b=4,\, c=-6$ &nbsp;|&nbsp; $D = 16 + 48 = 64$<br>
           $x_{1,2} = \frac{-4 \pm 8}{4}$ &nbsp;→&nbsp; $x_1 = 1,\; x_2 = -3$
         </div>
       </li>
       <li>
-        <span class="ex-stem">$h(x) = x^2 + 4x + 4$ &nbsp; <span class="tag ty">D = 0?</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$h(x) = x^2 + 4x + 4$ &nbsp; <span class="tag tag--accent">D = 0?</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=1,\, b=4,\, c=4$ &nbsp;|&nbsp; $D = 16 - 16 = 0$<br>
           $x = \frac{-4}{2} = -2$ &nbsp;→&nbsp; genau eine Nullstelle: $(-2\,|\,0)$
         </div>
       </li>
       <li>
-        <span class="ex-stem">$k(x) = 3x^2 - 12x + 9$ &nbsp; <span class="tag tr">a ≠ 1</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$k(x) = 3x^2 - 12x + 9$ &nbsp; <span class="tag" style="color:var(--err);border-color:currentColor;">a ≠ 1</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=3,\, b=-12,\, c=9$ &nbsp;|&nbsp; $D = 144 - 108 = 36$<br>
           $x_{1,2} = \frac{12 \pm 6}{6}$ &nbsp;→&nbsp; $x_1 = 3,\; x_2 = 1$
         </div>
       </li>
       <li>
-        <span class="ex-stem">$m(x) = x^2 - 2x + 5$ &nbsp; <span class="tag tb">D &lt; 0?</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$m(x) = x^2 - 2x + 5$ &nbsp; <span class="tag tag--physik">D &lt; 0?</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=1,\, b=-2,\, c=5$ &nbsp;|&nbsp; $D = 4 - 20 = -16 < 0$<br>
           Keine reellen Nullstellen — die Parabel liegt vollständig über der x-Achse.
         </div>
       </li>
       <li>
-        <span class="ex-stem">$n(x) = -2x^2 + 8x$ &nbsp; <span class="tag tr">a ≠ 1, c = 0</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$n(x) = -2x^2 + 8x$ &nbsp; <span class="tag" style="color:var(--err);border-color:currentColor;">a ≠ 1, c = 0</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=-2,\, b=8,\, c=0$ &nbsp;|&nbsp; $D = 64 - 0 = 64$<br>
           $x_{1,2} = \frac{-8 \pm 8}{-4}$ &nbsp;→&nbsp; $x_1 = 0,\; x_2 = 4$<br>
@@ -575,16 +465,16 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
         </div>
       </li>
       <li>
-        <span class="ex-stem">$p(x) = 2x^2 + 3x - 2$ &nbsp; <span class="tag tr">a ≠ 1</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$p(x) = 2x^2 + 3x - 2$ &nbsp; <span class="tag" style="color:var(--err);border-color:currentColor;">a ≠ 1</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=2,\, b=3,\, c=-2$ &nbsp;|&nbsp; $D = 9 + 16 = 25$<br>
           $x_{1,2} = \frac{-3 \pm 5}{4}$ &nbsp;→&nbsp; $x_1 = \frac{1}{2},\; x_2 = -2$
         </div>
       </li>
       <li>
-        <span class="ex-stem">$q(x) = -x^2 + 6x - 9$ &nbsp; <span class="tag ty">D = 0?</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$q(x) = -x^2 + 6x - 9$ &nbsp; <span class="tag tag--accent">D = 0?</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=-1,\, b=6,\, c=-9$ &nbsp;|&nbsp; $D = 36 - 36 = 0$<br>
           $x = \frac{-6}{-2} = 3$ &nbsp;→&nbsp; genau eine Nullstelle: $(3\,|\,0)$ (Scheitelpunkt auf x-Achse)
@@ -597,14 +487,14 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
 <!-- ═══════════════════════════════════════════════════════════
      TAB 4 — SCHNITTPUNKTE ZWEIER FUNKTIONEN
 ════════════════════════════════════════════════════════════════ -->
-<div class="tab" id="t4">
+<div class="tab-panel" id="t4">
   <h2><span class="num">4</span>Schnittpunkte zweier Funktionen</h2>
-  <p class="sub">Gleichung aufstellen, auf 0 bringen, abc-Formel anwenden</p>
+  <p class="subtitle">Gleichung aufstellen, auf 0 bringen, abc-Formel anwenden</p>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Vorgehen</h3>
     <p>Gesucht: alle Punkte, in denen $f$ und $g$ denselben y-Wert haben.</p>
-    <ol style="padding-left:1.4rem; margin-top:.6rem; line-height:2">
+    <ol style="padding-left:1.4rem;margin-top:.6rem;line-height:2">
       <li>Gleichung $f(x) = g(x)$ aufstellen</li>
       <li>Alles auf eine Seite bringen: $\ldots = 0$</li>
       <li>Gleichung vereinfachen → Form $ax^2 + bx + c = 0$</li>
@@ -614,28 +504,28 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
     </ol>
   </div>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Beispiel — Parabel und Gerade</h3>
     <p>$f(x) = x^2 - 2x + 1$ und $g(x) = 2x - 1$</p>
-    <div class="step-formula">$x^2 - 2x + 1 = 2x - 1$</div>
-    <div class="step-formula">$x^2 - 4x + 2 = 0$ &emsp; ($a=1, b=-4, c=2$)</div>
-    <div class="step-formula">$D = 16 - 8 = 8 > 0$ &nbsp;→&nbsp; zwei Schnittpunkte</div>
-    <div class="step-formula">$x_{1,2} = \dfrac{4 \pm \sqrt{8}}{2} = 2 \pm \sqrt{2}$</div>
+    <div class="formula formula--step">$x^2 - 2x + 1 = 2x - 1$</div>
+    <div class="formula formula--step">$x^2 - 4x + 2 = 0$ &emsp; ($a=1, b=-4, c=2$)</div>
+    <div class="formula formula--step">$D = 16 - 8 = 8 > 0$ &nbsp;→&nbsp; zwei Schnittpunkte</div>
+    <div class="formula formula--step">$x_{1,2} = \dfrac{4 \pm \sqrt{8}}{2} = 2 \pm \sqrt{2}$</div>
     <p style="margin:.7rem 0 .3rem">y-Werte (in $g$ einsetzen):</p>
-    <div class="step-formula">$y_1 = 2(2+\sqrt{2})-1 = 3+2\sqrt{2}$ &emsp; $y_2 = 2(2-\sqrt{2})-1 = 3-2\sqrt{2}$</div>
+    <div class="formula formula--step">$y_1 = 2(2+\sqrt{2})-1 = 3+2\sqrt{2}$ &emsp; $y_2 = 2(2-\sqrt{2})-1 = 3-2\sqrt{2}$</div>
     <div class="result-box">$S_1\!\left(2{+}\sqrt{2}\;|\;3{+}2\sqrt{2}\right) \approx (3{,}41\,|\,5{,}83)$<br>
     $S_2\!\left(2{-}\sqrt{2}\;|\;3{-}2\sqrt{2}\right) \approx (0{,}59\,|\,0{,}17)$</div>
   </div>
 
   <p class="section-label">Aufgaben</p>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 8 — Schnittpunkte bestimmen</h3>
     <p>Bestimme alle Schnittpunkte der gegebenen Funktionen.</p>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">$f(x) = x^2 - 3x + 2$ und $g(x) = x - 1$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $x^2 - 3x + 2 = x - 1 \Rightarrow x^2 - 4x + 3 = 0$<br>
           $D = 16 - 12 = 4 \Rightarrow x_{1,2} = \frac{4 \pm 2}{2} \Rightarrow x_1 = 3,\; x_2 = 1$<br>
@@ -645,7 +535,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">$f(x) = x^2 - 4$ und $g(x) = x + 2$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $x^2 - 4 = x + 2 \Rightarrow x^2 - x - 6 = 0$<br>
           $D = 1 + 24 = 25 \Rightarrow x_{1,2} = \frac{1 \pm 5}{2} \Rightarrow x_1 = 3,\; x_2 = -2$<br>
@@ -654,8 +544,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
         </div>
       </li>
       <li>
-        <span class="ex-stem">$f(x) = 2x^2 + 1$ und $g(x) = x^2 + 2x$ &nbsp; <span class="tag tb">zwei Parabeln</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$f(x) = 2x^2 + 1$ und $g(x) = x^2 + 2x$ &nbsp; <span class="tag tag--physik">zwei Parabeln</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $2x^2 + 1 = x^2 + 2x \Rightarrow x^2 - 2x + 1 = 0$<br>
           $D = 4 - 4 = 0 \Rightarrow x = 1$ (genau ein Schnittpunkt / Berührpunkt)<br>
@@ -665,7 +555,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">$f(x) = x^2 + x - 2$ und $g(x) = 3x + 2$</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $x^2 + x - 2 = 3x + 2 \Rightarrow x^2 - 2x - 4 = 0$<br>
           $D = 4 + 16 = 20 \Rightarrow x_{1,2} = \frac{2 \pm \sqrt{20}}{2} = 1 \pm \sqrt{5}$<br>
@@ -675,11 +565,10 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
         </div>
       </li>
       <li>
-        <span class="ex-stem">$f(x) = x^2 - 2x + 3$ und $g(x) = x + 1$ &nbsp; <span class="tag tr">kein Schnittpunkt?</span></span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <span class="ex-stem">$f(x) = x^2 - 2x + 3$ und $g(x) = x + 1$ &nbsp; <span class="tag" style="color:var(--err);border-color:currentColor;">kein Schnittpunkt?</span></span>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $x^2 - 2x + 3 = x + 1 \Rightarrow x^2 - 3x + 2{,}5 = 0$<br>
-
           Achtung: hier muss man genau rechnen. $a=1, b=-3, c=2{,}5$<br>
           $D = 9 - 10 = -1 < 0$<br>
           Keine reellen Lösungen → die Gerade und die Parabel haben <strong>keinen Schnittpunkt</strong>.
@@ -692,22 +581,22 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
 <!-- ═══════════════════════════════════════════════════════════
      TAB 5 — GEMISCHTE ÜBUNGEN
 ════════════════════════════════════════════════════════════════ -->
-<div class="tab" id="t5">
+<div class="tab-panel" id="t5">
   <h2><span class="num">5</span>Gemischte Übungen</h2>
-  <p class="sub">Kombinierte Aufgaben — alle Themen</p>
+  <p class="subtitle">Kombinierte Aufgaben — alle Themen</p>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 9 — Vollständige Analyse</h3>
     <p>Gegeben: $f(x) = 2x^2 - 6x - 8$. Bestimme:</p>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">a) Öffnungsrichtung und y-Achsenabschnitt (ohne Rechnung)</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$a = 2 > 0$ → öffnet nach oben. y-AS: $c = -8$ → Punkt $(0\,|\,-8)$</div>
       </li>
       <li>
         <span class="ex-stem">b) Den Scheitelpunkt (Scheitelpunktform bestimmen)</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $= 2(x^2 - 3x) - 8 = 2\!\left(x^2 - 3x + \tfrac{9}{4} - \tfrac{9}{4}\right) - 8 = 2\!\left(x - \tfrac{3}{2}\right)^2 - \tfrac{9}{2} - 8$<br>
           $= 2\!\left(x - \tfrac{3}{2}\right)^2 - \tfrac{25}{2}$<br>
@@ -716,7 +605,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">c) Die Nullstellen</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=2, b=-6, c=-8$ &nbsp;|&nbsp; $D = 36 + 64 = 100$<br>
           $x_{1,2} = \frac{6 \pm 10}{4}$ &nbsp;→&nbsp; $x_1 = 4,\; x_2 = -1$<br>
@@ -726,12 +615,12 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
     </ol>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 10 — Parabel aus Bedingungen</h3>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">Eine Parabel hat den Scheitelpunkt $S(2\,|\,3)$ und verläuft durch $(0\,|\,7)$. Bestimme ihre Gleichung.</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           Ansatz: $f(x) = a(x-2)^2 + 3$<br>
           Punkt $(0\,|\,7)$ einsetzen: $7 = a \cdot 4 + 3 \Rightarrow a = 1$<br>
@@ -740,7 +629,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">Eine Parabel verläuft durch die Nullstellen $x_1 = -1$ und $x_2 = 5$ sowie durch den Punkt $(0\,|\,-5)$. Bestimme ihre Gleichung.</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           Ansatz (Linearfaktorform): $f(x) = a(x+1)(x-5)$<br>
           Punkt $(0\,|\,-5)$: $-5 = a \cdot 1 \cdot (-5) = -5a \Rightarrow a = 1$<br>
@@ -750,12 +639,12 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
     </ol>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 11 — Schnittpunkte und Lage</h3>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">Untersuche, wie oft sich $f(x) = x^2 + 2$ und $g(x) = -x^2 + 10$ schneiden, und bestimme die Schnittpunkte.</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $x^2 + 2 = -x^2 + 10 \Rightarrow 2x^2 - 8 = 0 \Rightarrow x^2 = 4 \Rightarrow x = \pm 2$<br>
           $y = 4 + 2 = 6$<br>
@@ -764,7 +653,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">Für welchen Wert $k$ berührt die Gerade $g(x) = kx + 1$ die Parabel $f(x) = x^2$ genau einmal?</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $x^2 = kx + 1 \Rightarrow x^2 - kx - 1 = 0$<br>
           Berührung genau einmal: $D = 0 \Rightarrow k^2 + 4 = 0$<br>
@@ -775,19 +664,19 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
     </ol>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Aufgabe 12 — Textaufgabe</h3>
     <p>Ein Ball wird geworfen und seine Höhe (in Metern) in Abhängigkeit von der Wurfweite $x$ (in Metern) beschreibt die Funktion:</p>
-    <div class="fbox">$$h(x) = -0{,}1x^2 + 1{,}2x + 2$$</div>
+    <div class="formula">$$h(x) = -0{,}1x^2 + 1{,}2x + 2$$</div>
     <ol class="ex-list">
       <li>
         <span class="ex-stem">Wie hoch liegt der Ball zu Beginn (bei $x = 0$)?</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">$h(0) = 2$ m — der Ball wird aus 2 m Höhe geworfen.</div>
       </li>
       <li>
         <span class="ex-stem">In welcher maximalen Höhe fliegt der Ball? (Scheitelpunkt)</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $a=-0{,}1,\, b=1{,}2,\, c=2$<br>
           $x_S = -\frac{b}{2a} = -\frac{1{,}2}{-0{,}2} = 6$ m (Wurfweite am Scheitelpunkt)<br>
@@ -796,7 +685,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
       </li>
       <li>
         <span class="ex-stem">Bei welcher Wurfweite landet der Ball (Nullstellen, $h(x) = 0$)?</span>
-        <button class="bh" onclick="tog(this)">Lösung</button>
+        <button class="btn btn--ghost" onclick="tog(this)">Lösung</button>
         <div class="hint">
           $-0{,}1x^2 + 1{,}2x + 2 = 0$ &nbsp;|&nbsp; $\cdot(-10)$:<br>
           $x^2 - 12x - 20 = 0$<br>
@@ -812,26 +701,10 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:15px; h
 </main>
 
 <script>
-// ── Theme-aware Farben für Canvas ───────────────────────────
-function getThemeColors() {
-  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-  return {
-    bg:        dark ? '#1a1a1a' : '#ffffff',
-    grid:      dark ? '#2a2a2a' : '#eae6de',
-    axis:      dark ? '#777'    : '#555',
-    label:     dark ? '#aaa'    : '#888',
-    axisLabel: dark ? '#999'    : '#777',
-    curve:     '#c8400a',
-    vertex:    dark ? '#5b9cf6' : '#2a6496',
-    intercept: dark ? '#4ade80' : '#2e7d4f',
-    nullst:    '#c8400a',
-  };
-}
-
 // ── Tab / Hint ──────────────────────────────────────────────
 function show(id, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
@@ -865,7 +738,7 @@ function drawParabola(canvasId, a, b, c, opts) {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
-  const C = getThemeColors();
+  const C = Plot.colors();
   ctx.fillStyle = C.bg;
   ctx.fillRect(0, 0, W, H);
 
@@ -912,7 +785,7 @@ function drawParabola(canvasId, a, b, c, opts) {
   ctx.beginPath(); ctx.moveTo(ox - 5, 10); ctx.lineTo(ox, 0); ctx.lineTo(ox + 5, 10); ctx.fill();
 
   // tick labels
-  ctx.fillStyle = C.label; ctx.font = '10px DM Mono, monospace';
+  ctx.fillStyle = C.label; ctx.font = '10px "DM Mono", monospace';
   ctx.textAlign = 'center';
   for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
     if (x === 0) continue;
@@ -928,7 +801,7 @@ function drawParabola(canvasId, a, b, c, opts) {
     ctx.moveTo(ox - 3, toY(y)); ctx.lineTo(ox + 3, toY(y)); ctx.stroke();
     if (ox - 4 > 18) ctx.fillText(y, ox - 4, toY(y) + 4);
   }
-  ctx.fillStyle = C.axisLabel; ctx.font = 'italic 12px DM Sans, sans-serif';
+  ctx.fillStyle = C.text; ctx.font = 'italic 12px "DM Sans", sans-serif';
   ctx.textAlign = 'left'; ctx.fillText('x', W - 8, oy - 7);
   ctx.fillText('y', ox + 6, 14);
 
@@ -951,28 +824,28 @@ function drawParabola(canvasId, a, b, c, opts) {
   if (Math.abs(a) > 0.001) {
     const xS = -b / (2 * a), yS = f(xS);
     if (xS >= xMin - 0.1 && xS <= xMax + 0.1 && toY(yS) > -20 && toY(yS) < H + 20) {
-      ctx.fillStyle = C.vertex;
+      ctx.fillStyle = C.curve2;
       ctx.beginPath(); ctx.arc(toX(xS), toY(yS), 5, 0, 2 * Math.PI); ctx.fill();
-      ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = C.vertex;
+      ctx.font = 'bold 11px "DM Sans", sans-serif'; ctx.fillStyle = C.curve2;
       const tx = toX(xS) + 8, ty = toY(yS) - 8;
       ctx.textAlign = 'left';
-      ctx.fillText('S(' + fmt(xS) + ' | ' + fmt(yS) + ')', tx, ty);
+      ctx.fillText('S(' + fmt(xS) + ' | ' + fmt(yS) + ')', tx, ty);
     }
   }
 
   // y-intercept
   if (toY(c) > -10 && toY(c) < H + 10) {
-    ctx.fillStyle = C.intercept;
+    ctx.fillStyle = C.curve3;
     ctx.beginPath(); ctx.arc(ox, toY(c), 5, 0, 2 * Math.PI); ctx.fill();
-    ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = C.intercept;
+    ctx.font = 'bold 11px "DM Sans", sans-serif'; ctx.fillStyle = C.curve3;
     ctx.textAlign = 'left';
-    ctx.fillText('(0 | ' + fmt(c) + ')', ox + 8, toY(c) - 8);
+    ctx.fillText('(0 | ' + fmt(c) + ')', ox + 8, toY(c) - 8);
   }
 
   // nullstellen
   if (opts && opts.showNullstellen && Math.abs(a) > 0.001) {
     const D = b * b - 4 * a * c;
-    ctx.font = 'bold 11px DM Sans, sans-serif'; ctx.fillStyle = C.nullst;
+    ctx.font = 'bold 11px "DM Sans", sans-serif'; ctx.fillStyle = C.curve;
     if (D >= 0) {
       const sq = Math.sqrt(D);
       const roots = D === 0 ? [(-b) / (2 * a)] : [(-b + sq) / (2 * a), (-b - sq) / (2 * a)];
@@ -985,7 +858,7 @@ function drawParabola(canvasId, a, b, c, opts) {
         ctx.fillText(lbl, toX(xi), labelY);
       });
     } else {
-      ctx.textAlign = 'center'; ctx.font = '11px DM Sans, sans-serif';
+      ctx.textAlign = 'center'; ctx.font = '11px "DM Sans", sans-serif';
       ctx.fillText('D < 0 — keine reellen Nullstellen', W / 2, H - 8);
     }
   }
@@ -1019,18 +892,19 @@ function updateT3() {
   drawParabola('cv3', a, b, c, { showNullstellen: true });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function () {
   updateT1();
   updateT3();
-  // Canvas neu zeichnen wenn Theme wechselt
-  new MutationObserver(function() { updateT1(); updateT3(); })
-    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  Plot.onRedraw(function () { updateT1(); updateT3(); });
 });
 </script>
 
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
-</script>
+<footer class="site-footer">
+  <div class="container container--narrow site-footer-inner">
+    <a href="/mathematik/klasse10/">← Mathematik · Jgst. 10</a>
+    <nav class="site-footer-links"><a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a></nav>
+  </div>
+</footer>
+
 </body>
 </html>

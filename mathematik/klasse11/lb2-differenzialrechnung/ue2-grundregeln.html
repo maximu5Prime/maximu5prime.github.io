@@ -1,170 +1,63 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-subject="mathematik">
 <head>
 <meta charset="UTF-8">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Differenzierbarkeit &amp; Ableitungsregeln – Mathe 11</title>
-<link rel="stylesheet" href="../../../static/fonts.css">
-<link rel="stylesheet" href="../../../static/theme.css">
-<link rel="stylesheet" href="../../../static/katex/katex.min.css">
-<script defer src="../../../static/katex/katex.min.js"></script>
-<script defer src="../../../static/katex/contrib/auto-render.min.js"
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
-<style>
-:root {
-  --ink: #1a1208; --paper: #f7f3ec; --cream: #ede8de;
-  --accent: #c8400a; --accent2: #2a6496; --gold: #c9961a;
-  --green: #2e7d4f; --line: #d4cfc6;
-  --serif: 'Playfair Display', Georgia, serif;
-  --mono: 'DM Mono', monospace;
-  --sans: 'Source Sans 3', sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; }
-header { background: var(--ink); color: var(--paper); padding: 2.8rem 2rem 2.2rem; position: relative; overflow: hidden; }
-header::before { content:''; position:absolute; top:-60px; right:-80px; width:300px; height:300px; border-radius:50%; background:var(--accent); opacity:.1; }
-header::after  { content:''; position:absolute; bottom:-40px; left:8%; width:180px; height:180px; border-radius:50%; background:var(--gold); opacity:.08; }
-.hinner { max-width: 900px; margin: 0 auto; position: relative; }
-.klass { font-family:var(--mono); font-size:.78rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.5rem; }
-header h1 { font-family:var(--serif); font-size:clamp(1.8rem,5vw,3.2rem); font-weight:900; line-height:1.1; margin-bottom:.8rem; }
-header h1 span { color:var(--accent); }
-header p { font-size:.95rem; color:#a09888; max-width:560px; }
-header .bc { font-family:var(--mono); font-size:.68rem; color:#666; display:flex; gap:.4rem; align-items:center; margin-bottom:.9rem; flex-wrap:wrap; }
-header .bc a { color:#888; text-decoration:none; transition:color .15s; }
-header .bc a:hover { color:var(--gold); }
-header .bc span { color:#444; }
-nav { background:var(--ink); border-top:1px solid #2e2e2e; padding:0 1.5rem; display:flex; overflow-x:auto; gap:0; }
-nav button { font-family:var(--mono); font-size:.75rem; letter-spacing:.07em; text-transform:uppercase; background:none; border:none; color:#777; padding:.8rem 1.2rem; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
-nav button:hover { color:var(--paper); }
-nav button.active { color:var(--gold); border-bottom-color:var(--gold); }
-main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 5rem; }
-.tab { display:none; }
-.tab.active { display:block; animation: fu .3s ease; }
-@keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
-h2 { font-family:var(--serif); font-size:1.85rem; font-weight:700; margin-bottom:.3rem; }
-h2 .num { font-family:var(--mono); font-size:.95rem; color:var(--accent); margin-right:.4rem; }
-.sub { color:#999; font-size:.88rem; font-style:italic; margin-bottom:1.8rem; }
-h3 { font-family:var(--serif); font-size:1.05rem; margin-bottom:.6rem; }
-p { margin-bottom:.8rem; }
-.card { background:white; border:1px solid var(--line); border-radius:2px; padding:1.5rem 1.7rem; margin-bottom:1.4rem; box-shadow:0 2px 6px rgba(0,0,0,.04); }
-.card.theory { border-left:4px solid var(--accent2); background:#f0f5fa; }
-.card.ex { border-left:4px solid var(--accent); }
-.card.green { border-left:4px solid var(--green); background:#f0faf4; }
-.fbox { background:var(--cream); border:1px solid var(--line); border-radius:2px; padding:1rem 1.4rem; margin:.9rem 0; text-align:center; font-size:1.05rem; overflow-x:auto; }
-table.rt { width:100%; border-collapse:collapse; font-size:.9rem; margin:.8rem 0; }
-table.rt th { font-family:var(--mono); font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; background:var(--ink); color:var(--gold); padding:.55rem .8rem; text-align:left; }
-table.rt td { padding:.7rem .8rem; border-bottom:1px solid var(--line); }
-table.rt tr:nth-child(even) td { background:var(--cream); }
-.tag { display:inline-block; font-family:var(--mono); font-size:.7rem; padding:.18rem .55rem; border-radius:20px; margin-right:.3rem; margin-bottom:.3rem; }
-.tg { background:#d1fae5; color:#065f46; }
-.tr { background:#fee2e2; color:#991b1b; }
-.tb { background:#dbeafe; color:#1e40af; }
-.bh { background:none; border:1px dashed var(--gold); color:var(--gold); font-family:var(--mono); font-size:.73rem; padding:.3rem .65rem; border-radius:2px; cursor:pointer; }
-.btn { font-family:var(--mono); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; padding:.5rem 1.1rem; border:none; border-radius:2px; cursor:pointer; transition:opacity .15s; }
-.bp { background:var(--accent); color:white; }
-.hint { background:#fffbea; border-left:3px solid var(--gold); padding:.65rem 1rem; font-size:.87rem; margin:.7rem 0; display:none; }
-.hint.open { display:block; }
-.fb { font-family:var(--mono); font-size:.83rem; padding:.45rem .85rem; border-radius:2px; margin-top:.6rem; display:none; }
-.fb.show { display:inline-block; }
-.fb.ok  { background:#eaf7ee; color:var(--green); border:1px solid #b7dfca; }
-.fb.err { background:#fdecea; color:#c0392b; border:1px solid #f5c6c6; }
-.qopts { display:flex; flex-direction:column; gap:.45rem; margin-top:.7rem; }
-.qopt { background:white; border:1px solid var(--line); padding:.5rem .9rem; border-radius:2px; cursor:pointer; font-size:.92rem; text-align:left; transition:border-color .2s,background .2s; }
-.qopt:hover:not([disabled]) { border-color:var(--accent2); background:#f0f5fa; }
-.qopt.correct { border-color:var(--green)!important; background:#eaf7ee!important; color:var(--green)!important; }
-.qopt.wrong   { border-color:#c0392b!important; background:#fdecea!important; color:#c0392b!important; }
-.cwrap { width:100%; height:340px; border:1px solid var(--line); background:white; margin:.8rem 0; position:relative; border-radius:4px; overflow:hidden; }
-.cwrap canvas { position:absolute; top:0; left:0; }
-.ggb-controls {
-  display:flex; align-items:center; gap:1rem;
-  padding:.6rem 1rem; background:#e8e2d8;
-  font-family:var(--mono); font-size:.8rem; color:var(--ink);
-  flex-wrap:wrap; border:1px solid var(--line); border-top:none; border-radius:0 0 4px 4px; margin-top:-.5rem;
-}
-.ggb-controls label { white-space:nowrap; }
-.ggb-controls input[type=range] { flex:1; min-width:120px; accent-color:var(--accent2); cursor:pointer; }
-.slope-badge { background:var(--green); color:white; padding:.18rem .65rem; border-radius:2px; font-weight:600; white-space:nowrap; font-size:.78rem; }
-details summary { cursor:pointer; font-family:var(--mono); font-size:.8rem; color:var(--accent2); letter-spacing:.05em; margin-top:.8rem; }
-details[open] summary { margin-bottom:.5rem; }
-.footer-nav { background:var(--ink); padding:1rem 2rem; margin-top:3rem; }
-.footer-nav-inner { max-width:900px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.8rem; }
-.back-btn { font-family:var(--mono); font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); text-decoration:none; display:inline-flex; align-items:center; gap:.5rem; transition:opacity .2s; }
-.back-btn:hover { opacity:.7; }
-@media print {
-  @page { size: A4; margin: 1.5cm 2cm 2cm 2cm; }
-  nav, header, footer, .footer-nav, #themeToggle, button, .bh { display: none !important; }
-  .tab { display: block !important; }
-  h2 { break-after: avoid; }
-  .card.theory { break-inside: avoid; }
-  .card { box-shadow: none; border: 1px solid #ddd; padding: .65rem .9rem; margin-bottom: .45rem; }
-  body { font-size: 10pt; line-height: 1.45; background: white; }
-  main { padding: .4rem 0; }
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-}
-
-/* ── DARK MODE ── */
-[data-theme=dark] nav#mainNav,[data-theme=dark] nav:not(.bc){background:#111;border-top-color:#2e2e2e;}
-[data-theme=dark] nav button:hover{color:var(--ink);}
-[data-theme=dark] .footer-nav{background:#111;}
-[data-theme=dark] .card{background:#1c1c1c;border-color:#2e2e2e;}
-[data-theme=dark] .card.theory{background:#0d1e30;border-color:#1a3a5c;}
-[data-theme=dark] .cwrap{background:#1c1c1c;border-color:#333;}
-[data-theme=dark] input[type=text]{background:#1c1c1c;border-color:#555;color:var(--ink);}
-[data-theme=dark] input[type=text]:focus{border-color:var(--accent2);}
-[data-theme=dark] table.rt th{background:#2a2a2a;}
-[data-theme=dark] .fb.ok{background:#0a1f12;border-color:#1a5c3a;color:#86efac;}
-[data-theme=dark] .fb.err{background:#1f0a0a;border-color:#5c1a1a;color:#fca5a5;}
-[data-theme=dark] .hint{background:#1e1a08;border-left-color:var(--gold);}
-[data-theme=dark] .result-box{background:#0a1f12;border-left-color:#2e7d4f;color:#86efac;}
-[data-theme=dark] .scorebar{background:var(--cream);border-color:#2e2e2e;}
-[data-theme=dark] header .bc span{color:#555;}
-</style>
-<script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
 </head>
 <body>
 
-<header>
-  <div class="hinner">
-    <nav class="bc" aria-label="Breadcrumb">
-      <a href="../../../index.html">Lernportal</a>
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
       <span>/</span>
-      <a href="../index.html">Mathematik · Jgst. 11</a>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
       <span>/</span>
-      <a href="index.html">Differenzialrechnung</a>
+      <a href="/mathematik/klasse11/lb2-differenzialrechnung/">Differenzialrechnung</a>
       <span>/</span>
       <span>Differenzierbarkeit &amp; Grundregeln</span>
     </nav>
-    <div class="klass">M 11 · LB 2 · UE 2</div>
-    <h1>Differenzierbarkeit &amp; <span>Ableitungsregeln</span></h1>
-    <p>Differenzierbarkeit · Ableitungsfunktion grafisch · Potenz-, Faktor- und Summenregel</p>
+    <p class="kicker">M 11 · LB 2 · UE 2</p>
+    <h1 class="site-title">Differenzierbarkeit &amp; <em>Ableitungsregeln</em></h1>
+    <p class="site-sub">Differenzierbarkeit · Ableitungsfunktion grafisch · Potenz-, Faktor- und Summenregel</p>
   </div>
 </header>
 
-<nav id="mainNav">
-  <button class="active" onclick="showTab('t1',this)">① Differenzierbarkeit</button>
-  <button onclick="showTab('t2',this)">② Ableitungsfunktion grafisch</button>
-  <button onclick="showTab('t3',this)">③ Ableitungsregeln</button>
-  <button onclick="showTab('t4',this)">④ Übungsaufgaben</button>
+<nav class="tabs container container--narrow" id="mainNav">
+  <button class="tab-btn active" onclick="showTab('t1',this)">① Differenzierbarkeit</button>
+  <button class="tab-btn" onclick="showTab('t2',this)">② Ableitungsfunktion grafisch</button>
+  <button class="tab-btn" onclick="showTab('t3',this)">③ Ableitungsregeln</button>
+  <button class="tab-btn" onclick="showTab('t4',this)">④ Übungsaufgaben</button>
 </nav>
 
-<main>
+<main class="container container--narrow">
 
 <!-- ══════════════════════ TAB 1: Differenzierbarkeit ══════════════════════ -->
-<div class="tab active" id="t1">
+<div class="tab-panel active" id="t1">
   <h2><span class="num">01</span>Differenzierbarkeit</h2>
-  <p class="sub">Wann existiert die Ableitung f'(x₀)?</p>
+  <p class="subtitle">Wann existiert die Ableitung f'(x₀)?</p>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Was bedeutet differenzierbar?</h3>
     <p>Eine Funktion $f$ heißt an der Stelle $x_0$ <strong>differenzierbar</strong>, wenn der Grenzwert des Differenzenquotienten existiert:</p>
-    <div class="fbox">$$f'(x_0) = \lim_{x_1 \to x_0} \frac{f(x_1) - f(x_0)}{x_1 - x_0}$$</div>
+    <div class="formula">$$f'(x_0) = \lim_{x_1 \to x_0} \frac{f(x_1) - f(x_0)}{x_1 - x_0}$$</div>
     <p>Geometrisch: Der Graph hat an der Stelle $x_0$ eine eindeutige <strong>Tangente</strong> — keine Ecke, keinen Knick, keine senkrechte Tangente.</p>
   </div>
 
-  <div class="card ex">
+  <div class="card">
     <h3>Wann ist eine Funktion <em>nicht</em> differenzierbar?</h3>
-    <table class="rt">
+    <table class="table">
       <thead><tr><th>Fall</th><th>Beispiel</th><th>Was passiert?</th></tr></thead>
       <tbody>
         <tr><td><strong>Knick / Ecke</strong></td><td>$f(x) = |x|$ bei $x_0 = 0$</td><td>Linksseitige und rechtsseitige Tangente haben verschiedene Steigungen → Grenzwert existiert nicht</td></tr>
@@ -175,24 +68,24 @@ details[open] summary { margin-bottom:.5rem; }
     <p style="margin-top:.8rem;font-size:.9rem;"><strong>Merksatz:</strong> Differenzierbar $\Rightarrow$ stetig. Umgekehrt gilt das <em>nicht</em>.</p>
   </div>
 
-  <div class="card green">
+  <div class="card card--ok">
     <h3>Merksatz</h3>
     <p>Eine ganzrationale Funktion ist an <strong>jeder</strong> Stelle differenzierbar — ihr Graph hat keine Ecken oder senkrechte Tangenten.</p>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Quizfrage</h3>
     <p>Ist $f(x) = |x - 2|$ bei $x_0 = 2$ differenzierbar?</p>
-    <div class="qopts">
-      <button class="qopt" onclick="ansQ('q1a',false,'Nein — bei x₀ = 2 hat der Graph einen Knick. Links hat die Tangente Steigung −1, rechts +1.')">Ja, der Grenzwert existiert.</button>
-      <button class="qopt" onclick="ansQ('q1a',true,'Richtig! Bei x₀ = 2 hat der Graph einen Knick — links −1, rechts +1. Der Grenzwert existiert nicht.')">Nein, der Graph hat dort einen Knick.</button>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="ansQ('q1a',false,'Nein — bei x₀ = 2 hat der Graph einen Knick. Links hat die Tangente Steigung −1, rechts +1.')">Ja, der Grenzwert existiert.</button>
+      <button class="quiz-opt" onclick="ansQ('q1a',true,'Richtig! Bei x₀ = 2 hat der Graph einen Knick — links −1, rechts +1. Der Grenzwert existiert nicht.')">Nein, der Graph hat dort einen Knick.</button>
     </div>
-    <div class="fb" id="q1a"></div>
+    <div class="feedback" id="q1a"></div>
   </div>
 
-  <details>
+  <details class="solution">
     <summary>🔍 Vertiefung: Formaler Nachweis für |x| bei x₀ = 0</summary>
-    <div class="card theory" style="margin-top:.5rem;">
+    <div class="solution-body">
       <p>Linksseitiger Grenzwert: $\displaystyle\lim_{x_1 \to 0^-} \frac{|x_1| - 0}{x_1 - 0} = \lim_{x_1 \to 0^-} \frac{-x_1}{x_1} = -1$</p>
       <p>Rechtsseitiger Grenzwert: $\displaystyle\lim_{x_1 \to 0^+} \frac{x_1}{x_1} = +1$</p>
       <p>Da $-1 \neq +1$, existiert der Grenzwert nicht — $f$ ist bei $x_0 = 0$ nicht differenzierbar.</p>
@@ -201,32 +94,32 @@ details[open] summary { margin-bottom:.5rem; }
 </div>
 
 <!-- ══════════════════════ TAB 2: Ableitungsfunktion grafisch ══════════════════════ -->
-<div class="tab" id="t2">
+<div class="tab-panel" id="t2">
   <h2><span class="num">02</span>Ableitungsfunktion grafisch</h2>
-  <p class="sub">Vom Graphen von f zum Graphen von f'</p>
+  <p class="subtitle">Vom Graphen von f zum Graphen von f'</p>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Die Ableitungsfunktion</h3>
     <p>Die <strong>Ableitungsfunktion</strong> $f'$ ordnet jedem $x$ die Steigung des Graphen von $f$ an dieser Stelle zu:</p>
-    <div class="fbox">$$f'(x_0) = \text{Steigung der Tangente an } G_f \text{ bei } x_0$$</div>
+    <div class="formula">$$f'(x_0) = \text{Steigung der Tangente an } G_f \text{ bei } x_0$$</div>
     <p>Aus dem Graphen von $f$ lässt sich $f'$ skizzieren:</p>
-    <table class="rt">
+    <table class="table">
       <thead><tr><th>Eigenschaft von $f$</th><th>Konsequenz für $f'$</th></tr></thead>
       <tbody>
-        <tr><td><span class="tag tg">$f$ steigt</span> (Steigung positiv)</td><td>$f'(x) > 0$ — Graph von $f'$ <em>über</em> der $x$-Achse</td></tr>
-        <tr><td><span class="tag tr">$f$ fällt</span> (Steigung negativ)</td><td>$f'(x) < 0$ — Graph von $f'$ <em>unter</em> der $x$-Achse</td></tr>
-        <tr><td><span class="tag tb">Hochpunkt oder Tiefpunkt von $f$</span></td><td>$f'(x) = 0$ — Nullstelle von $f'$</td></tr>
+        <tr><td><span class="tag tag--kit">$f$ steigt</span> (Steigung positiv)</td><td>$f'(x) > 0$ — Graph von $f'$ <em>über</em> der $x$-Achse</td></tr>
+        <tr><td><span class="tag" style="color:var(--err);border-color:currentColor;">$f$ fällt</span> (Steigung negativ)</td><td>$f'(x) < 0$ — Graph von $f'$ <em>unter</em> der $x$-Achse</td></tr>
+        <tr><td><span class="tag tag--physik">Hochpunkt oder Tiefpunkt von $f$</span></td><td>$f'(x) = 0$ — Nullstelle von $f'$</td></tr>
         <tr><td>Steigung von $f$ wird flacher</td><td>$f'$ nimmt ab (fällt)</td></tr>
         <tr><td>Steigung von $f$ wird steiler</td><td>$f'$ nimmt zu (steigt)</td></tr>
       </tbody>
     </table>
   </div>
 
-  <div class="cwrap" id="wDeriv"><canvas id="cDeriv"></canvas></div>
-  <div class="ggb-controls">
+  <div class="canvas-wrap" id="wDeriv"><canvas id="cDeriv"></canvas></div>
+  <div class="slider-bar">
     <label>Schieberegler &nbsp;<strong id="a-disp">a = 1,00</strong></label>
     <input type="range" id="a-slider" min="-3.5" max="3.5" step="0.05" value="1">
-    <span class="slope-badge">f'(a) = <span id="slope-disp">9,00</span></span>
+    <span class="value-badge">f'(a) = <span id="slope-disp">9,00</span></span>
   </div>
   <script>
   (function(){
@@ -249,7 +142,7 @@ details[open] summary { margin-bottom:.5rem; }
       canvas.width  = W * dpr; canvas.height = H * dpr;
       canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
       var ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
-      return { ctx, W, H };
+      return { ctx: ctx, W: W, H: H };
     }
 
     function draw(){
@@ -261,9 +154,11 @@ details[open] summary { margin-bottom:.5rem; }
       function ty(y){ return pad.t + (1-(y-yMin)/(yMax-yMin))*ph; }
 
       var a = parseFloat(slider.value);
+      var c = Plot.colors();
 
       /* grid */
-      ctx.strokeStyle='#ddd8cf'; ctx.lineWidth=1;
+      ctx.fillStyle = c.bg; ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle=c.grid; ctx.lineWidth=1;
       for(var xi=-4;xi<=4;xi++){
         ctx.beginPath(); ctx.moveTo(tx(xi),pad.t); ctx.lineTo(tx(xi),pad.t+ph); ctx.stroke();
       }
@@ -272,12 +167,12 @@ details[open] summary { margin-bottom:.5rem; }
       }
 
       /* axes */
-      ctx.strokeStyle='#1a1208'; ctx.lineWidth=1.5;
+      ctx.strokeStyle=c.axis; ctx.lineWidth=1.5;
       ctx.beginPath(); ctx.moveTo(pad.l,ty(0)); ctx.lineTo(pad.l+pw,ty(0)); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(tx(0),pad.t); ctx.lineTo(tx(0),pad.t+ph); ctx.stroke();
 
       /* axis labels */
-      ctx.fillStyle='#888'; ctx.font='10px DM Mono,monospace'; ctx.textAlign='center';
+      ctx.fillStyle=c.label; ctx.font='10px "DM Mono",monospace'; ctx.textAlign='center';
       for(var xi=-4;xi<=4;xi++){
         if(xi===0) continue;
         ctx.fillText(xi, tx(xi), ty(0)+14);
@@ -287,17 +182,17 @@ details[open] summary { margin-bottom:.5rem; }
         if(yi===0) continue;
         ctx.fillText(yi, tx(0)-5, ty(yi)+3);
       }
-      ctx.fillStyle='#555'; ctx.font='italic 11px Georgia,serif';
+      ctx.fillStyle=c.text; ctx.font='italic 11px Georgia,serif';
       ctx.textAlign='left'; ctx.fillText('x', pad.l+pw+4, ty(0)+4);
       ctx.textAlign='center'; ctx.fillText('y', tx(0), pad.t-5);
 
       /* tangent */
       var m=df(a), b0=f(a)-m*a;
-      ctx.strokeStyle='#2e7d4f'; ctx.lineWidth=1.8; ctx.setLineDash([]);
+      ctx.strokeStyle=c.curve3; ctx.lineWidth=1.8; ctx.setLineDash([]);
       ctx.beginPath(); ctx.moveTo(tx(xMin),ty(m*xMin+b0)); ctx.lineTo(tx(xMax),ty(m*xMax+b0)); ctx.stroke();
 
       /* curve f */
-      ctx.strokeStyle='#2a6496'; ctx.lineWidth=2.5; ctx.setLineDash([]);
+      ctx.strokeStyle=c.curve; ctx.lineWidth=2.5; ctx.setLineDash([]);
       ctx.beginPath();
       var first=true;
       for(var i=0;i<=400;i++){
@@ -308,7 +203,7 @@ details[open] summary { margin-bottom:.5rem; }
       ctx.stroke();
 
       /* curve f' dashed */
-      ctx.strokeStyle='#c8400a'; ctx.lineWidth=2; ctx.setLineDash([7,5]);
+      ctx.strokeStyle=c.curve2; ctx.lineWidth=2; ctx.setLineDash([7,5]);
       ctx.beginPath(); first=true;
       for(var i=0;i<=400;i++){
         var x=xMin+(xMax-xMin)*i/400, y=df(x);
@@ -318,39 +213,39 @@ details[open] summary { margin-bottom:.5rem; }
       ctx.stroke(); ctx.setLineDash([]);
 
       /* vertical connector P→Q */
-      ctx.strokeStyle='#bbb'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+      ctx.strokeStyle=c.axis; ctx.lineWidth=1; ctx.setLineDash([3,3]);
       ctx.beginPath(); ctx.moveTo(tx(a),ty(f(a))); ctx.lineTo(tx(a),ty(df(a))); ctx.stroke();
       ctx.setLineDash([]);
 
       /* point P on f */
-      ctx.fillStyle='#2a6496';
+      ctx.fillStyle=c.curve;
       ctx.beginPath(); ctx.arc(tx(a),ty(f(a)),5.5,0,2*Math.PI); ctx.fill();
-      ctx.fillStyle='white';
+      ctx.fillStyle=c.bg;
       ctx.beginPath(); ctx.arc(tx(a),ty(f(a)),2.5,0,2*Math.PI); ctx.fill();
 
       /* point Q on f' */
-      ctx.fillStyle='#c8400a';
+      ctx.fillStyle=c.curve2;
       ctx.beginPath(); ctx.arc(tx(a),ty(df(a)),5,0,2*Math.PI); ctx.fill();
-      ctx.fillStyle='white';
+      ctx.fillStyle=c.bg;
       ctx.beginPath(); ctx.arc(tx(a),ty(df(a)),2.2,0,2*Math.PI); ctx.fill();
 
       /* slope label near Q */
       var qx=tx(a), qy=ty(df(a));
-      ctx.font='bold 11px DM Mono,monospace';
-      ctx.fillStyle='#2e7d4f';
+      ctx.font='bold 11px "DM Mono",monospace';
+      ctx.fillStyle=c.curve3;
       ctx.textAlign= a>0 ? 'right':'left';
       ctx.fillText("f'("+fmt(a)+") = "+fmt(df(a)), qx+(a>0?-9:9), qy-8);
 
       /* legend */
       var lx=pad.l+8, ly=pad.t+13;
-      ctx.font='11px DM Mono,monospace'; ctx.textAlign='left';
-      ctx.strokeStyle='#2a6496'; ctx.lineWidth=2.5; ctx.setLineDash([]);
+      ctx.font='11px "DM Mono",monospace'; ctx.textAlign='left';
+      ctx.strokeStyle=c.curve; ctx.lineWidth=2.5; ctx.setLineDash([]);
       ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+20,ly); ctx.stroke();
-      ctx.fillStyle='#2a6496'; ctx.fillText('f(x) = −x³ + 12x', lx+25, ly+4);
-      ctx.strokeStyle='#c8400a'; ctx.lineWidth=1.8; ctx.setLineDash([6,4]);
+      ctx.fillStyle=c.curve; ctx.fillText('f(x) = −x³ + 12x', lx+25, ly+4);
+      ctx.strokeStyle=c.curve2; ctx.lineWidth=1.8; ctx.setLineDash([6,4]);
       ctx.beginPath(); ctx.moveTo(lx,ly+17); ctx.lineTo(lx+20,ly+17); ctx.stroke();
       ctx.setLineDash([]);
-      ctx.fillStyle='#c8400a'; ctx.fillText("f'(x) = −3x² + 12", lx+25, ly+21);
+      ctx.fillStyle=c.curve2; ctx.fillText("f'(x) = −3x² + 12", lx+25, ly+21);
     }
 
     function update(){
@@ -362,13 +257,15 @@ details[open] summary { margin-bottom:.5rem; }
 
     window.derivUpdate = update;
     slider.addEventListener('input', update);
-    window.addEventListener('resize', function(){
-      if (document.getElementById('t2').classList.contains('active')) update();
+    window.addEventListener('DOMContentLoaded', function () {
+      Plot.onRedraw(function(){
+        if (document.getElementById('t2').classList.contains('active')) update();
+      });
     });
   })();
   </script>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Schritt-für-Schritt: $f(x) = x^3 - 3x$</h3>
     <p>Wir skizzieren $f'$ aus dem Graphen von $f$:</p>
     <ol style="margin-left:1.4rem;line-height:2.2;">
@@ -381,22 +278,22 @@ details[open] summary { margin-bottom:.5rem; }
     <p style="margin-top:.8rem;">Rechnerische Bestätigung (kommt in Tab ③): $f'(x) = 3x^2 - 3$</p>
   </div>
 
-  <details>
+  <details class="solution">
     <summary>🔍 Vertiefung: Warum ist f' vom Grad (n−1)?</summary>
-    <div class="card theory" style="margin-top:.5rem;">
+    <div class="solution-body">
       <p>Wenn $f$ eine ganzrationale Funktion vom Grad $n$ ist, dann ist $f'$ vom Grad $n-1$. Grund: Bei der Potenzregel ($x^n \to n \cdot x^{n-1}$) reduziert sich der Grad um 1. Ein Hochpunkt von $f$ erzeugt eine Nullstelle von $f'$ — genau deshalb hat die Ableitungsfunktion einer Parabel (Grad 2) eine Gerade (Grad 1) als Ableitung.</p>
     </div>
   </details>
 </div>
 
 <!-- ══════════════════════ TAB 3: Ableitungsregeln ══════════════════════ -->
-<div class="tab" id="t3">
+<div class="tab-panel" id="t3">
   <h2><span class="num">03</span>Ableitungsregeln</h2>
-  <p class="sub">Potenz-, Faktor- und Summenregel für ganzrationale Funktionen</p>
+  <p class="subtitle">Potenz-, Faktor- und Summenregel für ganzrationale Funktionen</p>
 
-  <div class="card green">
+  <div class="card card--ok">
     <h3>Die drei Grundregeln</h3>
-    <table class="rt">
+    <table class="table">
       <thead><tr><th>Regel</th><th>$f(x)$</th><th>$f'(x)$</th></tr></thead>
       <tbody>
         <tr><td><strong>Potenzregel</strong></td><td>$x^n \quad (n \in \mathbb{R})$</td><td>$n \cdot x^{n-1}$</td></tr>
@@ -405,43 +302,43 @@ details[open] summary { margin-bottom:.5rem; }
         <tr><td><strong>Summenregel</strong></td><td>$g(x) + h(x)$</td><td>$g'(x) + h'(x)$</td></tr>
       </tbody>
     </table>
-    <p style="margin-top:.8rem;font-size:.88rem;color:#666;">Hinweis: Produkt-, Quotienten- und Kettenregel kommen in späteren Lerneinheiten.</p>
+    <p style="margin-top:.8rem;font-size:.88rem;color:var(--muted);">Hinweis: Produkt-, Quotienten- und Kettenregel kommen in späteren Lerneinheiten.</p>
   </div>
 
-  <div class="card ex">
+  <div class="card">
     <h3>Schritt-für-Schritt Beispiel</h3>
     <p>Gegeben: $f(x) = -x^3 + 12x$</p>
-    <div class="fbox">
+    <div class="formula">
       $$f'(x) = \underbrace{-3 \cdot x^{3-1}}_{\text{Potenz- + Faktorregel}} + \underbrace{12 \cdot 1 \cdot x^{1-1}}_{\text{Potenz- + Faktorregel}} = -3x^2 + 12$$
     </div>
     <p>Probe: $f'(0) = 12$ — die Steigung bei $x = 0$ beträgt 12. ✓</p>
   </div>
 
-  <div class="card ex">
+  <div class="card">
     <h3>Weiteres Beispiel: Polynom höheren Grades</h3>
     <p>Gegeben: $f(x) = 2x^4 - 5x^3 + 3x - 7$</p>
     <p>Summenregel → jeden Term einzeln ableiten:</p>
-    <div class="fbox">$$f'(x) = 8x^3 - 15x^2 + 3$$</div>
-    <p style="font-size:.88rem;color:#666;">Rechenweg: $2x^4 \to 8x^3$ · $-5x^3 \to -15x^2$ · $3x \to 3$ · $-7 \to 0$</p>
+    <div class="formula">$$f'(x) = 8x^3 - 15x^2 + 3$$</div>
+    <p style="font-size:.88rem;color:var(--muted);">Rechenweg: $2x^4 \to 8x^3$ · $-5x^3 \to -15x^2$ · $3x \to 3$ · $-7 \to 0$</p>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Ableitungsquiz</h3>
     <div id="rqBox"></div>
     <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-top:1rem;">
-      <button class="btn bp" onclick="nextRQ()">Nächste Frage →</button>
-      <span id="rqScore" style="font-family:var(--mono);font-size:.83rem;color:#888;">0 / 0 richtig</span>
+      <button class="btn" onclick="nextRQ()">Nächste Frage →</button>
+      <span id="rqScore" style="font-family:var(--font-mono);font-size:.83rem;color:var(--muted);">0 / 0 richtig</span>
     </div>
   </div>
 </div>
 
 <!-- ══════════════════════ TAB 4: Übungsaufgaben ══════════════════════ -->
-<div class="tab" id="t4">
+<div class="tab-panel" id="t4">
   <h2><span class="num">04</span>Übungsaufgaben</h2>
-  <p class="sub">Ableitungsregeln anwenden</p>
+  <p class="subtitle">Ableitungsregeln anwenden</p>
 
-  <div class="card ex">
-    <span class="tag tb">Potenz- &amp; Summenregel</span>
+  <div class="task">
+    <span class="tag tag--physik">Potenz- &amp; Summenregel</span>
     <h3>Aufgabe 1 — Grundübung</h3>
     <p>Bestimme die Ableitungsfunktion:</p>
     <ol style="margin-left:1.4rem;line-height:2.5;">
@@ -449,7 +346,7 @@ details[open] summary { margin-bottom:.5rem; }
       <li>$g(x) = x^3 - 6x$</li>
       <li>$h(x) = -2x^5 + 4x^3 - x + 1$</li>
     </ol>
-    <button class="bh" onclick="toggleHint('h1')">💡 Lösung</button>
+    <button class="btn btn--ghost" onclick="toggleHint('h1')">💡 Lösung</button>
     <div class="hint" id="h1">
       a) $f'(x) = 12x^3 - 4x$<br>
       b) $g'(x) = 3x^2 - 6$<br>
@@ -457,8 +354,8 @@ details[open] summary { margin-bottom:.5rem; }
     </div>
   </div>
 
-  <div class="card ex">
-    <span class="tag tb">Ableitungsfunktion grafisch</span>
+  <div class="task">
+    <span class="tag tag--physik">Ableitungsfunktion grafisch</span>
     <h3>Aufgabe 2 — Grafisch Ableiten</h3>
     <p>Der Graph einer ganzrationalen Funktion $f$ hat:</p>
     <ul style="margin-left:1.4rem;line-height:2;">
@@ -467,7 +364,7 @@ details[open] summary { margin-bottom:.5rem; }
       <li>einen Wendepunkt bei $x = -0{,}5$</li>
     </ul>
     <p>Skizziere den qualitativen Verlauf von $f'$. Gib an: Vorzeichen von $f'$ in den verschiedenen Bereichen, Nullstellen von $f'$, ob $f'$ ein Extremum hat.</p>
-    <button class="bh" onclick="toggleHint('h2')">💡 Lösung</button>
+    <button class="btn btn--ghost" onclick="toggleHint('h2')">💡 Lösung</button>
     <div class="hint" id="h2">
       Nullstellen von $f'$: $x = -2$ und $x = 1$<br>
       $f' > 0$: $x &lt; -2$ und $x > 1$ (f steigt)<br>
@@ -476,18 +373,18 @@ details[open] summary { margin-bottom:.5rem; }
     </div>
   </div>
 
-  <div class="card ex">
-    <span class="tag tg">Sachkontext</span>
+  <div class="task">
+    <span class="tag tag--kit">Sachkontext</span>
     <h3>Aufgabe 3 — Fahrradweg</h3>
     <p>Ein Fahrradweg über einen Hügel hat das Höhenprofil</p>
-    <div class="fbox">$$h(x) = -x^3 + 12x \quad (x \text{ in km}, \; h \text{ in Metern})$$</div>
+    <div class="formula">$$h(x) = -x^3 + 12x \quad (x \text{ in km}, \; h \text{ in Metern})$$</div>
     <p>Der Streckenchef möchte wissen, wo der Anstieg am steilsten ist.</p>
     <ol style="margin-left:1.4rem;line-height:2.2;">
       <li>Berechne $h'(x)$ mithilfe der Ableitungsregeln.</li>
       <li>Berechne die Steigung bei $x = 0$, $x = 1$ und $x = 2$.</li>
       <li>Wo ist der Anstieg am steilsten? Begründe mithilfe deiner Ergebnisse.</li>
     </ol>
-    <button class="bh" onclick="toggleHint('h3')">💡 Lösung</button>
+    <button class="btn btn--ghost" onclick="toggleHint('h3')">💡 Lösung</button>
     <div class="hint" id="h3">
       1) $h'(x) = -3x^2 + 12$<br>
       2) $h'(0) = 12$ · $h'(1) = 9$ · $h'(2) = 0$<br>
@@ -495,27 +392,27 @@ details[open] summary { margin-bottom:.5rem; }
     </div>
   </div>
 
-  <div class="card ex">
-    <span class="tag tb">Differenzierbarkeit</span>
+  <div class="task">
+    <span class="tag tag--physik">Differenzierbarkeit</span>
     <h3>Aufgabe 4 — Differenzierbarkeit prüfen</h3>
     <p>Entscheide begründet, ob folgende Funktionen an der angegebenen Stelle differenzierbar sind:</p>
     <ol style="margin-left:1.4rem;line-height:2.2;">
       <li>$f(x) = x^4 - 3x$ bei $x_0 = 2$</li>
       <li>$g(x) = |2x - 4|$ bei $x_0 = 2$</li>
     </ol>
-    <button class="bh" onclick="toggleHint('h4')">💡 Lösung</button>
+    <button class="btn btn--ghost" onclick="toggleHint('h4')">💡 Lösung</button>
     <div class="hint" id="h4">
       1) Ja — $f$ ist eine ganzrationale Funktion, also überall differenzierbar. $f'(2) = 4 \cdot 2^3 - 3 = 29$.<br>
       2) Nein — bei $x_0 = 2$ hat der Graph einen Knick. Links: Steigung $-2$, rechts: Steigung $+2$. Der Grenzwert des Differenzenquotienten existiert nicht.
     </div>
   </div>
 
-  <div class="card ex">
-    <span class="tag" style="background:#fef3c7;color:#92400e;">⭐ Für Schnelle</span>
+  <div class="task">
+    <span class="tag tag--accent">⭐ Für Schnelle</span>
     <h3>Aufgabe 5 — Rückwärtsaufgabe</h3>
     <p>Gegeben ist die Ableitungsfunktion $f'(x) = 6x^2 - 4x$. Die Funktion $f$ ist eine ganzrationale Funktion dritten Grades mit $f(0) = 3$.</p>
     <p>Bestimme eine mögliche Funktionsgleichung von $f$.</p>
-    <button class="bh" onclick="toggleHint('h5')">💡 Lösung</button>
+    <button class="btn btn--ghost" onclick="toggleHint('h5')">💡 Lösung</button>
     <div class="hint" id="h5">
       Da $f'(x) = 6x^2 - 4x$, muss $f(x) = 2x^3 - 2x^2 + c$ sein (Potenzregel rückwärts).<br>
       Mit $f(0) = 3$: $c = 3$.<br>
@@ -528,7 +425,7 @@ details[open] summary { margin-bottom:.5rem; }
 
 <script>
 function showTab(id, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#t1, #t2, #t3, #t4').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
@@ -547,8 +444,8 @@ function renderLatex(el) {
 function ansQ(id, correct, msg) {
   const el = document.getElementById(id);
   el.textContent = (correct ? '✓ ' : '✗ ') + msg;
-  el.className = 'fb show ' + (correct ? 'ok' : 'err');
-  el.closest('.card.ex').querySelectorAll('.qopt').forEach(b => b.disabled = true);
+  el.className = 'feedback show ' + (correct ? 'ok' : 'err');
+  el.closest('.task').querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
 }
 
 // Quiz Tab 3 — nur Potenz/Faktor/Summenregel
@@ -567,9 +464,9 @@ function renderRQ() {
   const box = document.getElementById('rqBox');
   box.innerHTML =
     '<p style="font-size:1rem;margin-bottom:.6rem;">Bestimme $f\'(x)$ für: <strong>' + q.q + '</strong></p>' +
-    '<div class="qopts">' +
-    q.opts.map((o, i) => '<button class="qopt" id="rqopt' + i + '" onclick="ansRQ(' + i + ')">' + o + '</button>').join('') +
-    '</div><div class="fb" id="rqFB"></div>';
+    '<div class="quiz-opts">' +
+    q.opts.map((o, i) => '<button class="quiz-opt" id="rqopt' + i + '" onclick="ansRQ(' + i + ')">' + o + '</button>').join('') +
+    '</div><div class="feedback" id="rqFB"></div>';
   box._correctOpt = q.correct; box._opts = q.opts;
   renderLatex(box);
 }
@@ -587,21 +484,22 @@ function ansRQ(chosen) {
   document.getElementById('rqScore').textContent = rqC + ' / ' + rqT + ' richtig';
   const fb = document.getElementById('rqFB');
   fb.textContent = ok ? '✓ Korrekt!' : '✗ Richtig wäre: ' + correct;
-  fb.className = 'fb show ' + (ok ? 'ok' : 'err');
+  fb.className = 'feedback show ' + (ok ? 'ok' : 'err');
   renderLatex(fb);
 }
 function nextRQ() { rqIdx++; renderRQ(); }
 window.addEventListener('load', () => { setTimeout(renderRQ, 200); });
 </script>
 
-<footer class="footer-nav">
-  <div class="footer-nav-inner">
-    <a class="back-btn" href="ue1-differenzenquotient.html">← Differenzen- &amp; Differenzialquotient</a>
-    <a class="back-btn" href="index.html">LB 2 · Übersicht</a>
+<footer class="site-footer">
+  <div class="container container--narrow site-footer-inner">
+    <a href="/mathematik/klasse11/lb2-differenzialrechnung/ue1-differenzenquotient.html">← Differenzen- &amp; Differenzialquotient</a>
+    <nav class="site-footer-links">
+      <a href="/mathematik/klasse11/lb2-differenzialrechnung/">LB 2 · Übersicht</a>
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
   </div>
 </footer>
 
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln" style="position:fixed;bottom:1.2rem;right:1.2rem;width:2.4rem;height:2.4rem;border-radius:50%;border:1px solid var(--line);background:var(--paper);cursor:pointer;font-size:1rem;"></button>
-<script>(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();</script>
 </body>
 </html>

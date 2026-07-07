@@ -479,6 +479,119 @@ a.row-card:hover .row-num   { opacity: 1; }
 }
 .tag-row .tag { margin: 0; }
 
+/* Untertitel unter Abschnitts-Überschriften (Arbeitsblätter) */
+.subtitle {
+  color: var(--muted);
+  font-size: .9rem;
+  font-style: italic;
+  margin-bottom: 1.6rem;
+}
+
+/* Erfolg-Karte (grüner Merksatz) */
+.card--ok { border-left: 2px solid var(--ok); }
+
+/* Hinweis-Karte (Warnung / wichtiger Hinweis) */
+.card--warn { border-left: 2px solid var(--c-math); }
+
+/* Rechenschritt-Formel (linksbündig, mit Akzentlinie) */
+.formula--step {
+  text-align: left;
+  border-left: 2px solid var(--plot-curve);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: .55rem 1rem;
+  margin: .45rem 0;
+}
+
+/* Quiz-Auswahlbuttons */
+.quiz-opts {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  margin-top: .7rem;
+}
+.quiz-opt {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: .55rem .9rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: .92rem;
+  text-align: left;
+  color: var(--text);
+  transition: border-color .2s, background .2s;
+}
+.quiz-opt:hover:not([disabled]) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.quiz-opt.correct {
+  border-color: var(--ok) !important;
+  background: var(--ok-soft) !important;
+  color: var(--ok) !important;
+}
+.quiz-opt.wrong {
+  border-color: var(--err) !important;
+  background: var(--err-soft) !important;
+  color: var(--err) !important;
+}
+.quiz-opt[disabled] { cursor: default; }
+
+/* Grafisch-Zuordnen-Spiel (Graph-Matching) */
+.match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .8rem;
+  margin: .8rem 0;
+}
+@media (max-width: 640px) { .match-grid { grid-template-columns: 1fr; } }
+.match-card {
+  cursor: pointer;
+  border: 2px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  transition: border-color .2s;
+}
+.match-card:hover { border-color: var(--accent); }
+.match-card.sel  { border-color: var(--accent); border-width: 3px; }
+.match-card.ok   { border-color: var(--ok) !important; border-width: 3px !important; cursor: default; }
+.match-card.bad  { border-color: var(--err) !important; border-width: 3px !important; cursor: default; }
+.match-card canvas { display: block; }
+.match-label {
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  text-align: center;
+  padding: .25rem;
+  color: var(--muted);
+}
+
+/* Regler-Leiste unter Canvas-Applets (z.B. GeoGebra-artige Slider) */
+.slider-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .6rem 1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-top: none;
+  border-radius: 0 0 var(--r) var(--r);
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  flex-wrap: wrap;
+  margin-top: -1px;
+}
+.slider-bar label { white-space: nowrap; }
+.slider-bar input[type=range] { flex: 1; min-width: 120px; }
+.value-badge {
+  background: var(--ok);
+  color: var(--accent-contrast);
+  padding: .18rem .65rem;
+  border-radius: var(--r);
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: .78rem;
+}
+
 /* Platzhalter für leere Bereiche (Stub-Seiten) */
 .empty {
   border: 1px dashed var(--line-strong);

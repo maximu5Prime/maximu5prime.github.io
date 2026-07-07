@@ -1,192 +1,59 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-subject="mathematik">
 <head>
 <meta charset="UTF-8">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ableitungsregeln – Mathe 11</title>
-<link rel="stylesheet" href="../../../static/fonts.css">
-<link rel="stylesheet" href="../../../static/theme.css">
-<link rel="stylesheet" href="../../../static/katex/katex.min.css">
-<script defer src="../../../static/katex/katex.min.js"></script>
-<script defer src="../../../static/katex/contrib/auto-render.min.js"
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
 <style>
-:root {
-  --ink: #1a1208;
-  --paper: #f7f3ec;
-  --cream: #ede8de;
-  --accent: #c8400a;
-  --accent2: #2a6496;
-  --gold: #c9961a;
-  --green: #2e7d4f;
-  --line: #d4cfc6;
-  --serif: 'Playfair Display', Georgia, serif;
-  --mono: 'DM Mono', monospace;
-  --sans: 'Source Sans 3', sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; }
-
-header { background: var(--ink); color: var(--paper); padding: 2.8rem 2rem 2.2rem; position: relative; overflow: hidden; }
-header::before { content:''; position:absolute; top:-60px; right:-80px; width:300px; height:300px; border-radius:50%; background:var(--accent); opacity:.1; }
-header::after  { content:''; position:absolute; bottom:-40px; left:8%; width:180px; height:180px; border-radius:50%; background:var(--gold); opacity:.08; }
-.hinner { max-width: 900px; margin: 0 auto; position: relative; }
-.klass { font-family:var(--mono); font-size:.78rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.5rem; }
-header h1 { font-family:var(--serif); font-size:clamp(1.8rem,5vw,3.2rem); font-weight:900; line-height:1.1; margin-bottom:.8rem; }
-header h1 span { color:var(--accent); }
-header p { font-size:.95rem; color:#a09888; max-width:560px; }
-
-nav { background:var(--ink); border-top:1px solid #2e2e2e; padding:0 1.5rem; display:flex; overflow-x:auto; gap:0; }
-nav button { font-family:var(--mono); font-size:.75rem; letter-spacing:.07em; text-transform:uppercase; background:none; border:none; color:#777; padding:.8rem 1.2rem; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
-nav button:hover { color:var(--paper); }
-nav button.active { color:var(--gold); border-bottom-color:var(--gold); }
-
-main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 5rem; }
-.tab { display:none; }
-.tab.active { display:block; animation: fu .3s ease; }
-@keyframes fu { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
-
-h2 { font-family:var(--serif); font-size:1.85rem; font-weight:700; margin-bottom:.3rem; }
-h2 .num { font-family:var(--mono); font-size:.95rem; color:var(--accent); margin-right:.4rem; }
-.sub { color:#999; font-size:.88rem; font-style:italic; margin-bottom:1.8rem; }
-h3 { font-family:var(--serif); font-size:1.05rem; margin-bottom:.6rem; }
-
-.card { background:white; border:1px solid var(--line); border-radius:2px; padding:1.5rem 1.7rem; margin-bottom:1.4rem; box-shadow:0 2px 6px rgba(0,0,0,.04); }
-.card.theory { border-left:4px solid var(--accent2); background:#f0f5fa; }
-.card.ex     { border-left:4px solid var(--accent); }
-
-.fbox { background:var(--cream); border:1px solid var(--line); border-radius:2px; padding:1rem 1.4rem; margin:.9rem 0; text-align:center; font-size:1.05rem; overflow-x:auto; }
-
-table.rt { width:100%; border-collapse:collapse; font-size:.88rem; margin:.8rem 0; }
-table.rt th { font-family:var(--mono); font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; background:var(--ink); color:var(--gold); padding:.55rem .8rem; text-align:left; }
-table.rt td { padding:.65rem .8rem; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:.85rem; }
-table.rt tr:nth-child(even) td { background:var(--cream); }
-
-input[type=text], select { font-family:var(--mono); font-size:.88rem; padding:.45rem .7rem; border:1px solid var(--line); border-radius:2px; background:white; color:var(--ink); outline:none; transition:border-color .2s; }
-input[type=text]:focus, select:focus { border-color:var(--accent2); }
-.btn { font-family:var(--mono); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; padding:.5rem 1.1rem; border:none; border-radius:2px; cursor:pointer; transition:opacity .15s,transform .1s; }
-.btn:active { transform:scale(.97); }
-.bp { background:var(--accent); color:white; }
-.bs { background:var(--accent2); color:white; }
-.bh { background:none; border:1px dashed var(--gold); color:var(--gold); font-family:var(--mono); font-size:.73rem; padding:.3rem .65rem; border-radius:2px; cursor:pointer; }
-
-.fb { font-family:var(--mono); font-size:.83rem; padding:.45rem .85rem; border-radius:2px; margin-top:.6rem; display:none; }
-.fb.show { display:inline-block; }
-.fb.ok  { background:#eaf7ee; color:var(--green); border:1px solid #b7dfca; }
-.fb.err { background:#fdecea; color:#c0392b; border:1px solid #f5c6c6; }
-
-.hint { background:#fffbea; border-left:3px solid var(--gold); padding:.65rem 1rem; font-size:.87rem; margin:.7rem 0; display:none; overflow-x:auto; }
-.hint.open { display:block; }
-
-.qopts { display:flex; flex-direction:column; gap:.45rem; margin-top:.7rem; }
-.qopt { background:white; border:1px solid var(--line); padding:.5rem .9rem; border-radius:2px; cursor:pointer; font-size:.92rem; text-align:left; transition:border-color .2s,background .2s; }
-.qopt:hover:not([disabled]) { border-color:var(--accent2); background:#f0f5fa; }
-.qopt.correct { border-color:var(--green)!important; background:#eaf7ee!important; color:var(--green)!important; }
-.qopt.wrong   { border-color:#c0392b!important; background:#fdecea!important; color:#c0392b!important; }
-
-.gmgrid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; margin:.8rem 0; }
-@media(max-width:550px){ .gmgrid { grid-template-columns:1fr; } }
-.gc-wrap { cursor:pointer; border:2px solid var(--line); border-radius:2px; transition:border-color .2s; background:white; }
-.gc-wrap:hover { border-color:var(--accent2); }
-.gc-wrap.sel { border-color:var(--accent); border-width:3px; }
-.gc-wrap.ok  { border-color:var(--green)!important; border-width:3px!important; cursor:default; }
-.gc-wrap.bad { border-color:#c0392b!important; border-width:3px!important; cursor:default; }
-.gc-wrap canvas { display:block; }
-.glabel { font-family:var(--mono); font-size:.75rem; text-align:center; padding:.25rem; color:#666; }
-
-.scorebar { display:flex; align-items:center; gap:1rem; background:var(--cream); border:1px solid var(--line); padding:.75rem 1.1rem; border-radius:2px; margin-bottom:1.8rem; font-family:var(--mono); font-size:.83rem; }
-.stars { font-size:1.15rem; letter-spacing:.1em; }
-
-.tag { display:inline-block; font-family:var(--mono); font-size:.7rem; padding:.18rem .55rem; border-radius:20px; margin-right:.3rem; margin-bottom:.3rem; }
-.tb { background:#dbeafe; color:#1e40af; }
-.tr { background:#fee2e2; color:#991b1b; }
-.tg { background:#d1fae5; color:#065f46; }
-
-.result-box { padding:.7rem 1rem; background:#eaf7ee; border-left:3px solid var(--green); margin-top:.6rem; border-radius:0 2px 2px 0; overflow-x:auto; }
-
-.fbox .katex-display { margin: 0; }
-.fbox .katex { font-size: 1.15em; }
-
-@media print {
-  @page { size: A4; margin: 1.5cm 2cm 2cm 2cm; }
-  nav, header, footer, .scorebar { display: none !important; }
-  button, input[type=text], select, .fb, .hint { display: none !important; }
-  .tab { display: block !important; }
-  #rqBox, #gmGame, #derivOut { display: none !important; }
-  #t2, #t3 { break-before: page; }
-  h2 { break-after: avoid; }
-  .card.theory { break-inside: avoid; }
-  .card { box-shadow: none; border: 1px solid #ddd; padding: .65rem .9rem; margin-bottom: .45rem; }
-  body { font-size: 10pt; line-height: 1.45; background: white; }
-  main { padding: .4rem 0; }
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-}
-
-header .bc { font-family:var(--mono); font-size:.68rem; color:#666; display:flex; gap:.4rem; align-items:center; margin-bottom:.9rem; flex-wrap:wrap; }
-header .bc a { color:#888; text-decoration:none; transition:color .15s; }
-header .bc a:hover { color:var(--gold); }
-header .bc span { color:#444; }
-
-.footer-nav { background:var(--ink); padding:1rem 2rem; margin-top:3rem; }
-.footer-nav-inner { max-width:900px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.8rem; }
-.back-btn { font-family:var(--mono); font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); text-decoration:none; display:inline-flex; align-items:center; gap:.5rem; transition:opacity .2s; }
-.back-btn:hover { opacity:.7; }
-
-/* ── DARK MODE ── */
-[data-theme=dark] nav#mainNav,[data-theme=dark] nav:not(.bc){background:#111;border-top-color:#2e2e2e;}
-[data-theme=dark] nav button:hover{color:var(--ink);}
-[data-theme=dark] .footer-nav{background:#111;}
-[data-theme=dark] .card{background:#1c1c1c;border-color:#2e2e2e;}
-[data-theme=dark] .card.theory{background:#0d1e30;border-color:#1a3a5c;}
-[data-theme=dark] .cwrap{background:#1c1c1c;border-color:#333;}
-[data-theme=dark] input[type=text]{background:#1c1c1c;border-color:#555;color:var(--ink);}
-[data-theme=dark] input[type=text]:focus{border-color:var(--accent2);}
-[data-theme=dark] table.rt th{background:#2a2a2a;}
-[data-theme=dark] .fb.ok{background:#0a1f12;border-color:#1a5c3a;color:#86efac;}
-[data-theme=dark] .fb.err{background:#1f0a0a;border-color:#5c1a1a;color:#fca5a5;}
-[data-theme=dark] .hint{background:#1e1a08;border-left-color:var(--gold);}
-[data-theme=dark] .result-box{background:#0a1f12;border-left-color:#2e7d4f;color:#86efac;}
-[data-theme=dark] .scorebar{background:var(--cream);border-color:#2e2e2e;}
-[data-theme=dark] header .bc span{color:#555;}
+  #wGMsrc { width: 100%; height: 220px; position: relative; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; margin-bottom: .7rem; }
+  #wGMsrc canvas { position: absolute; top: 0; left: 0; }
+  .match-card { height: 150px; position: relative; }
 </style>
-<script>
-(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-</script></head>
+</head>
 <body>
 
-<header>
-  <div class="hinner">
-    <nav class="bc" aria-label="Breadcrumb">
-      <a href="../../../index.html">Lernportal</a>
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
       <span>/</span>
-      <a href="../index.html">Mathematik · Jgst. 11</a>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
       <span>/</span>
-      <a href="index.html">Differenzialrechnung</a>
+      <a href="/mathematik/klasse11/lb2-differenzialrechnung/">Differenzialrechnung</a>
       <span>/</span>
       <span>Ableitungsregeln</span>
     </nav>
-    <div class="klass">M 11 · LB 2 · UE 2</div>
-    <h1>Herleitung &amp; <span>Ableitungsregeln</span></h1>
-    <p>Potenz-, Faktor-, Summen-, Produkt-, Quotienten- und Kettenregel · Quiz · Grafisches Ableiten</p>
+    <p class="kicker">M 11 · LB 2 · Vertiefung</p>
+    <h1 class="site-title">Herleitung &amp; <em>Ableitungsregeln</em></h1>
+    <p class="site-sub">Potenz-, Faktor-, Summen-, Produkt-, Quotienten- und Kettenregel · Quiz · Grafisches Ableiten</p>
   </div>
 </header>
 
-<nav id="mainNav">
-  <button class="active" onclick="showTab('t1',this)">① Ableitungsregeln</button>
-  <button onclick="showTab('t2',this)">② Übungen</button>
-  <button onclick="showTab('t3',this)">③ Grafisch Ableiten</button>
+<nav class="tabs container container--narrow" id="mainNav">
+  <button class="tab-btn active" onclick="showTab('t1',this)">① Ableitungsregeln</button>
+  <button class="tab-btn" onclick="showTab('t2',this)">② Übungen</button>
+  <button class="tab-btn" onclick="showTab('t3',this)">③ Grafisch Ableiten</button>
 </nav>
 
-<main>
+<main class="container container--narrow">
 
 <!-- ══════════════════════ TAB 1 ══════════════════════ -->
-<div class="tab active" id="t1">
+<div class="tab-panel active" id="t1">
   <h2><span class="num">01</span>Ableitungsregeln</h2>
-  <p class="sub">Schnelles Ableiten ohne Grenzwertberechnung</p>
+  <p class="subtitle">Schnelles Ableiten ohne Grenzwertberechnung</p>
 
-  <div class="card theory">
-    <table class="rt">
+  <div class="card card--theory">
+    <table class="table">
       <thead><tr><th>Regel</th><th>$f(x)$</th><th>$f'(x)$</th></tr></thead>
       <tbody>
         <tr><td>Potenzregel</td><td>$x^n$</td><td>$n \cdot x^{n-1}$</td></tr>
@@ -200,120 +67,120 @@ header .bc span { color:#444; }
     </table>
   </div>
 
-  <div class="card ex">
+  <div class="task">
     <h3>Ableitungsquiz</h3>
     <div id="rqBox"></div>
     <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-top:1rem;">
-      <button class="btn bp" onclick="nextRQ()">Nächste Frage →</button>
-      <span id="rqScore" style="font-family:var(--mono);font-size:.83rem;color:#888;">0 / 0 richtig</span>
+      <button class="btn" onclick="nextRQ()">Nächste Frage →</button>
+      <span id="rqScore" style="font-family:var(--font-mono);font-size:.83rem;color:var(--muted);">0 / 0 richtig</span>
     </div>
   </div>
 
-  <div class="card ex">
+  <div class="card">
     <h3>Schritt-für-Schritt Lösungen</h3>
     <div style="display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin-bottom:.8rem;">
-      <select id="funcSel">
+      <select class="input" id="funcSel">
         <option value="p1">f(x) = 3x⁴ − 2x² + 5</option>
         <option value="p2">f(x) = x³ · (x + 1)</option>
         <option value="c1">f(x) = (2x + 1)³</option>
         <option value="c2">f(x) = √(x² + 1)</option>
         <option value="q1">f(x) = (x² + 1) / (x − 1)</option>
       </select>
-      <button class="btn bs" onclick="showDeriv()">Lösung anzeigen</button>
+      <button class="btn" onclick="showDeriv()">Lösung anzeigen</button>
     </div>
     <div id="derivOut"></div>
   </div>
 </div>
 
 <!-- ══════════════════════ TAB 2 ══════════════════════ -->
-<div class="tab" id="t2">
+<div class="tab-panel" id="t2">
   <h2><span class="num">02</span>Übungen</h2>
-  <p class="sub">Ableitungsregeln anwenden</p>
+  <p class="subtitle">Ableitungsregeln anwenden</p>
 
   <div class="scorebar">
     <span>Punkte:</span>
     <span class="stars" id="starBar">☆☆☆☆</span>
-    <span id="scoreNum" style="font-family:var(--mono);color:#888;">0 / 4</span>
+    <span id="scoreNum" style="font-family:var(--font-mono);color:var(--muted);">0 / 4</span>
   </div>
 
-  <div class="card ex">
-    <span class="tag tb">Potenz- &amp; Summenregel</span>
+  <div class="task">
+    <span class="tag tag--physik">Potenz- &amp; Summenregel</span>
     <h3>Aufgabe 1</h3>
     <p>Leite ab: $f(x) = 4x^3 - 6x + 2$</p>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a1" placeholder="f'(x) = ...">
-      <button class="btn bp" onclick="checkTask(1,['12x^2-6','12x²-6','12x2-6'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah1')">💡</button>
+      <input class="input" type="text" id="a1" placeholder="f'(x) = ...">
+      <button class="btn" onclick="checkTask(1,['12x^2-6','12x²-6','12x2-6'])">Prüfen</button>
+      <button class="btn btn--ghost" onclick="toggleHint('ah1')">💡</button>
     </div>
     <div class="hint" id="ah1">Potenzregel: $4 \cdot 3x^2 = 12x^2$ &ensp;|&ensp; $-6x \to -6$ &ensp;|&ensp; Konstante $2 \to 0$</div>
-    <div class="fb" id="fb1"></div>
+    <div class="feedback" id="fb1"></div>
   </div>
 
-  <div class="card ex">
-    <span class="tag tb">Produktregel</span>
+  <div class="task">
+    <span class="tag tag--physik">Produktregel</span>
     <h3>Aufgabe 2</h3>
     <p>Leite ab: $f(x) = x^2 \cdot (x - 3)$</p>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a2" placeholder="f'(x) = ...">
-      <button class="btn bp" onclick="checkTask(2,['3x^2-6x','3x²-6x'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah2')">💡</button>
+      <input class="input" type="text" id="a2" placeholder="f'(x) = ...">
+      <button class="btn" onclick="checkTask(2,['3x^2-6x','3x²-6x'])">Prüfen</button>
+      <button class="btn btn--ghost" onclick="toggleHint('ah2')">💡</button>
     </div>
     <div class="hint" id="ah2">Produktregel: $(x^2)' \cdot (x-3) + x^2 \cdot (x-3)'$
     $= 2x(x-3) + x^2 \cdot 1 = 2x^2 - 6x + x^2 = 3x^2 - 6x$</div>
-    <div class="fb" id="fb2"></div>
+    <div class="feedback" id="fb2"></div>
   </div>
 
-  <div class="card ex">
-    <span class="tag" style="background:#fef3c7;color:#92400e;">Kettenregel</span>
+  <div class="task">
+    <span class="tag tag--accent">Kettenregel</span>
     <h3>Aufgabe 3</h3>
     <p>Leite ab: $f(x) = (x^2 - 1)^4$</p>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a3" placeholder="f'(x) = ...">
-      <button class="btn bp" onclick="checkTask(3,['8x(x^2-1)^3','8x(x²-1)³','8x*(x^2-1)^3'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah3')">💡</button>
+      <input class="input" type="text" id="a3" placeholder="f'(x) = ...">
+      <button class="btn" onclick="checkTask(3,['8x(x^2-1)^3','8x(x²-1)³','8x*(x^2-1)^3'])">Prüfen</button>
+      <button class="btn btn--ghost" onclick="toggleHint('ah3')">💡</button>
     </div>
     <div class="hint" id="ah3">Äußere Funktion: $u^4 \to 4u^3$ &ensp;|&ensp; Innere: $u = x^2-1 \to u' = 2x$
     $$f'(x) = 4(x^2-1)^3 \cdot 2x = 8x(x^2-1)^3$$</div>
-    <div class="fb" id="fb3"></div>
+    <div class="feedback" id="fb3"></div>
   </div>
 
-  <div class="card ex">
-    <span class="tag" style="background:#fef3c7;color:#92400e;">Kettenregel</span>
+  <div class="task">
+    <span class="tag tag--accent">Kettenregel</span>
     <h3>Aufgabe 4</h3>
     <p>Leite ab: $f(x) = (3x + 2)^5$</p>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
-      <input type="text" id="a4" placeholder="f'(x) = ...">
-      <button class="btn bp" onclick="checkTask(4,['15(3x+2)^4','15*(3x+2)^4','15(3x+2)4'])">Prüfen</button>
-      <button class="bh" onclick="toggleHint('ah4')">💡</button>
+      <input class="input" type="text" id="a4" placeholder="f'(x) = ...">
+      <button class="btn" onclick="checkTask(4,['15(3x+2)^4','15*(3x+2)^4','15(3x+2)4'])">Prüfen</button>
+      <button class="btn btn--ghost" onclick="toggleHint('ah4')">💡</button>
     </div>
     <div class="hint" id="ah4">Äußere Funktion: $u^5 \to 5u^4$ &ensp;|&ensp; Innere: $u = 3x+2 \to u' = 3$
     $$f'(x) = 5(3x+2)^4 \cdot 3 = 15(3x+2)^4$$</div>
-    <div class="fb" id="fb4"></div>
+    <div class="feedback" id="fb4"></div>
   </div>
 
 </div>
 
 <!-- ══════════════════════ TAB 3 ══════════════════════ -->
-<div class="tab" id="t3">
+<div class="tab-panel" id="t3">
   <h2><span class="num">03</span>Grafisch Ableiten</h2>
-  <p class="sub">Ordne dem Graphen von $f$ den Graphen von $f'$ zu</p>
+  <p class="subtitle">Ordne dem Graphen von $f$ den Graphen von $f'$ zu</p>
 
-  <div class="card theory">
+  <div class="card card--theory">
     <h3>Merkhilfen</h3>
     <p style="line-height:2;">
-      <span class="tag tg">$f$ steigt</span> $\Rightarrow$ $f' > 0$ (Graph <em>über</em> der $x$-Achse)&ensp;
-      <span class="tag tr">$f$ fällt</span> $\Rightarrow$ $f' < 0$ (Graph <em>unter</em> der $x$-Achse)<br>
-      <span class="tag tb">Extremum von $f$</span> $\Rightarrow$ $f'$ hat dort eine <em>Nullstelle</em>&ensp;
-      <span class="tag tb">Wendepunkt von $f$</span> $\Rightarrow$ $f'$ hat dort ein <em>Extremum</em>
+      <span class="tag tag--kit">$f$ steigt</span> $\Rightarrow$ $f' > 0$ (Graph <em>über</em> der $x$-Achse)&ensp;
+      <span class="tag" style="color:var(--err);border-color:currentColor;">$f$ fällt</span> $\Rightarrow$ $f' < 0$ (Graph <em>unter</em> der $x$-Achse)<br>
+      <span class="tag tag--physik">Extremum von $f$</span> $\Rightarrow$ $f'$ hat dort eine <em>Nullstelle</em>&ensp;
+      <span class="tag tag--physik">Wendepunkt von $f$</span> $\Rightarrow$ $f'$ hat dort ein <em>Extremum</em>
     </p>
   </div>
 
   <div id="gmGame"></div>
 
   <div style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-top:1rem;">
-    <button class="btn bp" id="btnNext" onclick="nextGP()">Nächste Aufgabe →</button>
-    <button class="btn bs" id="btnSolve" onclick="solveGP()">Lösung zeigen</button>
-    <span id="gmScore" style="font-family:var(--mono);font-size:.83rem;color:#888;"></span>
+    <button class="btn" id="btnNext" onclick="nextGP()">Nächste Aufgabe →</button>
+    <button class="btn btn--ghost" id="btnSolve" onclick="solveGP()">Lösung zeigen</button>
+    <span id="gmScore" style="font-family:var(--font-mono);font-size:.83rem;color:var(--muted);"></span>
   </div>
 </div>
 
@@ -326,7 +193,7 @@ function renderLatex(el) {
   }
 }
 function showTab(id, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#t1, #t2, #t3').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
@@ -336,36 +203,6 @@ function toggleHint(id) {
   const el = document.getElementById(id);
   el.classList.toggle('open');
   if (el.classList.contains('open')) renderLatex(el);
-}
-
-// ── Canvas helpers (für grafisch ableiten) ──
-function drawGrid(ctx, w, h, xMin, xMax, yMin, yMax) {
-  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const clr = dark ? {bg:'#1c1c1c',grid:'#2a2a2a',axis:'#555',lbl:'#777'} : {bg:'#fff',grid:'#ece8e0',axis:'#bbb',lbl:'#999'};
-  const toX = x => (x - xMin) / (xMax - xMin) * w;
-  const toY = y => h - (y - yMin) / (yMax - yMin) * h;
-  ctx.fillStyle = clr.bg; ctx.fillRect(0, 0, w, h);
-  ctx.strokeStyle = clr.grid; ctx.lineWidth = 1;
-  for (let gx = Math.ceil(xMin); gx <= xMax; gx++) { ctx.beginPath(); ctx.moveTo(toX(gx),0); ctx.lineTo(toX(gx),h); ctx.stroke(); }
-  for (let gy = Math.ceil(yMin); gy <= yMax; gy++) { ctx.beginPath(); ctx.moveTo(0,toY(gy)); ctx.lineTo(w,toY(gy)); ctx.stroke(); }
-  ctx.strokeStyle = clr.axis; ctx.lineWidth = 1.5;
-  if (yMin<=0&&0<=yMax) { ctx.beginPath(); ctx.moveTo(0,toY(0)); ctx.lineTo(w,toY(0)); ctx.stroke(); }
-  if (xMin<=0&&0<=xMax) { ctx.beginPath(); ctx.moveTo(toX(0),0); ctx.lineTo(toX(0),h); ctx.stroke(); }
-  ctx.fillStyle = clr.lbl; ctx.font = '10px DM Mono, monospace';
-  for (let gx = Math.ceil(xMin); gx <= xMax; gx++) { if (gx===0) continue; ctx.fillText(gx, toX(gx)+2, toY(0)+12); }
-  for (let gy = Math.ceil(yMin); gy <= yMax; gy++) { if (gy===0) continue; ctx.fillText(gy, toX(0)+3, toY(gy)-2); }
-  return { toX, toY };
-}
-function plotFn(ctx, fn, toX, toY, xMin, xMax, color, lw, dash) {
-  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash(dash || []);
-  ctx.beginPath(); let first = true;
-  for (let i = 0; i <= 800; i++) {
-    const x = xMin + (xMax - xMin) * i / 800;
-    let y; try { y = fn(x); } catch(e) { first=true; continue; }
-    if (!isFinite(y)||Math.abs(y)>1e4) { first=true; continue; }
-    if (first) { ctx.moveTo(toX(x),toY(y)); first=false; } else ctx.lineTo(toX(x),toY(y));
-  }
-  ctx.stroke(); ctx.setLineDash([]);
 }
 
 // ── Tab 1: Quiz ──
@@ -386,9 +223,9 @@ function renderRQ() {
   const box = document.getElementById('rqBox');
   box.innerHTML =
     '<p style="font-size:1rem;margin-bottom:.6rem;">Leite ab: <strong>' + q.q + '</strong></p>' +
-    '<div class="qopts">' +
-    q.opts.map((o,i) => '<button class="qopt" id="rqopt'+i+'" onclick="ansRQ('+i+')">' + o + '</button>').join('') +
-    '</div><div class="fb" id="rqFB"></div>';
+    '<div class="quiz-opts">' +
+    q.opts.map((o,i) => '<button class="quiz-opt" id="rqopt'+i+'" onclick="ansRQ('+i+')">' + o + '</button>').join('') +
+    '</div><div class="feedback" id="rqFB"></div>';
   box._correctOpt = q.correct; box._opts = q.opts;
   renderLatex(box);
 }
@@ -406,7 +243,7 @@ function ansRQ(chosen) {
   document.getElementById('rqScore').textContent = rqC + ' / ' + rqT + ' richtig';
   const fb = document.getElementById('rqFB');
   fb.textContent = ok ? '✓ Korrekt!' : '✗ Richtig w\xe4re: ' + correct;
-  fb.className = 'fb show ' + (ok ? 'ok' : 'err');
+  fb.className = 'feedback show ' + (ok ? 'ok' : 'err');
   renderLatex(fb);
 }
 function nextRQ() { rqIdx++; renderRQ(); }
@@ -433,9 +270,9 @@ function showDeriv() {
   const d = derivSteps[document.getElementById('funcSel').value];
   const el = document.getElementById('derivOut');
   el.innerHTML =
-    '<div class="card theory" style="margin-top:0;"><h3>' + d.title + '</h3>' +
+    '<div class="card card--theory" style="margin-top:0;"><h3>' + d.title + '</h3>' +
     d.steps.map((s,i) =>
-      '<p style="margin:.4rem 0;"><span style="font-family:var(--mono);color:var(--accent);margin-right:.4rem;">' + (i+1) + '.</span>' + s + '</p>'
+      '<p style="margin:.4rem 0;"><span style="font-family:var(--font-mono);color:var(--accent);margin-right:.4rem;">' + (i+1) + '.</span>' + s + '</p>'
     ).join('') +
     '<div class="result-box">✅ ' + d.res + '</div></div>';
   renderLatex(el);
@@ -459,7 +296,7 @@ function checkTask(n, correct) {
 function showFB(id, ok, hint) {
   const el = document.getElementById(id);
   el.textContent = ok ? '✓ Richtig!' : '✗ Nicht ganz. ' + hint;
-  el.className = 'fb show ' + (ok ? 'ok' : 'err');
+  el.className = 'feedback show ' + (ok ? 'ok' : 'err');
 }
 
 // ── Tab 3: Grafisch Ableiten ──
@@ -486,39 +323,38 @@ function renderGM() {
   window._gmOpts = opts; gpSolved=false; gmSel=null;
   document.getElementById('btnSolve').disabled=false;
   document.getElementById('gmGame').innerHTML =
-    '<div class="card ex">' +
+    '<div class="task">' +
     '<h3>Aufgabe: ' + pair.name + ' — ' + pair.desc_f + '</h3>' +
     '<p style="font-size:.88rem;margin-bottom:.7rem;">Welcher Graph unten ist der Graph von $f\'$? ($f$ ist blau dargestellt)</p>' +
-    '<div style="width:100%;height:220px;border:1px solid var(--line);background:white;margin-bottom:.7rem;position:relative;" id="wGMsrc">' +
-    '<canvas id="gmSource" style="position:absolute;top:0;left:0;"></canvas></div>' +
-    '<p style="font-family:var(--mono);font-size:.75rem;color:#888;margin-bottom:.5rem;">W\xe4hle den Graphen von $f\'$:</p>' +
-    '<div class="gmgrid">' +
+    '<div id="wGMsrc"><canvas id="gmSource"></canvas></div>' +
+    '<p style="font-family:var(--font-mono);font-size:.75rem;color:var(--muted);margin-bottom:.5rem;">W\xe4hle den Graphen von $f\'$:</p>' +
+    '<div class="match-grid">' +
     opts.map((o,i) =>
-      '<div><div class="gc-wrap" id="gco'+i+'" onclick="selectGC('+i+')" style="height:150px;position:relative;">' +
-      '<canvas id="gmc'+i+'" style="position:absolute;top:0;left:0;"></canvas></div>' +
-      '<div class="glabel">Option ' + String.fromCharCode(65+i) + '</div></div>'
+      '<div><div class="match-card" id="gco'+i+'" onclick="selectGC('+i+')">' +
+      '<canvas id="gmc'+i+'"></canvas></div>' +
+      '<div class="match-label">Option ' + String.fromCharCode(65+i) + '</div></div>'
     ).join('') +
     '</div></div>';
   renderLatex(document.getElementById('gmGame'));
   requestAnimationFrame(() => {
-    drawMini('gmSource','wGMsrc',pair.f,'#2a6496',pair.desc_f);
-    opts.forEach((o,i) => drawMini('gmc'+i,'gco'+i,o.fn,'#c8400a',o.lbl));
+    const c = Plot.colors();
+    drawMini('gmSource','wGMsrc',pair.f,c.curve,pair.desc_f);
+    opts.forEach((o,i) => drawMini('gmc'+i,'gco'+i,o.fn,c.curve2,o.lbl));
   });
   document.getElementById('gmScore').textContent = gpDone>0 ? (gpOk+' / '+gpDone+' richtig') : '';
 }
 function drawMini(canvasId, wrapperId, fn, color, label) {
   const canvas=document.getElementById(canvasId); const wrap=document.getElementById(wrapperId);
   if (!canvas||!wrap) return;
-  const dpr=window.devicePixelRatio||1; const w=wrap.clientWidth||260, h=wrap.clientHeight||150;
-  canvas.width=w*dpr; canvas.height=h*dpr; canvas.style.width=w+'px'; canvas.style.height=h+'px';
-  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
-  const {toX,toY}=drawGrid(ctx,w,h,-3.5,3.5,-4,4);
-  plotFn(ctx,fn,toX,toY,-3.5,3.5,color,2.2);
-  ctx.font='bold 11px DM Mono, monospace'; ctx.fillStyle=color; ctx.fillText(label,6,16);
+  const { ctx, w, h } = Plot.setup(canvasId, wrapperId);
+  const view = { xMin:-3.5, xMax:3.5, yMin:-4, yMax:4 };
+  const map = Plot.grid(ctx, w, h, view);
+  Plot.curve(ctx, fn, map, view, { color: color, width: 2.2 });
+  ctx.font='bold 11px "DM Mono", monospace'; ctx.fillStyle=color; ctx.fillText(label,6,16);
 }
 function selectGC(i) {
   if (gpSolved) return;
-  document.querySelectorAll('.gc-wrap').forEach(w=>w.classList.remove('sel'));
+  document.querySelectorAll('.match-card').forEach(w=>w.classList.remove('sel'));
   document.getElementById('gco'+i).classList.add('sel'); gmSel=i;
 }
 function solveGP() {
@@ -536,21 +372,22 @@ function solveGP() {
 function nextGP() { gpIdx++; renderGM(); }
 
 window.addEventListener('load', () => { setTimeout(() => { renderRQ(); renderGM(); }, 200); });
-window.addEventListener('resize', () => {
-  if (document.querySelector('.tab.active').id === 't3') renderGM();
+window.addEventListener('DOMContentLoaded', function () {
+  Plot.onRedraw(function () {
+    if (document.getElementById('t3').classList.contains('active')) renderGM();
+  });
 });
 </script>
 
-<footer class="footer-nav">
-  <div class="footer-nav-inner">
-    <a class="back-btn" href="ue1-differenzenquotient.html">← Differenzen- &amp; Differenzialquotient</a>
-    <a class="back-btn" href="index.html">LB 2 · Übersicht</a>
+<footer class="site-footer">
+  <div class="container container--narrow site-footer-inner">
+    <a href="/mathematik/klasse11/lb2-differenzialrechnung/ue1-differenzenquotient.html">← Differenzen- &amp; Differenzialquotient</a>
+    <nav class="site-footer-links">
+      <a href="/mathematik/klasse11/lb2-differenzialrechnung/">LB 2 · Übersicht</a>
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
   </div>
 </footer>
 
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';setTimeout(function(){renderRQ();renderGM();},0);}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
-</script>
 </body>
 </html>
