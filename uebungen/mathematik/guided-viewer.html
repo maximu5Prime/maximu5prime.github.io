@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-subject="mathematik">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Geführter Lernpfad – Mathematik</title>
-<link rel="stylesheet" href="../../static/fonts.css">
-<link rel="stylesheet" href="../../static/theme.css">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<script defer src="/static/site.js"></script>
 <style>
 :root {
-  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
-  --accent:#c8400a; --gold:#c9961a; --line:#d4cfc6;
-  --mono:'DM Mono',monospace; --serif:'Playfair Display',Georgia,serif; --sans:'Source Sans 3',sans-serif;
+  --ink: var(--text); --paper: var(--bg); --cream: var(--surface-2);
+  --accent: var(--c-math); --gold: var(--c-math);
+  --mono: var(--font-mono); --serif: var(--font-serif); --sans: var(--font-sans);
   --nav-h: 54px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -86,7 +88,6 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);height:100
 .guided-error p{font-size:1rem;color:#888;}
 .guided-error a{font-family:var(--mono);font-size:.8rem;color:var(--accent);text-decoration:none;}
 </style>
-<script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body>
 
@@ -282,7 +283,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);height:100
         if (iframeDoc) iframeDoc.documentElement.setAttribute('data-theme', t);
       } catch (e) {}
     }
-    setTheme(r.getAttribute('data-theme') || 'light');
+    setTheme(r.getAttribute('data-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
     b.addEventListener('click', function () {
       var n = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       localStorage.setItem('theme', n);

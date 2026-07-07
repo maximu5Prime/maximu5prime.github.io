@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-subject="mathematik">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mathematik – Themenübersicht</title>
-<link rel="stylesheet" href="../../static/fonts.css">
-<link rel="stylesheet" href="../../static/theme.css">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<script defer src="/static/site.js"></script>
 <style>
 :root {
-  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
-  --accent:#c8400a; --gold:#c9961a; --line:#d4cfc6;
-  --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
+  --ink: var(--text); --paper: var(--bg); --cream: var(--surface-2);
+  --accent: var(--c-math); --gold: var(--c-math);
+  --serif: var(--font-serif); --mono: var(--font-mono); --sans: var(--font-sans);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 [hidden]{display:none!important;}
@@ -105,7 +107,7 @@ header .bc span{color:#444;}
 .mm-clickable{cursor:pointer;}
 .mm-clickable .mm-rect:hover{fill:#e0ddd4 !important;}
 .mm-root.mm-clickable .mm-rect:hover{fill:#2a2010 !important;}
-.mm-label{font-family:'Playfair Display',Georgia,serif;font-size:13px;font-weight:700;fill:var(--ink);}
+.mm-label{font-family:var(--serif);font-size:13px;font-weight:700;fill:var(--ink);}
 .mm-root .mm-label{fill:var(--paper);font-size:14px;font-weight:900;}
 .mm-sub{font-family:'DM Mono',monospace;font-size:9.5px;fill:#888;}
 .mm-soon .mm-label{fill:#bbb;}
@@ -174,7 +176,6 @@ header .bc span{color:#444;}
 .portal-link{font-family:var(--mono);font-size:.65rem;color:#555;text-decoration:none;transition:color .15s;}
 .portal-link:hover{color:var(--gold);}
 </style>
-<script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body>
 
@@ -227,8 +228,6 @@ header .bc span{color:#444;}
   </div>
 </footer>
 
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();</script>
 
 <script src="topics.js"></script>
 <script>
