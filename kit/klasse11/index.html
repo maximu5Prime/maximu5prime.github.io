@@ -1,165 +1,109 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-subject="kit">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Technology (KIT) – Jahrgangsstufe 11</title>
-  <link rel="stylesheet" href="../../static/fonts.css">
-  <link rel="stylesheet" href="../../static/theme.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <script defer src="/static/site.js"></script>
   <style>
-    :root {
-      --bg: #0f0f0f;
-      --surface: #171717;
-      --border: #2a2a2a;
-      --text: #f0ede8;
-      --text-muted: #888;
-      --accent: #6ee7b7;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none; z-index: 0;
-    }
-    .container { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; position: relative; z-index: 1; }
-
-    .breadcrumb { padding: 1.5rem 0 0; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
-    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
-    .breadcrumb a:hover { color: var(--accent); }
-    .breadcrumb span { color: #333; }
-
-    header { padding: 2rem 0 2.5rem; border-bottom: 1px solid var(--border); }
-    .fach-tag { font-family: 'DM Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 0.6rem; }
-    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; }
-    h1 em { font-style: italic; color: var(--accent); }
-    .header-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; max-width: 620px; }
-    .header-badges { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.75rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
-    .badge.highlight { border-color: var(--accent); color: var(--accent); }
-
-    .section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin: 2.5rem 0 1rem; display: flex; align-items: center; gap: 1rem; }
-    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-    .lernbereich-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-
-    .lb-card { background: var(--surface); display: grid; grid-template-columns: 56px 1fr auto; align-items: start; text-decoration: none; color: inherit; transition: background 0.15s; opacity: 0.45; cursor: default; }
-    .lb-num { padding: 1.5rem 0 1.5rem 1.4rem; font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--accent); line-height: 1; opacity: 0.28; }
-    .lb-content { padding: 1.4rem 1rem 1.4rem 1.2rem; border-left: 1px solid var(--border); }
-    .lb-id { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--text-muted); margin-bottom: 0.3rem; letter-spacing: 0.12em; }
-    .lb-title { font-size: 0.98rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.35; }
-    .lb-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; }
-    .lb-tags { margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-    .lb-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 0.18rem 0.5rem; border-radius: 2rem; border: 1px solid var(--border); color: var(--text-muted); }
-    .lb-meta { padding: 1.4rem 1.4rem 1.4rem 1rem; display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; min-width: 80px; }
-    .lb-hours { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--text-muted); white-space: nowrap; border: 1px solid var(--border); padding: 0.22rem 0.55rem; border-radius: 2rem; }
-    .lb-soon { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: #444; padding: 0.2rem 0.5rem; border-radius: 2rem; border: 1px solid #333; }
-
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-    header            { animation: fadeUp 0.4s ease both; }
-    .lernbereich-list { animation: fadeUp 0.4s 0.1s ease both; }
-
-    @media (max-width: 580px) {
-      .lb-card { grid-template-columns: 40px 1fr; }
-      .lb-meta { display: none; }
-      .lb-num { padding: 1.2rem 0 1.2rem 1rem; font-size: 1.4rem; }
-    }
-  
+    .row-card--soon { opacity: .5; }
   </style>
-<script>
-(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-</script></head>
+</head>
 <body>
-<div class="container">
 
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    <a href="../../index.html">Lernportal</a>
-    <span>/</span>
-    <span>Technology</span>
-    <span>/</span>
-    Jahrgangsstufe 11
-  </nav>
-
-  <header>
-    <div class="fach-tag">⚙ Technology (KIT) · Jahrgangsstufe 11</div>
-    <h1>Lernbereiche<br><em>Übersicht</em></h1>
-    <p class="header-meta">
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <span>Technology</span>
+      <span>/</span>
+      <span>Jahrgangsstufe 11</span>
+    </nav>
+    <p class="kicker">⚙ Technology (KIT) · Jahrgangsstufe 11</p>
+    <h1 class="site-title">Lernbereiche<br><em>Übersicht</em></h1>
+    <p class="site-sub">
       Lernbereiche gemäß Fachlehrplan · KIT – Technologie 11 · FOS Bayern.
       Materialien und Aufgaben werden schrittweise ergänzt.
     </p>
-    <div class="header-badges">
-      <span class="badge highlight">In Vorbereitung</span>
-      <span class="badge">Informatik</span>
-      <span class="badge">Technik</span>
-      <span class="badge">Innovation</span>
+    <div class="tag-row">
+      <span class="tag tag--accent">In Vorbereitung</span>
+      <span class="tag">Informatik</span>
+      <span class="tag">Technik</span>
+      <span class="tag">Innovation</span>
     </div>
-  </header>
+  </div>
+</header>
+
+<main class="container container--narrow">
 
   <p class="section-label">Lernbereiche</p>
 
-  <div class="lernbereich-list">
+  <div class="row-list">
 
-    <div class="lb-card">
-      <div class="lb-num">1</div>
-      <div class="lb-content">
-        <div class="lb-id">KIT 11 · Lernbereich 1</div>
-        <div class="lb-title">Grundlagen der Informatik</div>
-        <div class="lb-desc">Datenstrukturen, Algorithmen, Programmierparadigmen, EVA-Prinzip.</div>
-        <div class="lb-tags">
-          <span class="lb-tag">Algorithmen</span>
-          <span class="lb-tag">Datenstrukturen</span>
+    <div class="row-card row-card--soon">
+      <div class="row-num">1</div>
+      <div class="row-body">
+        <p class="row-id">KIT 11 · Lernbereich 1</p>
+        <p class="row-title">Grundlagen der Informatik</p>
+        <p class="row-desc">Datenstrukturen, Algorithmen, Programmierparadigmen, EVA-Prinzip.</p>
+        <div class="row-tags">
+          <span class="tag">Algorithmen</span>
+          <span class="tag">Datenstrukturen</span>
         </div>
       </div>
-      <div class="lb-meta">
-        <span class="lb-soon">demnächst</span>
+      <div class="row-side">
+        <span class="tag">demnächst</span>
       </div>
     </div>
 
-    <div class="lb-card">
-      <div class="lb-num">2</div>
-      <div class="lb-content">
-        <div class="lb-id">KIT 11 · Lernbereich 2</div>
-        <div class="lb-title">Netzwerke und Internet</div>
-        <div class="lb-desc">Netzwerktopologien, Protokolle, IP-Adressen, WWW und Datensicherheit.</div>
-        <div class="lb-tags">
-          <span class="lb-tag">TCP/IP</span>
-          <span class="lb-tag">Sicherheit</span>
+    <div class="row-card row-card--soon">
+      <div class="row-num">2</div>
+      <div class="row-body">
+        <p class="row-id">KIT 11 · Lernbereich 2</p>
+        <p class="row-title">Netzwerke und Internet</p>
+        <p class="row-desc">Netzwerktopologien, Protokolle, IP-Adressen, WWW und Datensicherheit.</p>
+        <div class="row-tags">
+          <span class="tag">TCP/IP</span>
+          <span class="tag">Sicherheit</span>
         </div>
       </div>
-      <div class="lb-meta">
-        <span class="lb-soon">demnächst</span>
+      <div class="row-side">
+        <span class="tag">demnächst</span>
       </div>
     </div>
 
-    <div class="lb-card">
-      <div class="lb-num">3</div>
-      <div class="lb-content">
-        <div class="lb-id">KIT 11 · Lernbereich 3</div>
-        <div class="lb-title">Technische Systeme</div>
-        <div class="lb-desc">Steuerung und Regelung, Sensoren, Aktoren, technische Problemlösungen.</div>
-        <div class="lb-tags">
-          <span class="lb-tag">Steuerung</span>
-          <span class="lb-tag">Regelung</span>
-          <span class="lb-tag">Sensoren</span>
+    <div class="row-card row-card--soon">
+      <div class="row-num">3</div>
+      <div class="row-body">
+        <p class="row-id">KIT 11 · Lernbereich 3</p>
+        <p class="row-title">Technische Systeme</p>
+        <p class="row-desc">Steuerung und Regelung, Sensoren, Aktoren, technische Problemlösungen.</p>
+        <div class="row-tags">
+          <span class="tag">Steuerung</span>
+          <span class="tag">Regelung</span>
+          <span class="tag">Sensoren</span>
         </div>
       </div>
-      <div class="lb-meta">
-        <span class="lb-soon">demnächst</span>
+      <div class="row-side">
+        <span class="tag">demnächst</span>
       </div>
     </div>
 
   </div>
 
-</div>
+</main>
 
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'dark');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
-</script>
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <span>Lernportal · FOS/BOS</span>
+    <nav class="site-footer-links"><a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a></nav>
+  </div>
+</footer>
+
 </body>
 </html>

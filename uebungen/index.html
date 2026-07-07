@@ -1,132 +1,64 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Übungsaufgaben – Lernportal</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Übungsaufgaben – Lernportal</title>
-<link rel="stylesheet" href="../static/fonts.css">
-  <link rel="stylesheet" href="../static/theme.css">
-<style>
-:root {
-  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
-  --accent:#c8400a; --accent2:#2a6496; --gold:#c9961a; --green:#2e7d4f; --line:#d4cfc6;
-  --math:#c8400a; --physik:#2a6496; --kit:#2e7d4f;
-  --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7;}
-
-header{background:var(--ink);color:var(--paper);padding:2.8rem 2rem 2.2rem;position:relative;overflow:hidden;}
-header::before{content:'';position:absolute;top:-60px;right:-80px;width:300px;height:300px;border-radius:50%;background:var(--accent);opacity:.1;}
-header::after{content:'';position:absolute;bottom:-40px;left:8%;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.08;}
-.hinner{max-width:900px;margin:0 auto;position:relative;}
-
-/* Breadcrumb im Header */
-.bc{font-family:var(--mono);font-size:.68rem;color:#666;display:flex;gap:.4rem;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;}
-.bc a{color:#888;text-decoration:none;transition:color .15s;}
-.bc a:hover{color:var(--gold);}
-.bc span{color:#444;}
-
-.klass{font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem;}
-header h1{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:900;line-height:1.1;margin-bottom:.6rem;}
-header p{font-size:.95rem;color:#a09888;max-width:560px;}
-
-main{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
-h2{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;margin:2.2rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--line);}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem;}
-
-.fach-card{background:white;border:1px solid var(--line);border-radius:2px;padding:2rem 1.8rem;
-  text-decoration:none;color:var(--ink);display:block;transition:box-shadow .2s,transform .15s;
-  border-left:4px solid var(--fach-color,var(--accent));}
-.fach-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.09);transform:translateY(-2px);}
-.fach-icon{font-size:1.8rem;margin-bottom:.8rem;display:block;}
-.fach-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fach-color,var(--accent));margin-bottom:.4rem;}
-.fach-card h3{font-family:var(--serif);font-size:1.3rem;font-weight:700;margin-bottom:.4rem;}
-.fach-card p{font-size:.86rem;color:#888;line-height:1.55;}
-.fach-meta{margin-top:1rem;font-family:var(--mono);font-size:.7rem;color:#aaa;}
-
-.coming-card{background:white;border:1px solid var(--line);border-radius:2px;padding:2rem 1.8rem;
-  opacity:.45;cursor:default;border-left:4px solid var(--line);}
-.coming-card .fach-tag{color:#aaa;}
-.coming-card h3{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:#aaa;margin-bottom:.4rem;}
-.coming-card p{font-size:.86rem;color:#bbb;}
-
-.footer-nav{background:var(--ink);padding:1rem 2rem;margin-top:3rem;}
-.footer-nav-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
-.back-btn{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
-.back-btn:hover{opacity:.7;}
-.portal-link{font-family:var(--mono);font-size:.68rem;color:#555;text-decoration:none;transition:color .15s;}
-.portal-link:hover{color:var(--gold);}
-
-@media(max-width:560px){.grid{grid-template-columns:1fr;}}
-
-[data-theme=dark] .fach-card{background:#1e1e1e;}
-[data-theme=dark] .fach-card h3{color:var(--ink);}
-[data-theme=dark] .fach-card p{color:#a09888;}
-[data-theme=dark] .fach-card .fach-meta{color:#666;}
-[data-theme=dark] .coming-card{background:#161616;border-color:#2e2e2e;}
-
-  </style>
-<script>
-(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-</script></head>
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <script defer src="/static/site.js"></script>
+</head>
 <body>
 
-<header>
-  <div class="hinner">
-    <nav class="bc" aria-label="Breadcrumb">
-      <a href="../index.html">Lernportal</a>
+<header class="site-header site-header--compact">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
       <span>/</span>
       <span>Übungsaufgaben</span>
     </nav>
-    <div class="klass">Interaktive Übungen · FOS Nürnberg</div>
-    <h1>Übungsaufgaben</h1>
-    <p>Selbsttests und Prüfungsvorbereitung mit automatischer Auswertung – für alle Fächer.</p>
+    <p class="kicker kicker--muted">Interaktive Übungen · FOS Nürnberg</p>
+    <h1 class="site-title">Übungsaufgaben</h1>
+    <p class="site-sub">Selbsttests und Prüfungsvorbereitung mit automatischer Auswertung – für alle Fächer.</p>
   </div>
 </header>
 
-<main>
-  <h2>Fächer</h2>
-  <div class="grid">
+<main class="container">
 
-    <a class="fach-card" href="mathematik/index.html" style="--fach-color:var(--math);">
-      <span class="fach-icon">∑</span>
-      <div class="fach-tag">Mathematik</div>
-      <h3>Mathe-Übungen</h3>
-      <p>Prüfungsvorbereitung, Selbsttests und interaktive Aufgaben zur Differentialrechnung, ganzrationalen Funktionen und mehr.</p>
-      <div class="fach-meta">Vorklasse · Jgst. 11 · 30 Aufgaben</div>
+  <p class="section-label">Fächer</p>
+
+  <div class="card-grid">
+
+    <a class="card" href="/uebungen/mathematik/" data-subject="mathematik">
+      <h2 class="card-title">Mathe-Übungen</h2>
+      <p class="card-desc">Prüfungsvorbereitung, Selbsttests und interaktive Aufgaben zur Differentialrechnung, ganzrationalen Funktionen und mehr.</p>
+      <p class="card-meta">Vorklasse · Jgst. 11 · 30 Aufgaben</p>
     </a>
 
-    <div class="coming-card">
-      <span class="fach-icon">⚛</span>
-      <div class="fach-tag">In Vorbereitung</div>
-      <h3>Physik-Übungen</h3>
-      <p>Mechanik, Elektrodynamik, Schwingungen und Wellen.</p>
+    <div class="card" style="opacity:.5;" data-subject="physik">
+      <p class="kicker kicker--muted">In Vorbereitung</p>
+      <h2 class="card-title">Physik-Übungen</h2>
+      <p class="card-desc">Mechanik, Elektrodynamik, Schwingungen und Wellen.</p>
     </div>
 
-    <div class="coming-card">
-      <span class="fach-icon">⚙</span>
-      <div class="fach-tag">In Vorbereitung</div>
-      <h3>KIT-Übungen</h3>
-      <p>Informatik, Technik und Innovation.</p>
+    <div class="card" style="opacity:.5;" data-subject="kit">
+      <p class="kicker kicker--muted">In Vorbereitung</p>
+      <h2 class="card-title">KIT-Übungen</h2>
+      <p class="card-desc">Informatik, Technik und Innovation.</p>
     </div>
 
   </div>
+
 </main>
 
-<footer class="footer-nav">
-  <div class="footer-nav-inner">
-    <a class="back-btn" href="../index.html">← Lernportal</a>
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <span>Lernportal · FOS/BOS</span>
+    <nav class="site-footer-links"><a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a></nav>
   </div>
 </footer>
 
-
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
-</script>
 </body>
 </html>
