@@ -1,388 +1,113 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lernportal — Mathematik · Physik · Technology</title>
+  <meta name="description" content="Unterrichtsmaterialien und interaktive Übungen für Mathematik, Physik und Technology an der FOS/BOS.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lernportal</title>
-  <link rel="stylesheet" href="static/fonts.css">
-  <link rel="stylesheet" href="static/theme.css">
-  <script>
-    (function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-  </script>
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <script defer src="/static/site.js"></script>
   <style>
-    :root {
-      --bg: #0f0f0f;
-      --surface: #171717;
-      --border: #2a2a2a;
-      --text: #f0ede8;
-      --text-muted: #888;
-      --math: #e8c547;
-      --physik: #5b9cf6;
-      --kit: #6ee7b7;
-      --projekte: #c084fc;
-      --accent: #ff6b35;
-    }
-
-    html[data-theme="light"] {
-      --math: #a07d08;
-      --physik: #1d4ed8;
-      --kit: #047857;
-      --projekte: #7c3aed;
-      --accent: #d4521e;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Grid background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Header */
-    header {
-      padding: 3rem 0 2rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .header-inner {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .site-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      line-height: 1;
-      letter-spacing: -0.02em;
-    }
-
-    .site-title span {
+    .pill-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1.3rem; }
+    .fach-card .card-title { color: var(--accent); font-size: 1.5rem; }
+    .fach-glyph {
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
       color: var(--accent);
-      font-style: italic;
-    }
-
-    .site-subtitle {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-top: 0.5rem;
-    }
-
-    .year-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-      padding: 0.4rem 0.8rem;
-      border-radius: 2rem;
-      white-space: nowrap;
-    }
-
-    /* Section label */
-    .section-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--text-muted);
-      margin: 3rem 0 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* Fach Cards */
-    .fach-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5px;
-      background: var(--border);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .fach-card {
-      background: var(--surface);
-      padding: 2rem;
-      text-decoration: none;
-      color: inherit;
       display: block;
-      transition: background 0.2s;
-      position: relative;
-      overflow: hidden;
+      margin-bottom: .9rem;
     }
-
-    .fach-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--fach-color);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
-    }
-
-    .fach-card:hover {
-      background: #1e1e1e;
-    }
-    html[data-theme="light"] .fach-card:hover {
-      background: rgba(0,0,0,.04);
-    }
-
-    .fach-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .fach-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .fach-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.6rem;
-      margin-bottom: 0.3rem;
-      color: var(--fach-color);
-    }
-
-    .fach-desc {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 1.5rem;
-    }
-
-    .klassen-pills {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .pill {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.3rem 0.7rem;
-      border-radius: 2rem;
-      border: 1px solid var(--fach-color);
-      color: var(--fach-color);
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .pill:hover {
-      background: var(--fach-color);
-      color: #000;
-    }
-
-    /* Übungen Section */
-    .uebung-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-
-    .uebung-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.4rem;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .uebung-card:hover {
-      border-color: var(--accent);
-      background: #1e1e1e;
-    }
-    html[data-theme="light"] .uebung-card:hover {
-      background: rgba(0,0,0,.04);
-    }
-
-    .uebung-icon {
-      font-size: 1.5rem;
-      flex-shrink: 0;
-    }
-
-    .uebung-info {}
-    .uebung-title {
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-bottom: 0.2rem;
-    }
-    .uebung-meta {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--text-muted);
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 5rem;
-      padding: 2rem 0;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-text {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
   </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <div class="header-inner">
-      <div>
-        <h1 class="site-title">Lern<span>portal</span></h1>
-        <p class="site-subtitle">Materialien · Aufgaben · Übungen</p>
-      </div>
-    </div>
-  </header>
+<header class="site-header">
+  <div class="container">
+    <p class="kicker kicker--muted">Materialien · Aufgaben · Übungen</p>
+    <h1 class="site-title">Lern<em>portal</em></h1>
+    <p class="site-sub">Unterrichtsmaterialien und interaktive Übungen für Mathematik, Physik und Technology an der FOS/BOS.</p>
+  </div>
+</header>
 
-  <!-- FÄCHER -->
+<main class="container">
+
   <p class="section-label">Fächer</p>
 
-  <div class="fach-grid">
+  <div class="card-grid card-grid--wide">
 
-    <!-- Mathematik -->
-    <div class="fach-card" style="--fach-color: var(--math);">
-      <span class="fach-icon">∑</span>
-      <div class="fach-name">Mathematik</div>
-      <div class="fach-desc">Analysis, Stochastik, Lineare Algebra und mehr.</div>
-      <div class="klassen-pills">
-        <a class="pill" href="mathematik/klasse10/index.html">Jgst. 10</a>
-        <a class="pill" href="mathematik/klasse11/index.html">Jgst. 11</a>
-        <a class="pill" href="mathematik/klasse12/index.html">Jgst. 12</a>
+    <div class="card fach-card" data-subject="mathematik">
+      <span class="fach-glyph" aria-hidden="true">∑</span>
+      <h2 class="card-title">Mathematik</h2>
+      <p class="card-desc">Analysis, Stochastik, Lineare Algebra und mehr.</p>
+      <div class="pill-row">
+        <a class="pill" href="/mathematik/klasse10/">Jgst. 10</a>
+        <a class="pill" href="/mathematik/klasse11/">Jgst. 11</a>
+        <a class="pill" href="/mathematik/klasse12/">Jgst. 12</a>
       </div>
     </div>
 
-    <!-- Physik -->
-    <div class="fach-card" style="--fach-color: var(--physik);">
-      <span class="fach-icon">⚛</span>
-      <div class="fach-name">Physik</div>
-      <div class="fach-desc">Mechanik, Elektrodynamik, Quantenphysik und Optik.</div>
-      <div class="klassen-pills">
-        <a class="pill" href="physik/klasse11/index.html">Jgst. 11</a>
-        <a class="pill" href="physik/klasse12/index.html">Jgst. 12</a>
+    <div class="card fach-card" data-subject="physik">
+      <span class="fach-glyph" aria-hidden="true">⚛</span>
+      <h2 class="card-title">Physik</h2>
+      <p class="card-desc">Mechanik, Elektrodynamik, Quantenphysik und Optik.</p>
+      <div class="pill-row">
+        <a class="pill" href="/physik/klasse11/">Jgst. 11</a>
+        <a class="pill" href="/physik/klasse12/">Jgst. 12</a>
       </div>
     </div>
 
-    <!-- KIT -->
-    <div class="fach-card" style="--fach-color: var(--kit);">
-      <span class="fach-icon">⚙</span>
-      <div class="fach-name">Technology</div>
-      <div class="fach-desc">KIT – Informatik, Technik und Innovation im Unterricht.</div>
-      <div class="klassen-pills">
-        <a class="pill" href="kit/klasse11/index.html">Jgst. 11</a>
-        <a class="pill" href="kit/klasse12/index.html">Jgst. 12</a>
+    <div class="card fach-card" data-subject="kit">
+      <span class="fach-glyph" aria-hidden="true">⚙</span>
+      <h2 class="card-title">Technology</h2>
+      <p class="card-desc">KIT — Informatik, Technik und Innovation im Unterricht.</p>
+      <div class="pill-row">
+        <a class="pill" href="/kit/klasse11/">Jgst. 11</a>
+        <a class="pill" href="/kit/klasse12/">Jgst. 12</a>
       </div>
     </div>
 
-    <!-- Projekte -->
-    <div class="fach-card" style="--fach-color: var(--projekte);">
-      <span class="fach-icon">◈</span>
-      <div class="fach-name">Projekte</div>
-      <div class="fach-desc">Schülerprojekte, fächerübergreifende Aufgaben und Dokumentationen.</div>
-      <div class="klassen-pills">
-        <a class="pill" href="projekte/index.html">Alle Projekte</a>
+    <div class="card fach-card" data-subject="projekte">
+      <span class="fach-glyph" aria-hidden="true">◈</span>
+      <h2 class="card-title">Projekte</h2>
+      <p class="card-desc">Schülerprojekte, fächerübergreifende Aufgaben und Dokumentationen.</p>
+      <div class="pill-row">
+        <a class="pill" href="/projekte/">Alle Projekte</a>
       </div>
     </div>
 
   </div>
 
-  <!-- ÜBUNGEN -->
   <p class="section-label">Übungsaufgaben</p>
 
-  <div class="uebung-grid">
-    <a class="uebung-card" href="uebungen/mathematik/index.html">
-      <span class="uebung-icon">📐</span>
-      <div class="uebung-info">
-        <div class="uebung-title">Mathe-Übungen</div>
-        <div class="uebung-meta">Jgst. 11 &amp; 12</div>
-      </div>
+  <div class="card-grid">
+    <a class="card" href="/uebungen/mathematik/" data-subject="mathematik">
+      <h2 class="card-title">Mathe-Übungen</h2>
+      <p class="card-desc">Wissenslandkarte, Abschlussprüfungs-Browser und Arbeitsblätter.</p>
+      <p class="card-meta">Jgst. 10–12</p>
     </a>
-    <a class="uebung-card" href="uebungen/physik/index.html">
-      <span class="uebung-icon">🔬</span>
-      <div class="uebung-info">
-        <div class="uebung-title">Physik-Übungen</div>
-        <div class="uebung-meta">Jgst. 11 &amp; 12</div>
-      </div>
+    <a class="card" href="/uebungen/physik/" data-subject="physik">
+      <h2 class="card-title">Physik-Übungen</h2>
+      <p class="card-desc">Übungsaufgaben und Arbeitsblätter.</p>
+      <p class="card-meta">Jgst. 11 &amp; 12</p>
     </a>
-    <a class="uebung-card" href="uebungen/kit/index.html">
-      <span class="uebung-icon">💻</span>
-      <div class="uebung-info">
-        <div class="uebung-title">KIT-Übungen</div>
-        <div class="uebung-meta">Jgst. 11 &amp; 12</div>
-      </div>
+    <a class="card" href="/uebungen/kit/" data-subject="kit">
+      <h2 class="card-title">KIT-Übungen</h2>
+      <p class="card-desc">Übungsaufgaben und Arbeitsblätter.</p>
+      <p class="card-meta">Jgst. 11 &amp; 12</p>
     </a>
   </div>
 
-  <footer>
-    <span class="footer-text">Lernportal · FOS/BOS</span>
-    <span class="footer-text" style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;">
-      <span>Mathematik · Physik · Technology</span>
-      <span style="display:flex;gap:1rem;">
-        <a href="impressum.html" style="color:var(--text-muted);text-decoration:none;font-family:'DM Mono',monospace;font-size:.7rem;transition:color .15s;" onmouseover="this.style.color='#f0ede8'" onmouseout="this.style.color=''">Impressum</a>
-        <a href="datenschutz.html" style="color:var(--text-muted);text-decoration:none;font-family:'DM Mono',monospace;font-size:.7rem;transition:color .15s;" onmouseover="this.style.color='#f0ede8'" onmouseout="this.style.color=''">Datenschutz</a>
-      </span>
-    </span>
-  </footer>
-</div>
+</main>
 
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'dark');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
-</script>
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <span>Lernportal · FOS/BOS</span>
+    <nav class="site-footer-links"><a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a></nav>
+  </div>
+</footer>
+
 </body>
 </html>

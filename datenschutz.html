@@ -1,63 +1,40 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datenschutzerklärung — Lernportal</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Datenschutzerklärung – Lernportal</title>
-<link rel="stylesheet" href="static/fonts.css">
-  <link rel="stylesheet" href="static/theme.css">
-<style>
-:root {
-  --ink:#1a1208; --paper:#f7f3ec; --cream:#ede8de;
-  --accent:#c8400a; --gold:#c9961a; --line:#d4cfc6;
-  --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',monospace; --sans:'Source Sans 3',sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);font-weight:300;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7;}
-
-header{background:var(--ink);color:var(--paper);padding:2.5rem 2rem 2rem;}
-.hinner{max-width:720px;margin:0 auto;}
-.bc{font-family:var(--mono);font-size:.68rem;color:#666;display:flex;gap:.4rem;margin-bottom:.9rem;flex-wrap:wrap;}
-.bc a{color:#888;text-decoration:none;}
-.bc a:hover{color:var(--gold);}
-.bc span{color:#444;}
-.klass{font-family:var(--mono);font-size:.75rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:.4rem;}
-header h1{font-family:var(--serif);font-size:clamp(1.6rem,4vw,2.5rem);font-weight:900;line-height:1.1;}
-
-main{max-width:720px;margin:0 auto;padding:2.5rem 2rem 5rem;}
-h2{font-family:var(--serif);font-size:1.15rem;font-weight:700;margin:2rem 0 .6rem;padding-bottom:.35rem;border-bottom:1px solid var(--line);}
-h3{font-family:var(--serif);font-size:1rem;font-weight:700;margin:1.2rem 0 .4rem;}
-p{margin-bottom:.75rem;font-size:.95rem;}
-ul{margin:.4rem 0 .75rem 1.2rem;font-size:.95rem;}
-ul li{margin-bottom:.3rem;}
-a{color:var(--accent);text-decoration:none;}
-a:hover{text-decoration:underline;}
-
-.footer-nav{background:var(--ink);padding:1rem 2rem;}
-.footer-nav-inner{max-width:720px;margin:0 auto;}
-.back-btn{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s;}
-.back-btn:hover{opacity:.7;}
-
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <script defer src="/static/site.js"></script>
+  <style>
+    main h2 { font-size: 1.15rem; margin: 2rem 0 .6rem; padding-bottom: .35rem; border-bottom: 1px solid var(--line); }
+    main h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; }
+    main p  { margin-bottom: .75rem; font-size: .95rem; }
+    main ul { margin: .4rem 0 .75rem 1.2rem; font-size: .95rem; }
+    main ul li { margin-bottom: .3rem; }
+    main a  { color: var(--accent); text-decoration: none; }
+    main a:hover { text-decoration: underline; }
   </style>
-<script>
-(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
-</script></head>
+</head>
 <body>
 
-<header>
-  <div class="hinner">
-    <nav class="bc" aria-label="Breadcrumb">
-      <a href="index.html">Lernportal</a>
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
       <span>/</span>
       <span>Datenschutz</span>
     </nav>
-    <div class="klass">Rechtliches</div>
-    <h1>Datenschutzerklärung</h1>
+    <p class="kicker kicker--muted">Rechtliches</p>
+    <h1 class="site-title">Datenschutzerklärung</h1>
   </div>
 </header>
 
-<main>
+<main class="container container--narrow">
+
   <h2>1. Verantwortlicher</h2>
   <p>
     Maximilian Frisch<br>
@@ -74,36 +51,30 @@ a:hover{text-decoration:underline;}
   </ul>
   <p>Diese Daten werden von GitHub verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am sicheren Betrieb). Weitere Informationen: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>.</p>
 
-  <h2>3. Schriftarten – Lokal gehostet</h2>
-  <p>Diese Website verwendet ausschließlich <strong>lokal gespeicherte Schriftarten</strong> (DM Mono, DM Sans, DM Serif Display, Playfair Display, Source Sans 3). Es wird keine Verbindung zu Google Fonts oder anderen externen Schriftdiensten hergestellt. Es werden dabei keine personenbezogenen Daten übertragen.</p>
+  <h2>3. Schriftarten und Bibliotheken – Lokal gehostet</h2>
+  <p>Diese Website verwendet ausschließlich <strong>lokal gespeicherte Schriftarten</strong> (DM Sans, DM Mono, DM Serif Display). Auch die Formel-Bibliothek <strong>KaTeX</strong> wird lokal von dieser Website ausgeliefert. Es wird keine Verbindung zu Google Fonts, Content-Delivery-Netzwerken oder anderen externen Diensten hergestellt. Es werden dabei keine personenbezogenen Daten an Dritte übertragen.</p>
 
-  <h2>4. Externe CDNs – KaTeX / jsDelivr</h2>
-  <p>Auf Seiten mit mathematischen Formeln wird die Bibliothek <strong>KaTeX</strong> über das CDN des Anbieters <strong>jsDelivr</strong> (ProspectOne, Krakowskie Przedmiescie 6, 00-325 Warschau, Polen) geladen. Dabei wird Ihre IP-Adresse an jsDelivr übermittelt. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Weitere Informationen: <a href="https://www.jsdelivr.com/privacy-policy-jsdelivr-net" target="_blank" rel="noopener">jsDelivr Privacy Policy</a>.</p>
+  <h2>4. Cookies und lokaler Speicher</h2>
+  <p>Diese Website setzt <strong>keine Cookies</strong>. Die Website kann den <em>localStorage</em> des Browsers nutzen, um die gewählte Darstellung (helles/dunkles Farbschema) und auf interaktiven Übungsseiten deinen Lernfortschritt lokal auf deinem Gerät zu speichern. Diese Daten verlassen deinen Browser nicht und werden nicht an den Server übertragen. Du kannst den Speicher jederzeit im Browser löschen.</p>
 
-  <h2>5. Cookies und lokaler Speicher</h2>
-  <p>Diese Website setzt <strong>keine Cookies</strong>. Interaktive Übungsseiten können den <em>localStorage</em> des Browsers nutzen, um deinen Lernfortschritt lokal auf deinem Gerät zu speichern. Diese Daten verlassen deinen Browser nicht und werden nicht an den Server übertragen. Du kannst den Speicher jederzeit im Browser löschen.</p>
-
-  <h2>6. Keine Analyse-Tools</h2>
+  <h2>5. Keine Analyse-Tools</h2>
   <p>Es werden keine Tracking- oder Analyse-Dienste (z.B. Google Analytics) eingesetzt.</p>
 
-  <h2>7. Deine Rechte</h2>
+  <h2>6. Deine Rechte</h2>
   <p>Nach der DSGVO stehen dir folgende Rechte zu: Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch (Art. 21). Für Anfragen wende dich an die oben genannte E-Mail-Adresse.</p>
   <p>Du hast außerdem das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, z.B. beim Bayerischen Landesamt für Datenschutzaufsicht (BayLDA).</p>
 
-  <h2>8. Aktualität</h2>
-  <p>Stand: Mai 2026</p>
+  <h2>7. Aktualität</h2>
+  <p>Stand: Juli 2026</p>
+
 </main>
 
-<footer class="footer-nav">
-  <div class="footer-nav-inner">
-    <a class="back-btn" href="index.html">← Lernportal</a>
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <span>Lernportal · FOS/BOS</span>
+    <nav class="site-footer-links"><a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a></nav>
   </div>
 </footer>
 
-
-<button id="themeToggle" aria-label="Farbschema wechseln" title="Farbschema wechseln"></button>
-<script>
-(function(){var r=document.documentElement,b=document.getElementById('themeToggle');function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'☾':'☀';}a(r.getAttribute('data-theme')||'light');b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n);});})();
-</script>
 </body>
 </html>
