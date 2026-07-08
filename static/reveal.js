@@ -3,12 +3,22 @@
    (Fade-up, analog zur bestehenden .tab-panel-Animation in theme.css).
    Respektiert prefers-reduced-motion zusätzlich per JS-Check: dort werden
    Elemente sofort ohne Bewegung sichtbar, statt nur auf die globale
-   CSS-Transition-Verkürzung zu vertrauen. */
+   CSS-Transition-Verkürzung zu vertrauen.
+
+   Elemente innerhalb eines .tab-panel werden ausgenommen: die sind beim
+   Laden per display:none unsichtbar (kein Layout, IntersectionObserver
+   feuert daher erst verzögert nach dem Tab-Wechsel) und ihr Erscheinen
+   ist ohnehin schon durch die bestehende .tab-panel.active-Animation
+   (fade-up, theme.css) abgedeckt — sonst blitzen sie beim Tab-Wechsel
+   kurz unsichtbar auf, bevor der Observer reagiert. */
 (function () {
   'use strict';
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var els = document.querySelectorAll('.card, .row-card, .task');
+  var els = Array.prototype.filter.call(
+    document.querySelectorAll('.card, .row-card, .task'),
+    function (el) { return !el.closest('.tab-panel'); }
+  );
   if (!els.length) return;
 
   if (reduced || !('IntersectionObserver' in window)) {
