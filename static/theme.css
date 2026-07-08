@@ -81,6 +81,16 @@
   --sp-5: 2.5rem;
   --sp-6: 4rem;
   --r: 3px;                  /* editorial: fast eckig; Pills = 999px */
+
+  /* Bewegung */
+  --ease-out: cubic-bezier(.16,1,.3,1);
+
+  /* Schatten: flach & warm (an --text gekoppelt statt hartem Schwarz),
+     Dark-Mode-Werte separat unten (Schatten auf dunklem Grund brauchen
+     mehr Deckkraft, sonst unsichtbar). Nicht in @media print (Sektion 17). */
+  --shadow-sm: 0 1px 3px color-mix(in srgb, var(--text) 7%, transparent);
+  --shadow-md: 0 4px 14px color-mix(in srgb, var(--text) 10%, transparent);
+  --shadow-lg: 0 10px 30px color-mix(in srgb, var(--text) 14%, transparent);
 }
 
 
@@ -123,6 +133,13 @@
     --plot-curve:   #7ba3f0;
     --plot-curve-2: #ff8a5b;
     --plot-curve-3: #5fd39a;
+
+    /* Schatten in Dark Mode: fixes Schwarz statt --text (das im Dark Mode
+       fast weiß ist und sonst zum hellen Glow statt Schatten würde),
+       höhere Deckkraft, da Schatten auf dunklem Grund sonst untergehen. */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.5);
+    --shadow-md: 0 4px 14px rgba(0,0,0,.55);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,.6);
   }
 }
 
@@ -157,6 +174,10 @@
   --plot-curve:   #7ba3f0;
   --plot-curve-2: #ff8a5b;
   --plot-curve-3: #5fd39a;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.5);
+  --shadow-md: 0 4px 14px rgba(0,0,0,.55);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,.6);
 }
 
 
@@ -231,8 +252,17 @@ main.container {
 /* ── 6 · Header, Breadcrumb, Kicker ──────────────────────────────────── */
 
 .site-header {
+  position: relative;
   padding: 3.2rem 0 2.2rem;
   border-bottom: 1px solid var(--line);
+}
+.site-header::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent 60%);
+  opacity: .5;
 }
 .site-header--compact { padding: 2.2rem 0 1.9rem; }
 
@@ -317,19 +347,29 @@ main.container {
   border: 1px solid var(--line-strong);
   background: var(--surface);
   color: var(--muted);
-  font-size: .95rem;
   line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  transition: color .15s, border-color .15s;
+  transition: color .15s, border-color .15s, box-shadow .2s var(--ease-out);
 }
 .theme-toggle:hover {
   color: var(--accent);
   border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
 }
+.theme-toggle svg {
+  position: absolute;
+  width: 1.05rem;
+  height: 1.05rem;
+  transition: opacity .3s var(--ease-out), transform .3s var(--ease-out);
+}
+.theme-toggle .i-sun  { opacity: 1; transform: rotate(0deg)   scale(1); }
+.theme-toggle .i-moon { opacity: 0; transform: rotate(-90deg) scale(.5); }
+.theme-toggle[data-icon="dark"] .i-sun  { opacity: 0; transform: rotate(90deg)  scale(.5); }
+.theme-toggle[data-icon="dark"] .i-moon { opacity: 1; transform: rotate(0deg)   scale(1); }
 
 
 /* ── 8 · Karten ──────────────────────────────────────────────────────── */
@@ -350,13 +390,15 @@ main.container {
   padding: 1.5rem 1.7rem;
   color: inherit;
   text-decoration: none;
-  transition: border-color .2s, background .2s;
+  transition: border-color .2s, background .2s, box-shadow .25s var(--ease-out), transform .25s var(--ease-out);
 }
 a.card { display: block; }
 a.card:hover,
 .card--hover:hover {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .card--theory { border-left: 2px solid var(--plot-curve); }
@@ -404,11 +446,13 @@ a.card:hover .card-title { color: var(--accent); }
   border-radius: var(--r);
   color: inherit;
   text-decoration: none;
-  transition: border-color .2s, background .2s;
+  transition: border-color .2s, background .2s, box-shadow .25s var(--ease-out), transform .25s var(--ease-out);
 }
 a.row-card:hover {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 a.row-card:hover .row-arrow { opacity: 1; transform: none; }
 a.row-card:hover .row-num   { opacity: 1; }
@@ -660,7 +704,7 @@ a.row-card:hover .row-num   { opacity: 1; }
   color: var(--accent-contrast);
   cursor: pointer;
   text-decoration: none;
-  transition: opacity .15s, transform .1s;
+  transition: opacity .15s var(--ease-out), transform .15s var(--ease-out);
 }
 .btn:hover  { opacity: .85; }
 .btn:active { transform: scale(.98); }
@@ -924,7 +968,9 @@ input[type=range]:focus-visible {
   border-bottom: 1px solid var(--line);
   overflow-x: auto;
   margin-bottom: var(--sp-4);
+  scrollbar-width: none; /* Firefox: Scrollbar ausblenden, Scroll-Funktion bleibt */
 }
+.tabs::-webkit-scrollbar { display: none; } /* Chrome/Safari/Edge */
 .tab-btn {
   font-family: var(--font-mono);
   font-size: var(--fs-tag);
@@ -938,7 +984,7 @@ input[type=range]:focus-visible {
   padding: .85rem 1.1rem;
   cursor: pointer;
   white-space: nowrap;
-  transition: color .2s, border-color .2s;
+  transition: color .2s var(--ease-out), border-color .2s var(--ease-out);
 }
 .tab-btn:hover { color: var(--text); }
 .tab-btn.active {
@@ -985,6 +1031,16 @@ input[type=range]:focus-visible {
   transition: color .15s;
 }
 .site-footer a:hover { color: var(--accent); }
+
+
+/* ── 15b · Scroll-Reveal (von static/reveal.js injiziert) ─────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .5s var(--ease-out), transform .5s var(--ease-out);
+}
+.reveal-visible { opacity: 1; transform: none; }
 
 
 /* ── 16 · Responsive (einheitlicher Breakpoint: 640px) ───────────────── */
@@ -1041,6 +1097,8 @@ input[type=range]:focus-visible {
   .tab-panel { display: block !important; }
 
   .task, .card, .solution { break-inside: avoid; }
+  .card, .row-card { box-shadow: none !important; transform: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
   h1, h2, h3 { break-after: avoid; }
 
   a { text-decoration: none; color: inherit; }

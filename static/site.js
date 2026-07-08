@@ -21,8 +21,11 @@
   btn.className = 'theme-toggle';
   btn.setAttribute('aria-label', 'Farbschema wechseln');
   btn.title = 'Farbschema wechseln';
+  btn.innerHTML =
+    '<svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M21.5 12h-2.6M5.1 12H2.5M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8M18.4 18.4l-1.8-1.8M7.4 7.4 5.6 5.6"/></svg>' +
+    '<svg class="i-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>';
 
-  function icon() { btn.textContent = effective() === 'dark' ? '☾' : '☀'; }
+  function icon() { btn.dataset.icon = effective(); }
   icon();
 
   btn.addEventListener('click', function () {
