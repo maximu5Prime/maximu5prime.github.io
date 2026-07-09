@@ -52,6 +52,31 @@ body:has(.deck) { overflow: hidden; }
   padding-left: var(--sp-4);
 }
 
+/* Folien mit Text + Bild/Grafik nebeneinander (z.B. Kontext-Folie) */
+.slide--split {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+}
+.slide--split .slide-text { flex: 1 1 360px; }
+.slide-photo {
+  flex: 0 1 420px;
+  border-radius: var(--r);
+  overflow: hidden;
+  margin: 0;
+}
+.slide-photo img { display: block; width: 100%; height: auto; }
+.slide-photo figcaption {
+  padding: .5rem .8rem;
+  font-size: var(--fs-small);
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: none;
+}
+/* Solange kein Foto vorliegt: .slide-photo.empty (bestehende Platzhalter-Komponente, theme.css §8) */
+
 .deck-exit {
   position: fixed;
   top: var(--sp-3);
@@ -95,6 +120,7 @@ body:has(.deck) { overflow: hidden; }
 @media (max-width: 640px) {
   .slide { padding: var(--sp-5) 1.3rem; }
   .slide h2 { font-size: 1.6rem; }
+  .slide--split { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {

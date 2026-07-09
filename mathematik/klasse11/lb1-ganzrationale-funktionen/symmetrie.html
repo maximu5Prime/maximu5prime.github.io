@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symmetrie – Ganzrationale Funktionen · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">Ganzrationale Funktionen</a>
+      <span>/</span>
+      <span>Symmetrie</span>
+    </nav>
+    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
+    <h1 class="site-title">Symmetrie<br><em>am Graphen</em></h1>
+    <p class="site-sub">Achsensymmetrie zur y-Achse oder Punktsymmetrie zum Ursprung?</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <article class="card card--theory wiki-entry" id="symmetrie">
+    <div class="wiki-entry-text">
+      <h3>Achsen- &amp; Punktsymmetrie erkennen</h3>
+      <p><strong>Merksatz:</strong> Enthält $f$ nur <strong>gerade</strong> Exponenten (ggf. plus Konstante), ist der Graph achsensymmetrisch zur $y$-Achse: $f(-x)=f(x)$. Enthält $f$ nur <strong>ungerade</strong> Exponenten, ist er punktsymmetrisch zum Ursprung: $f(-x)=-f(x)$. Bei gemischten Exponenten liegt in der Regel keine dieser Symmetrien vor.</p>
+      <p><strong>Beispiel:</strong> $f(x) = x^3 - 3x$ ist punktsymmetrisch zum Ursprung (nur ungerade Exponenten). $g(x) = x^4 - 2x^2$ ist achsensymmetrisch zur $y$-Achse (nur gerade Exponenten).</p>
+    </div>
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wSym"><canvas id="cSym"></canvas></div>
+      <p class="wiki-entry-caption">$f(x)=x^3-3x$ (punktsymmetrisch) und $g(x)=x^4-2x^2$ (achsensymmetrisch).</p>
+    </div>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="grenzverhalten.html">Grenzverhalten</a></li>
+        <li><a href="nullstellen-ausklammern-binomisch.html">Nullstellen: Ausklammern</a></li>
+      </ul>
+    </aside>
+  </article>
+
+  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">← LB 1 · Ganzrationale Funktionen</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function redraw() {
+  var cv = document.getElementById('cSym');
+  if (!cv) return;
+  var setup = Plot.setup('cSym', 'wSym');
+  var view = { xMin: -3, xMax: 3, yMin: -6, yMax: 6 };
+  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
+  Plot.curve(setup.ctx, function (x) { return Math.pow(x, 3) - 3 * x; }, map, view, { color: Plot.colors().curve });
+  Plot.curve(setup.ctx, function (x) { return Math.pow(x, 4) - 2 * Math.pow(x, 2); }, map, view, { color: Plot.colors().curve2 });
+}
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>

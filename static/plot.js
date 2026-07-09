@@ -41,11 +41,14 @@ window.Plot = (function () {
   }
 
   /* Hintergrund, Raster, Achsen, Labels. view = {xMin,xMax,yMin,yMax}.
+     opts: {labels, stepX, stepY} — stepX/stepY (Default 1) für große Wertebereiche,
+     sonst werden bei z.B. yMax=200 hunderte Gitterlinien übereinander gezeichnet.
      Rückgabe: Koordinaten-Mapping {toX, toY}. */
   function grid(ctx, w, h, view, opts) {
     opts = opts || {};
     var c = colors();
     var xMin = view.xMin, xMax = view.xMax, yMin = view.yMin, yMax = view.yMax;
+    var stepX = opts.stepX || 1, stepY = opts.stepY || 1;
     var toX = function (x) { return (x - xMin) / (xMax - xMin) * w; };
     var toY = function (y) { return h - (y - yMin) / (yMax - yMin) * h; };
     var gx, gy;
@@ -55,10 +58,10 @@ window.Plot = (function () {
 
     ctx.strokeStyle = c.grid;
     ctx.lineWidth = 1;
-    for (gx = Math.ceil(xMin); gx <= xMax; gx++) {
+    for (gx = Math.ceil(xMin / stepX) * stepX; gx <= xMax; gx += stepX) {
       ctx.beginPath(); ctx.moveTo(toX(gx), 0); ctx.lineTo(toX(gx), h); ctx.stroke();
     }
-    for (gy = Math.ceil(yMin); gy <= yMax; gy++) {
+    for (gy = Math.ceil(yMin / stepY) * stepY; gy <= yMax; gy += stepY) {
       ctx.beginPath(); ctx.moveTo(0, toY(gy)); ctx.lineTo(w, toY(gy)); ctx.stroke();
     }
 
@@ -70,11 +73,11 @@ window.Plot = (function () {
     if (opts.labels !== false) {
       ctx.fillStyle = c.label;
       ctx.font = '10px "DM Mono", monospace';
-      for (gx = Math.ceil(xMin); gx <= xMax; gx++) {
+      for (gx = Math.ceil(xMin / stepX) * stepX; gx <= xMax; gx += stepX) {
         if (gx === 0) continue;
         ctx.fillText(gx, toX(gx) + 2, toY(0) + 12);
       }
-      for (gy = Math.ceil(yMin); gy <= yMax; gy++) {
+      for (gy = Math.ceil(yMin / stepY) * stepY; gy <= yMax; gy += stepY) {
         if (gy === 0) continue;
         ctx.fillText(gy, toX(0) + 3, toY(gy) - 2);
       }

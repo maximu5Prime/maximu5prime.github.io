@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Präsentation: Hauptproblem – Ganzrationale Funktionen · Mathe 11</title>
+<title>Präsentation: Gewinn &amp; Verlust – Ganzrationale Funktionen · Mathe 11</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="stylesheet" href="/static/fonts.css">
@@ -24,57 +24,89 @@
 
   <section class="slide slide--title active" data-slide="1">
     <p class="kicker">Mathematik · Klasse 11 · LB 1</p>
-    <h1 class="site-title">Ganzrationale<br><em>Funktionen</em></h1>
-    <p class="site-sub">Wie beschreibt man eine Größe, die wächst, ein Maximum erreicht und wieder fällt – und wie erkennt man genau den Moment, an dem sich das Verhalten ändert?</p>
+    <h1 class="site-title">Gewinn<br><em>&amp; Verlust</em></h1>
+    <p class="site-sub">Wie liest man aus ein paar gemeldeten Quartalszahlen eine Funktion heraus — und was verrät sie über die richtige Produktionsmenge?</p>
   </section>
 
-  <section class="slide slide--context" data-slide="2">
-    <p class="kicker">Kontext</p>
-    <h2>Die Ölquelle</h2>
-    <p>Eine Förderanlage misst über 8 Tage, wie viele Tausend Barrel Öl sie pro Tag fördert. Die Ingenieure wollen wissen: Läuft die Quelle stabil – oder verändert sich etwas?</p>
+  <section class="slide slide--context slide--split" data-slide="2">
+    <div class="slide-text">
+      <p class="kicker">Kontext</p>
+      <h2>Der Quartalsbericht</h2>
+      <p>Eine Analystin verfolgt ein Unternehmen, das ein neues Produkt herstellt. Jedes Quartal meldet die Firma, wie viel sie produziert hat und wie viel Gewinn (oder Verlust) dabei entstanden ist.</p>
+    </div>
+    <div class="slide-photo empty">
+      <p class="kicker">Bildidee</p>
+      <p>Symbolfoto: Kursdiagramm / Börsenticker / Quartalsbericht</p>
+    </div>
   </section>
 
   <section class="slide slide--data" data-slide="3">
     <p class="kicker">Beobachtung</p>
-    <h2>Die Messdaten</h2>
-    <div class="canvas-wrap" id="wPlot"><canvas id="cPlot"></canvas></div>
-    <p class="site-sub">Förderrate $q(t)$ in Tausend Barrel pro Tag, $t$ in Tagen.</p>
+    <h2>Die gemeldeten Quartale</h2>
+    <div class="canvas-wrap canvas-wrap--tall" id="wObs"><canvas id="cObs"></canvas></div>
+    <p class="site-sub">Produktionsmenge $x$ in Tsd. Stück, Gewinn $G$ in Tsd. €. Wie könnte man das mit einer Funktion beschreiben?</p>
   </section>
 
-  <section class="slide slide--question" data-slide="4">
-    <p class="kicker">Zuspitzung</p>
-    <h2>Was fällt euch auf?</h2>
-    <p>An welcher Stelle fördert die Quelle am meisten? Was passiert danach mit der Förderrate – und gibt es einen Tag, an dem sie ganz zum Stillstand kommt?</p>
+  <section class="slide slide--term" data-slide="4">
+    <p class="kicker">Funktionsterm aufstellen</p>
+    <h2>Was wissen wir schon?</h2>
+    <p>Bei $x=2$ und $x=8$ steht das Unternehmen genau an der Gewinnschwelle ($G=0$). Bei $x=0$ meldet es $-48$ Tsd. € Verlust.</p>
+    <div class="formula">$$G(x) = a\,(x+3)(x-2)(x-8), \qquad G(0)=-48 \;\Rightarrow\; a=-1$$</div>
+    <div class="formula">$$G(x) = -(x+3)(x-2)(x-8) = -x^3+7x^2+14x-48$$</div>
   </section>
 
-  <section class="slide slide--problem" data-slide="5">
+  <section class="slide slide--check" data-slide="5">
+    <p class="kicker">Punktprobe &amp; Wertetabelle</p>
+    <h2>Stimmt das Modell mit der Realität überein?</h2>
+    <p>Im Quartal mit $x=5$ meldet das Unternehmen einen Gewinn von 72 Tsd. €.</p>
+    <div class="formula">$$G(5) = -(5+3)(5-2)(5-8) = -(8)(3)(-3) = 72 \;\;✓$$</div>
+  </section>
+
+  <section class="slide slide--problem" data-slide="6">
     <p class="kicker">Hauptproblem der Stunde</p>
-    <h2>Wann fördert die Quelle am meisten – und wann kommt sie zum Stillstand?</h2>
-    <div class="formula">$$q(t) = t^3 - 12t^2 + 36t, \quad t \in [0;\,8]$$</div>
+    <h2>Zwischen welchen Produktionsmengen arbeitet das Unternehmen profitabel?</h2>
+    <div class="canvas-wrap canvas-wrap--tall" id="wProblem"><canvas id="cProblem"></canvas></div>
+    <div class="formula">$$G(x) = -x^3+7x^2+14x-48, \quad x \in [0;\,10]$$</div>
   </section>
 
-  <section class="slide slide--transition" data-slide="6">
+  <section class="slide slide--transition" data-slide="7">
     <h2>Das arbeiten wir jetzt gemeinsam heraus.</h2>
     <p class="site-sub">Danach: Theorie-Wiki &amp; Übungen zu diesem Lernbereich.</p>
     <a class="btn" href="index.html">→ Zur Lernbereich-Übersicht</a>
   </section>
 
-  <div class="deck-chrome"><span id="deckCurrent">1</span> / <span id="deckTotal">6</span></div>
+  <div class="deck-chrome"><span id="deckCurrent">1</span> / <span id="deckTotal">7</span></div>
   <div class="deck-progress"><div class="deck-progress-bar" id="deckProgressBar"></div></div>
 </div>
 
 <script>
-function q(t) { return Math.pow(t, 3) - 12 * Math.pow(t, 2) + 36 * t; }
-function redraw() {
-  var cv = document.getElementById('cPlot');
+function G(x) { return -Math.pow(x, 3) + 7 * Math.pow(x, 2) + 14 * x - 48; }
+var view = { xMin: 0, xMax: 10, yMin: -240, yMax: 80 };
+var gridOpts = { stepX: 2, stepY: 40 };
+
+function drawObservation() {
+  var cv = document.getElementById('cObs');
   if (!cv) return;
-  var setup = Plot.setup('cPlot', 'wPlot');
-  var view = { xMin: 0, xMax: 8, yMin: -5, yMax: 40 };
-  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
-  Plot.curve(setup.ctx, q, map, view);
+  var setup = Plot.setup('cObs', 'wObs');
+  var map = Plot.grid(setup.ctx, setup.w, setup.h, view, gridOpts);
+  [0, 2, 5, 8, 10].forEach(function (x) { Plot.dot(setup.ctx, map, x, G(x)); });
 }
-window.addEventListener('load', redraw);
-if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+
+function drawProblem() {
+  var cv = document.getElementById('cProblem');
+  if (!cv) return;
+  var setup = Plot.setup('cProblem', 'wProblem');
+  var map = Plot.grid(setup.ctx, setup.w, setup.h, view, gridOpts);
+  Plot.curve(setup.ctx, G, map, view);
+  Plot.dot(setup.ctx, map, 2, 0, { label: 'x=2' });
+  Plot.dot(setup.ctx, map, 8, 0, { label: 'x=8' });
+}
+
+function redraw() { drawObservation(); drawProblem(); }
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
 </script>
 
 </body>

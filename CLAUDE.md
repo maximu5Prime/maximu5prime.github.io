@@ -38,7 +38,7 @@ keine eigene Struktur haben.
 ```
 <fach>/klasse<nr>/lb<n>-<thema>/index.html            ← LB-Übersicht
 <fach>/klasse<nr>/lb<n>-<thema>/praesentation.html    ← Folien-Einstieg (Pilot, s.u.)
-<fach>/klasse<nr>/lb<n>-<thema>/ue<n>-<thema>.html    ← Einzelne UE
+<fach>/klasse<nr>/lb<n>-<thema>/<thema-slug>.html     ← einzelnes Wiki-Theorie-Thema (kein UE-Zeitraster)
 <fach>/klasse<nr>/lb<n>-<thema>/uebungen.html          ← Interaktive Übungsaufgaben zum LB
 <fach>/index.html                                      ← Fach-Landingpage: Tabs "Nach Jahrgangsstufe" /
                                                            "Nach Thema" (Vorbild: mathematik/index.html)
@@ -53,14 +53,28 @@ bislang nur an einem LB pilotiertes Muster:
   zu Stundenbeginn projiziert: Kontext → Beobachtung → Hauptproblem der Stunde → Übergang in den
   gemeinsamen Unterricht. Kein `.site-header`, reine Bühne. `.slide`-Sichtbarkeit läuft über
   Opacity/Pointer-Events, NIE über `display:none` — sonst messen Canvas-Applets (`Plot.setup()`) beim
-  Setup 0×0 (gleicher Grund wie bei `reveal.js`s Ausschluss von `.tab-panel`).
-- **`ue<n>-*.html`** — kurze Wiki-Theorie-Einträge (`.card.card--theory`, 2–4 pro Seite) statt eines
-  langen linearen Skripts; Herleitung passiert live in der Präsentation, die Seite dient danach zum
-  Nachschlagen. Jeder Eintrag schließt mit einer `.related`-Box (Querverlinkung zu
-  vorausgesetzten/verwandten Konzepten), damit man beim Nachschlagen gezielt springt statt sich durch
-  ein großes Skript zu lesen.
+  Setup 0×0 (gleicher Grund wie bei `reveal.js`s Ausschluss von `.tab-panel`). Kann Text+Bild nebeneinander
+  zeigen (`.slide--split` + `.slide-photo`); ohne vorhandenes Foto reused `.slide-photo.empty` (bestehende
+  Platzhalter-Komponente) statt eines kaputten `<img>`.
+- **`<thema-slug>.html`** — flache, themenbezogene Dateinamen (kein `ue<n>`-Präfix — bewusst **kein**
+  Lesson-/Zeitraster-Bezug), je ein kleinschrittiges Thema pro Seite mit `.wiki-entry`-Layout: Text
+  (`.wiki-entry-text`, max. 62ch) neben Grafik/Interaktivem (`.wiki-entry-visual`), volle `container`-Breite
+  (1100px) statt `container--narrow`. Herleitung passiert live in der Präsentation, die Seite dient danach
+  zum Nachschlagen. Jeder Eintrag: `.related`-Box (Querverlinkung, "Siehe auch") PLUS inline Textlinks im
+  Fließtext zu verwandten Themen. `.wiki-entry` kollabiert erst bei 900px auf eine Spalte — bewusste
+  Ausnahme vom sonst einheitlichen 640px-Breakpoint (§16 theme.css), da 62ch-Text + ≥260px-Grafik
+  kombiniert mehr Raum brauchen.
 - **`uebungen.html`** bleibt unverändert (eigene Quiz-Engine, nicht Teil dieses Musters) — Wiki-Seiten
   verweisen nur per Fließtext darauf (Kapitel sind dort rein JS-geschaltet, nicht per Hash verlinkbar).
+  **Bekannter Folge-Task:** `uebungen.html` für LB1 enthält noch Kurvendiskussion/Extremstellen-Aufgaben,
+  die laut Lehrplan (s.u.) nicht zu diesem LB gehören — noch nicht behoben.
+
+**Fachliche Korrektheit vor Inhalt schreiben prüfen:** Vor dem Schreiben von Theorie-Inhalten den
+Lehrplan-Umfang verifizieren, nicht raten oder von Nachbar-LBs übernehmen. Kurvendiskussion/
+Extremstellen/Wendepunkte gehören NICHT zu „Ganzrationale Funktionen" (LB1), sondern zum separaten,
+späteren LB „Differenzialrechnung" (`lb2-differenzialrechnung/`). Lehrplan-Digests (T/NT, alt/neu) liegen
+in `../01_Materialien/01_Mathematik/01_Kontext/m11-*-lb*-*.md` — dort nachschlagen, bevor eine
+Kompetenzliste angenommen wird.
 
 Noch nicht auf andere Lernbereiche übertragen — vor einer Migration bestehender LBs (andere
 Strukturmuster: Theorie direkt im LB-Index, oder Theorie in UE-Seiten inkl. eigener Übungen-Tab) erst
@@ -92,7 +106,9 @@ python -m http.server 8000   # aus dem Repo-Root starten
 - **JS:** `static/site.js` (Theme-Toggle mit SVG-Icon-Crossfade, feuert `themechange`-Event) ·
   `static/plot.js` (gemeinsame Canvas-Primitive für Applets: `Plot.setup/grid/curve/dot/colors/onRedraw` —
   Farben immer zur Zeichenzeit über `Plot.colors()` lesen, nie cachen, sonst bleiben nach Theme-Wechsel
-  alte Farben stehen) · `static/reveal.js` (IntersectionObserver-Scroll-Reveal für `.card`/`.row-card`/
+  alte Farben stehen; `grid()` akzeptiert `opts.stepX`/`opts.stepY` (Default 1) für große Wertebereiche —
+  ohne Schrittweite zeichnet `grid()` eine Linie pro Ganzzahl-Einheit, was bei z.B. `yMax=200` zu
+  hunderten überlappenden Gitterlinien führt) · `static/reveal.js` (IntersectionObserver-Scroll-Reveal für `.card`/`.row-card`/
   `.task`, respektiert `prefers-reduced-motion`; beobachtet bewusst KEINE Elemente innerhalb von
   `.tab-panel` — sonst Flackern beim Tab-Wechsel, da `display:none`-Elemente den Observer verzögert
   feuern lassen) · `static/slides.css`/`static/slides.js` (Vollbild-Präsentations-Deck für den
@@ -103,8 +119,11 @@ python -m http.server 8000   # aus dem Repo-Root starten
 - **Komponenten:** `.site-header`, `.breadcrumb`, `.card`/`.card-grid`, `.row-list`/`.row-card`,
   `.tag`/`.tag-row`, `.tabs`/`.tab-btn`/`.tab-panel`, `.task`, `.solution`, `.hint`, `.formula`,
   `.related`/`.related-list` (Querverlinkung zwischen Wiki-Theorie-Einträgen, "Siehe auch"),
-  `.canvas-wrap` (für `Plot.setup()`; eigenständig positionierte Canvases nutzen stattdessen
-  `.plot-wrap`), `.site-footer` — siehe `_templates/` für Beispiele.
+  `.wiki-entry`/`.wiki-entry-text`/`.wiki-entry-visual` (Text+Grafik-Zweispalter für Wiki-Theorie-Seiten,
+  kollabiert bei 900px statt des einheitlichen 640px-Breakpoints),
+  `.canvas-wrap` (für `Plot.setup()`; `.canvas-wrap--tall` als höherer Modifier für Vollbild-Kontexte;
+  eigenständig positionierte Canvases nutzen stattdessen `.plot-wrap`), `.site-footer` — siehe
+  `_templates/` für Beispiele.
 - **Canvas-Applets:** selbst gebaut, kein GeoGebra
 - **Dark-Mode-Kontrast-Fallstricke:** Theme-Tokens, die zwischen Hell/Dunkel invertieren (`--accent`,
   `--ok`, `--plot-curve` etc.), NICHT als Flächenfarbe mit fest-weißem Text kombinieren — bricht im

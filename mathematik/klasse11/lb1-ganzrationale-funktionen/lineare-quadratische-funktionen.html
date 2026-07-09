@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lineare &amp; quadratische Funktionen – Ganzrationale Funktionen · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">Ganzrationale Funktionen</a>
+      <span>/</span>
+      <span>Lineare &amp; quadratische Funktionen</span>
+    </nav>
+    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
+    <h1 class="site-title">Lineare &amp;<br><em>quadratische Funktionen</em></h1>
+    <p class="site-sub">Wiederholung: die beiden einfachsten Spezialfälle ganzrationaler Funktionen.</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <article class="card card--theory wiki-entry" id="linear">
+    <div class="wiki-entry-text">
+      <h3>Lineare Funktionen</h3>
+      <p><strong>Merksatz:</strong> $f(x) = mx+b$ (Grad 1). $m$ = Steigung, $b$ = $y$-Achsenabschnitt $f(0)$. Nullstelle: $mx+b=0 \Rightarrow x = -\dfrac{b}{m}$ (falls $m\neq0$).</p>
+      <p><strong>Beispiel:</strong> $f(x)=2x-4$: Steigung $m=2$, $y$-Achsenabschnitt $b=-4$, Nullstelle $x=2$.</p>
+    </div>
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wLin"><canvas id="cLin"></canvas></div>
+      <p class="wiki-entry-caption">Graph von $f(x)=2x-4$.</p>
+    </div>
+  </article>
+
+  <article class="card card--theory wiki-entry" id="quadratisch">
+    <div class="wiki-entry-text">
+      <h3>Quadratische Funktionen</h3>
+      <p><strong>Merksatz:</strong> Scheitelpunktform $f(x)=a(x-d)^2+e$ (Grad 2). Scheitelpunkt $S(d\,|\,e)$. Öffnungsrichtung: $a>0$ nach oben, $a<0$ nach unten. Nullstellen über $pq$-Formel oder Ausklammern.</p>
+      <p><strong>Beispiel:</strong> $g(x)=(x-1)^2-4$: Scheitelpunkt $S(1\,|\,{-4})$, öffnet nach oben. Nullstellen: $(x-1)^2=4 \Rightarrow x=3$ oder $x=-1$.</p>
+    </div>
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wQuad"><canvas id="cQuad"></canvas></div>
+      <p class="wiki-entry-caption">Graph von $g(x)=(x-1)^2-4$.</p>
+    </div>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="grad-leitkoeffizient.html">Grad &amp; Leitkoeffizient (allgemein)</a></li>
+        <li><a href="nullstellen-ausklammern-binomisch.html">Nullstellen: Ausklammern &amp; binomische Formeln</a></li>
+      </ul>
+    </aside>
+  </article>
+
+  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">← LB 1 · Ganzrationale Funktionen</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function drawLin() {
+  var cv = document.getElementById('cLin');
+  if (!cv) return;
+  var setup = Plot.setup('cLin', 'wLin');
+  var view = { xMin: -3, xMax: 5, yMin: -6, yMax: 6 };
+  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
+  Plot.curve(setup.ctx, function (x) { return 2 * x - 4; }, map, view);
+  Plot.dot(setup.ctx, map, 2, 0, { label: 'x=2' });
+}
+function drawQuad() {
+  var cv = document.getElementById('cQuad');
+  if (!cv) return;
+  var setup = Plot.setup('cQuad', 'wQuad');
+  var view = { xMin: -3, xMax: 5, yMin: -6, yMax: 6 };
+  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
+  Plot.curve(setup.ctx, function (x) { return Math.pow(x - 1, 2) - 4; }, map, view);
+  Plot.dot(setup.ctx, map, 1, -4, { label: 'S(1|-4)' });
+}
+function redraw() { drawLin(); drawQuad(); }
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>

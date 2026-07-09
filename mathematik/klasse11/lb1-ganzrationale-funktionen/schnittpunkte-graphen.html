@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemeinsame Punkte zweier Graphen – Ganzrationale Funktionen · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">Ganzrationale Funktionen</a>
+      <span>/</span>
+      <span>Gemeinsame Punkte zweier Graphen</span>
+    </nav>
+    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
+    <h1 class="site-title">Gemeinsame Punkte<br><em>zweier Graphen</em></h1>
+    <p class="site-sub">Wo schneiden oder berühren sich zwei Funktionsgraphen?</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <article class="card card--theory wiki-entry" id="schnittpunkte">
+    <div class="wiki-entry-text">
+      <h3>Schnittpunkte zweier Graphen</h3>
+      <p><strong>Merksatz:</strong> An einem gemeinsamen Punkt gilt $f(x)=g(x)$. Diese Gleichung wird gelöst wie eine <a href="nullstellen-ausklammern-binomisch.html">Nullstellenbestimmung</a> — man bringt alles auf eine Seite und faktorisiert $f(x)-g(x)=0$.</p>
+      <p><strong>Beispiel:</strong> $f(x)=x^2+1$, $g(x)=2x+4$:</p>
+      <div class="formula">$$x^2+1=2x+4 \;\Rightarrow\; x^2-2x-3=0 \;\Rightarrow\; (x-3)(x+1)=0$$</div>
+      <p>Schnittpunkte bei $x=3$ und $x=-1$: $S_1(-1\,|\,2)$ und $S_2(3\,|\,10)$.</p>
+    </div>
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wSchnitt"><canvas id="cSchnitt"></canvas></div>
+      <p class="wiki-entry-caption">$f(x)=x^2+1$ und $g(x)=2x+4$ mit beiden Schnittpunkten.</p>
+    </div>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="nullstellen-polynomdivision.html">Nullstellen: Polynomdivision</a></li>
+        <li><a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit</a> (bei Berührung statt Schnitt)</li>
+      </ul>
+    </aside>
+  </article>
+
+  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">← LB 1 · Ganzrationale Funktionen</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function redraw() {
+  var cv = document.getElementById('cSchnitt');
+  if (!cv) return;
+  var setup = Plot.setup('cSchnitt', 'wSchnitt');
+  var view = { xMin: -3, xMax: 5, yMin: -2, yMax: 12 };
+  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
+  Plot.curve(setup.ctx, function (x) { return x * x + 1; }, map, view, { color: Plot.colors().curve });
+  Plot.curve(setup.ctx, function (x) { return 2 * x + 4; }, map, view, { color: Plot.colors().curve2 });
+  Plot.dot(setup.ctx, map, -1, 2, { label: 'S1(-1|2)' });
+  Plot.dot(setup.ctx, map, 3, 10, { label: 'S2(3|10)' });
+}
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>

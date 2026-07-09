@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funktionswerte &amp; Wertetabelle – Ganzrationale Funktionen · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">Ganzrationale Funktionen</a>
+      <span>/</span>
+      <span>Funktionswerte &amp; Wertetabelle</span>
+    </nav>
+    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
+    <h1 class="site-title">Funktionswerte<br><em>&amp; Wertetabelle</em></h1>
+    <p class="site-sub">Die Grundlage für alles Weitere: Werte einsetzen, Punkte prüfen.</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <article class="card card--theory wiki-entry" id="funktionswert">
+    <div class="wiki-entry-text">
+      <h3>Funktionswert berechnen &amp; Wertetabelle</h3>
+      <p><strong>Merksatz:</strong> Um den Funktionswert $f(x_0)$ zu berechnen, wird $x_0$ in den Term eingesetzt. Eine Wertetabelle listet mehrere solche Paare $(x\,|\,f(x))$ systematisch auf — Grundlage, um einen Graphen von Hand zu skizzieren.</p>
+      <p><strong>Beispiel:</strong> $f(x) = x^3 - 4x$:</p>
+      <div class="formula">$$f(-2)=0,\; f(-1)=3,\; f(0)=0,\; f(1)=-3,\; f(2)=0$$</div>
+    </div>
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wPunkt"><canvas id="cPunkt"></canvas></div>
+      <p class="wiki-entry-caption" id="sX-val">Regler bewegen, um $x$ zu verändern.</p>
+      <div class="slider-row" style="display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;">
+        <label style="font-family:var(--font-mono);font-size:.82rem;color:var(--muted);">x =</label>
+        <input type="range" id="sX" min="-2.5" max="2.5" step="0.1" value="1.5" oninput="redraw()">
+      </div>
+    </div>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="grad-leitkoeffizient.html">Grad &amp; Leitkoeffizient</a></li>
+        <li><a href="schnittpunkte-graphen.html">Gemeinsame Punkte zweier Graphen</a></li>
+      </ul>
+    </aside>
+  </article>
+
+  <article class="card card--theory" id="punktprobe">
+    <h3>Punktprobe: Liegt P auf dem Graphen?</h3>
+    <p><strong>Merksatz:</strong> Ein Punkt $P(x_0\,|\,y_0)$ liegt genau dann auf dem Graphen von $f$, wenn $f(x_0) = y_0$ gilt.</p>
+    <p><strong>Beispiel:</strong> Für $f(x) = x^3 - 4x$: Liegt $P(2\,|\,3)$ auf dem Graphen? $f(2) = 0 \neq 3$ — <strong>nein</strong>. Liegt $Q(-1\,|\,3)$ auf dem Graphen? $f(-1) = 3$ — <strong>ja</strong>.</p>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="funktionsterm-aufstellen.html">Funktionsterm aufstellen</a></li>
+      </ul>
+    </aside>
+  </article>
+
+  <p class="site-sub">→ Grundlage für alle weiteren Themen dieses Lernbereichs. Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">← LB 1 · Ganzrationale Funktionen</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function f(x) { return Math.pow(x, 3) - 4 * x; }
+function redraw() {
+  var cv = document.getElementById('cPunkt');
+  if (!cv) return;
+  var setup = Plot.setup('cPunkt', 'wPunkt');
+  var view = { xMin: -3, xMax: 3, yMin: -6, yMax: 6 };
+  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
+  Plot.curve(setup.ctx, f, map, view);
+  var x = parseFloat(document.getElementById('sX').value);
+  var y = f(x);
+  Plot.dot(setup.ctx, map, x, y, { label: 'P(' + x.toFixed(1) + '|' + y.toFixed(1) + ')' });
+  document.getElementById('sX-val').textContent = 'x = ' + x.toFixed(1) + ',  f(x) = ' + y.toFixed(2);
+}
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>
