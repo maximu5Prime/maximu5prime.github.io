@@ -23,8 +23,8 @@
 body{font-family:var(--font-sans);font-weight:300;background:var(--bg);color:var(--text);min-height:100vh;}
 button{font-family:inherit;cursor:pointer;background:none;border:none;padding:0;}
 
-/* Header: bewusst invertiert (bg/fg vertauscht), siehe uebungen/mathematik/index.html
-   für dasselbe Muster. Der Gold-Akzent bleibt deshalb fest statt Token. */
+/* Header: bewusst invertiert (bg/fg vertauscht). Der Gold-Akzent bleibt
+   deshalb fest statt Token. */
 header{background:var(--text);color:var(--bg);padding:1.8rem 1.5rem 1.4rem;position:relative;overflow:hidden;}
 header::before{content:'';position:absolute;top:-50px;right:-60px;width:240px;height:240px;border-radius:50%;background:var(--accent);opacity:.1;}
 .hinner{max-width:1380px;margin:0 auto;position:relative;}
@@ -258,8 +258,7 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
    theme.css-Variablen umgestellt), nicht strukturell auf die theme.css-
    Komponenten migriert — dafür ist die Filter-/Grid-/Overlay-Logik zu
    eigenständig. Bewusst fest belassen: Header/Footer/Selbar-Akzentfarbe
-   (invertierte Balken, siehe uebungen/mathematik/index.html für dasselbe
-   Muster), die Schwierigkeits-/AFB-/Fach-Badges (.ck11/.ckmix/.ck12/
+   (invertierte Balken), die Schwierigkeits-/AFB-/Fach-Badges (.ck11/.ckmix/.ck12/
    .cafb1-3/.ch.ana/.ch.geo/.cfach-*, feste Pastelltöne ohne Dark-Pendant)
    sowie die immer-dunkle Lightbox (#ov*). --accent2 bleibt ebenfalls fest,
    da es teils als Vollflächen-Hintergrund mit festem weißen Text dient. */
@@ -271,8 +270,8 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 <div class="hinner">
   <nav class="bc">
     <a href="../../index.html">Lernportal</a><span>/</span>
-    <a href="../index.html">Übungen</a><span>/</span>
-    <a href="index.html">Mathematik</a><span>/</span>
+    <a href="../index.html">Mathematik</a><span>/</span>
+    <a href="index.html">Jgst. 12</a><span>/</span>
     <span>FAP Browser</span>
   </nav>
   <div class="hrow">
@@ -440,7 +439,7 @@ header p{font-size:.84rem;color:#a09888;margin-top:.25rem;}
 
 <footer class="fnav">
   <div class="fnav-in">
-    <a class="backbtn" href="index.html">← Mathematik</a>
+    <a class="backbtn" href="index.html">← Jgst. 12</a>
     <a class="backbtn" href="../../index.html" style="font-size:.65rem;color:#555;">Lernportal ↗</a>
   </div>
 </footer>

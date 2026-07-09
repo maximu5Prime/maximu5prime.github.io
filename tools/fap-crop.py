@@ -7,8 +7,8 @@ Verwendung (aus dem Repo-Root aufrufen):
   python tools/fap-crop.py INPUT.png AUSGABE_PREFIX [--n-tasks 2] [--thresh 245] [--min-gap 30] [--pad 30]
 
 Beispiele:
-  python tools/fap-crop.py uebungen/mathematik/fap-aufgaben/2025_T2_AI_p7.png uebungen/mathematik/fap-aufgaben/2025_T2_AI_2 --n-tasks 2
-  python tools/fap-crop.py uebungen/mathematik/fap-aufgaben/2024_T2_AI_page.png uebungen/mathematik/fap-aufgaben/2024_T2_AI --n-tasks 3
+  python tools/fap-crop.py mathematik/klasse12/fap-aufgaben/2025_T2_AI_p7.png mathematik/klasse12/fap-aufgaben/2025_T2_AI_2 --n-tasks 2
+  python tools/fap-crop.py mathematik/klasse12/fap-aufgaben/2024_T2_AI_page.png mathematik/klasse12/fap-aufgaben/2024_T2_AI --n-tasks 3
 
 Ausgabe:
   AUSGABE_PREFIX_1.png, AUSGABE_PREFIX_2.png, …
@@ -108,7 +108,7 @@ def crop_image(img: Image.Image, y_start: int, y_end: int, pad: int = 30) -> Ima
 def main():
     parser = argparse.ArgumentParser(description="FAP-Aufgaben Crop-Tool")
     parser.add_argument("input", help="Eingabe-PNG-Datei")
-    parser.add_argument("prefix", help="Ausgabe-Prefix (z. B. uebungen/mathematik/fap-aufgaben/2025_T2_AI_2)")
+    parser.add_argument("prefix", help="Ausgabe-Prefix (z. B. mathematik/klasse12/fap-aufgaben/2025_T2_AI_2)")
     parser.add_argument("--n-tasks", "-n", type=int, default=2, help="Anzahl Aufgaben im Bild (Default: 2)")
     parser.add_argument("--thresh", type=int, default=245, help="Weiß-Schwellwert 0–255 (Default: 245)")
     parser.add_argument("--min-gap", type=int, default=30, help="Minimale Bandbreite in px (Default: 30)")

@@ -1,0 +1,103 @@
+/* ── Präsentations-Deck ──────────────────────────────────────────────────
+   Vollbild-Folien für den Unterrichtseinstieg (LK projiziert am Beamer).
+   Nutzt ausschließlich bestehende Tokens aus theme.css — kein eigenes
+   Farb-/Spacing-/Easing-System. Inaktive Folien bleiben layoutfähig
+   (opacity/pointer-events statt display:none), damit Canvas-Applets
+   (static/plot.js) beim Setup nicht 0×0 messen. */
+
+html, body { height: 100%; }
+body:has(.deck) { overflow: hidden; }
+
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-6) clamp(1.5rem, 8vw, 8rem);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .45s var(--ease-out);
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+.slide h2 {
+  font-family: var(--font-serif);
+  font-size: var(--fs-h1);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  max-width: 900px;
+}
+
+.slide p { max-width: 700px; line-height: 1.6; }
+
+.slide--title, .slide--transition { align-items: center; text-align: center; }
+.slide--title .site-sub,
+.slide--transition .site-sub { max-width: 620px; }
+
+/* Hauptproblem-Hervorhebung — Randlinie statt gefüllter Fläche (Dark-Mode-sicher) */
+.slide--problem h2 {
+  border-left: 3px solid var(--plot-curve);
+  padding-left: var(--sp-4);
+}
+
+.deck-exit {
+  position: fixed;
+  top: var(--sp-3);
+  left: var(--sp-4);
+  z-index: 10;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: .35rem .7rem;
+  background: var(--surface);
+  transition: color .15s, border-color .15s;
+}
+.deck-exit:hover { color: var(--accent); border-color: var(--accent); }
+
+.deck-chrome {
+  position: fixed;
+  bottom: var(--sp-3);
+  left: var(--sp-4);
+  z-index: 10;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  color: var(--faint);
+}
+
+.deck-progress {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: var(--line);
+  z-index: 10;
+}
+.deck-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  transition: width .35s var(--ease-out);
+}
+
+@media (max-width: 640px) {
+  .slide { padding: var(--sp-5) 1.3rem; }
+  .slide h2 { font-size: 1.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide { transition: none; }
+  .deck-progress-bar { transition: none; }
+}

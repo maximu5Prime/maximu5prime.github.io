@@ -646,6 +646,36 @@ a.row-card:hover .row-num   { opacity: 1; }
 }
 .empty .kicker { color: var(--faint); margin-bottom: .8rem; }
 
+/* Querverlinkung zwischen Wiki-Theorie-Einträgen ("Siehe auch") */
+.related {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--line);
+}
+.related-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--faint);
+  margin-bottom: .3rem;
+}
+.related-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem .9rem;
+  list-style: none;
+  padding: 0;
+}
+.related-list a {
+  font-size: var(--fs-small);
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-strong);
+  transition: color .15s, border-color .15s;
+}
+.related-list a:hover { color: var(--accent); border-color: currentColor; }
+
 
 /* ── 9 · Tags & Pills ────────────────────────────────────────────────── */
 

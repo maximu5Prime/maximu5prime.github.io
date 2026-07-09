@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Präsentation: Hauptproblem – Ganzrationale Funktionen · Mathe 11</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/slides.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
+<script defer src="/static/slides.js"></script>
+</head>
+<body>
+
+<div class="deck" id="deck">
+  <a class="deck-exit" href="index.html">× Verlassen</a>
+
+  <section class="slide slide--title active" data-slide="1">
+    <p class="kicker">Mathematik · Klasse 11 · LB 1</p>
+    <h1 class="site-title">Ganzrationale<br><em>Funktionen</em></h1>
+    <p class="site-sub">Wie beschreibt man eine Größe, die wächst, ein Maximum erreicht und wieder fällt – und wie erkennt man genau den Moment, an dem sich das Verhalten ändert?</p>
+  </section>
+
+  <section class="slide slide--context" data-slide="2">
+    <p class="kicker">Kontext</p>
+    <h2>Die Ölquelle</h2>
+    <p>Eine Förderanlage misst über 8 Tage, wie viele Tausend Barrel Öl sie pro Tag fördert. Die Ingenieure wollen wissen: Läuft die Quelle stabil – oder verändert sich etwas?</p>
+  </section>
+
+  <section class="slide slide--data" data-slide="3">
+    <p class="kicker">Beobachtung</p>
+    <h2>Die Messdaten</h2>
+    <div class="canvas-wrap" id="wPlot"><canvas id="cPlot"></canvas></div>
+    <p class="site-sub">Förderrate $q(t)$ in Tausend Barrel pro Tag, $t$ in Tagen.</p>
+  </section>
+
+  <section class="slide slide--question" data-slide="4">
+    <p class="kicker">Zuspitzung</p>
+    <h2>Was fällt euch auf?</h2>
+    <p>An welcher Stelle fördert die Quelle am meisten? Was passiert danach mit der Förderrate – und gibt es einen Tag, an dem sie ganz zum Stillstand kommt?</p>
+  </section>
+
+  <section class="slide slide--problem" data-slide="5">
+    <p class="kicker">Hauptproblem der Stunde</p>
+    <h2>Wann fördert die Quelle am meisten – und wann kommt sie zum Stillstand?</h2>
+    <div class="formula">$$q(t) = t^3 - 12t^2 + 36t, \quad t \in [0;\,8]$$</div>
+  </section>
+
+  <section class="slide slide--transition" data-slide="6">
+    <h2>Das arbeiten wir jetzt gemeinsam heraus.</h2>
+    <p class="site-sub">Danach: Theorie-Wiki &amp; Übungen zu diesem Lernbereich.</p>
+    <a class="btn" href="index.html">→ Zur Lernbereich-Übersicht</a>
+  </section>
+
+  <div class="deck-chrome"><span id="deckCurrent">1</span> / <span id="deckTotal">6</span></div>
+  <div class="deck-progress"><div class="deck-progress-bar" id="deckProgressBar"></div></div>
+</div>
+
+<script>
+function q(t) { return Math.pow(t, 3) - 12 * Math.pow(t, 2) + 36 * t; }
+function redraw() {
+  var cv = document.getElementById('cPlot');
+  if (!cv) return;
+  var setup = Plot.setup('cPlot', 'wPlot');
+  var view = { xMin: 0, xMax: 8, yMin: -5, yMax: 40 };
+  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
+  Plot.curve(setup.ctx, q, map, view);
+}
+window.addEventListener('load', redraw);
+if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+</script>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 # FAP-Browser – Technische Notizen
 
-**Dateien:** `uebungen/mathematik/fap-aufgaben.html` · `uebungen/mathematik/fap-data.js` · `uebungen/mathematik/fap-aufgaben/` (PNG-Bilder) — dieses Dokument und `fap-crop.py` liegen in `tools/`
+**Dateien:** `mathematik/klasse12/fap-aufgaben.html` · `mathematik/klasse12/fap-data.js` · `mathematik/klasse12/fap-aufgaben/` (PNG-Bilder) — dieses Dokument und `fap-crop.py` liegen in `tools/`
 
 ---
 
@@ -173,4 +173,4 @@ Unter dem Aufgabentitel erscheint eine Kurzversion der `desc` des ersten Aufgabe
 ## Deployment
 
 Website-Repo: `02_Website/` → `git push` (SSH Port 443, Port 22 geblockt)  
-Pfad: `uebungen/mathematik/fap-aufgaben.html`
+Pfad: `mathematik/klasse12/fap-aufgaben.html`
