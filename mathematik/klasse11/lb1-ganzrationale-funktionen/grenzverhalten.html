@@ -13,13 +13,14 @@
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
   <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -29,33 +30,94 @@
       <span>/</span>
       <span>Grenzverhalten</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
     <h1 class="site-title">Grenzverhalten<br><em>für x → ±∞</em></h1>
-    <p class="site-sub">Was passiert am Rand des Graphen, weit links und weit rechts?</p>
+    <p class="site-sub">Weit draußen zählt nur noch das Leitglied — Grad und Vorzeichen
+      des Leitkoeffizienten legen fest, wohin die Enden des Graphen laufen.</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="grenzverhalten">
 
-  <article class="card card--theory wiki-entry" id="grenzverhalten">
     <div class="wiki-entry-text">
-      <h3>Grenzverhalten bestimmen</h3>
-      <p><strong>Merksatz:</strong> Für $x\to\pm\infty$ dominiert der Term mit dem höchsten Grad — <a href="grad-leitkoeffizient.html">Grad $n$ und Leitkoeffizient $a_n$</a> allein entscheiden über das Verhalten:</p>
+      <p>Für betragsgroße $x$ wächst die höchste Potenz so viel schneller als alle anderen
+        Summanden, dass diese nicht mehr ins Gewicht fallen. Es gilt:</p>
       <div class="formula">$$\lim_{x\to\pm\infty} f(x) = \lim_{x\to\pm\infty} a_n x^n$$</div>
-      <p>Vier Fälle:</p>
-      <table style="width:100%;border-collapse:collapse;margin:.6rem 0;">
-        <tr><th style="text-align:left;padding:.3rem;border-bottom:1px solid var(--line);">Grad $n$</th><th style="text-align:left;padding:.3rem;border-bottom:1px solid var(--line);">$a_n$</th><th style="text-align:left;padding:.3rem;border-bottom:1px solid var(--line);">$x\to-\infty$</th><th style="text-align:left;padding:.3rem;border-bottom:1px solid var(--line);">$x\to+\infty$</th></tr>
-        <tr><td style="padding:.3rem;">gerade</td><td style="padding:.3rem;">$>0$</td><td style="padding:.3rem;">$+\infty$</td><td style="padding:.3rem;">$+\infty$</td></tr>
-        <tr><td style="padding:.3rem;">gerade</td><td style="padding:.3rem;">$<0$</td><td style="padding:.3rem;">$-\infty$</td><td style="padding:.3rem;">$-\infty$</td></tr>
-        <tr><td style="padding:.3rem;">ungerade</td><td style="padding:.3rem;">$>0$</td><td style="padding:.3rem;">$-\infty$</td><td style="padding:.3rem;">$+\infty$</td></tr>
-        <tr><td style="padding:.3rem;">ungerade</td><td style="padding:.3rem;">$<0$</td><td style="padding:.3rem;">$+\infty$</td><td style="padding:.3rem;">$-\infty$</td></tr>
+      <p>Deshalb genügen <a href="grad-leitkoeffizient.html">Grad und Leitkoeffizient</a>,
+        um beide Enden des Graphen zu bestimmen — vier Fälle:</p>
+      <table class="table">
+        <thead><tr><th>Grad $n$</th><th>$a_n$</th><th>$x \to -\infty$</th><th>$x \to +\infty$</th></tr></thead>
+        <tbody>
+          <tr><td>gerade</td><td>$&gt; 0$</td><td>$+\infty$</td><td>$+\infty$</td></tr>
+          <tr><td>gerade</td><td>$&lt; 0$</td><td>$-\infty$</td><td>$-\infty$</td></tr>
+          <tr><td>ungerade</td><td>$&gt; 0$</td><td>$-\infty$</td><td>$+\infty$</td></tr>
+          <tr><td>ungerade</td><td>$&lt; 0$</td><td>$+\infty$</td><td>$-\infty$</td></tr>
+        </tbody>
       </table>
-      <p><strong>Beispiel:</strong> $f(x)=-2x^3+5x$: $n=3$ (ungerade), $a_n=-2<0$ → für $x\to+\infty$ geht $f(x)\to-\infty$, für $x\to-\infty$ geht $f(x)\to+\infty$.</p>
+      <p>Merkhilfe: Gerader Grad — beide Enden gleich (wie bei der Parabel).
+        Ungerader Grad — Enden entgegengesetzt (wie bei der Geraden). Ob dazwischen
+        <a href="symmetrie.html">Symmetrie</a> herrscht, verrät ein Blick auf die Exponenten.</p>
     </div>
+
     <div class="wiki-entry-visual">
       <div class="canvas-wrap" id="wGrenz"><canvas id="cGrenz"></canvas></div>
-      <p class="wiki-entry-caption">$f(x)=-2x^3+5x$ — links steigend aus $+\infty$ kommend, rechts fallend nach $-\infty$.</p>
+      <div class="slider-row">
+        <label for="slZoom">Zoom:</label>
+        <input type="range" id="slZoom" min="1" max="10" step="0.5" value="1" oninput="redraw()">
+        <span class="slider-value" id="slZoomVal">× 1</span>
+      </div>
+      <p class="wiki-entry-caption">Zoom heraus: $f(x) = -2x^3 + 5x$ (durchgezogen) und sein
+        Leitglied $-2x^3$ (gestrichelt) werden ununterscheidbar — das Leitglied gewinnt.</p>
     </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Grenzverhalten von $f(x) = -2x^3 + 5x$ bestimmen.</p>
+
+      <p><strong>Schritt 1 · Leitglied ablesen.</strong> Höchste Potenz $x^3$, davor $-2$:</p>
+      <div class="formula formula--step">$$\text{Leitglied } -2x^3
+        \qquad\Rightarrow\qquad n = 3 \text{ (ungerade)},\quad a_3 = -2 &lt; 0$$</div>
+
+      <p><strong>Schritt 2 · Fall aus der Tabelle.</strong> Ungerader Grad, negativer
+        Leitkoeffizient — letzte Zeile:</p>
+      <div class="formula formula--step">$$\lim_{x\to-\infty} f(x) = +\infty
+        \qquad\quad \lim_{x\to+\infty} f(x) = -\infty$$</div>
+
+      <div class="result-box">
+        Der Graph kommt links „von oben" und verschwindet rechts „nach unten" —
+        ganz ohne Wertetabelle bestimmt.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="1">
+        <p class="quiz-q"><strong>1 ·</strong> Welches Grenzverhalten hat
+          $g(x) = -\tfrac{1}{2}x^4 + 3x^3 - x$?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">$x \to -\infty:\; g \to -\infty$ und $x \to +\infty:\; g \to +\infty$</button>
+          <button class="quiz-opt">$x \to -\infty:\; g \to -\infty$ und $x \to +\infty:\; g \to -\infty$</button>
+          <button class="quiz-opt">$x \to -\infty:\; g \to +\infty$ und $x \to +\infty:\; g \to +\infty$</button>
+        </div>
+        <div class="hint" data-quiz-hint>Nur das Leitglied $-\tfrac{1}{2}x^4$ zählt:
+          gerader Grad → beide Enden gleich. Vorzeichen von $a_4$?</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
+        <p class="quiz-q"><strong>2 ·</strong> Wahr oder falsch?</p>
+        <table class="ankreuz">
+          <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+          <tbody>
+            <tr><td>Für $f(x) = x^3 - 3x$ gilt: $x \to +\infty \Rightarrow f \to +\infty$.</td><td></td><td></td></tr>
+            <tr><td>Bei geradem Grad laufen die beiden Enden des Graphen in entgegengesetzte Richtungen.</td><td></td><td></td></tr>
+            <tr><td>$h(x) = 7 - x^2$ geht für $x \to -\infty$ gegen $-\infty$.</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="hint" data-quiz-hint>Bei $h$: erst sortieren! Das Leitglied ist $-x^2$ —
+          gerader Grad, negatives Vorzeichen.</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
@@ -64,10 +126,19 @@
         <li><a href="symmetrie.html">Symmetrie</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="vielfachheit-vorzeichenverhalten.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Vielfachheit &amp; Vorzeichenverhalten
+      </a>
+      <a class="pager-next" href="symmetrie.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Symmetrie
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -80,14 +151,27 @@
 </footer>
 
 <script>
+/* Applet: Herauszoomen — Funktion und Leitglied verschmelzen. */
+function f(x) { return -2 * Math.pow(x, 3) + 5 * x; }
+function leit(x) { return -2 * Math.pow(x, 3); }
+
 function redraw() {
-  var cv = document.getElementById('cGrenz');
-  if (!cv) return;
-  var setup = Plot.setup('cGrenz', 'wGrenz');
-  var view = { xMin: -3, xMax: 3, yMin: -12, yMax: 12 };
-  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
-  Plot.curve(setup.ctx, function (x) { return -2 * Math.pow(x, 3) + 5 * x; }, map, view);
+  var z = parseFloat(document.getElementById('slZoom').value);
+  var view = { xMin: -3 * z, xMax: 3 * z, yMin: -12 * z * z * z, yMax: 12 * z * z * z };
+  var step = Math.max(1, Math.round(z));
+  var s = Plot.setup('cGrenz', 'wGrenz');
+  var map = Plot.grid(s.ctx, s.w, s.h, view, {
+    stepX: step,
+    stepY: Math.max(2, Math.round(4 * z * z * z)),
+    labels: z <= 2
+  });
+  var c = Plot.colors();
+  Plot.curve(s.ctx, leit, map, view, { color: c.curve2, dash: [6, 5], width: 2 });
+  Plot.curve(s.ctx, f, map, view, { color: c.curve });
+
+  document.getElementById('slZoomVal').textContent = '× ' + z.toString().replace('.', ',');
 }
+
 window.addEventListener('load', function () {
   redraw();
   if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);

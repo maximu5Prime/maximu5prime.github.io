@@ -13,13 +13,14 @@
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
   <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -29,43 +30,110 @@
       <span>/</span>
       <span>Modellierung im Sachkontext</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
     <h1 class="site-title">Modellierung<br><em>im Sachkontext</em></h1>
-    <p class="site-sub">Vom Sachverhalt zur Funktion — und zurück zur Antwort im Kontext. Ohne Ableitung.</p>
+    <p class="site-sub">Ein Sachverhalt wird zur Funktion: Größen übersetzen, sinnvollen
+      Bereich festlegen, Ergebnisse im Kontext deuten — ganz ohne Ableitung.</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="modellierung">
 
-  <article class="card card--theory" id="vorgehen">
-    <h3>Vorgehen bei Sachkontext-Aufgaben</h3>
-    <p><strong>Merksatz:</strong> Ein Sachverhalt wird durch eine ganzrationale Funktion mit einer zum Kontext passenden <a href="wertemenge-definitionsmenge.html">Definitionsmenge</a> modelliert (z. B. nur $x\geq0$, da negative Mengen keinen Sinn ergeben). Nullstellen, Werte und Vorzeichen der Funktion werden anschließend im Sachzusammenhang gedeutet — <strong>ohne Ableitung</strong>, ganz mit den Werkzeugen dieses Lernbereichs.</p>
-  </article>
-
-  <article class="card card--theory wiki-entry" id="gewinnfunktion">
     <div class="wiki-entry-text">
-      <h3>Beispiel: die Gewinnfunktion aus der Präsentation</h3>
-      <p>Aus <a href="funktionsterm-aufstellen.html">Funktionsterm aufstellen</a> bekannt:</p>
-      <div class="formula">$$G(x) = -x^3+7x^2+14x-48 = -(x+3)(x-2)(x-8), \quad x\in[0;10]$$</div>
-      <p>Nullstellen im Definitionsbereich: $x=2$ und $x=8$ — das sind <strong>Gewinnschwelle</strong> und <strong>Gewinngrenze</strong>. Die <a href="vielfachheit-vorzeichenverhalten.html">Vorzeichentabelle</a> zeigt: für $0\leq x<2$ und $8<x\leq10$ ist $G(x)<0$ (Verlust), für $2<x<8$ ist $G(x)>0$ (Gewinnzone).</p>
-      <p><strong>Antwort auf das Hauptproblem:</strong> Zwischen 2000 und 8000 Stück Produktionsmenge arbeitet das Unternehmen profitabel.</p>
+      <p>Modellieren heißt übersetzen: Aus „Produktionsmenge" wird $x$, aus „Gewinn"
+        wird $G(x)$ — und aus der Sachfrage wird eine Rechenaufgabe.</p>
+      <p>Dabei gehört zu jedem Modell eine passende
+        <a href="wertemenge-definitionsmenge.html">Definitionsmenge</a>: Negative Mengen
+        oder Zeiten ergeben keinen Sinn, also z.&nbsp;B. $D = [0\,;\,10]$.</p>
+      <p>Die Rechenergebnisse werden am Ende <strong>rückübersetzt</strong>:
+        Nullstellen sind etwa <em>Gewinnschwelle</em> und <em>Gewinngrenze</em>,
+        das Vorzeichen dazwischen zeigt Gewinn- und Verlustzonen
+        (<a href="ungleichungen.html">Ungleichung</a> $G(x) &gt; 0$),
+        Randwerte wie $G(0)$ haben oft eine eigene Bedeutung (Fixkosten).</p>
+      <p>Nullstellen außerhalb von $D$ sind mathematisch korrekt, im Kontext aber
+        bedeutungslos — sie werden benannt und aussortiert. Wie man den Term selbst
+        findet, zeigt <a href="funktionsterm-aufstellen.html">Funktionsterm aufstellen</a>.</p>
     </div>
+
     <div class="wiki-entry-visual">
       <div class="canvas-wrap canvas-wrap--tall" id="wModell"><canvas id="cModell"></canvas></div>
-      <p class="wiki-entry-caption">Verlust – Gewinnzone (2 bis 8) – erneut Verlust.</p>
+      <div class="formula formula--dyn" id="modellLine">…</div>
+      <p class="wiki-entry-caption">Zieh die Produktionsmenge $x$ am Graphen der
+        Gewinnfunktion $G$ entlang: Zwischen den Nullstellen $2$ und $8$ liegt die
+        Gewinnzone (Mengen in Tausend Stück, Gewinn in Tausend Euro).</p>
     </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Ein Unternehmen modelliert seinen Gewinn (in Tausend Euro) je Produktionsmenge
+        $x$ (in Tausend Stück) durch $G(x) = -(x+3)(x-2)(x-8)$ mit $D = [0\,;\,10]$.</p>
+
+      <p><strong>Schritt 1 · Nullstellen deuten.</strong> Ablesen aus der Produktform:
+        $x = -3,\; 2,\; 8$. Wegen $D = [0;10]$ ist $x = -3$ ohne Bedeutung:</p>
+      <div class="formula formula--step">$$x = 2\!: \text{ Gewinnschwelle}
+        \qquad\quad x = 8\!: \text{ Gewinngrenze}$$</div>
+
+      <p><strong>Schritt 2 · Vorzeichen dazwischen.</strong> Testwert $x = 5$:</p>
+      <div class="formula formula--step">$$G(5) = -(8)(3)(-3) = 72 &gt; 0
+        \qquad\Rightarrow\qquad \text{Gewinnzone } 2 &lt; x &lt; 8$$</div>
+
+      <p><strong>Schritt 3 · Randwerte deuten.</strong></p>
+      <div class="formula formula--step">$$G(0) = -(3)(-2)(-8) = -48\!: \text{ Fixkosten von } 48\,000\ €
+        \text{ ohne Produktion}$$</div>
+
+      <div class="result-box">
+        Antwort im Kontext: Zwischen 2000 und 8000 Stück arbeitet das Unternehmen
+        profitabel; darunter und darüber macht es Verlust.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Berechne für $G(x) = -(x+3)(x-2)(x-8)$
+          die Randwerte des Definitionsbereichs $[0\,;\,10]$:</p>
+        <p>$G(0) = $ <input class="input quiz-input" data-ans="-48">
+          &emsp; $G(10) = $ <input class="input quiz-input" data-ans="-208"></p>
+        <div class="hint" data-quiz-hint>Einsetzen in die Produktform:
+          $G(10) = -(13)(8)(2)$. Vorzeichen mitführen!</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="1">
+        <p class="quiz-q"><strong>2 ·</strong> Ein Wasserstand wird durch $W(t)$ mit
+          $D = [0\,;\,12]$ (Stunden) modelliert. $W$ hat in $D$ genau eine Nullstelle bei
+          $t = 5$, davor ist $W$ negativ, danach positiv. Was bedeutet das?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">Um 5 Uhr ist der Wasserstand am höchsten.</button>
+          <button class="quiz-opt">Nach 5 Stunden erreicht der Wasserstand die Nullmarke und steigt darüber.</button>
+          <button class="quiz-opt">Das Modell ist unbrauchbar, weil Wasserstände nie negativ sein können.</button>
+        </div>
+        <div class="hint" data-quiz-hint>Die Nullmarke ist ein Bezugspegel (z.&nbsp;B. „Normalstand") —
+          negative Werte heißen „darunter". Was passiert am Vorzeichenwechsel?</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
       <ul class="related-list">
         <li><a href="funktionsterm-aufstellen.html">Funktionsterm aufstellen</a></li>
-        <li><a href="praesentation.html">Präsentation: Hauptproblem</a></li>
+        <li><a href="wertemenge-definitionsmenge.html">Definitionsmenge &amp; Wertemenge</a></li>
+        <li><a href="ungleichungen.html">Ungleichungen</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="funktionsterm-aufstellen.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Funktionsterm aufstellen
+      </a>
+      <a class="pager-next" href="funktionenscharen.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Funktionenscharen
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -78,19 +146,53 @@
 </footer>
 
 <script>
+/* Applet: Gewinnfunktion mit ziehbarem Mengen-Marker — Zonen live gedeutet. */
+var VIEW = { xMin: 0, xMax: 10, yMin: -240, yMax: 100 };
+var px = 5;
+var curMap = null;
+
+function G(x) { return -(x + 3) * (x - 2) * (x - 8); }
+
 function redraw() {
-  var cv = document.getElementById('cModell');
-  if (!cv) return;
-  var setup = Plot.setup('cModell', 'wModell');
-  var view = { xMin: 0, xMax: 10, yMin: -240, yMax: 80 };
-  var map = Plot.grid(setup.ctx, setup.w, setup.h, view, { stepX: 2, stepY: 40 });
-  Plot.curve(setup.ctx, function (x) { return -Math.pow(x, 3) + 7 * Math.pow(x, 2) + 14 * x - 48; }, map, view);
-  Plot.dot(setup.ctx, map, 2, 0, { label: 'x=2' });
-  Plot.dot(setup.ctx, map, 8, 0, { label: 'x=8' });
+  var s = Plot.setup('cModell', 'wModell');
+  curMap = Plot.grid(s.ctx, s.w, s.h, VIEW, { stepX: 1, stepY: 40 });
+  var c = Plot.colors();
+
+  /* Gewinnzone hervorheben */
+  s.ctx.strokeStyle = c.curve3;
+  s.ctx.lineWidth = 6;
+  s.ctx.beginPath();
+  s.ctx.moveTo(curMap.toX(2), curMap.toY(0));
+  s.ctx.lineTo(curMap.toX(8), curMap.toY(0));
+  s.ctx.stroke();
+
+  Plot.curve(s.ctx, G, curMap, VIEW, { color: c.curve });
+  Plot.dot(s.ctx, curMap, 2, 0, { color: c.curve3, label: 'Schwelle' });
+  Plot.dot(s.ctx, curMap, 8, 0, { color: c.curve3, label: 'Grenze' });
+
+  var y = G(px);
+  Plot.dot(s.ctx, curMap, px, y, { r: 6 });
+
+  document.getElementById('modellLine').textContent =
+    'x = ' + px.toFixed(1).replace('.', ',') + '   →   G(x) = ' +
+    Math.round(y) + '   (' + (y > 0.5 ? 'Gewinn' : y < -0.5 ? 'Verlust' : 'Nullmarke') + ')';
 }
+
 window.addEventListener('load', function () {
   redraw();
   if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+
+  Plot.draggable(document.getElementById('cModell'), {
+    map: function () { return curMap; },
+    hitTest: function (mx, my) {
+      var pts = [{ px: curMap.toX(px), py: curMap.toY(G(px)) }];
+      return Plot.nearest(pts, mx, my, 26);
+    },
+    onDrag: function (idx, x) {
+      px = Math.max(0, Math.min(10, Math.round(x * 10) / 10));
+      redraw();
+    }
+  });
 });
 </script>
 

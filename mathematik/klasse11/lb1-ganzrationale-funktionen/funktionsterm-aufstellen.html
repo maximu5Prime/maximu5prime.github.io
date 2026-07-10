@@ -12,13 +12,15 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -28,34 +30,105 @@
       <span>/</span>
       <span>Funktionsterm aufstellen</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
     <h1 class="site-title">Funktionsterm<br><em>aufstellen</em></h1>
-    <p class="site-sub">Aus bekannten Eigenschaften den passenden Term rückwärts konstruieren (Steckbriefaufgabe).</p>
+    <p class="site-sub">Vom Steckbrief zum Term: Die Nullstellen liefern die Faktoren,
+      ein zusätzlicher Punkt liefert den Streckfaktor $a$.</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="steckbrief">
 
-  <article class="card card--theory" id="steckbrief">
-    <h3>Vorgehen bei Steckbriefaufgaben</h3>
-    <p><strong>Merksatz:</strong> Sind Nullstellen bekannt, startet man mit dem Ansatz $f(x)=a(x-x_1)(x-x_2)\cdots$ (Nullstellenform) und bestimmt den Leitkoeffizienten $a$ über einen weiteren bekannten Punkt (<a href="funktionswerte-wertetabelle.html">Punktprobe</a>). Sind keine Nullstellen, sondern nur Punkte/Bedingungen bekannt, setzt man den allgemeinen Term mit unbekannten Koeffizienten an und löst ein Gleichungssystem.</p>
-    <p><strong>Beispiel (aus der Präsentation):</strong> Eine Gewinnfunktion hat im betrachteten Bereich Nullstellen bei $x=2$ und $x=8$, außerdem — rein formal, als dritter Linearfaktor — bei $x=-3$ (wirtschaftlich außerhalb des Definitionsbereichs). Bekannt ist zusätzlich $G(0)=-48$.</p>
-    <div class="formula">$$G(x) = a\,(x+3)(x-2)(x-8)$$</div>
-    <p>Einsetzen von $x=0$: $a\cdot3\cdot(-2)\cdot(-8) = 48a \overset{!}{=} -48 \;\Rightarrow\; a=-1$.</p>
-    <div class="formula">$$G(x) = -(x+3)(x-2)(x-8) = -x^3+7x^2+14x-48$$</div>
+    <div class="wiki-entry-text">
+      <p>Sind die Nullstellen bekannt, startet man mit dem <strong>Produktansatz</strong>
+        (Nullstellenform):</p>
+      <div class="formula">$$f(x) = a\,(x - x_1)(x - x_2)\cdots(x - x_n)$$</div>
+      <p>Eine <a href="vielfachheit-vorzeichenverhalten.html">doppelte Nullstelle</a>
+        („berührt die Achse") bekommt ihren Faktor im Quadrat: $(x - x_0)^2$.
+        Die Zahl der Faktoren muss zum geforderten
+        <a href="grad-leitkoeffizient.html">Grad</a> passen.</p>
+      <p>Der Streckfaktor $a$ ist die letzte Unbekannte. Ihn bestimmt ein weiterer
+        bekannter Punkt — oft der $y$-Achsenabschnitt — per
+        <a href="funktionswerte-wertetabelle.html">Punktprobe</a>: Punkt einsetzen,
+        nach $a$ auflösen.</p>
+      <p>Sind keine Nullstellen bekannt, sondern nur Punkte, setzt man den allgemeinen
+        Term $ax^n + \dots$ an und löst ein Gleichungssystem — in diesem Lernbereich
+        reicht fast immer der Produktansatz.</p>
+    </div>
+
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wTerm"><canvas id="cTerm"></canvas></div>
+      <div class="formula formula--dyn" id="termLine">…</div>
+      <p class="wiki-entry-caption">Zieh die drei Nullstellen auf der Achse und den Punkt
+        $P$ — der Produktansatz baut den Term live zusammen.</p>
+    </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Eine Gewinnfunktion dritten Grades hat Nullstellen bei $-3$, $2$ und $8$,
+        außerdem ist $G(0) = -48$ bekannt. Wie lautet der Term?</p>
+
+      <p><strong>Schritt 1 · Produktansatz.</strong> Drei einfache Nullstellen, Grad 3:</p>
+      <div class="formula formula--step">$$G(x) = a\,(x+3)(x-2)(x-8)$$</div>
+
+      <p><strong>Schritt 2 · Punkt einsetzen.</strong> $G(0) = -48$:</p>
+      <div class="formula formula--step">$$a \cdot 3 \cdot (-2) \cdot (-8) = 48a
+        \overset{!}{=} -48 \qquad\Rightarrow\qquad a = -1$$</div>
+
+      <p><strong>Schritt 3 · Term notieren</strong> (und bei Bedarf ausmultiplizieren):</p>
+      <div class="formula formula--step">$$G(x) = -(x+3)(x-2)(x-8) = -x^3 + 7x^2 + 14x - 48$$</div>
+
+      <div class="result-box">
+        Probe: $G(0) = -(3)(-2)(-8) = -48$ ✓ — genau die Funktion aus der
+        <a href="modellierung-sachkontext.html">Gewinn-und-Verlust-Aufgabe</a>.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Eine Parabel hat Nullstellen bei $1$ und $4$
+          und es gilt $f(0) = 8$. Bestimme $a$ im Ansatz $f(x) = a\,(x-1)(x-4)$:</p>
+        <p>$a = $ <input class="input quiz-input" data-ans="2"></p>
+        <div class="hint" data-quiz-hint>$f(0) = a \cdot (-1) \cdot (-4) = 4a$ —
+          und das soll $8$ sein.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="2">
+        <p class="quiz-q"><strong>2 ·</strong> Ein Graph dritten Grades berührt die $x$-Achse
+          bei $x = 2$ und schneidet sie bei $x = -1$. Welcher Ansatz passt?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">$f(x) = a\,(x-2)(x+1)$</button>
+          <button class="quiz-opt">$f(x) = a\,(x-2)(x+1)^2$</button>
+          <button class="quiz-opt">$f(x) = a\,(x-2)^2(x+1)$</button>
+        </div>
+        <div class="hint" data-quiz-hint>Berühren heißt doppelte Nullstelle — welcher Faktor
+          gehört ins Quadrat? Und stimmt der Gesamtgrad $2 + 1 = 3$?</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
       <ul class="related-list">
         <li><a href="funktionswerte-wertetabelle.html">Funktionswerte &amp; Punktprobe</a></li>
+        <li><a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit &amp; Vorzeichenverhalten</a></li>
         <li><a href="modellierung-sachkontext.html">Modellierung im Sachkontext</a></li>
-        <li><a href="praesentation.html">Präsentation: Hauptproblem</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="ungleichungen.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Ungleichungen
+      </a>
+      <a class="pager-next" href="modellierung-sachkontext.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Modellierung im Sachkontext
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -66,6 +139,75 @@
     </nav>
   </div>
 </footer>
+
+<script>
+/* Applet: ziehbare Nullstellen + Punkt P → Produktansatz wird live gebaut. */
+var VIEW = { xMin: -5, xMax: 5, yMin: -6, yMax: 6 };
+var Z = [-3, 1, 4];              /* Nullstellen */
+var P = { x: 0, y: 3 };          /* Zusatzpunkt für a */
+var curMap = null;
+
+function fmt(v) { return (Math.round(v * 2) / 2).toString().replace('.', ','); }
+function factorStr(x0) {
+  if (x0 === 0) return 'x';
+  return '(x ' + (x0 < 0 ? '+ ' + fmt(-x0) : '− ' + fmt(x0)) + ')';
+}
+
+function redraw() {
+  var s = Plot.setup('cTerm', 'wTerm');
+  curMap = Plot.grid(s.ctx, s.w, s.h, VIEW);
+  var c = Plot.colors();
+
+  var denom = (P.x - Z[0]) * (P.x - Z[1]) * (P.x - Z[2]);
+  var a = Math.abs(denom) < 0.05 ? null : P.y / denom;
+
+  if (a !== null) {
+    Plot.curve(s.ctx, function (x) {
+      return a * (x - Z[0]) * (x - Z[1]) * (x - Z[2]);
+    }, curMap, VIEW, { color: c.curve });
+  }
+
+  Z.forEach(function (x0, i) {
+    Plot.dot(s.ctx, curMap, x0, 0, { color: c.curve2, label: 'x' + (i + 1) });
+  });
+  Plot.dot(s.ctx, curMap, P.x, P.y, { color: c.curve3, label: 'P' });
+
+  document.getElementById('termLine').textContent = a === null
+    ? 'P darf nicht auf einer Nullstelle liegen'
+    : 'f(x) = ' + fmt(Math.round(a * 100) / 100) + ' · ' +
+      factorStr(Z[0]) + ' · ' + factorStr(Z[1]) + ' · ' + factorStr(Z[2]);
+}
+
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+
+  Plot.draggable(document.getElementById('cTerm'), {
+    map: function () { return curMap; },
+    hitTest: function (mx, my) {
+      var pts = Z.map(function (x0) {
+        return { px: curMap.toX(x0), py: curMap.toY(0) };
+      });
+      pts.push({ px: curMap.toX(P.x), py: curMap.toY(P.y) });
+      return Plot.nearest(pts, mx, my, 18);
+    },
+    onDrag: function (idx, x, y) {
+      var nx = Math.max(-4.5, Math.min(4.5, Math.round(x * 2) / 2));
+      if (idx < 3) {
+        /* Nullstellen dürfen nicht zusammenfallen */
+        for (var i = 0; i < 3; i++) {
+          if (i !== idx && Math.abs(Z[i] - nx) < 0.5) return;
+        }
+        Z[idx] = nx;
+      } else {
+        P.x = nx;
+        P.y = Math.max(-5.5, Math.min(5.5, Math.round(y * 2) / 2));
+      }
+      redraw();
+    }
+  });
+});
+</script>
 
 </body>
 </html>

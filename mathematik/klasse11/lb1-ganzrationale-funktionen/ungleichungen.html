@@ -13,13 +13,14 @@
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
   <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -29,36 +30,116 @@
       <span>/</span>
       <span>Ungleichungen</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
     <h1 class="site-title">Ganzrationale<br><em>Ungleichungen</em></h1>
-    <p class="site-sub">Lösungsmengen direkt am Graphen ablesen.</p>
+    <p class="site-sub">$f(x) &gt; 0$ heißt: Wo liegt der Graph oberhalb der $x$-Achse?
+      Die Nullstellen zerlegen die Achse in Abschnitte mit festem Vorzeichen.</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="ungleichungen">
 
-  <article class="card card--theory wiki-entry" id="ungleichungen">
     <div class="wiki-entry-text">
-      <h3>Ungleichungen über den Graphen lösen</h3>
-      <p><strong>Merksatz:</strong> Um $f(x) > 0$ (bzw. $<0$, $\geq0$, $\leq0$) zu lösen, skizziert man den Graphen: die <a href="nullstellen-ausklammern-binomisch.html">Nullstellen</a> sind die Grenzen der Lösungsmenge, die <a href="vielfachheit-vorzeichenverhalten.html">Vorzeichentabelle</a> zeigt, wo der Graph ober- bzw. unterhalb der $x$-Achse verläuft.</p>
-      <p><strong>Beispiel:</strong> $f(x)=x(x-3)^2 \geq 0$. Da $(x-3)^2$ nie negativ ist, hängt das Vorzeichen von $f$ allein von $x$ ab (außer bei der Berührung $x=3$, wo $f=0$ bleibt):</p>
-      <div class="formula">$$\mathbb{L} = \{x \in \mathbb{R} \mid x \geq 0\}$$</div>
+      <p>Eine Ungleichung wie $f(x) &gt; 0$ löst man graphisch in drei Schritten:</p>
+      <p><strong>1 ·</strong> Alle <a href="nullstellen-ausklammern-binomisch.html">Nullstellen</a>
+        bestimmen — sie sind die einzigen Stellen, an denen das Vorzeichen wechseln kann.</p>
+      <p><strong>2 ·</strong> Zwischen den Nullstellen je einen Testwert einsetzen
+        (<a href="vielfachheit-vorzeichenverhalten.html">Vorzeichentabelle</a>) oder den
+        skizzierten Graphen ablesen.</p>
+      <p><strong>3 ·</strong> Die passenden Abschnitte als Intervalle notieren. Bei $\geq$
+        oder $\leq$ gehören die Nullstellen mit zur Lösungsmenge.</p>
+      <p>Achtung an Berühr-Nullstellen (gerade
+        <a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit</a>): Dort wechselt das
+        Vorzeichen <em>nicht</em>. Und steht rechts nicht $0$, sondern eine zweite Funktion
+        ($f(x) &gt; g(x)$), hilft die Differenzfunktion — wie bei den
+        <a href="schnittpunkte-graphen.html">gemeinsamen Punkten</a>.</p>
     </div>
+
     <div class="wiki-entry-visual">
       <div class="canvas-wrap" id="wUngl"><canvas id="cUngl"></canvas></div>
-      <p class="wiki-entry-caption">Für $x\geq0$ verläuft der Graph nie unterhalb der $x$-Achse.</p>
+      <div class="formula formula--dyn" id="unglLine">…</div>
+      <p class="wiki-entry-caption">Zieh die gestrichelte Schranke $y = c$ nach oben oder
+        unten: Die markierten Bereiche auf der $x$-Achse zeigen, wo $f(x) &gt; c$ gilt
+        ($f(x) = x^3 - 4x$).</p>
     </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Löse $x^3 - 4x &gt; 0$.</p>
+
+      <p><strong>Schritt 1 · Nullstellen.</strong> Ausklammern und dritte binomische Formel:</p>
+      <div class="formula formula--step">$$x^3 - 4x = x\,(x^2 - 4) = x\,(x-2)(x+2)
+        \qquad\Rightarrow\qquad x = -2,\; 0,\; 2$$</div>
+
+      <p><strong>Schritt 2 · Vorzeichentabelle.</strong> Testwerte in den vier Abschnitten:</p>
+      <table class="table">
+        <thead><tr><th>Intervall</th><th>Testwert</th><th>Vorzeichen</th></tr></thead>
+        <tbody>
+          <tr><td>$x &lt; -2$</td><td>$f(-3) = -15$</td><td>$-$</td></tr>
+          <tr><td>$-2 &lt; x &lt; 0$</td><td>$f(-1) = 3$</td><td>$+$</td></tr>
+          <tr><td>$0 &lt; x &lt; 2$</td><td>$f(1) = -3$</td><td>$-$</td></tr>
+          <tr><td>$x &gt; 2$</td><td>$f(3) = 15$</td><td>$+$</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Schritt 3 · Intervalle ablesen.</strong> Gesucht sind die $+$-Abschnitte:</p>
+      <div class="formula formula--step">$$\mathbb{L} = \;]-2\,;\,0[ \;\cup\; ]2\,;\,\infty[$$</div>
+
+      <div class="result-box">
+        Alle Nullstellen sind einfach — das Vorzeichen wechselt an jeder. Die Ränder
+        gehören nicht dazu, weil echt „größer" gefordert ist.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Löse $x^2 - 4 \leq 0$. Die Lösungsmenge ist
+          ein Intervall $[\,a\,;\,b\,]$:</p>
+        <p>$a = $ <input class="input quiz-input" data-ans="-2">
+          &emsp; $b = $ <input class="input quiz-input" data-ans="2"></p>
+        <div class="hint" data-quiz-hint>Nullstellen von $x^2 - 4$: dritte binomische Formel.
+          Die Parabel öffnet nach oben — wo liegt sie unterhalb der Achse?
+          Wegen $\leq$ gehören die Ränder dazu.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
+        <p class="quiz-q"><strong>2 ·</strong> $h(x) = x\,(x-3)^2$. Wahr oder falsch?</p>
+        <table class="ankreuz">
+          <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+          <tbody>
+            <tr><td>Für $0 &lt; x &lt; 3$ gilt $h(x) &gt; 0$.</td><td></td><td></td></tr>
+            <tr><td>Für $x &gt; 3$ gilt $h(x) &lt; 0$.</td><td></td><td></td></tr>
+            <tr><td>Die Lösungsmenge von $h(x) \geq 0$ ist $[0\,;\,\infty[$.</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="hint" data-quiz-hint>$x = 3$ ist doppelte Nullstelle — dort berührt der
+          Graph die Achse nur, das Vorzeichen bleibt nach der Berührung gleich.</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
       <ul class="related-list">
         <li><a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit &amp; Vorzeichenverhalten</a></li>
+        <li><a href="schnittpunkte-graphen.html">Gemeinsame Punkte zweier Graphen</a></li>
+        <li><a href="nullstellen-ausklammern-binomisch.html">Nullstellen: Ausklammern &amp; binomische Formeln</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="schnittpunkte-graphen.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Gemeinsame Punkte zweier Graphen
+      </a>
+      <a class="pager-next" href="funktionsterm-aufstellen.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Funktionsterm aufstellen
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -71,18 +152,69 @@
 </footer>
 
 <script>
+/* Applet: ziehbare Schranke y = c — Lösungsbereiche von f(x) > c auf der x-Achse. */
+var VIEW = { xMin: -3, xMax: 3, yMin: -6, yMax: 6 };
+var cVal = 0;
+var curMap = null;
+
+function f(x) { return Math.pow(x, 3) - 4 * x; }
+
 function redraw() {
-  var cv = document.getElementById('cUngl');
-  if (!cv) return;
-  var setup = Plot.setup('cUngl', 'wUngl');
-  var view = { xMin: -1.5, xMax: 4.5, yMin: -18, yMax: 8 };
-  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
-  Plot.curve(setup.ctx, function (x) { return x * Math.pow(x - 3, 2); }, map, view);
-  Plot.dot(setup.ctx, map, 0, 0, { label: 'x=0' });
+  var s = Plot.setup('cUngl', 'wUngl');
+  curMap = Plot.grid(s.ctx, s.w, s.h, VIEW);
+  var col = Plot.colors();
+
+  /* Schranke y = c */
+  s.ctx.strokeStyle = col.curve2;
+  s.ctx.lineWidth = 2;
+  s.ctx.setLineDash([7, 5]);
+  s.ctx.beginPath();
+  s.ctx.moveTo(0, curMap.toY(cVal));
+  s.ctx.lineTo(s.w, curMap.toY(cVal));
+  s.ctx.stroke();
+  s.ctx.setLineDash([]);
+
+  Plot.curve(s.ctx, f, curMap, VIEW, { color: col.curve });
+
+  /* Lösungsbereiche f(x) > c dick auf der x-Achse markieren */
+  s.ctx.strokeStyle = col.curve3;
+  s.ctx.lineWidth = 6;
+  var n = 600, inRun = false, runStart = 0;
+  for (var i = 0; i <= n; i++) {
+    var x = VIEW.xMin + (VIEW.xMax - VIEW.xMin) * i / n;
+    var above = f(x) > cVal;
+    if (above && !inRun) { inRun = true; runStart = x; }
+    if ((!above || i === n) && inRun) {
+      inRun = false;
+      s.ctx.beginPath();
+      s.ctx.moveTo(curMap.toX(runStart), curMap.toY(0));
+      s.ctx.lineTo(curMap.toX(x), curMap.toY(0));
+      s.ctx.stroke();
+    }
+  }
+
+  /* Griff zum Ziehen der Schranke */
+  Plot.dot(s.ctx, curMap, 2.6, cVal, { color: col.curve2, r: 6, label: 'c' });
+
+  document.getElementById('unglLine').textContent =
+    'markiert: alle x mit f(x) > ' + cVal.toFixed(1).replace('.', ',');
 }
+
 window.addEventListener('load', function () {
   redraw();
   if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+
+  Plot.draggable(document.getElementById('cUngl'), {
+    map: function () { return curMap; },
+    hitTest: function (mx, my) {
+      /* Die ganze Schranken-Linie ist greifbar */
+      return Math.abs(my - curMap.toY(cVal)) < 16 ? 0 : null;
+    },
+    onDrag: function (idx, x, y) {
+      cVal = Math.max(-5, Math.min(5, Math.round(y * 2) / 2));
+      redraw();
+    }
+  });
 });
 </script>
 

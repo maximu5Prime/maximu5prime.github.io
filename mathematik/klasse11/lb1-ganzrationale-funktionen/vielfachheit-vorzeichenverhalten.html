@@ -13,13 +13,14 @@
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
   <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -29,49 +30,121 @@
       <span>/</span>
       <span>Vielfachheit &amp; Vorzeichenverhalten</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
     <h1 class="site-title">Vielfachheit &amp;<br><em>Vorzeichenverhalten</em></h1>
-    <p class="site-sub">Berührt der Graph die x-Achse nur, oder durchdringt er sie?</p>
+    <p class="site-sub">Wie oft ein Faktor im Term steckt, entscheidet:
+      Schneidet der Graph die $x$-Achse — oder berührt er sie nur?</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="vielfachheit">
 
-  <article class="card card--theory wiki-entry" id="vielfachheit">
     <div class="wiki-entry-text">
-      <h3>Vielfachheit einer Nullstelle</h3>
-      <p><strong>Merksatz:</strong> Die Vielfachheit einer Nullstelle $x_0$ ist der Exponent des Faktors $(x-x_0)$ in der vollständig faktorisierten Form. <strong>Ungerade</strong> Vielfachheit (1, 3, …): der Graph durchdringt die $x$-Achse (Vorzeichenwechsel). <strong>Gerade</strong> Vielfachheit (2, 4, …): der Graph berührt die $x$-Achse nur (kein Vorzeichenwechsel).</p>
-      <p><strong>Beispiel:</strong> $f(x)=x(x-3)^2$: $x=0$ ist einfache Nullstelle (Durchgang), $x=3$ ist doppelte Nullstelle (Berührung).</p>
+      <p>Die <strong>Vielfachheit</strong> einer Nullstelle $x_0$ ist der Exponent des
+        Faktors $(x - x_0)$ in der vollständig faktorisierten Form — dorthin kommt man
+        durch <a href="nullstellen-ausklammern-binomisch.html">Ausklammern</a> oder
+        <a href="nullstellen-polynomdivision.html">Polynomdivision</a>.</p>
+      <div class="formula">$$\text{ungerade Vielfachheit: Graph } \textbf{schneidet}
+        \qquad \text{gerade: Graph } \textbf{berührt}$$</div>
+      <p>Beim Schneiden wechselt $f$ das Vorzeichen, beim Berühren nicht.
+        Die <strong>Vorzeichentabelle</strong> macht das nachprüfbar: Zwischen zwei
+        benachbarten Nullstellen bleibt das Vorzeichen konstant — ein Testwert pro
+        Abschnitt genügt.</p>
+      <p>Dieses Wissen braucht man beim Skizzieren, beim Lösen von
+        <a href="ungleichungen.html">Ungleichungen</a> und um Graphen einem Term
+        zuzuordnen, ohne einen einzigen Punkt zu berechnen.</p>
     </div>
+
     <div class="wiki-entry-visual">
       <div class="canvas-wrap" id="wViel"><canvas id="cViel"></canvas></div>
-      <p class="wiki-entry-caption">Bei $x=0$ Vorzeichenwechsel, bei $x=3$ nur Berührung.</p>
+      <div class="slider-row">
+        <label for="slK">Vielfachheit k:</label>
+        <input type="range" id="slK" min="1" max="3" step="1" value="2" oninput="redraw()">
+        <span class="slider-value" id="slKVal">2</span>
+      </div>
+      <div class="formula formula--dyn" id="vielLine">…</div>
+      <p class="wiki-entry-caption">$f(x) = (x-1)^k \,(x+2)$: Verändere die Vielfachheit
+        der Nullstelle bei $x = 1$ — bei geradem $k$ berührt der Graph, bei ungeradem
+        schneidet er.</p>
     </div>
-  </article>
 
-  <article class="card card--theory" id="vorzeichentabelle">
-    <h3>Vorzeichentabelle</h3>
-    <p><strong>Merksatz:</strong> Zwischen zwei benachbarten Nullstellen bleibt das Vorzeichen von $f$ konstant. Eine Vorzeichentabelle prüft das mit Testwerten in jedem Teilintervall — nützlich für <a href="ungleichungen.html">Ungleichungen</a> und um Vielfachheiten am Graphen zu bestätigen.</p>
-    <p><strong>Beispiel</strong> für $f(x)=x(x-3)^2$ mit Nullstellen bei $0$ und $3$:</p>
-    <table style="width:100%;border-collapse:collapse;margin:.6rem 0;">
-      <tr><th style="text-align:left;padding:.3rem;border-bottom:1px solid var(--line);">Intervall</th><th style="text-align:left;padding:.3rem;border-bottom:1px solid var(--line);">Testwert</th><th style="text-align:left;padding:.3rem;border-bottom:1px solid var(--line);">Vorzeichen $f$</th></tr>
-      <tr><td style="padding:.3rem;">$x<0$</td><td style="padding:.3rem;">$x=-1$</td><td style="padding:.3rem;">$f(-1)=-16<0$</td></tr>
-      <tr><td style="padding:.3rem;">$0<x<3$</td><td style="padding:.3rem;">$x=1$</td><td style="padding:.3rem;">$f(1)=4>0$</td></tr>
-      <tr><td style="padding:.3rem;">$x>3$</td><td style="padding:.3rem;">$x=4$</td><td style="padding:.3rem;">$f(4)=4>0$</td></tr>
-    </table>
-    <p>Beim Durchgang bei $x=0$ wechselt das Vorzeichen (− → +), bei der Berührung bei $x=3$ bleibt es gleich (+ → +) — genau wie die Vielfachheit es vorhersagt.</p>
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Wie verhält sich $q(t) = t\,(t-6)^2$ an seinen Nullstellen?</p>
+
+      <p><strong>Schritt 1 · Vielfachheiten ablesen.</strong> Faktor $t$: Nullstelle bei
+        $t = 0$, Exponent $1$ → einfach. Faktor $(t-6)^2$: Nullstelle bei $t = 6$,
+        Exponent $2$ → doppelt.</p>
+
+      <p><strong>Schritt 2 · Vorzeichentabelle mit Testwerten.</strong></p>
+      <table class="table">
+        <thead><tr><th>Intervall</th><th>Testwert</th><th>Vorzeichen von $q$</th></tr></thead>
+        <tbody>
+          <tr><td>$t &lt; 0$</td><td>$q(-1) = -49$</td><td>$-$</td></tr>
+          <tr><td>$0 &lt; t &lt; 6$</td><td>$q(1) = 25$</td><td>$+$</td></tr>
+          <tr><td>$t &gt; 6$</td><td>$q(7) = 7$</td><td>$+$</td></tr>
+        </tbody>
+      </table>
+
+      <div class="result-box">
+        Bei $t = 0$ wechselt das Vorzeichen ($- \to +$): Durchgang.
+        Bei $t = 6$ bleibt es ($+ \to +$): Berührung — genau wie die Vielfachheiten
+        es vorhersagen.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W,F">
+        <p class="quiz-q"><strong>1 ·</strong> Berühren oder schneiden? Wahr oder falsch?</p>
+        <table class="ankreuz">
+          <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+          <tbody>
+            <tr><td>$f(x) = (x-2)^2(x+1)$ berührt die $x$-Achse bei $x = 2$.</td><td></td><td></td></tr>
+            <tr><td>$f(x) = (x-2)^2(x+1)$ berührt die $x$-Achse auch bei $x = -1$.</td><td></td><td></td></tr>
+            <tr><td>$g(x) = x^3(x-4)$ schneidet die $x$-Achse bei $x = 0$.</td><td></td><td></td></tr>
+            <tr><td>Eine vierfache Nullstelle erzeugt einen Vorzeichenwechsel.</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="hint" data-quiz-hint>Nur der Exponent des jeweiligen Faktors zählt:
+          gerade → berühren, ungerade → schneiden. $x^3$ hat den Exponenten 3.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="2">
+        <p class="quiz-q"><strong>2 ·</strong> $h(x) = (x+3)(x-1)^2$ ist negativ für $x &lt; -3$
+          und positiv für $-3 &lt; x &lt; 1$. Welches Vorzeichen hat $h$ für $x &gt; 1$?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">Negativ — an jeder Nullstelle wechselt das Vorzeichen.</button>
+          <button class="quiz-opt">Das hängt vom Leitkoeffizienten ab und ist hier nicht bestimmbar.</button>
+          <button class="quiz-opt">Positiv — $x = 1$ ist doppelte Nullstelle, das Vorzeichen bleibt.</button>
+        </div>
+        <div class="hint" data-quiz-hint>Welche Vielfachheit hat die Nullstelle bei $x = 1$?
+          Gerade Vielfachheit heißt: berühren, kein Wechsel.</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
       <ul class="related-list">
-        <li><a href="nullstellen-ausklammern-binomisch.html">Nullstellen: Ausklammern</a></li>
+        <li><a href="nullstellen-ausklammern-binomisch.html">Nullstellen: Ausklammern &amp; binomische Formeln</a></li>
         <li><a href="ungleichungen.html">Ungleichungen</a></li>
+        <li><a href="grenzverhalten.html">Grenzverhalten</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="nullstellen-substitution.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Nullstellen: Substitution
+      </a>
+      <a class="pager-next" href="grenzverhalten.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Grenzverhalten
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -84,16 +157,24 @@
 </footer>
 
 <script>
+/* Applet: f(x) = (x−1)^k (x+2) — Vielfachheit k formt das Verhalten bei x=1. */
+var VIEW = { xMin: -3, xMax: 3, yMin: -6, yMax: 6 };
+var WORDS = { 1: 'k = 1 (ungerade): schneidet bei x = 1', 2: 'k = 2 (gerade): berührt bei x = 1', 3: 'k = 3 (ungerade): schneidet flach bei x = 1' };
+
 function redraw() {
-  var cv = document.getElementById('cViel');
-  if (!cv) return;
-  var setup = Plot.setup('cViel', 'wViel');
-  var view = { xMin: -1.5, xMax: 4.5, yMin: -18, yMax: 8 };
-  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
-  Plot.curve(setup.ctx, function (x) { return x * Math.pow(x - 3, 2); }, map, view);
-  Plot.dot(setup.ctx, map, 0, 0, { label: 'x=0 (einfach)' });
-  Plot.dot(setup.ctx, map, 3, 0, { label: 'x=3 (doppelt)' });
+  var k = parseInt(document.getElementById('slK').value, 10);
+  var s = Plot.setup('cViel', 'wViel');
+  var map = Plot.grid(s.ctx, s.w, s.h, VIEW);
+  var c = Plot.colors();
+  Plot.curve(s.ctx, function (x) { return Math.pow(x - 1, k) * (x + 2); }, map, VIEW, { color: c.curve });
+  Plot.dot(s.ctx, map, -2, 0, { color: c.curve3, label: 'einfach' });
+  Plot.dot(s.ctx, map, 1, 0, { label: 'k-fach' });
+
+  document.getElementById('slKVal').textContent = k;
+  document.getElementById('vielLine').textContent = 'f(x) = (x − 1)' +
+    (k === 1 ? '' : k === 2 ? '²' : '³') + ' · (x + 2)   —   ' + WORDS[k];
 }
+
 window.addEventListener('load', function () {
   redraw();
   if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wertemenge &amp; Definitionsmenge – Ganzrationale Funktionen · Mathe 11</title>
+  <title>Definitionsmenge &amp; Wertemenge – Ganzrationale Funktionen · Mathe 11</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/static/fonts.css">
@@ -12,13 +12,15 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -26,38 +28,109 @@
       <span>/</span>
       <a href="/mathematik/klasse11/lb1-ganzrationale-funktionen/">Ganzrationale Funktionen</a>
       <span>/</span>
-      <span>Wertemenge &amp; Definitionsmenge</span>
+      <span>Definitionsmenge &amp; Wertemenge</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
-    <h1 class="site-title">Wertemenge &amp;<br><em>Definitionsmenge</em></h1>
-    <p class="site-sub">Welche x-Werte sind erlaubt, welche y-Werte kommen vor?</p>
+    <h1 class="site-title">Definitionsmenge<br><em>&amp; Wertemenge</em></h1>
+    <p class="site-sub">Welche $x$ darf ich einsetzen, welche $y$ kommen dabei heraus?
+      Beides lässt sich am Graphen ablesen.</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="d-und-w">
 
-  <article class="card card--theory" id="definitionsmenge">
-    <h3>Definitionsmenge $D_f$</h3>
-    <p><strong>Merksatz:</strong> Ganzrationale Funktionen sind für ganz $\mathbb{R}$ definiert — es gibt keine Definitionslücken. In einem <a href="modellierung-sachkontext.html">Sachkontext</a> wird $D_f$ aber oft künstlich eingeschränkt, z.B. auf ein Intervall, weil nur bestimmte Werte sinnvoll interpretierbar sind (negative Produktionsmengen etwa).</p>
-    <p><strong>Beispiel:</strong> Modelliert $f(t)$ eine Größe für $t$ zwischen 0 und 8 Tagen, ist $D_f = [0;8]$, obwohl der Term selbst für alle $t\in\mathbb{R}$ berechenbar wäre.</p>
-  </article>
+    <div class="wiki-entry-text">
+      <p>Die <strong>Definitionsmenge</strong> $D_f$ sammelt alle $x$-Werte, die eingesetzt
+        werden dürfen. Ganzrationale Funktionen haben keine Lücken: maximal ist immer
+        $D_f = \mathbb{R}$.</p>
+      <p>Trotzdem wird $D_f$ oft eingeschränkt — im
+        <a href="modellierung-sachkontext.html">Sachkontext</a> sind etwa negative
+        Produktionsmengen sinnlos, also z.&nbsp;B. $D_f = [0;8]$.</p>
+      <p>Die <strong>Wertemenge</strong> $W_f$ sammelt alle $y$-Werte, die dabei wirklich
+        herauskommen. Am Graphen: der Bereich zwischen dem tiefsten und dem höchsten Punkt
+        über der Definitionsmenge.</p>
+      <p>Bei eingeschränktem $D_f$ prüft man die <strong>Randwerte</strong> und markante
+        Punkte dazwischen (Scheitel, Werte aus der
+        <a href="funktionswerte-wertetabelle.html">Wertetabelle</a>) — der kleinste und der
+        größte gefundene Wert begrenzen $W_f$.</p>
+    </div>
 
-  <article class="card card--theory" id="wertemenge">
-    <h3>Wertemenge $W_f$</h3>
-    <p><strong>Merksatz:</strong> Bei maximaler Definitionsmenge (ganz $\mathbb{R}$) und ungeradem Grad ist $W_f=\mathbb{R}$ (das <a href="grenzverhalten.html">Grenzverhalten</a> geht in beide Richtungen). Bei eingeschränkter Definitionsmenge wird $W_f$ über die Randwerte und eine Wertetabelle abgeschätzt: die kleinsten/größten auftretenden Funktionswerte im betrachteten Intervall bilden die Grenzen.</p>
-    <p><strong>Beispiel:</strong> Für $f(x)=x^3-4x$ mit $D_f=[-2;2]$: Randwerte $f(-2)=0$, $f(2)=0$; ein Blick in die <a href="funktionswerte-wertetabelle.html">Wertetabelle</a> zeigt Werte bis $f(-1{,}15)\approx 3{,}1$ und $f(1{,}15)\approx-3{,}1$ — die tatsächlichen Extremwerte lassen sich in diesem Lernbereich nur so, über Wertetabelle/Graph, abschätzen (keine Ableitung nötig).</p>
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wDW"><canvas id="cDW"></canvas></div>
+      <div class="formula formula--dyn" id="dwLine">…</div>
+      <p class="wiki-entry-caption">Zieh die beiden Grenzen auf der $x$-Achse:
+        Der markierte Bogen ist der „erlaubte" Teil des Graphen von $f(x) = (x-1)^2 - 4$,
+        der Balken an der $y$-Achse zeigt die zugehörige Wertemenge.</p>
+    </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Gesucht: $W_f$ für $f(x) = (x-1)^2 - 4$ mit $D_f = [-1;2]$.</p>
+
+      <p><strong>Schritt 1 · Randwerte berechnen.</strong></p>
+      <div class="formula formula--step">$$f(-1) = (-2)^2 - 4 = 0 \qquad\quad f(2) = 1^2 - 4 = -3$$</div>
+
+      <p><strong>Schritt 2 · Markante Punkte dazwischen prüfen.</strong> Die Scheitelform zeigt
+        den Scheitel $S(1\,|\,{-4})$ — und $x = 1$ liegt in $D_f$. Tiefer als $-4$ kommt die
+        Parabel nirgends.</p>
+
+      <p><strong>Schritt 3 · Kleinsten und größten Wert nehmen.</strong> Kandidaten sind
+        $0$, $-3$ und $-4$:</p>
+      <div class="formula formula--step">$$W_f = [-4\,;\,0]$$</div>
+
+      <div class="result-box">
+        Randwerte allein reichen nicht — der Scheitel bei $x = 1$ drückt die Wertemenge
+        auf $-4$ hinunter, obwohl beide Ränder höher liegen.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="0">
+        <p class="quiz-q"><strong>1 ·</strong> Was ist die maximale Definitionsmenge von
+          $g(x) = -2x^5 + 3x^2 - 7$?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">$D_g = \mathbb{R}$ — ganzrationale Funktionen haben keine Definitionslücken.</button>
+          <button class="quiz-opt">$D_g = \mathbb{R} \setminus \{0\}$, weil $g(0)$ negativ ist.</button>
+          <button class="quiz-opt">$D_g = [0;\infty)$, weil ungerade Potenzen für negative $x$ nicht erlaubt sind.</button>
+        </div>
+        <div class="hint" data-quiz-hint>Gibt es ein $x$, für das sich der Term nicht ausrechnen
+          lässt? Potenzen und Summen funktionieren für jedes $x$.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>2 ·</strong> Bestimme $W_f$ für $f(x) = (x-1)^2 - 4$ auf
+          $D_f = [0;3]$. Kandidaten: Randwerte und Scheitel.</p>
+        <p>$f(0) = $ <input class="input quiz-input" data-ans="-3">
+          &emsp; $f(3) = $ <input class="input quiz-input" data-ans="0">
+          &emsp; $W_f = [\,$<input class="input quiz-input" data-ans="-4">$\,;\,$<input class="input quiz-input" data-ans="0">$\,]$</p>
+        <div class="hint" data-quiz-hint>Der Scheitel $S(1\,|\,{-4})$ liegt in $[0;3]$ —
+          er liefert den kleinsten Wert. Der größte Kandidat gewinnt die Obergrenze.</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
       <ul class="related-list">
         <li><a href="funktionswerte-wertetabelle.html">Funktionswerte &amp; Wertetabelle</a></li>
+        <li><a href="modellierung-sachkontext.html">Modellierung im Sachkontext</a></li>
         <li><a href="grenzverhalten.html">Grenzverhalten</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="grad-leitkoeffizient.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Grad &amp; Leitkoeffizient
+      </a>
+      <a class="pager-next" href="nullstellen-ausklammern-binomisch.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Nullstellen: Ausklammern &amp; binomische Formeln
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -68,6 +141,69 @@
     </nav>
   </div>
 </footer>
+
+<script>
+/* Applet: ziehbare Intervallgrenzen auf der x-Achse → Wertemenge als y-Balken. */
+var VIEW = { xMin: -3, xMax: 5, yMin: -6, yMax: 6 };
+var A = -1, B = 2;   /* Intervallgrenzen */
+var curMap = null;
+
+function f(x) { return Math.pow(x - 1, 2) - 4; }
+function fmt(v) { return v.toFixed(1).replace(/\.0$/, '').replace('.', ','); }
+
+function redraw() {
+  var s = Plot.setup('cDW', 'wDW');
+  curMap = Plot.grid(s.ctx, s.w, s.h, VIEW);
+  var c = Plot.colors();
+
+  /* Gesamte Kurve blass, erlaubter Abschnitt kräftig */
+  Plot.curve(s.ctx, f, curMap, VIEW, { color: c.grid, width: 2 });
+  var lo = Math.min(A, B), hi = Math.max(A, B);
+  Plot.curve(s.ctx, function (x) { return (x >= lo && x <= hi) ? f(x) : NaN; },
+    curMap, VIEW, { color: c.curve, width: 3 });
+
+  /* Wertemenge bestimmen: Ränder + Scheitel (falls im Intervall) */
+  var wMin = Math.min(f(lo), f(hi));
+  var wMax = Math.max(f(lo), f(hi));
+  if (lo <= 1 && 1 <= hi) wMin = Math.min(wMin, -4);
+
+  /* W als Balken an der y-Achse */
+  s.ctx.strokeStyle = c.curve2;
+  s.ctx.lineWidth = 5;
+  s.ctx.beginPath();
+  s.ctx.moveTo(curMap.toX(0), curMap.toY(wMin));
+  s.ctx.lineTo(curMap.toX(0), curMap.toY(wMax));
+  s.ctx.stroke();
+
+  /* Ziehbare Grenzen auf der x-Achse */
+  Plot.dot(s.ctx, curMap, A, 0, { color: c.curve3, label: 'a' });
+  Plot.dot(s.ctx, curMap, B, 0, { color: c.curve3, label: 'b' });
+
+  document.getElementById('dwLine').textContent =
+    'D = [' + fmt(lo) + '; ' + fmt(hi) + ']   →   W = [' + fmt(wMin) + '; ' + fmt(wMax) + ']';
+}
+
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+
+  Plot.draggable(document.getElementById('cDW'), {
+    map: function () { return curMap; },
+    hitTest: function (mx, my) {
+      var pts = [
+        { px: curMap.toX(A), py: curMap.toY(0) },
+        { px: curMap.toX(B), py: curMap.toY(0) }
+      ];
+      return Plot.nearest(pts, mx, my, 20);
+    },
+    onDrag: function (idx, x) {
+      var v = Math.max(-2.5, Math.min(4.5, Math.round(x * 2) / 2));
+      if (idx === 0) A = v; else B = v;
+      redraw();
+    }
+  });
+});
+</script>
 
 </body>
 </html>

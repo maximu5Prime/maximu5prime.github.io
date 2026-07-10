@@ -13,13 +13,14 @@
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
   <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -29,54 +30,102 @@
       <span>/</span>
       <span>Funktionswerte &amp; Wertetabelle</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
     <h1 class="site-title">Funktionswerte<br><em>&amp; Wertetabelle</em></h1>
-    <p class="site-sub">Die Grundlage für alles Weitere: Werte einsetzen, Punkte prüfen.</p>
+    <p class="site-sub">Werte einsetzen, Tabelle füllen, Punkte prüfen —
+      die Handarbeit hinter jedem Graphen.</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="funktionswert">
 
-  <article class="card card--theory wiki-entry" id="funktionswert">
     <div class="wiki-entry-text">
-      <h3>Funktionswert berechnen &amp; Wertetabelle</h3>
-      <p><strong>Merksatz:</strong> Um den Funktionswert $f(x_0)$ zu berechnen, wird $x_0$ in den Term eingesetzt. Eine Wertetabelle listet mehrere solche Paare $(x\,|\,f(x))$ systematisch auf — Grundlage, um einen Graphen von Hand zu skizzieren.</p>
-      <p><strong>Beispiel:</strong> $f(x) = x^3 - 4x$:</p>
-      <div class="formula">$$f(-2)=0,\; f(-1)=3,\; f(0)=0,\; f(1)=-3,\; f(2)=0$$</div>
+      <p>Der Funktionswert $f(x_0)$ entsteht, indem man $x_0$ in den Term einsetzt und
+        ausrechnet. Der Punkt $\bigl(x_0\,|\,f(x_0)\bigr)$ liegt dann auf dem Graphen.</p>
+      <p>Eine <strong>Wertetabelle</strong> sammelt mehrere solcher Paare — damit lässt sich
+        jeder Graph von Hand skizzieren, auch wenn man den Verlauf noch nicht kennt.</p>
+      <p>Die <strong>Punktprobe</strong> dreht die Frage um: Liegt ein gegebener Punkt
+        $P(x_0\,|\,y_0)$ auf dem Graphen?</p>
+      <div class="formula">$$P(x_0\,|\,y_0) \text{ liegt auf } G_f \;\Leftrightarrow\; f(x_0) = y_0$$</div>
+      <p>Einsetzen und Prüfen braucht man in diesem Lernbereich ständig — etwa beim
+        <a href="funktionsterm-aufstellen.html">Aufstellen von Funktionstermen</a> oder bei
+        <a href="schnittpunkte-graphen.html">gemeinsamen Punkten zweier Graphen</a>.</p>
     </div>
+
     <div class="wiki-entry-visual">
       <div class="canvas-wrap" id="wPunkt"><canvas id="cPunkt"></canvas></div>
-      <p class="wiki-entry-caption" id="sX-val">Regler bewegen, um $x$ zu verändern.</p>
-      <div class="slider-row" style="display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;">
-        <label style="font-family:var(--font-mono);font-size:.82rem;color:var(--muted);">x =</label>
-        <input type="range" id="sX" min="-2.5" max="2.5" step="0.1" value="1.5" oninput="redraw()">
-      </div>
+      <div class="formula formula--dyn" id="valLine">…</div>
+      <p class="wiki-entry-caption">Zieh den Punkt am Graphen von $f(x) = x^3 - 4x$ entlang —
+        zu jedem $x$ gehört genau ein Funktionswert.</p>
     </div>
 
-    <aside class="related">
-      <p class="related-label">Siehe auch</p>
-      <ul class="related-list">
-        <li><a href="grad-leitkoeffizient.html">Grad &amp; Leitkoeffizient</a></li>
-        <li><a href="schnittpunkte-graphen.html">Gemeinsame Punkte zweier Graphen</a></li>
-      </ul>
-    </aside>
-  </article>
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Wertetabelle für $f(x) = x^3 - 4x$ von $x = -2$ bis $x = 2$.</p>
 
-  <article class="card card--theory" id="punktprobe">
-    <h3>Punktprobe: Liegt P auf dem Graphen?</h3>
-    <p><strong>Merksatz:</strong> Ein Punkt $P(x_0\,|\,y_0)$ liegt genau dann auf dem Graphen von $f$, wenn $f(x_0) = y_0$ gilt.</p>
-    <p><strong>Beispiel:</strong> Für $f(x) = x^3 - 4x$: Liegt $P(2\,|\,3)$ auf dem Graphen? $f(2) = 0 \neq 3$ — <strong>nein</strong>. Liegt $Q(-1\,|\,3)$ auf dem Graphen? $f(-1) = 3$ — <strong>ja</strong>.</p>
+      <p><strong>Schritt 1 · Einen Wert ausführlich rechnen.</strong> Für $x = -1$:</p>
+      <div class="formula formula--step">$$f(-1) = (-1)^3 - 4 \cdot (-1) = -1 + 4 = 3$$</div>
+
+      <p><strong>Schritt 2 · Tabelle füllen.</strong> Genauso für die übrigen $x$-Werte:</p>
+      <table class="table">
+        <thead><tr><th>$x$</th><th>$-2$</th><th>$-1$</th><th>$0$</th><th>$1$</th><th>$2$</th></tr></thead>
+        <tbody><tr><td>$f(x)$</td><td>$0$</td><td>$3$</td><td>$0$</td><td>$-3$</td><td>$0$</td></tr></tbody>
+      </table>
+
+      <p><strong>Schritt 3 · Punktprobe.</strong> Liegt $P(2\,|\,3)$ auf dem Graphen?</p>
+      <div class="formula formula--step">$$f(2) = 8 - 8 = 0 \;\neq\; 3 \qquad\Rightarrow\qquad P \text{ liegt nicht auf } G_f$$</div>
+
+      <div class="result-box">
+        Fünf Punkte reichen hier schon für eine brauchbare Skizze — und $Q(-1\,|\,3)$ liegt
+        wegen $f(-1) = 3$ auf dem Graphen, $P(2\,|\,3)$ nicht.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Berechne für $f(x) = x^3 - 4x$ zwei weitere Werte:</p>
+        <p>$f(3) = $ <input class="input quiz-input" data-ans="15">
+          &emsp; $f(-3) = $ <input class="input quiz-input" data-ans="-15"></p>
+        <div class="hint" data-quiz-hint>$f(3) = 27 - 12$. Bei $f(-3)$ auf die Vorzeichen achten:
+          $(-3)^3 = -27$ und $-4 \cdot (-3) = +12$.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="1">
+        <p class="quiz-q"><strong>2 ·</strong> Liegt der Punkt $R(-2\,|\,{-8})$ auf dem Graphen von
+          $g(x) = x^3$?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">Nein, denn $g(-2) = 8 \neq -8$.</button>
+          <button class="quiz-opt">Ja, denn $g(-2) = (-2)^3 = -8$.</button>
+          <button class="quiz-opt">Das lässt sich ohne Graph nicht entscheiden.</button>
+        </div>
+        <div class="hint" data-quiz-hint>Punktprobe: $x_0 = -2$ einsetzen und mit $y_0 = -8$
+          vergleichen. Ungerade Potenz: $(-2)^3 = -2 \cdot (-2) \cdot (-2)$.</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
       <ul class="related-list">
         <li><a href="funktionsterm-aufstellen.html">Funktionsterm aufstellen</a></li>
+        <li><a href="schnittpunkte-graphen.html">Gemeinsame Punkte zweier Graphen</a></li>
+        <li><a href="wertemenge-definitionsmenge.html">Definitionsmenge &amp; Wertemenge</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Grundlage für alle weiteren Themen dieses Lernbereichs. Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="lineare-quadratische-funktionen.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Lineare &amp; quadratische Funktionen
+      </a>
+      <a class="pager-next" href="grad-leitkoeffizient.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Grad &amp; Leitkoeffizient
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -89,22 +138,50 @@
 </footer>
 
 <script>
+/* Applet: Punkt auf der Kurve entlangziehen — x wählen, f(x) ablesen. */
+var VIEW = { xMin: -3, xMax: 3, yMin: -6, yMax: 6 };
+var px = 1.5;
+var curMap = null;
+
 function f(x) { return Math.pow(x, 3) - 4 * x; }
+
 function redraw() {
-  var cv = document.getElementById('cPunkt');
-  if (!cv) return;
-  var setup = Plot.setup('cPunkt', 'wPunkt');
-  var view = { xMin: -3, xMax: 3, yMin: -6, yMax: 6 };
-  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
-  Plot.curve(setup.ctx, f, map, view);
-  var x = parseFloat(document.getElementById('sX').value);
-  var y = f(x);
-  Plot.dot(setup.ctx, map, x, y, { label: 'P(' + x.toFixed(1) + '|' + y.toFixed(1) + ')' });
-  document.getElementById('sX-val').textContent = 'x = ' + x.toFixed(1) + ',  f(x) = ' + y.toFixed(2);
+  var s = Plot.setup('cPunkt', 'wPunkt');
+  curMap = Plot.grid(s.ctx, s.w, s.h, VIEW);
+  var c = Plot.colors();
+  Plot.curve(s.ctx, f, curMap, VIEW, { color: c.curve });
+
+  /* Hilfslinien vom Punkt zu den Achsen */
+  var y = f(px);
+  s.ctx.strokeStyle = c.axis;
+  s.ctx.setLineDash([4, 4]);
+  s.ctx.beginPath();
+  s.ctx.moveTo(curMap.toX(px), curMap.toY(0));
+  s.ctx.lineTo(curMap.toX(px), curMap.toY(y));
+  s.ctx.lineTo(curMap.toX(0), curMap.toY(y));
+  s.ctx.stroke();
+  s.ctx.setLineDash([]);
+
+  Plot.dot(s.ctx, curMap, px, y, { label: 'P' });
+  document.getElementById('valLine').textContent =
+    'x = ' + px.toFixed(1).replace('.', ',') + '   →   f(x) = ' + y.toFixed(2).replace('.', ',');
 }
+
 window.addEventListener('load', function () {
   redraw();
   if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+
+  Plot.draggable(document.getElementById('cPunkt'), {
+    map: function () { return curMap; },
+    hitTest: function (mx, my) {
+      var pts = [{ px: curMap.toX(px), py: curMap.toY(f(px)) }];
+      return Plot.nearest(pts, mx, my, 22);
+    },
+    onDrag: function (idx, x) {
+      px = Math.max(-2.6, Math.min(2.6, Math.round(x * 10) / 10));
+      redraw();
+    }
+  });
 });
 </script>
 

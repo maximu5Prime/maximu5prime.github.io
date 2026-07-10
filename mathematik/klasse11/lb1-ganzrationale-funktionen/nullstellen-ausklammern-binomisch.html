@@ -13,13 +13,14 @@
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
   <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -29,43 +30,105 @@
       <span>/</span>
       <span>Nullstellen: Ausklammern &amp; binomisch</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
     <h1 class="site-title">Nullstellen:<br><em>Ausklammern &amp; binomische Formeln</em></h1>
-    <p class="site-sub">Die schnellsten Wege zu einer Nullstelle, wenn der Term es hergibt.</p>
+    <p class="site-sub">Produkt gleich null heißt: Einer der Faktoren ist null.
+      Ausklammern und binomische Formeln bringen den Term in Produktform.</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="ausklammern-binomisch">
 
-  <article class="card card--theory wiki-entry" id="ausklammern">
     <div class="wiki-entry-text">
-      <h3>Nullstellen durch Ausklammern</h3>
-      <p><strong>Merksatz:</strong> Kommt in jedem Summanden mindestens $x^1$ vor, lässt sich $x$ (oder eine höhere Potenz) ausklammern. Eine Nullstelle liegt dann direkt bei $x=0$.</p>
-      <div class="formula">$$f(x) = x^3 - 6x^2 + 9x = x(x-3)^2$$</div>
-      <p><strong>Beispiel:</strong> Nullstellen bei $x=0$ und $x=3$ (doppelt, siehe <a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit</a>).</p>
+      <p>Eine <strong>Nullstelle</strong> ist ein $x$, für das $f(x) = 0$ gilt — dort
+        schneidet oder berührt der Graph die $x$-Achse. Der Schlüssel zum Rechnen ist der
+        <strong>Satz vom Nullprodukt</strong>:</p>
+      <div class="formula">$$a \cdot b = 0 \;\Leftrightarrow\; a = 0 \;\text{ oder }\; b = 0$$</div>
+      <p><strong>Ausklammern:</strong> Steckt in jedem Summanden ein $x$, lässt sich die
+        kleinste Potenz herausziehen — eine Nullstelle liegt dann sofort bei $x = 0$.</p>
+      <p><strong>Binomische Formeln rückwärts:</strong> Muster wie $a^2 - 2ab + b^2 = (a-b)^2$
+        oder $a^2 - b^2 = (a-b)(a+b)$ zerlegen den Rest ohne weitere Rechnung.</p>
+      <p>Wie oft ein Faktor vorkommt, entscheidet über das Verhalten an der Nullstelle —
+        siehe <a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit</a>. Und wenn sich
+        kein Muster findet, hilft die
+        <a href="nullstellen-polynomdivision.html">Polynomdivision</a>.</p>
     </div>
+
     <div class="wiki-entry-visual">
       <div class="canvas-wrap" id="wAusk"><canvas id="cAusk"></canvas></div>
-      <p class="wiki-entry-caption">$f(x)=x(x-3)^2$: Nullstelle bei 0 (einfach), Berührung bei 3 (doppelt).</p>
+      <div class="formula formula--dyn" id="factorLine">f(x) = x · (x − 3)² — Nullstelle antippen!</div>
+      <p class="wiki-entry-caption">Tippe eine Nullstelle an: Der zugehörige Faktor wird
+        angezeigt. Bei $x=0$ schneidet der Graph (einfach), bei $x=3$ berührt er nur (doppelt).</p>
     </div>
-  </article>
 
-  <article class="card card--theory" id="binomisch">
-    <h3>Nullstellen mit binomischen Formeln</h3>
-    <p><strong>Merksatz:</strong> $a^2-2ab+b^2=(a-b)^2$, $a^2+2ab+b^2=(a+b)^2$, $a^2-b^2=(a-b)(a+b)$ — erkennt man eines dieser Muster, faktorisiert das den Term direkt.</p>
-    <p><strong>Beispiel:</strong> $g(x) = x^3-9x = x(x^2-9) = x(x-3)(x+3)$ (3. binomische Formel im Klammerausdruck) → Nullstellen bei $x=0,\,3,\,-3$.</p>
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Gesucht: alle Nullstellen von $f(x) = x^3 - 6x^2 + 9x$.</p>
+
+      <p><strong>Schritt 1 · Ausklammern.</strong> In jedem Summanden steckt ein $x$:</p>
+      <div class="formula formula--step">$$f(x) = x \cdot \bigl(x^2 - 6x + 9\bigr)$$</div>
+
+      <p><strong>Schritt 2 · Binomische Formel erkennen.</strong> $x^2 - 6x + 9$ passt auf
+        $a^2 - 2ab + b^2$ mit $a = x$, $b = 3$:</p>
+      <div class="formula formula--step">$$f(x) = x \cdot (x - 3)^2$$</div>
+
+      <p><strong>Schritt 3 · Satz vom Nullprodukt.</strong> Jeder Faktor kann null werden:</p>
+      <div class="formula formula--step">$$x = 0 \qquad\text{oder}\qquad (x-3)^2 = 0 \;\Leftrightarrow\; x = 3$$</div>
+
+      <div class="result-box">
+        Nullstellen: $x_1 = 0$ (einfach — der Graph schneidet) und $x_2 = 3$
+        (doppelt — der Graph berührt die Achse nur).
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Bestimme die Nullstellen von
+          $g(x) = x^3 + 3x^2 = x^2(x + 3)$:</p>
+        <p>doppelte Nullstelle: $x = $ <input class="input quiz-input" data-ans="0">
+          &emsp; einfache Nullstelle: $x = $ <input class="input quiz-input" data-ans="-3"></p>
+        <div class="hint" data-quiz-hint>Satz vom Nullprodukt: $x^2 = 0$ oder $x + 3 = 0$.
+          Der Exponent am Faktor verrät die Vielfachheit.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
+        <p class="quiz-q"><strong>2 ·</strong> Wahr oder falsch?</p>
+        <table class="ankreuz">
+          <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+          <tbody>
+            <tr><td>$x^2 - 9 = (x-3)(x+3)$ — dritte binomische Formel.</td><td></td><td></td></tr>
+            <tr><td>$x^2 + 9 = (x+3)^2$ — erste binomische Formel.</td><td></td><td></td></tr>
+            <tr><td>Aus $x^3 - 2x^2$ lässt sich $x^2$ ausklammern.</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="hint" data-quiz-hint>Probe durch Ausmultiplizieren: $(x+3)^2 = x^2 + 6x + 9$ —
+          wo ist das mittlere Glied in $x^2 + 9$?</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
       <ul class="related-list">
         <li><a href="nullstellen-polynomdivision.html">Nullstellen: Polynomdivision</a></li>
         <li><a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit &amp; Vorzeichenverhalten</a></li>
+        <li><a href="lineare-quadratische-funktionen.html">Lineare &amp; quadratische Funktionen</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="wertemenge-definitionsmenge.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Definitionsmenge &amp; Wertemenge
+      </a>
+      <a class="pager-next" href="nullstellen-polynomdivision.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Nullstellen: Probieren &amp; Polynomdivision
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -78,19 +141,48 @@
 </footer>
 
 <script>
+/* Applet: Nullstellen antippen → zugehöriger Faktor wird angezeigt. */
+var VIEW = { xMin: -1, xMax: 4.5, yMin: -3, yMax: 6 };
+var ZEROS = [
+  { x: 0, text: 'Faktor x  →  Nullstelle x = 0 (einfach: Graph schneidet)' },
+  { x: 3, text: 'Faktor (x − 3)²  →  Nullstelle x = 3 (doppelt: Graph berührt)' }
+];
+var selected = null;
+var curMap = null;
+
+function f(x) { return x * Math.pow(x - 3, 2); }
+
 function redraw() {
-  var cv = document.getElementById('cAusk');
-  if (!cv) return;
-  var setup = Plot.setup('cAusk', 'wAusk');
-  var view = { xMin: -1, xMax: 4, yMin: -3, yMax: 6 };
-  var map = Plot.grid(setup.ctx, setup.w, setup.h, view);
-  Plot.curve(setup.ctx, function (x) { return x * Math.pow(x - 3, 2); }, map, view);
-  Plot.dot(setup.ctx, map, 0, 0, { label: 'x=0' });
-  Plot.dot(setup.ctx, map, 3, 0, { label: 'x=3' });
+  var s = Plot.setup('cAusk', 'wAusk');
+  curMap = Plot.grid(s.ctx, s.w, s.h, VIEW);
+  var c = Plot.colors();
+  Plot.curve(s.ctx, f, curMap, VIEW, { color: c.curve });
+  ZEROS.forEach(function (z, i) {
+    Plot.dot(s.ctx, curMap, z.x, 0, {
+      color: i === selected ? c.accent : c.curve2,
+      r: i === selected ? 7 : 5,
+      label: 'x=' + z.x
+    });
+  });
+  document.getElementById('factorLine').textContent =
+    selected === null ? 'f(x) = x · (x − 3)² — Nullstelle antippen!' : ZEROS[selected].text;
 }
+
 window.addEventListener('load', function () {
   redraw();
   if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+
+  var canvas = document.getElementById('cAusk');
+  canvas.style.cursor = 'pointer';
+  canvas.addEventListener('pointerdown', function (ev) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = ev.clientX - rect.left, my = ev.clientY - rect.top;
+    var pts = ZEROS.map(function (z) {
+      return { px: curMap.toX(z.x), py: curMap.toY(0) };
+    });
+    var hit = Plot.nearest(pts, mx, my, 24);
+    if (hit !== null) { selected = hit; redraw(); }
+  });
 });
 </script>
 
