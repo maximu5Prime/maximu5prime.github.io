@@ -12,13 +12,15 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
 <body>
 
 <header class="site-header site-header--compact">
-  <div class="container container--narrow">
+  <div class="container container--wide">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Lernportal</a>
       <span>/</span>
@@ -28,32 +30,123 @@
       <span>/</span>
       <span>Nullstellen: Polynomdivision</span>
     </nav>
-    <p class="kicker">∑ M 11 · LB 1 · Wiki</p>
-    <h1 class="site-title">Nullstellen:<br><em>Systematisches Probieren &amp; Polynomdivision</em></h1>
-    <p class="site-sub">Wenn sich nichts ausklammern lässt: eine Nullstelle raten, dann abspalten.</p>
+    <h1 class="site-title">Nullstellen:<br><em>Probieren &amp; Polynomdivision</em></h1>
+    <p class="site-sub">Wenn sich nichts ausklammern lässt: eine Nullstelle durch Probieren finden,
+      dann den passenden Faktor abspalten — der Grad wird kleiner, bis alles zerlegt ist.</p>
   </div>
 </header>
 
-<main class="container">
+<main class="container container--wide">
+  <div class="wiki-entry" id="probieren-polynomdivision">
 
-  <article class="card card--theory" id="probieren-polynomdivision">
-    <h3>Probieren + Polynomdivision</h3>
-    <p><strong>Merksatz:</strong> Findet man durch systematisches Probieren (meist unter den Teilern des Absolutglieds $a_0$) eine Nullstelle $x_0$, lässt sich $(x-x_0)$ per Polynomdivision abspalten. Das Restpolynom hat einen um 1 kleineren Grad — der Vorgang wiederholt sich, bis vollständig faktorisiert ist.</p>
-    <p><strong>Beispiel:</strong> $p(x) = x^3 - 6x^2 + 11x - 6$. Teiler von $-6$: $\pm1,\pm2,\pm3,\pm6$. Probe: $p(1) = 1-6+11-6 = 0$ ✓ → $(x-1)$ abspalten:</p>
-    <div class="formula">$$p(x) = (x-1)(x^2-5x+6) = (x-1)(x-2)(x-3)$$</div>
-    <p>Vollständig faktorisiert: Nullstellen bei $x=1$, $x=2$, $x=3$ (alle einfach).</p>
+    <div class="wiki-entry-text">
+      <p>Nicht jeder Term lässt sich durch <a href="nullstellen-ausklammern-binomisch.html">Ausklammern
+        oder binomische Formeln</a> zerlegen. Dann hilft ein Verfahren in zwei Schritten:
+        <strong>erst raten, dann teilen.</strong></p>
+      <p><strong>Raten:</strong> Wenn eine ganzrationale Funktion eine ganzzahlige Nullstelle hat,
+        steckt sie in den Teilern des Absolutglieds $a_0$ (der Zahl ohne $x$).
+        Diese Kandidaten setzt man der Reihe nach ein, bis $0$ herauskommt.</p>
+      <p><strong>Teilen:</strong> Ist $x_0$ eine Nullstelle, lässt sich der Faktor $(x - x_0)$
+        ohne Rest abspalten — das erledigt die Polynomdivision. Übrig bleibt ein Restpolynom
+        mit einem um 1 kleineren Grad:</p>
+      <div class="formula">$$p(x) = (x - x_0) \cdot \underbrace{r(x)}_{\text{Grad um 1 kleiner}}$$</div>
+      <p>Das wiederholt man, bis das Restpolynom quadratisch ist — ab da übernehmen
+        Mitternachtsformel oder <a href="nullstellen-ausklammern-binomisch.html">binomische Formeln</a>.
+        Am Ende ist der Term vollständig faktorisiert und alle Nullstellen samt
+        <a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit</a> sind ablesbar.</p>
+    </div>
+
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wDiv"><canvas id="cDiv"></canvas></div>
+      <div class="slider-row">
+        <label for="slStage">Abspalten:</label>
+        <input type="range" id="slStage" min="0" max="2" step="1" value="0" oninput="redraw()">
+        <span class="slider-value" id="slStageVal">0 ×</span>
+      </div>
+      <div class="formula formula--dyn" id="factorLine">p(x) = x³ − 6x² + 11x − 6</div>
+      <p class="wiki-entry-caption">Jede Division spaltet eine Nullstelle ab —
+        die Kurve des Restpolynoms wird einen Grad flacher, die übrigen Nullstellen bleiben.</p>
+    </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Gesucht: alle Nullstellen von $p(x) = x^3 - 6x^2 + 11x - 6$.</p>
+
+      <p><strong>Schritt 1 · Nullstelle raten.</strong> Kandidaten sind die Teiler von $a_0 = -6$,
+        also $\pm 1,\ \pm 2,\ \pm 3,\ \pm 6$. Einsetzen:</p>
+      <div class="formula formula--step">$$p(1) = 1 - 6 + 11 - 6 = 0 \quad\checkmark
+        \qquad\Rightarrow\qquad x_1 = 1 \text{ ist Nullstelle}$$</div>
+
+      <p><strong>Schritt 2 · Polynomdivision.</strong> Weil $x_1 = 1$ Nullstelle ist,
+        lässt sich $(x - 1)$ ohne Rest abspalten:</p>
+      <div class="formula formula--step">$$\begin{aligned}
+        \bigl(x^3 - 6x^2 + 11x - 6\bigr) \;:\; (x - 1) \;&=\; x^2 - 5x + 6\\[2pt]
+        \underline{-\,(x^3 - x^2)}\phantom{{}+11x-6}\;&\\
+        -5x^2 + 11x - 6\;&\\
+        \underline{-\,(-5x^2 + 5x)}\phantom{{}-6}\;&\\
+        6x - 6\;&\\
+        \underline{-\,(6x - 6)}\;&\\
+        0\;&
+      \end{aligned}$$</div>
+
+      <p><strong>Schritt 3 · Restpolynom zerlegen.</strong> $x^2 - 5x + 6$ ist quadratisch —
+        Mitternachtsformel (oder Kopfrechnen: welche zwei Zahlen ergeben $+6$ als Produkt
+        und $-5$ als Summe?):</p>
+      <div class="formula formula--step">$$x^2 - 5x + 6 = (x - 2)(x - 3)$$</div>
+
+      <div class="result-box">
+        $$p(x) = (x - 1)(x - 2)(x - 3)$$
+        Nullstellen: $x_1 = 1$, $x_2 = 2$, $x_3 = 3$ — alle einfach.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 · Raten.</strong> Gegeben ist $q(x) = x^3 - 2x^2 - 5x + 6$.
+          Berechne die Probewerte:</p>
+        <p>$q(1) = $ <input class="input quiz-input" data-ans="0">
+          &emsp; $q(2) = $ <input class="input quiz-input" data-ans="-4"></p>
+        <div class="hint" data-quiz-hint>Einsetzen und ausrechnen: $q(1) = 1 - 2 - 5 + 6$ und
+          $q(2) = 8 - 8 - 10 + 6$. Welcher Kandidat ist eine Nullstelle?</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>2 · Teilen.</strong> Wegen $q(1) = 0$ gilt
+          $\bigl(x^3 - 2x^2 - 5x + 6\bigr) : (x - 1) = x^2 + b\,x + c$.
+          Bestimme das Restpolynom und daraus die übrigen Nullstellen:</p>
+        <p>$b = $ <input class="input quiz-input" data-ans="-1">
+          &emsp; $c = $ <input class="input quiz-input" data-ans="-6"></p>
+        <p>kleinere Nullstelle: <input class="input quiz-input" data-ans="-2">
+          &emsp; größere Nullstelle: <input class="input quiz-input" data-ans="3"></p>
+        <div class="hint" data-quiz-hint>Rechne die Division wie im Rechenbeispiel — oder
+          multipliziere $(x-1)(x^2 + bx + c)$ aus und vergleiche die Koeffizienten.
+          Das Restpolynom zerlegst du mit der Mitternachtsformel.</div>
+      </div>
+    </section>
 
     <aside class="related">
       <p class="related-label">Siehe auch</p>
       <ul class="related-list">
         <li><a href="nullstellen-ausklammern-binomisch.html">Ausklammern &amp; binomische Formeln</a></li>
+        <li><a href="nullstellen-substitution.html">Nullstellen: Substitution</a></li>
         <li><a href="funktionsterm-aufstellen.html">Funktionsterm aufstellen</a></li>
       </ul>
     </aside>
-  </article>
 
-  <p class="site-sub">→ Passende Aufgaben in den <a href="uebungen.html">Übungen</a>.</p>
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="nullstellen-ausklammern-binomisch.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Ausklammern &amp; binomische Formeln
+      </a>
+      <a class="pager-next" href="nullstellen-substitution.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Nullstellen: Substitution
+      </a>
+    </nav>
 
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -64,6 +157,51 @@
     </nav>
   </div>
 </footer>
+
+<script>
+/* Applet: Faktoren abspalten — p(x) → Restpolynome, Grad sinkt sichtbar. */
+var VIEW = { xMin: -1, xMax: 5, yMin: -7, yMax: 7 };
+var STAGES = [
+  { fn: function (x) { return (x - 1) * (x - 2) * (x - 3); }, zeros: [1, 2, 3],
+    line: 'p(x) = x³ − 6x² + 11x − 6' },
+  { fn: function (x) { return (x - 2) * (x - 3); }, zeros: [2, 3],
+    line: 'p(x) = (x − 1) · (x² − 5x + 6)' },
+  { fn: function (x) { return x - 3; }, zeros: [3],
+    line: 'p(x) = (x − 1) · (x − 2) · (x − 3)' }
+];
+
+function redraw() {
+  var stage = parseInt(document.getElementById('slStage').value, 10);
+  var s = Plot.setup('cDiv', 'wDiv');
+  var map = Plot.grid(s.ctx, s.w, s.h, VIEW, { stepY: 2 });
+  var c = Plot.colors();
+
+  /* Vorherige Stufe blass gestrichelt als Vergleich */
+  if (stage > 0) {
+    Plot.curve(s.ctx, STAGES[stage - 1].fn, map, VIEW, { color: c.grid, width: 2, dash: [6, 5] });
+  }
+  Plot.curve(s.ctx, STAGES[stage].fn, map, VIEW, { color: c.curve });
+
+  /* Abgespaltene Nullstellen als blasse Punkte, verbleibende kräftig */
+  for (var i = 0; i < 3; i++) {
+    var x0 = i + 1;
+    var gone = STAGES[stage].zeros.indexOf(x0) === -1;
+    Plot.dot(s.ctx, map, x0, 0, {
+      color: gone ? c.axis : c.curve2,
+      r: gone ? 4 : 5,
+      label: gone ? '' : 'x=' + x0
+    });
+  }
+
+  document.getElementById('slStageVal').textContent = stage + ' ×';
+  document.getElementById('factorLine').textContent = STAGES[stage].line;
+}
+
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
 
 </body>
 </html>

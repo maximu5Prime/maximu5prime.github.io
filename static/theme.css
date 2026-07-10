@@ -1015,6 +1015,15 @@ input[type=range]:focus-visible {
 .wiki-section { grid-column: 1 / -1; }
 .wiki-section > h2 { margin-bottom: var(--sp-3); }
 
+/* Absatz-Rhythmus (globaler Reset nullt margins) */
+.wiki-entry-text p + p,
+.wiki-entry-text p + .formula,
+.wiki-entry-text .formula + p,
+.wiki-section p + p,
+.wiki-section p + .formula--step,
+.wiki-section .formula--step + p,
+.quiz-task p + p { margin-top: .8rem; }
+
 /* Prev/Next-Klickstrecke am Seitenende der Wiki-Einträge */
 .pager {
   grid-column: 1 / -1;

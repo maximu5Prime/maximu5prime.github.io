@@ -1,6 +1,9 @@
 /* reveal.js — Scroll-Reveal (progressive enhancement).
-   Blendet .card/.row-card/.task beim Eintritt in den Viewport sanft ein
-   (Fade-up, analog zur bestehenden .tab-panel-Animation in theme.css).
+   Blendet .card/.row-card/.task sowie die Wiki-Bausteine
+   (.wiki-entry-text/-visual, .wiki-section) beim Eintritt in den Viewport
+   sanft ein (Fade-up, analog zur bestehenden .tab-panel-Animation in
+   theme.css). Opacity statt display:none — Canvas-Applets in
+   .wiki-entry-visual messen beim Setup dadurch echte Größen.
    Respektiert prefers-reduced-motion zusätzlich per JS-Check: dort werden
    Elemente sofort ohne Bewegung sichtbar, statt nur auf die globale
    CSS-Transition-Verkürzung zu vertrauen.
@@ -16,7 +19,7 @@
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var els = Array.prototype.filter.call(
-    document.querySelectorAll('.card, .row-card, .task'),
+    document.querySelectorAll('.card, .row-card, .task, .wiki-entry-text, .wiki-entry-visual, .wiki-section'),
     function (el) { return !el.closest('.tab-panel'); }
   );
   if (!els.length) return;
