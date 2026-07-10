@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Präsentation: Hochwasser – Ganzrationale Funktionen · Mathe 11</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/slides.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
+<script defer src="/static/slides.js"></script>
+</head>
+<body>
+
+<div class="deck" id="deck">
+  <a class="deck-exit" href="index.html">× Verlassen</a>
+
+  <section class="slide slide--title active" data-slide="1">
+    <p class="kicker">Mathematik · Klasse 11 · LB 1 · UE 2</p>
+    <h1 class="site-title">Hoch-<br><em>wasser</em></h1>
+    <p class="site-sub">Ein Pegel nähert sich der Warnmarke.
+      Berührt er sie nur — oder bricht er durch?</p>
+  </section>
+
+  <section class="slide slide--context slide--split" data-slide="2">
+    <div class="slide-text">
+      <p class="kicker">Kontext</p>
+      <h2>Die Pegelprognose</h2>
+      <p>Nach tagelangem Regen beobachtet eine Hydrologin den Fluss. Sie misst den
+        Pegelstand $p$ <em>relativ zur Warnmarke</em> (in Dezimetern): negativ heißt
+        darunter, $0$ heißt genau Warnhöhe. $t$ zählt die Tage seit Messbeginn.</p>
+    </div>
+    <div class="slide-photo empty">
+      <p class="kicker">Bildidee</p>
+      <p>Symbolfoto: Pegellatte am Fluss / Hochwassermarke</p>
+    </div>
+  </section>
+
+  <section class="slide slide--data" data-slide="3">
+    <p class="kicker">Beobachtung</p>
+    <h2>Die Messwerte</h2>
+    <div class="canvas-wrap canvas-wrap--tall" id="wPegel"><canvas id="cPegel"></canvas></div>
+    <p class="site-sub">Am Tag 3 scheint der Pegel die Warnmarke zu erreichen — dann
+      sinkt er wieder. Entwarnung?</p>
+  </section>
+
+  <section class="slide" data-slide="4">
+    <p class="kicker">Das Modell</p>
+    <h2>Die Prognosefunktion</h2>
+    <p>Die Hydrologin passt eine ganzrationale Funktion an die Messwerte an:</p>
+    <div class="formula">$$p(t) = \tfrac{1}{4}t^3 - 3t^2 + \tfrac{45}{4}t - \tfrac{27}{2},
+      \qquad t \in [0\,;\,8]$$</div>
+    <p>Wann genau gilt $p(t) = 0$? Der Term verrät es nicht freiwillig —
+      hier braucht es die Nullstellen-Werkzeuge.</p>
+  </section>
+
+  <section class="slide slide--problem" data-slide="5">
+    <p class="kicker">Hauptproblem der Stunde</p>
+    <h2>Wann erreicht der Pegel die Warnmarke — und berührt er sie dort nur oder durchbricht er sie?</h2>
+    <p class="site-sub">Entscheidend für den Katastrophenschutz: Eine Berührung ist ein
+      Warnschuss, ein Durchbruch eine Überflutung. Der Unterschied steckt in der
+      Vielfachheit der Nullstelle.</p>
+  </section>
+
+  <section class="slide slide--transition" data-slide="6">
+    <p class="kicker">Werkzeugkasten</p>
+    <h2>Was ihr dafür braucht</h2>
+    <p>
+      <a href="nullstellen-ausklammern-binomisch.html">Ausklammern &amp; binomische Formeln</a> &nbsp;·&nbsp;
+      <a href="nullstellen-polynomdivision.html">Probieren &amp; Polynomdivision</a> &nbsp;·&nbsp;
+      <a href="nullstellen-substitution.html">Substitution</a> &nbsp;·&nbsp;
+      <a href="vielfachheit-vorzeichenverhalten.html">Vielfachheit &amp; Vorzeichenverhalten</a>
+    </p>
+    <p class="site-sub">Alles Weitere steht im Theorie-Wiki dieses Lernbereichs.</p>
+    <a class="btn" href="index.html">→ Zur Lernbereich-Übersicht</a>
+  </section>
+
+  <div class="deck-chrome"><span id="deckCurrent">1</span> / <span id="deckTotal">6</span></div>
+  <div class="deck-progress"><div class="deck-progress-bar" id="deckProgressBar"></div></div>
+</div>
+
+<script>
+/* p(t) = 0.25·(t−3)²·(t−6) — berührt die Warnmarke bei t=3, durchbricht sie bei t=6. */
+function p(t) { return 0.25 * Math.pow(t - 3, 2) * (t - 6); }
+
+function redraw() {
+  var cv = document.getElementById('cPegel');
+  if (!cv) return;
+  var s = Plot.setup('cPegel', 'wPegel');
+  var view = { xMin: 0, xMax: 8, yMin: -16, yMax: 14 };
+  var map = Plot.grid(s.ctx, s.w, s.h, view, { stepX: 1, stepY: 4 });
+  var c = Plot.colors();
+
+  /* Warnmarke = x-Achse hervorheben */
+  s.ctx.strokeStyle = c.curve2;
+  s.ctx.lineWidth = 2;
+  s.ctx.setLineDash([8, 5]);
+  s.ctx.beginPath();
+  s.ctx.moveTo(0, map.toY(0));
+  s.ctx.lineTo(s.w, map.toY(0));
+  s.ctx.stroke();
+  s.ctx.setLineDash([]);
+
+  /* Nur Messpunkte zeigen — die Kurve wird erst im Unterricht erarbeitet */
+  [0, 1, 2, 3, 4, 5, 6, 7, 8].forEach(function (t) {
+    Plot.dot(s.ctx, map, t, p(t), {});
+  });
+}
+
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>

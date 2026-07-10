@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Präsentation: Die neue Achterbahn – Ganzrationale Funktionen · Mathe 11</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/slides.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
+<script defer src="/static/slides.js"></script>
+</head>
+<body>
+
+<div class="deck" id="deck">
+  <a class="deck-exit" href="index.html">× Verlassen</a>
+
+  <section class="slide slide--title active" data-slide="1">
+    <p class="kicker">Mathematik · Klasse 11 · LB 1 · UE 1</p>
+    <h1 class="site-title">Die neue<br><em>Achterbahn</em></h1>
+    <p class="site-sub">Ein Planungsbüro schickt nur einen Funktionsterm.
+      Was verrät er über die Fahrt?</p>
+  </section>
+
+  <section class="slide slide--context slide--split" data-slide="2">
+    <div class="slide-text">
+      <p class="kicker">Kontext</p>
+      <h2>Der Streckenentwurf</h2>
+      <p>Ein Freizeitpark plant eine neue Bahn. Das Ingenieurbüro liefert das Höhenprofil
+        des ersten Streckenabschnitts — nicht als Zeichnung, sondern als Funktion:
+        Höhe $H$ in Metern, Strecke $x$ in 100-Meter-Schritten.</p>
+    </div>
+    <div class="slide-photo empty">
+      <p class="kicker">Bildidee</p>
+      <p>Symbolfoto: Achterbahn-Lifthill / Baustelle im Freizeitpark</p>
+    </div>
+  </section>
+
+  <section class="slide slide--data" data-slide="3">
+    <p class="kicker">Beobachtung</p>
+    <h2>Das gelieferte Profil</h2>
+    <div class="canvas-wrap canvas-wrap--tall" id="wProfil"><canvas id="cProfil"></canvas></div>
+    <div class="formula">$$H(x) = -x^3 + 12x^2 - 36x + 50, \qquad x \in [0\,;\,8]$$</div>
+  </section>
+
+  <section class="slide" data-slide="4">
+    <p class="kicker">Erste Fragen</p>
+    <h2>Was können wir dem Term entlocken?</h2>
+    <p>Wie hoch startet die Fahrt? Wie hoch ist die Bahn nach 400 Metern?
+      Einsetzen genügt:</p>
+    <div class="formula">$$H(0) = 50 \qquad\quad H(4) = -64 + 192 - 144 + 50 = 34$$</div>
+    <p>Und weiter draußen? Für große $x$ stürzt $-x^3$ ins Bodenlose —
+      das Modell kann nur auf einem begrenzten Abschnitt gelten.</p>
+  </section>
+
+  <section class="slide slide--problem" data-slide="5">
+    <p class="kicker">Hauptproblem der Stunde</p>
+    <h2>Welche Höhen durchläuft die Fahrt insgesamt — und auf welchem Abschnitt ist das Modell überhaupt gültig?</h2>
+    <p class="site-sub">Gesucht: sinnvolle Definitionsmenge, tiefster und höchster Punkt
+      der Strecke — nur mit Einsetzen, Tabelle und Graph.</p>
+  </section>
+
+  <section class="slide slide--transition" data-slide="6">
+    <p class="kicker">Werkzeugkasten</p>
+    <h2>Was ihr dafür braucht</h2>
+    <p>
+      <a href="lineare-quadratische-funktionen.html">Lineare &amp; quadratische Funktionen</a> &nbsp;·&nbsp;
+      <a href="funktionswerte-wertetabelle.html">Funktionswerte &amp; Wertetabelle</a> &nbsp;·&nbsp;
+      <a href="grad-leitkoeffizient.html">Grad &amp; Leitkoeffizient</a> &nbsp;·&nbsp;
+      <a href="wertemenge-definitionsmenge.html">Definitionsmenge &amp; Wertemenge</a>
+    </p>
+    <p class="site-sub">Alles Weitere steht im Theorie-Wiki dieses Lernbereichs.</p>
+    <a class="btn" href="index.html">→ Zur Lernbereich-Übersicht</a>
+  </section>
+
+  <div class="deck-chrome"><span id="deckCurrent">1</span> / <span id="deckTotal">6</span></div>
+  <div class="deck-progress"><div class="deck-progress-bar" id="deckProgressBar"></div></div>
+</div>
+
+<script>
+function H(x) { return -Math.pow(x, 3) + 12 * x * x - 36 * x + 50; }
+
+function redraw() {
+  var cv = document.getElementById('cProfil');
+  if (!cv) return;
+  var s = Plot.setup('cProfil', 'wProfil');
+  var view = { xMin: 0, xMax: 8, yMin: 0, yMax: 60 };
+  var map = Plot.grid(s.ctx, s.w, s.h, view, { stepX: 1, stepY: 10 });
+  Plot.curve(s.ctx, H, map, view);
+  Plot.dot(s.ctx, map, 0, 50, { label: 'Start' });
+  Plot.dot(s.ctx, map, 2, H(2), { label: 'Tal?' });
+  Plot.dot(s.ctx, map, 6, H(6), { label: 'Kuppe?' });
+}
+
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>

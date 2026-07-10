@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Präsentation: Lohnt sich das? – Ganzrationale Funktionen · Mathe 11</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/slides.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
+<script defer src="/static/slides.js"></script>
+</head>
+<body>
+
+<div class="deck" id="deck">
+  <a class="deck-exit" href="index.html">× Verlassen</a>
+
+  <section class="slide slide--title active" data-slide="1">
+    <p class="kicker">Mathematik · Klasse 11 · LB 1 · UE 4</p>
+    <h1 class="site-title">Lohnt sich<br><em>das?</em></h1>
+    <p class="site-sub">Eine Schülerfirma, zwei Kurven — und die Frage,
+      ab wann sich die Arbeit auszahlt.</p>
+  </section>
+
+  <section class="slide slide--context slide--split" data-slide="2">
+    <div class="slide-text">
+      <p class="kicker">Kontext</p>
+      <h2>Die Schülerfirma</h2>
+      <p>Eine Schülerfirma produziert Handyhüllen und verkauft sie für 10 € das Stück.
+        Aus dem letzten Jahr kennt sie ihre Kosten ziemlich genau: Werkzeug und Miete
+        sind fix, das Material wird bei großen Mengen ineffizient teuer.</p>
+    </div>
+    <div class="slide-photo empty">
+      <p class="kicker">Bildidee</p>
+      <p>Symbolfoto: Werkbank / 3D-Drucker / Verkaufsstand</p>
+    </div>
+  </section>
+
+  <section class="slide slide--data" data-slide="3">
+    <p class="kicker">Beobachtung</p>
+    <h2>Erlös gegen Kosten</h2>
+    <div class="canvas-wrap canvas-wrap--tall" id="wEK"><canvas id="cEK"></canvas></div>
+    <div class="formula">$$E(x) = 10x \qquad\quad K(x) = x^2 + 16
+      \qquad (x \text{ in 100 Stück},\; € \text{ in 100})$$</div>
+  </section>
+
+  <section class="slide" data-slide="4">
+    <p class="kicker">Die entscheidenden Stellen</p>
+    <h2>Wo schneiden sich die Kurven?</h2>
+    <p>An den Schnittpunkten deckt der Erlös die Kosten exakt — der
+      <em>Break-even</em>. Links davon zahlt die Firma drauf, rechts davon…
+      auch wieder? Der Blick auf den Graphen sagt: Es gibt <strong>zwei</strong>
+      solcher Stellen.</p>
+    <div class="formula">$$E(x) = K(x) \;\Leftrightarrow\; 10x = x^2 + 16$$</div>
+  </section>
+
+  <section class="slide slide--problem" data-slide="5">
+    <p class="kicker">Hauptproblem der Stunde</p>
+    <h2>Ab welcher und bis zu welcher Stückzahl lohnt sich die Produktion?</h2>
+    <p class="site-sub">Gesucht ist der ganze Bereich, in dem $E(x) &gt; K(x)$ gilt —
+      Schnittpunkte berechnen, dazwischen die Ungleichung deuten.</p>
+  </section>
+
+  <section class="slide slide--transition" data-slide="6">
+    <p class="kicker">Werkzeugkasten</p>
+    <h2>Was ihr dafür braucht</h2>
+    <p>
+      <a href="schnittpunkte-graphen.html">Gemeinsame Punkte zweier Graphen</a> &nbsp;·&nbsp;
+      <a href="ungleichungen.html">Ungleichungen</a>
+    </p>
+    <p class="site-sub">Alles Weitere steht im Theorie-Wiki dieses Lernbereichs.</p>
+    <a class="btn" href="index.html">→ Zur Lernbereich-Übersicht</a>
+  </section>
+
+  <div class="deck-chrome"><span id="deckCurrent">1</span> / <span id="deckTotal">6</span></div>
+  <div class="deck-progress"><div class="deck-progress-bar" id="deckProgressBar"></div></div>
+</div>
+
+<script>
+function E(x) { return 10 * x; }
+function K(x) { return x * x + 16; }
+
+function redraw() {
+  var cv = document.getElementById('cEK');
+  if (!cv) return;
+  var s = Plot.setup('cEK', 'wEK');
+  var view = { xMin: 0, xMax: 10, yMin: 0, yMax: 110 };
+  var map = Plot.grid(s.ctx, s.w, s.h, view, { stepX: 1, stepY: 20 });
+  var c = Plot.colors();
+  Plot.curve(s.ctx, E, map, view, { color: c.curve3 });
+  Plot.curve(s.ctx, K, map, view, { color: c.curve2 });
+  Plot.dot(s.ctx, map, 2, 20, { label: '?' });
+  Plot.dot(s.ctx, map, 8, 80, { label: '?' });
+}
+
+window.addEventListener('load', function () {
+  redraw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>
