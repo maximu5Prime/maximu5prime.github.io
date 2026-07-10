@@ -40,17 +40,29 @@ window.Plot = (function () {
     return { ctx: ctx, w: w, h: h };
   }
 
+  /* Koordinaten-Mapping Mathe ↔ Canvas-CSS-Pixel (beide Richtungen).
+     fromX/fromY brauchen Drag-Applets, um Pointer-Positionen zurückzurechnen. */
+  function mapper(view, w, h) {
+    var xMin = view.xMin, xMax = view.xMax, yMin = view.yMin, yMax = view.yMax;
+    return {
+      toX:   function (x)  { return (x - xMin) / (xMax - xMin) * w; },
+      toY:   function (y)  { return h - (y - yMin) / (yMax - yMin) * h; },
+      fromX: function (px) { return xMin + px / w * (xMax - xMin); },
+      fromY: function (py) { return yMin + (h - py) / h * (yMax - yMin); }
+    };
+  }
+
   /* Hintergrund, Raster, Achsen, Labels. view = {xMin,xMax,yMin,yMax}.
      opts: {labels, stepX, stepY} — stepX/stepY (Default 1) für große Wertebereiche,
      sonst werden bei z.B. yMax=200 hunderte Gitterlinien übereinander gezeichnet.
-     Rückgabe: Koordinaten-Mapping {toX, toY}. */
+     Rückgabe: Koordinaten-Mapping {toX, toY, fromX, fromY}. */
   function grid(ctx, w, h, view, opts) {
     opts = opts || {};
     var c = colors();
     var xMin = view.xMin, xMax = view.xMax, yMin = view.yMin, yMax = view.yMax;
     var stepX = opts.stepX || 1, stepY = opts.stepY || 1;
-    var toX = function (x) { return (x - xMin) / (xMax - xMin) * w; };
-    var toY = function (y) { return h - (y - yMin) / (yMax - yMin) * h; };
+    var map = mapper(view, w, h);
+    var toX = map.toX, toY = map.toY;
     var gx, gy;
 
     ctx.fillStyle = c.bg;
@@ -82,7 +94,66 @@ window.Plot = (function () {
         ctx.fillText(gy, toX(0) + 3, toY(gy) - 2);
       }
     }
-    return { toX: toX, toY: toY };
+    return map;
+  }
+
+  /* Nächstliegender Punkt im Trefferradius r (CSS-px).
+     pts = [{px, py}, …] in Canvas-CSS-Pixeln → Index oder null. */
+  function nearest(pts, mx, my, r) {
+    var hit = null, best = (r || 14) * (r || 14);
+    for (var i = 0; i < pts.length; i++) {
+      var dx = pts[i].px - mx, dy = pts[i].py - my;
+      var d = dx * dx + dy * dy;
+      if (d <= best) { best = d; hit = i; }
+    }
+    return hit;
+  }
+
+  /* Ziehbare Punkte auf einem Canvas. Ein Aufruf pro Canvas.
+     opts = {
+       hitTest(mx, my)  → Index|null   (Pointer-Position in CSS-px),
+       onDrag(idx, x, y)               (x/y in Mathe-Koordinaten),
+       map()            → aktuelles Mapping mit fromX/fromY,
+       onEnd(idx)                      (optional, nach Loslassen)
+     }
+     Setzt touch-action:none nur auf diesem Canvas (Seiten-Scroll bleibt). */
+  function draggable(canvas, opts) {
+    var active = null;
+    canvas.style.touchAction = 'none';
+    canvas.style.cursor = 'grab';
+
+    function pos(ev) {
+      var rect = canvas.getBoundingClientRect();
+      /* CSS-px == Zeichen-px, da setup() den DPR bereits im Context skaliert. */
+      return { mx: ev.clientX - rect.left, my: ev.clientY - rect.top };
+    }
+
+    canvas.addEventListener('pointerdown', function (ev) {
+      var p = pos(ev);
+      var idx = opts.hitTest(p.mx, p.my);
+      if (idx === null || idx === undefined) return;
+      active = idx;
+      canvas.setPointerCapture(ev.pointerId);
+      canvas.style.cursor = 'grabbing';
+      ev.preventDefault();
+    });
+    canvas.addEventListener('pointermove', function (ev) {
+      if (active === null) return;
+      var p = pos(ev);
+      var m = opts.map();
+      opts.onDrag(active, m.fromX(p.mx), m.fromY(p.my));
+    });
+    function release(ev) {
+      if (active === null) return;
+      if (opts.onEnd) opts.onEnd(active);
+      active = null;
+      canvas.style.cursor = 'grab';
+      if (ev.pointerId !== undefined && canvas.hasPointerCapture(ev.pointerId)) {
+        canvas.releasePointerCapture(ev.pointerId);
+      }
+    }
+    canvas.addEventListener('pointerup', release);
+    canvas.addEventListener('pointercancel', release);
   }
 
   /* Funktionsgraph zeichnen. opts: {color, width, dash, samples} */
@@ -139,9 +210,12 @@ window.Plot = (function () {
   return {
     setup: setup,
     grid: grid,
+    mapper: mapper,
     curve: curve,
     dot: dot,
     colors: colors,
+    nearest: nearest,
+    draggable: draggable,
     onRedraw: onRedraw,
     redraw: runRedraw
   };
