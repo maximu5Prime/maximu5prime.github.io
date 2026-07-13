@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Permutation – Kombinatorik · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--wide">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/">Grundlagen der Kombinatorik</a>
+      <span>/</span>
+      <span>Permutation</span>
+    </nav>
+    <h1 class="site-title">Permutation<br><em>alle anordnen</em></h1>
+    <p class="site-sub">Nicht auswählen, sondern <em>alle</em> $n$ Elemente in eine Reihenfolge
+      bringen — dafür gibt es genau $n!$ Möglichkeiten.</p>
+  </div>
+</header>
+
+<main class="container container--wide">
+  <div class="wiki-entry" id="permutation">
+
+    <div class="wiki-entry-text">
+      <p>Für das erste Element gibt es $n$ mögliche Plätze. Ein Element ist jetzt platziert, also
+        bleiben für das zweite nur noch $n-1$ Plätze. Für das dritte nur noch $n-2$ — und so weiter,
+        bis nur noch einer übrig ist. Mit dem
+        <a href="allgemeines-zaehlprinzip.html">Zählprinzip</a> folgt:</p>
+      <div class="formula">$$n \cdot (n-1) \cdot (n-2) \cdot \ldots \cdot 2 \cdot 1 = n!$$</div>
+      <p>Man liest $n!$ als „$n$ Fakultät". Festlegung: $0! = 1$.</p>
+      <p>Die Permutation ist ein Spezialfall der
+        <a href="variation-ohne-wiederholung.html">Variation ohne Wiederholung</a>, bei dem
+        $k = n$ gilt — es werden also nicht nur $k$ von $n$ Elementen ausgewählt, sondern
+        wirklich alle angeordnet.</p>
+    </div>
+
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wPerm"><canvas id="cPerm"></canvas></div>
+      <div class="slider-row">
+        <label for="slPermN">Läufer:</label>
+        <input type="range" id="slPermN" min="3" max="6" step="1" value="5" oninput="setN()">
+        <span class="slider-value" id="slPermNVal">5</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn--ghost" onclick="shuffleOrder()">Zufällig mischen</button>
+        <button class="btn btn--ghost" onclick="resetOrder()">Reset</button>
+      </div>
+      <div class="formula formula--dyn" id="permLine">…</div>
+      <p class="wiki-entry-caption">Klicke zwei Läufer nacheinander an, um ihre Plätze zu tauschen —
+        jede Reihenfolge ist eine mögliche Permutation.</p>
+    </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>5 Kolleginnen und Kollegen setzen sich nebeneinander an einen Besprechungstisch mit
+        5 festen Plätzen. Wie viele Sitzordnungen sind möglich?</p>
+
+      <p><strong>Schritt 1 · Plätze der Reihe nach besetzen.</strong> Für Platz 1 stehen alle
+        5 Personen zur Wahl, für Platz 2 nur noch 4, usw.:</p>
+      <div class="formula formula--step">$$5 \cdot 4 \cdot 3 \cdot 2 \cdot 1 = 5!$$</div>
+
+      <p><strong>Schritt 2 · Ausrechnen.</strong></p>
+      <div class="formula formula--step">$$5! = 120$$</div>
+
+      <div class="result-box">
+        Es gibt 120 verschiedene Sitzordnungen.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Auf wie viele Arten können 4 verschiedene Bücher
+          nebeneinander in ein Regalfach gestellt werden?</p>
+        <p>Anzahl: <input class="input quiz-input" data-ans="24" data-tol="0"></p>
+        <div class="hint" data-quiz-hint>Permutation von 4 Elementen: $4!$.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="1">
+        <p class="quiz-q"><strong>2 ·</strong> 6 Kundentermine sollen an einem Tag nacheinander
+          eingeplant werden. Zwei bestimmte Termine (A und B) müssen dabei immer direkt
+          hintereinander liegen. Wie viele Reihenfolgen sind dann noch möglich?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">$6! = 720$</button>
+          <button class="quiz-opt">$5! \cdot 2! = 240$</button>
+          <button class="quiz-opt">$4! \cdot 2! = 48$</button>
+        </div>
+        <div class="hint" data-quiz-hint>A und B als einen Block betrachten: 5 Einheiten
+          (4 einzelne Termine + 1 Block) anordnen, innerhalb des Blocks A/B vertauschen.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F">
+        <p class="quiz-q"><strong>3 ·</strong> Wahr oder falsch?</p>
+        <table class="ankreuz">
+          <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+          <tbody>
+            <tr><td>Es gilt $0! = 1$.</td><td></td><td></td></tr>
+            <tr><td>Die Anzahl der Permutationen von $n$ Elementen wächst langsamer als $n^n$.</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="hint" data-quiz-hint>Vergleiche $n!$ mit $n^n$ für z. B. $n=5$:
+          $120$ gegen $3125$.</div>
+      </div>
+    </section>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="allgemeines-zaehlprinzip.html">Allgemeines Zählprinzip</a></li>
+        <li><a href="variation-ohne-wiederholung.html">Variation ohne Wiederholung</a></li>
+      </ul>
+    </aside>
+
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="allgemeines-zaehlprinzip.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Allgemeines Zählprinzip
+      </a>
+      <a class="pager-next" href="variation-ohne-wiederholung.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Variation ohne Wiederholung
+      </a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb6-kombinatorik/">← LB 6 · Grundlagen der Kombinatorik</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* Applet: n Läufer-Chips, per Klick paarweise vertauschbar. */
+var n = 5;
+var order = [1, 2, 3, 4, 5];
+var selSlot = null;
+var chipPts = [];
+
+function renderMath(el) {
+  if (window.renderMathInElement) {
+    renderMathInElement(el, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false });
+  }
+}
+function fmt(v) { return v.toLocaleString('de-DE'); }
+function factorial(k) { var r = 1; for (var i = 2; i <= k; i++) r *= i; return r; }
+
+function resetOrder() {
+  order = [];
+  for (var i = 1; i <= n; i++) order.push(i);
+  selSlot = null;
+  redraw();
+}
+function shuffleOrder() {
+  for (var i = order.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+  }
+  selSlot = null;
+  redraw();
+}
+function setN() {
+  n = parseInt(document.getElementById('slPermN').value, 10);
+  document.getElementById('slPermNVal').textContent = n;
+  resetOrder();
+}
+
+function redraw() {
+  var s = Plot.setup('cPerm', 'wPerm');
+  var c = Plot.colors();
+  s.ctx.fillStyle = c.bg;
+  s.ctx.fillRect(0, 0, s.w, s.h);
+
+  var spacing = s.w / (n + 1);
+  var y = s.h / 2;
+  var r = Math.min(24, spacing / 2 - 6);
+  chipPts = [];
+  for (var i = 0; i < n; i++) {
+    var x = (i + 1) * spacing;
+    chipPts.push({ px: x, py: y });
+    s.ctx.beginPath();
+    s.ctx.arc(x, y, r, 0, 2 * Math.PI);
+    s.ctx.fillStyle = (i === selSlot) ? c.accent : c.curve;
+    s.ctx.fill();
+    s.ctx.font = 'bold 14px "DM Mono", monospace';
+    s.ctx.fillStyle = c.bg;
+    s.ctx.textAlign = 'center';
+    s.ctx.textBaseline = 'middle';
+    s.ctx.fillText(order[i], x, y);
+  }
+  s.ctx.textAlign = 'start';
+  s.ctx.textBaseline = 'alphabetic';
+
+  var line = document.getElementById('permLine');
+  line.innerHTML = '$$' + n + '! = ' + fmt(factorial(n)) + '$$';
+  renderMath(line);
+}
+
+function onCanvasClick(ev) {
+  var canvas = document.getElementById('cPerm');
+  var rect = canvas.getBoundingClientRect();
+  var mx = ev.clientX - rect.left, my = ev.clientY - rect.top;
+  var idx = Plot.nearest(chipPts, mx, my, 26);
+  if (idx === null) return;
+  if (selSlot === null) {
+    selSlot = idx;
+  } else if (selSlot === idx) {
+    selSlot = null;
+  } else {
+    var tmp = order[selSlot]; order[selSlot] = order[idx]; order[idx] = tmp;
+    selSlot = null;
+  }
+  redraw();
+}
+
+window.addEventListener('load', function () {
+  redraw();
+  document.getElementById('cPerm').addEventListener('click', onCanvasClick);
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>

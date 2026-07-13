@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variation mit Wiederholung – Kombinatorik · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--wide">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/">Grundlagen der Kombinatorik</a>
+      <span>/</span>
+      <span>Variation mit Wiederholung</span>
+    </nav>
+    <h1 class="site-title">Variation<br><em>mit Wiederholung</em></h1>
+    <p class="site-sub">$k$ von $n$ Elementen auswählen und anordnen, wobei jedes Element beliebig
+      oft wiederkehren darf — genau das Prinzip hinter der Anzahl möglicher Passwörter.</p>
+  </div>
+</header>
+
+<main class="container container--wide">
+  <div class="wiki-entry" id="variation-m">
+
+    <div class="wiki-entry-text">
+      <p>Wie bei der <a href="variation-ohne-wiederholung.html">Variation ohne Wiederholung</a>
+        wählst du $k$ von $n$ Elementen aus und die Reihenfolge zählt — aber jetzt darf jedes
+        Element <strong>mehrfach</strong> vorkommen, du legst es also zurück. Auf jeder der $k$
+        Stufen stehen wieder alle $n$ Elemente zur Verfügung, mit dem
+        <a href="allgemeines-zaehlprinzip.html">Zählprinzip</a> folgt:</p>
+      <div class="formula">$$V^{W}(n,k) = n^k$$</div>
+      <p>Urnenmodell: Du ziehst $k$-mal aus einer Urne mit $n$ Kugeln und legst jede gezogene Kugel
+        <strong>sofort zurück</strong>.</p>
+      <p>Ein Passwort ist genau so ein Fall: An jeder der $k$ Stellen steht der volle
+        Zeichenvorrat $n$ erneut zur Verfügung. Das Applet nebenan ist eine reine
+        <strong>Wachstumsvisualisierung</strong> von $n^k$ — kein echtes Cracking-Tool, es greift
+        auf keine externen Daten oder Dienste zu.</p>
+    </div>
+
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wPw"><canvas id="cPw"></canvas></div>
+      <div class="slider-row">
+        <label for="slCharset">Zeichenvorrat:</label>
+        <input type="range" id="slCharset" min="0" max="2" step="1" value="1" oninput="redrawPw()">
+        <span class="slider-value" id="slCharsetVal">26</span>
+      </div>
+      <div class="slider-row">
+        <label for="slLen">Länge $k$:</label>
+        <input type="range" id="slLen" min="1" max="12" step="1" value="6" oninput="redrawPw()">
+        <span class="slider-value" id="slLenVal">6</span>
+      </div>
+      <div class="formula formula--dyn" id="pwLine">…</div>
+      <p class="wiki-entry-caption">Angenommene Rate: $10^9$ Versuche pro Sekunde (handelsüblicher
+        Rechner, Wert aus dem Unterrichtsskript). Der Balken nutzt eine logarithmische Skala, weil
+        $n^k$ extrem schnell wächst.</p>
+    </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Ein Passwort besteht aus 4 Kleinbuchstaben (26 mögliche Buchstaben). Wie viele Passwörter
+        sind möglich, wenn Wiederholung erlaubt ist — und wie viele wären es ohne?</p>
+
+      <p><strong>Schritt 1 · Mit Wiederholung.</strong> An jeder der 4 Stellen stehen unabhängig
+        alle 26 Buchstaben zur Verfügung:</p>
+      <div class="formula formula--step">$$V^{W}(26,4) = 26^4 = 456.976$$</div>
+
+      <p><strong>Schritt 2 · Zum Vergleich ohne Wiederholung.</strong> Für die 1. Stelle 26
+        Buchstaben, für die 2. nur noch 25, usw.:</p>
+      <div class="formula formula--step">$$V(26,4) = 26 \cdot 25 \cdot 24 \cdot 23 = 358.800$$</div>
+
+      <div class="result-box">
+        Wiederholung erlaubt mehr Möglichkeiten: 456.976 gegenüber 358.800 — obwohl beide Male nur
+        4 Stellen und 26 Zeichen im Spiel sind.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Ein Zahlenschloss hat 3 Ringe mit den Ziffern 0–9,
+          jede Ziffer darf auf mehreren Ringen vorkommen. Wie viele Einstellungen sind möglich?</p>
+        <p>Anzahl: <input class="input quiz-input" data-ans="1000" data-tol="0"></p>
+        <div class="hint" data-quiz-hint>$V^W(10,3) = 10^3$.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>2 ·</strong> Ein Passwort aus 62 möglichen Zeichen wird von
+          6 auf 8 Zeichen verlängert. Um welchen Faktor steigt die Anzahl möglicher Passwörter?</p>
+        <p>Faktor: <input class="input quiz-input" data-ans="3844" data-tol="0"></p>
+        <div class="hint" data-quiz-hint>$62^8 / 62^6 = 62^2$.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="0">
+        <p class="quiz-q"><strong>3 ·</strong> Ein Angreifer schafft $10^9$ Versuche pro Sekunde.
+          Ein Passwort aus 6 Kleinbuchstaben (26 mögliche Zeichen) ist im schlechtesten Fall
+          ungefähr in welcher Zeit durchprobiert?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">≈ 0,3 Sekunden</button>
+          <button class="quiz-opt">≈ 3 Minuten</button>
+          <button class="quiz-opt">≈ 3 Stunden</button>
+        </div>
+        <div class="hint" data-quiz-hint>$26^6 = 308.915.776$, geteilt durch $10^9$ Versuche/s.</div>
+      </div>
+    </section>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="variation-ohne-wiederholung.html">Variation ohne Wiederholung</a></li>
+        <li><a href="kombination-ohne-wiederholung.html">Kombination ohne Wiederholung</a></li>
+      </ul>
+    </aside>
+
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="variation-ohne-wiederholung.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Variation ohne Wiederholung
+      </a>
+      <a class="pager-next" href="kombination-ohne-wiederholung.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Kombination ohne Wiederholung
+      </a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb6-kombinatorik/">← LB 6 · Grundlagen der Kombinatorik</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* Applet: Passwortknacker (didaktisch) — n^k live, Log-Balken, Zeitschätzung bei 10^9 Versuchen/s. */
+var CHARSETS = [
+  { n: 10, label: 'Ziffern (10)' },
+  { n: 26, label: 'Kleinbuchstaben (26)' },
+  { n: 62, label: 'Groß-/Kleinbuchstaben + Ziffern (62)' }
+];
+var MAX_LOG = 12 * Math.log(62) / Math.LN10; /* Referenz: 62^12 */
+var RATE = 1e9;
+
+function renderMathPw(el) {
+  if (window.renderMathInElement) {
+    renderMathInElement(el, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false });
+  }
+}
+function fmt(v) { return v.toLocaleString('de-DE'); }
+
+function formatDuration(seconds) {
+  if (seconds < 60) return (seconds < 10 ? seconds.toFixed(2) : seconds.toFixed(1)).replace('.', ',') + ' Sekunden';
+  var minutes = seconds / 60;
+  if (minutes < 60) return minutes.toFixed(1).replace('.', ',') + ' Minuten';
+  var hours = minutes / 60;
+  if (hours < 24) return hours.toFixed(1).replace('.', ',') + ' Stunden';
+  var days = hours / 24;
+  if (days < 365) return days.toFixed(1).replace('.', ',') + ' Tage';
+  var years = days / 365.25;
+  if (years < 1e6) return fmt(Math.round(years)) + ' Jahre';
+  return years.toExponential(2).replace('.', ',') + ' Jahre';
+}
+
+function redrawPw() {
+  var stage = parseInt(document.getElementById('slCharset').value, 10);
+  var k = parseInt(document.getElementById('slLen').value, 10);
+  var cs = CHARSETS[stage];
+  document.getElementById('slCharsetVal').textContent = cs.n;
+  document.getElementById('slLenVal').textContent = k;
+
+  var total = Math.pow(cs.n, k);
+  var logTotal = k * Math.log(cs.n) / Math.LN10;
+  var seconds = total / RATE;
+
+  var s = Plot.setup('cPw', 'wPw');
+  var c = Plot.colors();
+  s.ctx.fillStyle = c.bg;
+  s.ctx.fillRect(0, 0, s.w, s.h);
+
+  s.ctx.font = '11px "DM Mono", monospace';
+  s.ctx.fillStyle = c.label;
+  s.ctx.fillText(cs.label + ' · Länge ' + k, 12, 20);
+
+  s.ctx.font = 'bold 22px "DM Mono", monospace';
+  s.ctx.fillStyle = c.accent;
+  var totalText = total > 1e15 ? total.toExponential(3).replace('.', ',') : fmt(total);
+  s.ctx.fillText(totalText, 12, 55);
+
+  var barX = 12, barY = 80, barW = s.w - 24, barH = 22;
+  s.ctx.fillStyle = c.grid;
+  s.ctx.fillRect(barX, barY, barW, barH);
+  var fillW = Math.max(2, Math.min(barW, barW * (logTotal / MAX_LOG)));
+  s.ctx.fillStyle = c.curve;
+  s.ctx.fillRect(barX, barY, fillW, barH);
+
+  s.ctx.font = '11px "DM Mono", monospace';
+  s.ctx.fillStyle = c.label;
+  s.ctx.fillText('Geschätzte Brute-Force-Zeit bei 10⁹ Versuchen/s:', 12, 130);
+  s.ctx.font = 'bold 15px "DM Mono", monospace';
+  s.ctx.fillStyle = c.text;
+  s.ctx.fillText(formatDuration(seconds), 12, 152);
+
+  var line = document.getElementById('pwLine');
+  line.innerHTML = '$$' + cs.n + '^{' + k + '} = ' + totalText + '$$';
+  renderMathPw(line);
+}
+
+window.addEventListener('load', function () {
+  redrawPw();
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redrawPw);
+});
+</script>
+
+</body>
+</html>

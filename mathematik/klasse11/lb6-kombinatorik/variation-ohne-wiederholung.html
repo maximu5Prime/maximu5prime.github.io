@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variation ohne Wiederholung – Kombinatorik · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--wide">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/">Grundlagen der Kombinatorik</a>
+      <span>/</span>
+      <span>Variation ohne Wiederholung</span>
+    </nav>
+    <h1 class="site-title">Variation<br><em>ohne Wiederholung</em></h1>
+    <p class="site-sub">$k$ von $n$ Elementen auswählen und anordnen, ohne ein Element doppelt zu
+      verwenden — die Reihenfolge zählt, zurückgelegt wird nicht.</p>
+  </div>
+</header>
+
+<main class="container container--wide">
+  <div class="wiki-entry" id="variation-o">
+
+    <div class="wiki-entry-text">
+      <p>Du wählst $k$ von $n$ Elementen aus, mit $k < n$. Die Reihenfolge ist wichtig, und jedes
+        Element darf nur einmal vorkommen. Für das erste Element gibt es $n$ Möglichkeiten, für das
+        zweite nur noch $n-1$, für das dritte $n-2$ — bis für das $k$-te Element noch $n-k+1$
+        Möglichkeiten bleiben:</p>
+      <div class="formula">$$V(n,k) = n \cdot (n-1) \cdot \ldots \cdot (n-k+1) = \frac{n!}{(n-k)!}$$</div>
+      <p>Urnenmodell: Du ziehst $k$ Kugeln aus einer Urne mit $n$ Kugeln, <strong>ohne
+        Zurücklegen</strong>, und notierst die Reihenfolge der Ziehung.</p>
+      <p>Legst du stattdessen jede gezogene Kugel zurück, landest du bei der
+        <a href="variation-mit-wiederholung.html">Variation mit Wiederholung</a>. Zählt die
+        Reihenfolge am Ende nicht mehr, landest du bei der
+        <a href="kombination-ohne-wiederholung.html">Kombination</a>.</p>
+    </div>
+
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wVar"><canvas id="cVar"></canvas></div>
+      <div class="slider-row">
+        <label for="slVarN">Läufer $n$:</label>
+        <input type="range" id="slVarN" min="5" max="10" step="1" value="8" oninput="setVarN()">
+        <span class="slider-value" id="slVarNVal">8</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn--ghost" onclick="resetPodium()">Reset</button>
+      </div>
+      <div class="formula formula--dyn" id="varLine">…</div>
+      <p class="wiki-entry-caption">Klicke Läufer aus dem Pool an, um sie auf Gold/Silber/Bronze zu
+        setzen — klicke ein besetztes Podium erneut an, um den Platz wieder freizugeben.</p>
+    </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Ein Verein hat 8 Kandidat*innen für den Vorstand. Gesucht werden Vorsitz, Kassenwart und
+        Schriftführung — drei unterschiedliche Ämter. Wie viele Besetzungen sind möglich?</p>
+
+      <p><strong>Schritt 1 · Ämter der Reihe nach besetzen.</strong> Vorsitz: 8 Kandidat*innen,
+        Kassenwart: noch 7 übrig, Schriftführung: noch 6 übrig.</p>
+      <div class="formula formula--step">$$V(8,3) = \frac{8!}{(8-3)!} = 8 \cdot 7 \cdot 6$$</div>
+
+      <p><strong>Schritt 2 · Ausrechnen.</strong></p>
+      <div class="formula formula--step">$$8 \cdot 7 \cdot 6 = 336$$</div>
+
+      <div class="result-box">
+        Es gibt 336 mögliche Vorstandsbesetzungen.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Bei einem 100-Meter-Lauf mit 10 Athletinnen werden
+          Gold, Silber und Bronze vergeben. Wie viele mögliche Reihenfolgen der ersten drei Plätze
+          gibt es?</p>
+        <p>Anzahl: <input class="input quiz-input" data-ans="720" data-tol="0"></p>
+        <div class="hint" data-quiz-hint>$V(10,3) = 10 \cdot 9 \cdot 8$.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="1">
+        <p class="quiz-q"><strong>2 ·</strong> Eine Firma wählt aus 12 Bewerber*innen 3 Personen
+          für Projektleitung, Stellvertretung und Dokumentation aus. Wie viele Möglichkeiten gibt
+          es?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">$\binom{12}{3} = 220$</button>
+          <button class="quiz-opt">$V(12,3) = 12 \cdot 11 \cdot 10 = 1.320$</button>
+          <button class="quiz-opt">$12^3 = 1.728$</button>
+        </div>
+        <div class="hint" data-quiz-hint>Die drei Positionen sind unterschiedliche Rollen — wer
+          welche Rolle bekommt, zählt. Also Variation, nicht Kombination.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="ankreuz" data-ans="F,W">
+        <p class="quiz-q"><strong>3 ·</strong> Wahr oder falsch?</p>
+        <table class="ankreuz">
+          <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+          <tbody>
+            <tr><td>Bei der Variation ohne Wiederholung darf ein Element mehrfach ausgewählt werden.</td><td></td><td></td></tr>
+            <tr><td>Für $k = n$ ist $V(n,k)$ dasselbe wie die Permutation $n!$.</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="hint" data-quiz-hint>„Ohne Wiederholung" heißt: ohne Zurücklegen.</div>
+      </div>
+    </section>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="permutation.html">Permutation</a></li>
+        <li><a href="variation-mit-wiederholung.html">Variation mit Wiederholung</a></li>
+      </ul>
+    </aside>
+
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="permutation.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Permutation
+      </a>
+      <a class="pager-next" href="variation-mit-wiederholung.html">
+        <span class="pager-label">Nächstes Thema →</span>
+        Variation mit Wiederholung
+      </a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb6-kombinatorik/">← LB 6 · Grundlagen der Kombinatorik</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* Applet: Pool von n Läufern → 3 Podiumsplätze, Klick weist zu / gibt frei. */
+var varN = 8;
+var pool = [];
+var podium = [null, null, null];
+var poolPts = [];
+var podiumRects = [];
+
+function renderMath(el) {
+  if (window.renderMathInElement) {
+    renderMathInElement(el, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false });
+  }
+}
+function fmt(v) { return v.toLocaleString('de-DE'); }
+
+function resetPodium() {
+  pool = [];
+  for (var i = 1; i <= varN; i++) pool.push(i);
+  podium = [null, null, null];
+  redraw();
+}
+function setVarN() {
+  varN = parseInt(document.getElementById('slVarN').value, 10);
+  document.getElementById('slVarNVal').textContent = varN;
+  resetPodium();
+}
+
+function redraw() {
+  var s = Plot.setup('cVar', 'wVar');
+  var c = Plot.colors();
+  s.ctx.fillStyle = c.bg;
+  s.ctx.fillRect(0, 0, s.w, s.h);
+
+  s.ctx.font = '11px "DM Mono", monospace';
+  s.ctx.fillStyle = c.label;
+  s.ctx.fillText('Verfügbar', 12, 18);
+
+  var spacing = s.w / (pool.length + 1);
+  var yPool = 55, r = Math.min(20, spacing / 2 - 5);
+  poolPts = [];
+  s.ctx.textAlign = 'center';
+  s.ctx.textBaseline = 'middle';
+  pool.forEach(function (val, i) {
+    var x = (i + 1) * spacing;
+    poolPts.push({ px: x, py: yPool, value: val });
+    s.ctx.beginPath();
+    s.ctx.arc(x, yPool, r, 0, 2 * Math.PI);
+    s.ctx.fillStyle = c.curve;
+    s.ctx.fill();
+    s.ctx.font = 'bold 13px "DM Mono", monospace';
+    s.ctx.fillStyle = c.bg;
+    s.ctx.fillText(val, x, yPool);
+  });
+
+  var labels = ['1. Platz', '2. Platz', '3. Platz'];
+  var boxW = 90, boxH = 60, gap = 24;
+  var totalW = boxW * 3 + gap * 2;
+  var startX = (s.w - totalW) / 2;
+  var yBox = 150;
+  podiumRects = [];
+  for (var slot = 0; slot < 3; slot++) {
+    var x = startX + slot * (boxW + gap);
+    podiumRects.push({ x: x, y: yBox, w: boxW, h: boxH });
+    s.ctx.font = '10px "DM Mono", monospace';
+    s.ctx.fillStyle = c.label;
+    s.ctx.textAlign = 'center';
+    s.ctx.fillText(labels[slot], x + boxW / 2, yBox - 10);
+    s.ctx.strokeStyle = podium[slot] !== null ? c.accent : c.grid;
+    s.ctx.lineWidth = 2;
+    s.ctx.strokeRect(x, yBox, boxW, boxH);
+    if (podium[slot] !== null) {
+      s.ctx.font = 'bold 20px "DM Mono", monospace';
+      s.ctx.fillStyle = c.accent;
+      s.ctx.textBaseline = 'middle';
+      s.ctx.fillText(podium[slot], x + boxW / 2, yBox + boxH / 2);
+    } else {
+      s.ctx.font = '16px "DM Mono", monospace';
+      s.ctx.fillStyle = c.grid;
+      s.ctx.textBaseline = 'middle';
+      s.ctx.fillText('–', x + boxW / 2, yBox + boxH / 2);
+    }
+  }
+  s.ctx.textAlign = 'start';
+  s.ctx.textBaseline = 'alphabetic';
+
+  var k = 3;
+  var factors = [];
+  for (var i = 0; i < k; i++) factors.push(varN - i);
+  var total = factors.reduce(function (a, b) { return a * b; }, 1);
+  var line = document.getElementById('varLine');
+  line.innerHTML = '$$' + factors.join(' \\cdot ') + ' = ' + fmt(total) + '$$';
+  renderMath(line);
+}
+
+function onCanvasClick(ev) {
+  var canvas = document.getElementById('cVar');
+  var rect = canvas.getBoundingClientRect();
+  var mx = ev.clientX - rect.left, my = ev.clientY - rect.top;
+
+  var idx = Plot.nearest(poolPts, mx, my, 24);
+  if (idx !== null) {
+    var freeSlot = podium.indexOf(null);
+    if (freeSlot !== -1) {
+      podium[freeSlot] = poolPts[idx].value;
+      pool.splice(pool.indexOf(poolPts[idx].value), 1);
+      redraw();
+    }
+    return;
+  }
+
+  for (var s = 0; s < podiumRects.length; s++) {
+    var b = podiumRects[s];
+    if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h && podium[s] !== null) {
+      pool.push(podium[s]);
+      pool.sort(function (a, b2) { return a - b2; });
+      podium[s] = null;
+      redraw();
+      return;
+    }
+  }
+}
+
+window.addEventListener('load', function () {
+  resetPodium();
+  document.getElementById('cVar').addEventListener('click', onCanvasClick);
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+});
+</script>
+
+</body>
+</html>

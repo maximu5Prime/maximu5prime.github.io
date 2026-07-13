@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kombination ohne Wiederholung – Kombinatorik · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/plot.js"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--wide">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/">Grundlagen der Kombinatorik</a>
+      <span>/</span>
+      <span>Kombination ohne Wiederholung</span>
+    </nav>
+    <h1 class="site-title">Kombination<br><em>ohne Wiederholung</em></h1>
+    <p class="site-sub">Jetzt zählt nur noch, <em>wer</em> ausgewählt wird — nicht mehr, in welcher
+      Reihenfolge. Genau wie bei Lottozahlen oder einem Team.</p>
+  </div>
+</header>
+
+<main class="container container--wide">
+  <div class="wiki-entry" id="kombination">
+
+    <div class="wiki-entry-text">
+      <p>Bei der <a href="variation-ohne-wiederholung.html">Variation</a> $V(n,k)$ wird jede
+        $k$-elementige Auswahl mehrfach gezählt — einmal für jede der $k!$ möglichen Reihenfolgen.
+        Zählt die Reihenfolge nicht mehr, teilst du also durch $k!$:</p>
+      <div class="formula">$$K(n,k) = \binom{n}{k} = \frac{n!}{k! \cdot (n-k)!}$$</div>
+      <p>$\binom{n}{k}$ heißt <strong>Binomialkoeffizient</strong>, man spricht „$n$ über $k$".</p>
+      <p>Urnenmodell: Du ziehst $k$ Kugeln aus einer Urne mit $n$ Kugeln — alle
+        <strong>gleichzeitig</strong>, ohne Zurücklegen und ohne Reihenfolge. Bleibt die Reihenfolge
+        dagegen wichtig, bist du wieder bei der
+        <a href="variation-ohne-wiederholung.html">Variation ohne Wiederholung</a>.</p>
+    </div>
+
+    <div class="wiki-entry-visual">
+      <div class="canvas-wrap" id="wUrn"><canvas id="cUrn"></canvas></div>
+      <div class="slider-row">
+        <label for="slUrnN">Kugeln $n$:</label>
+        <input type="range" id="slUrnN" min="6" max="20" step="1" value="10" oninput="setUrnN()">
+        <span class="slider-value" id="slUrnNVal">10</span>
+      </div>
+      <div class="slider-row">
+        <label for="slUrnK">Ziehen $k$:</label>
+        <input type="range" id="slUrnK" min="1" max="6" step="1" value="3" oninput="setUrnK()">
+        <span class="slider-value" id="slUrnKVal">3</span>
+      </div>
+      <div class="formula formula--dyn" id="urnLine">…</div>
+      <p class="wiki-entry-caption">Klicke bis zu $k$ Kugeln an. Die gezogenen Kugeln werden
+        sortiert angezeigt — die Klickreihenfolge spielt bewusst keine Rolle.</p>
+    </div>
+
+    <section class="wiki-section">
+      <h2>Rechenbeispiel</h2>
+      <p>Beim Lotto werden aus 49 Kugeln 6 gezogen, die Reihenfolge spielt keine Rolle. Wie viele
+        verschiedene Ziehungsergebnisse gibt es?</p>
+
+      <p><strong>Schritt 1 · Geordnet zählen (Zwischenschritt).</strong> Würde die Reihenfolge
+        zählen, gäbe es $V(49,6)$ Möglichkeiten:</p>
+      <div class="formula formula--step">$$V(49,6) = 49 \cdot 48 \cdot 47 \cdot 46 \cdot 45 \cdot 44 = 10.068.347.520$$</div>
+
+      <p><strong>Schritt 2 · Durch die Mehrfachzählung teilen.</strong> Jede 6er-Auswahl wurde
+        $6! = 720$-mal gezählt:</p>
+      <div class="formula formula--step">$$\binom{49}{6} = \frac{10.068.347.520}{720} = 13.983.816$$</div>
+
+      <div class="result-box">
+        Es gibt 13.983.816 mögliche Ziehungen. Die Chance auf 6 Richtige mit einem Tipp beträgt
+        $P \approx 0{,}0000000715$ — eine Chance von 1 zu knapp 14 Millionen.
+      </div>
+    </section>
+
+    <section class="wiki-section">
+      <h2>Selbst üben</h2>
+
+      <div class="quiz-task" data-quiz="fill">
+        <p class="quiz-q"><strong>1 ·</strong> Aus 10 Mitarbeitenden soll ein gleichberechtigtes
+          Projektteam von 3 Personen gebildet werden (keine unterschiedlichen Rollen). Wie viele
+          Teams sind möglich?</p>
+        <p>Anzahl: <input class="input quiz-input" data-ans="120" data-tol="0"></p>
+        <div class="hint" data-quiz-hint>$\binom{10}{3} = \dfrac{10 \cdot 9 \cdot 8}{3!}$.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="1">
+        <p class="quiz-q"><strong>2 ·</strong> Beim Skat erhält jede*r Mitspielende 10 Karten aus
+          einem 32er-Blatt. Wie viele verschiedene 10-Karten-Hände sind möglich?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">$32^{10}$</button>
+          <button class="quiz-opt">$\binom{32}{10} = 64.512.240$</button>
+          <button class="quiz-opt">$V(32,10) = 32 \cdot 31 \cdot \ldots \cdot 23$</button>
+        </div>
+        <div class="hint" data-quiz-hint>Nur <em>welche</em> Karten in der Hand sind zählt —
+          nicht die Reihenfolge, in der sie gezogen wurden.</div>
+      </div>
+
+      <div class="quiz-task" data-quiz="mcq" data-ans="0">
+        <p class="quiz-q"><strong>3 ·</strong> Warum ist die Ziehung der Lottozahlen eine
+          Kombination und keine Variation?</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt">Weil die Reihenfolge der Ziehung für das Ergebnis keine Rolle
+            spielt.</button>
+          <button class="quiz-opt">Weil beim Lotto Zurücklegen erlaubt ist.</button>
+          <button class="quiz-opt">Weil 49 eine ungerade Zahl ist.</button>
+        </div>
+        <div class="hint" data-quiz-hint>Variation vs. Kombination entscheidet sich immer an der
+          Frage: Zählt die Reihenfolge?</div>
+      </div>
+    </section>
+
+    <aside class="related">
+      <p class="related-label">Siehe auch</p>
+      <ul class="related-list">
+        <li><a href="variation-ohne-wiederholung.html">Variation ohne Wiederholung</a></li>
+        <li><a href="allgemeines-zaehlprinzip.html">Allgemeines Zählprinzip</a></li>
+      </ul>
+    </aside>
+
+    <nav class="pager" aria-label="Wiki-Navigation">
+      <a class="pager-prev" href="variation-mit-wiederholung.html">
+        <span class="pager-label">← Voriges Thema</span>
+        Variation mit Wiederholung
+      </a>
+      <a class="pager-next" href="/mathematik/klasse11/lb6-kombinatorik/">
+        <span class="pager-label">Zurück →</span>
+        Übersicht Kombinatorik
+      </a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb6-kombinatorik/">← LB 6 · Grundlagen der Kombinatorik</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* Applet: Urnenmodell — n Kugeln im Kreis, bis zu k anklickbar, sortiert angezeigt. */
+var urnN = 10, urnK = 3;
+var selected = [];
+var ballPts = [];
+
+function renderMathUrn(el) {
+  if (window.renderMathInElement) {
+    renderMathInElement(el, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false });
+  }
+}
+function fmt(v) { return v.toLocaleString('de-DE'); }
+function factorial(k) { var r = 1; for (var i = 2; i <= k; i++) r *= i; return r; }
+function binom(n, k) { return Math.round(factorial(n) / (factorial(k) * factorial(n - k))); }
+
+function setUrnN() {
+  urnN = parseInt(document.getElementById('slUrnN').value, 10);
+  document.getElementById('slUrnNVal').textContent = urnN;
+  selected = [];
+  redrawUrn();
+}
+function setUrnK() {
+  urnK = parseInt(document.getElementById('slUrnK').value, 10);
+  document.getElementById('slUrnKVal').textContent = urnK;
+  selected = [];
+  redrawUrn();
+}
+
+function redrawUrn() {
+  var s = Plot.setup('cUrn', 'wUrn');
+  var c = Plot.colors();
+  s.ctx.fillStyle = c.bg;
+  s.ctx.fillRect(0, 0, s.w, s.h);
+
+  var cx = s.w / 2, cy = s.h / 2 + 8;
+  var R = Math.min(s.w, s.h) * 0.32;
+
+  s.ctx.beginPath();
+  s.ctx.arc(cx, cy, R + 18, 0, 2 * Math.PI);
+  s.ctx.strokeStyle = c.grid;
+  s.ctx.lineWidth = 1.5;
+  s.ctx.stroke();
+
+  var r = Math.max(9, Math.min(16, 130 / urnN));
+  ballPts = [];
+  s.ctx.textAlign = 'center';
+  s.ctx.textBaseline = 'middle';
+  for (var i = 0; i < urnN; i++) {
+    var angle = -Math.PI / 2 + i * (2 * Math.PI / urnN);
+    var x = cx + R * Math.cos(angle), y = cy + R * Math.sin(angle);
+    var num = i + 1;
+    ballPts.push({ px: x, py: y, value: num });
+    var sel = selected.indexOf(num) !== -1;
+    s.ctx.beginPath();
+    s.ctx.arc(x, y, r, 0, 2 * Math.PI);
+    s.ctx.fillStyle = sel ? c.accent : c.curve;
+    s.ctx.fill();
+    s.ctx.font = 'bold ' + Math.max(9, r - 3) + 'px "DM Mono", monospace';
+    s.ctx.fillStyle = c.bg;
+    s.ctx.fillText(num, x, y);
+  }
+  s.ctx.textAlign = 'start';
+  s.ctx.textBaseline = 'alphabetic';
+
+  s.ctx.font = '11px "DM Mono", monospace';
+  s.ctx.fillStyle = c.label;
+  var drawnText = selected.length
+    ? 'Gezogen: ' + selected.slice().sort(function (a, b) { return a - b; }).join(', ')
+    : 'Gezogen: – noch keine Kugel ausgewählt –';
+  s.ctx.fillText(drawnText, 12, s.h - 12);
+
+  var line = document.getElementById('urnLine');
+  line.innerHTML = '$$\\binom{' + urnN + '}{' + urnK + '} = ' + fmt(binom(urnN, urnK)) + '$$';
+  renderMathUrn(line);
+}
+
+function onUrnClick(ev) {
+  var canvas = document.getElementById('cUrn');
+  var rect = canvas.getBoundingClientRect();
+  var mx = ev.clientX - rect.left, my = ev.clientY - rect.top;
+  var idx = Plot.nearest(ballPts, mx, my, 20);
+  if (idx === null) return;
+  var val = ballPts[idx].value;
+  var pos = selected.indexOf(val);
+  if (pos !== -1) {
+    selected.splice(pos, 1);
+  } else if (selected.length < urnK) {
+    selected.push(val);
+  }
+  redrawUrn();
+}
+
+window.addEventListener('load', function () {
+  redrawUrn();
+  document.getElementById('cUrn').addEventListener('click', onUrnClick);
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redrawUrn);
+});
+</script>
+
+</body>
+</html>
