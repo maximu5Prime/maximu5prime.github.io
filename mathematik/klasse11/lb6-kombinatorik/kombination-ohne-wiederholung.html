@@ -156,10 +156,13 @@
 </footer>
 
 <script>
-/* Applet: Urnenmodell — n Kugeln im Kreis, bis zu k anklickbar, sortiert angezeigt. */
+/* Applet: Urnenmodell — n Kugeln im Kreis, bis zu k anklickbar (Puls beim Ziehen,
+   Shake bei vollem k), sortiert angezeigt. */
 var urnN = 10, urnK = 3;
 var selected = [];
 var ballPts = [];
+var curHitR = 20;
+var animating = false;
 
 function renderMathUrn(el) {
   if (window.renderMathInElement) {
@@ -183,13 +186,15 @@ function setUrnK() {
   redrawUrn();
 }
 
-function redrawUrn() {
+/* pulseVal: Kugel, die gerade skaliert pulsiert (oder null). pulseScale: 1 = normal.
+   offsetX: horizontaler Shake-Versatz (0 = keiner). */
+function drawUrn(offsetX, pulseVal, pulseScale) {
   var s = Plot.setup('cUrn', 'wUrn');
   var c = Plot.colors();
   s.ctx.fillStyle = c.bg;
   s.ctx.fillRect(0, 0, s.w, s.h);
 
-  var cx = s.w / 2, cy = s.h / 2 + 8;
+  var cx = s.w / 2 + offsetX, cy = s.h / 2 + 8;
   var R = Math.min(s.w, s.h) * 0.32;
 
   s.ctx.beginPath();
@@ -199,6 +204,9 @@ function redrawUrn() {
   s.ctx.stroke();
 
   var r = Math.max(9, Math.min(16, 130 / urnN));
+  var chord = 2 * R * Math.sin(Math.PI / urnN);
+  curHitR = Math.max(9, Math.min(20, chord / 2 - 2));
+
   ballPts = [];
   s.ctx.textAlign = 'center';
   s.ctx.textBaseline = 'middle';
@@ -206,10 +214,11 @@ function redrawUrn() {
     var angle = -Math.PI / 2 + i * (2 * Math.PI / urnN);
     var x = cx + R * Math.cos(angle), y = cy + R * Math.sin(angle);
     var num = i + 1;
-    ballPts.push({ px: x, py: y, value: num });
+    ballPts.push({ px: x - offsetX, py: y, value: num });
     var sel = selected.indexOf(num) !== -1;
+    var rr = (num === pulseVal) ? r * pulseScale : r;
     s.ctx.beginPath();
-    s.ctx.arc(x, y, r, 0, 2 * Math.PI);
+    s.ctx.arc(x, y, rr, 0, 2 * Math.PI);
     s.ctx.fillStyle = sel ? c.accent : c.curve;
     s.ctx.fill();
     s.ctx.font = 'bold ' + Math.max(9, r - 3) + 'px "DM Mono", monospace';
@@ -225,32 +234,57 @@ function redrawUrn() {
     ? 'Gezogen: ' + selected.slice().sort(function (a, b) { return a - b; }).join(', ')
     : 'Gezogen: – noch keine Kugel ausgewählt –';
   s.ctx.fillText(drawnText, 12, s.h - 12);
+}
 
+function redrawUrn() {
+  drawUrn(0, null, 1);
   var line = document.getElementById('urnLine');
   line.innerHTML = '$$\\binom{' + urnN + '}{' + urnK + '} = ' + fmt(binom(urnN, urnK)) + '$$';
   renderMathUrn(line);
 }
 
+function pulseBall(val) {
+  animating = true;
+  Plot.tween(220, function (t) {
+    var scale = 1 + 0.6 * Math.sin(t * Math.PI);
+    drawUrn(0, val, scale);
+  }, function () { animating = false; redrawUrn(); });
+}
+
+function shakeUrn() {
+  animating = true;
+  Plot.tween(300, function (t) {
+    var offset = Math.sin(t * Math.PI * 4) * 8 * (1 - t);
+    drawUrn(offset, null, 1);
+  }, function () { animating = false; redrawUrn(); });
+}
+
 function onUrnClick(ev) {
+  if (animating) return;
   var canvas = document.getElementById('cUrn');
   var rect = canvas.getBoundingClientRect();
   var mx = ev.clientX - rect.left, my = ev.clientY - rect.top;
-  var idx = Plot.nearest(ballPts, mx, my, 20);
+  var idx = Plot.nearest(ballPts, mx, my, curHitR);
   if (idx === null) return;
   var val = ballPts[idx].value;
   var pos = selected.indexOf(val);
   if (pos !== -1) {
     selected.splice(pos, 1);
+    pulseBall(val);
   } else if (selected.length < urnK) {
     selected.push(val);
+    pulseBall(val);
+  } else {
+    shakeUrn();
   }
-  redrawUrn();
 }
 
 window.addEventListener('load', function () {
   redrawUrn();
-  document.getElementById('cUrn').addEventListener('click', onUrnClick);
-  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redrawUrn);
+  var canvas = document.getElementById('cUrn');
+  canvas.style.touchAction = 'manipulation';
+  canvas.addEventListener('click', onUrnClick);
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(function () { if (!animating) redrawUrn(); });
 });
 </script>
 

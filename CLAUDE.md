@@ -45,10 +45,19 @@ keine eigene Struktur haben.
                                                                  "Nach Thema" (Vorbild: mathematik/index.html)
 ```
 
+**LB-Ordnernummerierung folgt teils altem, teils neuem Lehrplan:** `klasse11/lb3-zufallsexperiment/`
+und `lb4-wahrscheinlichkeit/` tragen noch die Nummerierung des Lehrplans 2017/18; `lb6-kombinatorik/`
+(vormals `lb5-kombinatorik/`) wurde auf die Nummerierung des neuen Lehrplans 2026/27 umgestellt, weil
+Kombinatorik dort LB6 statt LB5 ist. Vor Anlegen eines neuen LB-Ordners im passenden Lehrplan-Digest
+(`../01_Materialien/01_Mathematik/01_Kontext/m11-*-lb*-*.md`) prüfen, welche Nummerierung (alt/neu)
+für die Zielklasse gerade gilt — eine flächendeckende Umbenennung aller Bestandsordner ist NICHT
+automatisch Teil einzelner LB-Aufgaben.
+
 ### Präsentationen + Wiki-Theorie (Pilot: `mathematik/klasse11/lb1-ganzrationale-funktionen/`)
 
 Die Website ist Begleitmaterial zum Unterricht vor Ort, kein eigenständiges Skript. Muster
-(bislang nur an LB1 umgesetzt):
+(Präsentations-Decks bislang nur an LB1 umgesetzt; das Wiki-Pattern selbst — ohne Decks — zusätzlich
+an `lb6-kombinatorik/` als **deckloser Variante**, s.u.):
 
 - **`praesentation-<slug>.html`** — pro Unterrichtseinheit EIN Vollbild-Folien-Deck
   (`static/slides.css`/`static/slides.js`) mit einer UE-umspannenden **Leitaufgabe** (Sachkontext):
@@ -79,6 +88,20 @@ Die Website ist Begleitmaterial zum Unterricht vor Ort, kein eigenständiges Skr
 - **Hub `index.html`** — gliedert nach UE-Bögen: je `.section-label` („UE 1 · Grundlagen · ~6 Std.")
   → Deck-`.card` → `.row-list` der zugehörigen Wiki-row-cards (durchlaufende Nummerierung, keine
   `.row-id`-Zeilen).
+- **Deckloser Hub (`lb6-kombinatorik/index.html`)** — für LBs ohne Präsentations-Decks: kein
+  `.section-label`-pro-UE + Deck-`.card`, sondern EIN `.section-label` („Themen") direkt über einer
+  flachen `.row-list` aller Wiki-Themen (Reihenfolge = fachliche Reihenfolge, kein UE-Zeitraster).
+  Vorbild für die Grundstruktur ist der decklose LB-Übersichts-Hub `mathematik/klasse11/index.html`,
+  nicht der Deck-Hub von LB1.
+- **Applets ohne Funktionsgraph** (`lb6-kombinatorik/*.html`: Konfigurator, Läufer-Swap, Podium,
+  Passwortknacker, Urnenmodell) — brauchen `Plot.grid`/`Plot.curve` nicht, nutzen aber weiterhin
+  `Plot.setup()` (DPR-Skalierung) und `Plot.colors()` (Theme-Farben) und zeichnen mit eigenen
+  `ctx.fillRect`/`ctx.arc`-Routinen. Klick- statt Drag-Interaktion: eigener
+  `canvas.addEventListener('click', …)`-Handler + `Plot.nearest(pts, mx, my, r)` als Hit-Test (kein
+  `Plot.draggable`, da diskrete Auswahl statt kontinuierliches Ziehen). Dynamische `.formula--dyn`-
+  Zeilen mit echtem LaTeX brauchen nach jedem Redraw ein manuelles `renderMathInElement(el, {...})`
+  (gleiche Optionen wie der initiale `auto-render`-Aufruf im `<head>`) — Auto-Render läuft nur einmal
+  beim Seitenladen und erfasst später eingefügten Text nicht.
 
 **Fachliche Korrektheit vor Inhalt schreiben prüfen:** Vor dem Schreiben von Theorie-Inhalten den
 Lehrplan-Umfang verifizieren, nicht raten oder von Nachbar-LBs übernehmen. Kurvendiskussion/
@@ -87,9 +110,12 @@ späteren LB „Differenzialrechnung" (`lb2-differenzialrechnung/`). Lehrplan-Di
 in `../01_Materialien/01_Mathematik/01_Kontext/m11-*-lb*-*.md` — dort nachschlagen, bevor eine
 Kompetenzliste angenommen wird.
 
-Noch nicht auf andere Lernbereiche übertragen — vor einer Migration bestehender LBs (andere
-Strukturmuster: Theorie direkt im LB-Index, oder Theorie in UE-Seiten inkl. eigener Übungen-Tab) erst
-den Piloten mit echtem Unterrichtseinsatz validieren.
+Präsentations-Decks noch nicht auf andere Lernbereiche übertragen — vor einer Migration bestehender
+LBs (andere Strukturmuster: Theorie direkt im LB-Index, oder Theorie in UE-Seiten inkl. eigener
+Übungen-Tab) erst den Piloten mit echtem Unterrichtseinsatz validieren. Das Wiki-Pattern OHNE Decks
+(4-Zonen-Themenseiten + flacher Hub) wurde dagegen bereits ein zweites Mal angewendet
+(`lb6-kombinatorik/`, greenfield — kein bestehender Content, also keine Migrationsfrage) und ist der
+Standard für neue, noch leere LBs.
 
 Umlaute: ä→ae, ö→oe, ü→ue, ß→ss. Leerzeichen→`-`. Alles Kleinschreibung.
 

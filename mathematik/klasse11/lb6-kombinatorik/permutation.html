@@ -64,6 +64,7 @@
         <button class="btn btn--ghost" onclick="resetOrder()">Reset</button>
       </div>
       <div class="formula formula--dyn" id="permLine">…</div>
+      <p class="wiki-entry-caption" id="permSeen">Bereits gesehene Anordnungen: 1</p>
       <p class="wiki-entry-caption">Klicke zwei Läufer nacheinander an, um ihre Plätze zu tauschen —
         jede Reihenfolge ist eine mögliche Permutation.</p>
     </div>
@@ -154,11 +155,14 @@
 </footer>
 
 <script>
-/* Applet: n Läufer-Chips, per Klick paarweise vertauschbar. */
+/* Applet: n Läufer-Chips, per Klick paarweise vertauschbar (mit Flug-Tween). */
 var n = 5;
 var order = [1, 2, 3, 4, 5];
 var selSlot = null;
 var chipPts = [];
+var curHitR = 26;
+var animating = false;
+var seen = new Set();
 
 function renderMath(el) {
   if (window.renderMathInElement) {
@@ -168,6 +172,21 @@ function renderMath(el) {
 function fmt(v) { return v.toLocaleString('de-DE'); }
 function factorial(k) { var r = 1; for (var i = 2; i <= k; i++) r *= i; return r; }
 
+function layout(w) {
+  var spacing = w / (n + 1);
+  return {
+    spacing: spacing,
+    r: Math.min(24, spacing / 2 - 6),
+    hitR: Math.min(26, spacing / 2 - 4)
+  };
+}
+
+function markSeen() {
+  seen.add(order.join(','));
+  var el = document.getElementById('permSeen');
+  if (el) el.textContent = 'Bereits gesehene Anordnungen: ' + seen.size;
+}
+
 function resetOrder() {
   order = [];
   for (var i = 1; i <= n; i++) order.push(i);
@@ -175,6 +194,7 @@ function resetOrder() {
   redraw();
 }
 function shuffleOrder() {
+  if (animating) return;
   for (var i = order.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
@@ -185,7 +205,20 @@ function shuffleOrder() {
 function setN() {
   n = parseInt(document.getElementById('slPermN').value, 10);
   document.getElementById('slPermNVal').textContent = n;
+  seen = new Set();
   resetOrder();
+}
+
+function drawChip(ctx, x, y, r, label, color, bg) {
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, 2 * Math.PI);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.font = 'bold 14px "DM Mono", monospace';
+  ctx.fillStyle = bg;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, x, y);
 }
 
 function redraw() {
@@ -194,22 +227,14 @@ function redraw() {
   s.ctx.fillStyle = c.bg;
   s.ctx.fillRect(0, 0, s.w, s.h);
 
-  var spacing = s.w / (n + 1);
   var y = s.h / 2;
-  var r = Math.min(24, spacing / 2 - 6);
+  var L = layout(s.w);
+  curHitR = L.hitR;
   chipPts = [];
   for (var i = 0; i < n; i++) {
-    var x = (i + 1) * spacing;
+    var x = (i + 1) * L.spacing;
     chipPts.push({ px: x, py: y });
-    s.ctx.beginPath();
-    s.ctx.arc(x, y, r, 0, 2 * Math.PI);
-    s.ctx.fillStyle = (i === selSlot) ? c.accent : c.curve;
-    s.ctx.fill();
-    s.ctx.font = 'bold 14px "DM Mono", monospace';
-    s.ctx.fillStyle = c.bg;
-    s.ctx.textAlign = 'center';
-    s.ctx.textBaseline = 'middle';
-    s.ctx.fillText(order[i], x, y);
+    drawChip(s.ctx, x, y, L.r, order[i], (i === selSlot) ? c.accent : c.curve, c.bg);
   }
   s.ctx.textAlign = 'start';
   s.ctx.textBaseline = 'alphabetic';
@@ -217,29 +242,63 @@ function redraw() {
   var line = document.getElementById('permLine');
   line.innerHTML = '$$' + n + '! = ' + fmt(factorial(n)) + '$$';
   renderMath(line);
+  markSeen();
+}
+
+function animateSwap(idxA, idxB) {
+  animating = true;
+  var valA = order[idxA], valB = order[idxB];
+  Plot.tween(250, function (t) {
+    var s = Plot.setup('cPerm', 'wPerm');
+    var c = Plot.colors();
+    s.ctx.fillStyle = c.bg;
+    s.ctx.fillRect(0, 0, s.w, s.h);
+    var y = s.h / 2;
+    var L = layout(s.w);
+    for (var i = 0; i < n; i++) {
+      if (i === idxA || i === idxB) continue;
+      var x = (i + 1) * L.spacing;
+      drawChip(s.ctx, x, y, L.r, order[i], c.curve, c.bg);
+    }
+    var xA = (idxA + 1) * L.spacing, xB = (idxB + 1) * L.spacing;
+    var bump = Math.sin(t * Math.PI) * 10;
+    drawChip(s.ctx, xA + (xB - xA) * t, y - bump, L.r, valA, c.accent, c.bg);
+    drawChip(s.ctx, xB + (xA - xB) * t, y - bump, L.r, valB, c.accent, c.bg);
+    s.ctx.textAlign = 'start';
+    s.ctx.textBaseline = 'alphabetic';
+  }, function () {
+    order[idxA] = valB;
+    order[idxB] = valA;
+    selSlot = null;
+    animating = false;
+    redraw();
+  });
 }
 
 function onCanvasClick(ev) {
+  if (animating) return;
   var canvas = document.getElementById('cPerm');
   var rect = canvas.getBoundingClientRect();
   var mx = ev.clientX - rect.left, my = ev.clientY - rect.top;
-  var idx = Plot.nearest(chipPts, mx, my, 26);
+  var idx = Plot.nearest(chipPts, mx, my, curHitR);
   if (idx === null) return;
   if (selSlot === null) {
     selSlot = idx;
+    redraw();
   } else if (selSlot === idx) {
     selSlot = null;
+    redraw();
   } else {
-    var tmp = order[selSlot]; order[selSlot] = order[idx]; order[idx] = tmp;
-    selSlot = null;
+    animateSwap(selSlot, idx);
   }
-  redraw();
 }
 
 window.addEventListener('load', function () {
   redraw();
-  document.getElementById('cPerm').addEventListener('click', onCanvasClick);
-  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+  var canvas = document.getElementById('cPerm');
+  canvas.style.touchAction = 'manipulation';
+  canvas.addEventListener('click', onCanvasClick);
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(function () { if (!animating) redraw(); });
 });
 </script>
 

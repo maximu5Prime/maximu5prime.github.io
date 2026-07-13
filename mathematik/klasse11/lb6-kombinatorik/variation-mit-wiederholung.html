@@ -67,9 +67,14 @@
         <span class="slider-value" id="slLenVal">6</span>
       </div>
       <div class="formula formula--dyn" id="pwLine">…</div>
+      <div class="btn-row">
+        <button class="btn btn--ghost" onclick="simulateAttack()">Angriff simulieren</button>
+      </div>
+      <p class="wiki-entry-caption" id="pwCrackOut">&nbsp;</p>
       <p class="wiki-entry-caption">Angenommene Rate: $10^9$ Versuche pro Sekunde (handelsüblicher
         Rechner, Wert aus dem Unterrichtsskript). Der Balken nutzt eine logarithmische Skala, weil
-        $n^k$ extrem schnell wächst.</p>
+        $n^k$ extrem schnell wächst. „Angriff simulieren" zeigt nur, wie ein zufälliges Passwort
+        dieser Länge aussehen könnte — kein echtes Cracking-Tool.</p>
     </div>
 
     <section class="wiki-section">
@@ -155,12 +160,14 @@
 <script>
 /* Applet: Passwortknacker (didaktisch) — n^k live, Log-Balken, Zeitschätzung bei 10^9 Versuchen/s. */
 var CHARSETS = [
-  { n: 10, label: 'Ziffern (10)' },
-  { n: 26, label: 'Kleinbuchstaben (26)' },
-  { n: 62, label: 'Groß-/Kleinbuchstaben + Ziffern (62)' }
+  { n: 10, label: 'Ziffern (10)', chars: '0123456789' },
+  { n: 26, label: 'Kleinbuchstaben (26)', chars: 'abcdefghijklmnopqrstuvwxyz' },
+  { n: 62, label: 'Groß-/Kleinbuchstaben + Ziffern (62)', chars: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' }
 ];
 var MAX_LOG = 12 * Math.log(62) / Math.LN10; /* Referenz: 62^12 */
 var RATE = 1e9;
+var prevLogTotal = 6 * Math.log(26) / Math.LN10;
+var attacking = false;
 
 function renderMathPw(el) {
   if (window.renderMathInElement) {
@@ -182,17 +189,7 @@ function formatDuration(seconds) {
   return years.toExponential(2).replace('.', ',') + ' Jahre';
 }
 
-function redrawPw() {
-  var stage = parseInt(document.getElementById('slCharset').value, 10);
-  var k = parseInt(document.getElementById('slLen').value, 10);
-  var cs = CHARSETS[stage];
-  document.getElementById('slCharsetVal').textContent = cs.n;
-  document.getElementById('slLenVal').textContent = k;
-
-  var total = Math.pow(cs.n, k);
-  var logTotal = k * Math.log(cs.n) / Math.LN10;
-  var seconds = total / RATE;
-
+function drawPwFrame(cs, k, logTotal, totalText, seconds) {
   var s = Plot.setup('cPw', 'wPw');
   var c = Plot.colors();
   s.ctx.fillStyle = c.bg;
@@ -204,7 +201,6 @@ function redrawPw() {
 
   s.ctx.font = 'bold 22px "DM Mono", monospace';
   s.ctx.fillStyle = c.accent;
-  var totalText = total > 1e15 ? total.toExponential(3).replace('.', ',') : fmt(total);
   s.ctx.fillText(totalText, 12, 55);
 
   var barX = 12, barY = 80, barW = s.w - 24, barH = 22;
@@ -220,15 +216,74 @@ function redrawPw() {
   s.ctx.font = 'bold 15px "DM Mono", monospace';
   s.ctx.fillStyle = c.text;
   s.ctx.fillText(formatDuration(seconds), 12, 152);
+}
 
+function redrawPw() {
+  var stage = parseInt(document.getElementById('slCharset').value, 10);
+  var k = parseInt(document.getElementById('slLen').value, 10);
+  var cs = CHARSETS[stage];
+  document.getElementById('slCharsetVal').textContent = cs.n;
+  document.getElementById('slLenVal').textContent = k;
+
+  var total = Math.pow(cs.n, k);
+  var newLogTotal = k * Math.log(cs.n) / Math.LN10;
+  var oldLogTotal = prevLogTotal;
+  var totalText = total > 1e15 ? total.toExponential(3).replace('.', ',') : fmt(total);
   var line = document.getElementById('pwLine');
-  line.innerHTML = '$$' + cs.n + '^{' + k + '} = ' + totalText + '$$';
-  renderMathPw(line);
+
+  Plot.tween(300, function (t) {
+    var curLog = oldLogTotal + (newLogTotal - oldLogTotal) * t;
+    var curTotal = Math.pow(10, curLog);
+    var curText = curTotal > 1e15 ? curTotal.toExponential(3).replace('.', ',') : fmt(Math.round(curTotal));
+    drawPwFrame(cs, k, curLog, curText, curTotal / RATE);
+  }, function () {
+    prevLogTotal = newLogTotal;
+    drawPwFrame(cs, k, newLogTotal, totalText, total / RATE);
+    line.innerHTML = '$$' + cs.n + '^{' + k + '} = ' + totalText + '$$';
+    renderMathPw(line);
+  });
+}
+
+function randomPassword(cs, k) {
+  var out = '';
+  for (var i = 0; i < k; i++) out += cs.chars[Math.floor(Math.random() * cs.chars.length)];
+  return out;
+}
+
+function simulateAttack() {
+  if (attacking) return;
+  attacking = true;
+  var stage = parseInt(document.getElementById('slCharset').value, 10);
+  var k = parseInt(document.getElementById('slLen').value, 10);
+  var cs = CHARSETS[stage];
+  var target = randomPassword(cs, k);
+  var out = document.getElementById('pwCrackOut');
+
+  Plot.tween(900, function (t) {
+    var revealCount = t < 0.75 ? 0 : Math.floor((t - 0.75) / 0.25 * k);
+    var chars = [];
+    for (var i = 0; i < k; i++) {
+      chars.push(i < revealCount ? target[i] : cs.chars[Math.floor(Math.random() * cs.chars.length)]);
+    }
+    out.textContent = 'Simuliertes Beispielpasswort: ' + chars.join('');
+  }, function () {
+    out.textContent = 'Simuliertes Beispielpasswort: ' + target + ' (rein zufällig erzeugt, keine echte Attacke)';
+    attacking = false;
+  });
 }
 
 window.addEventListener('load', function () {
-  redrawPw();
-  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redrawPw);
+  drawPwFrame(CHARSETS[1], 6, prevLogTotal, fmt(Math.pow(26, 6)), Math.pow(26, 6) / RATE);
+  var line = document.getElementById('pwLine');
+  line.innerHTML = '$$26^{6} = ' + fmt(Math.pow(26, 6)) + '$$';
+  renderMathPw(line);
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(function () {
+    var stage = parseInt(document.getElementById('slCharset').value, 10);
+    var k = parseInt(document.getElementById('slLen').value, 10);
+    var cs = CHARSETS[stage];
+    var total = Math.pow(cs.n, k);
+    drawPwFrame(cs, k, prevLogTotal, fmt(total), total / RATE);
+  });
 });
 </script>
 

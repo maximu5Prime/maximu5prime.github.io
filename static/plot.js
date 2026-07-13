@@ -192,6 +192,32 @@ window.Plot = (function () {
     }
   }
 
+  /* Zeitbasiertes Tween. onFrame(t) bekommt ease-out-kubisches t (0→1),
+     onDone() feuert einmal am Ende. Respektiert prefers-reduced-motion: dann
+     kein Frame-Loop, sondern sofort onFrame(1) + onDone(). Eine Instanz pro
+     Aufruf (kein globaler State) — mehrere Tweens können parallel laufen. */
+  function tween(duration, onFrame, onDone) {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      onFrame(1);
+      if (onDone) onDone();
+      return;
+    }
+    var start = null;
+    function step(ts) {
+      if (start === null) start = ts;
+      var t = Math.min(1, (ts - start) / duration);
+      var eased = 1 - Math.pow(1 - t, 3);
+      onFrame(eased);
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else if (onDone) {
+        onDone();
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
   /* Redraw-Registry: window.resize (debounced), themechange, beforeprint. */
   var redrawFns = [];
   var resizeTimer = null;
@@ -216,6 +242,7 @@ window.Plot = (function () {
     colors: colors,
     nearest: nearest,
     draggable: draggable,
+    tween: tween,
     onRedraw: onRedraw,
     redraw: runRedraw
   };

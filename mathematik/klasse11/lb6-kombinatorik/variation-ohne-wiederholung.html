@@ -154,12 +154,14 @@
 </footer>
 
 <script>
-/* Applet: Pool von n Läufern → 3 Podiumsplätze, Klick weist zu / gibt frei. */
+/* Applet: Pool von n Läufern → 3 Podiumsplätze, Klick weist zu (mit Flug-Tween) / gibt frei. */
 var varN = 8;
 var pool = [];
 var podium = [null, null, null];
 var poolPts = [];
 var podiumRects = [];
+var curHitR = 24;
+var animating = false;
 
 function renderMath(el) {
   if (window.renderMathInElement) {
@@ -167,6 +169,64 @@ function renderMath(el) {
   }
 }
 function fmt(v) { return v.toLocaleString('de-DE'); }
+
+function poolLayout(w) {
+  var spacing = w / (pool.length + 1);
+  return {
+    spacing: spacing,
+    r: Math.min(20, spacing / 2 - 5),
+    hitR: Math.min(24, spacing / 2 - 3)
+  };
+}
+
+function drawChipC(ctx, x, y, r, label, color, bg) {
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, 2 * Math.PI);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.font = 'bold 13px "DM Mono", monospace';
+  ctx.fillStyle = bg;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, x, y);
+}
+
+function podiumBoxCenter(w, slot) {
+  var boxW = 90, boxH = 60, gap = 24;
+  var totalW = boxW * 3 + gap * 2;
+  var startX = (w - totalW) / 2;
+  var yBox = 150;
+  return { x: startX + slot * (boxW + gap), y: yBox, w: boxW, h: boxH, cx: startX + slot * (boxW + gap) + boxW / 2, cy: yBox + boxH / 2 };
+}
+
+function drawPodium(ctx, w, c, glowSlot, glowStrength) {
+  var labels = ['1. Platz', '2. Platz', '3. Platz'];
+  podiumRects = [];
+  for (var slot = 0; slot < 3; slot++) {
+    var b = podiumBoxCenter(w, slot);
+    podiumRects.push(b);
+    ctx.font = '10px "DM Mono", monospace';
+    ctx.fillStyle = c.label;
+    ctx.textAlign = 'center';
+    ctx.fillText(labels[slot], b.cx, b.y - 10);
+    var lineW = 2;
+    var strokeColor = podium[slot] !== null ? c.accent : c.grid;
+    if (slot === glowSlot) { lineW = 2 + 4 * glowStrength; }
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineW;
+    ctx.strokeRect(b.x, b.y, b.w, b.h);
+    ctx.textBaseline = 'middle';
+    if (podium[slot] !== null) {
+      ctx.font = 'bold 20px "DM Mono", monospace';
+      ctx.fillStyle = c.accent;
+      ctx.fillText(podium[slot], b.cx, b.cy);
+    } else {
+      ctx.font = '16px "DM Mono", monospace';
+      ctx.fillStyle = c.grid;
+      ctx.fillText('–', b.cx, b.cy);
+    }
+  }
+}
 
 function resetPodium() {
   pool = [];
@@ -188,53 +248,21 @@ function redraw() {
 
   s.ctx.font = '11px "DM Mono", monospace';
   s.ctx.fillStyle = c.label;
+  s.ctx.textAlign = 'start';
   s.ctx.fillText('Verfügbar', 12, 18);
 
-  var spacing = s.w / (pool.length + 1);
-  var yPool = 55, r = Math.min(20, spacing / 2 - 5);
+  var L = poolLayout(s.w);
+  curHitR = L.hitR;
+  var yPool = 55;
   poolPts = [];
-  s.ctx.textAlign = 'center';
-  s.ctx.textBaseline = 'middle';
   pool.forEach(function (val, i) {
-    var x = (i + 1) * spacing;
+    var x = (i + 1) * L.spacing;
     poolPts.push({ px: x, py: yPool, value: val });
-    s.ctx.beginPath();
-    s.ctx.arc(x, yPool, r, 0, 2 * Math.PI);
-    s.ctx.fillStyle = c.curve;
-    s.ctx.fill();
-    s.ctx.font = 'bold 13px "DM Mono", monospace';
-    s.ctx.fillStyle = c.bg;
-    s.ctx.fillText(val, x, yPool);
+    drawChipC(s.ctx, x, yPool, L.r, val, c.curve, c.bg);
   });
 
-  var labels = ['1. Platz', '2. Platz', '3. Platz'];
-  var boxW = 90, boxH = 60, gap = 24;
-  var totalW = boxW * 3 + gap * 2;
-  var startX = (s.w - totalW) / 2;
-  var yBox = 150;
-  podiumRects = [];
-  for (var slot = 0; slot < 3; slot++) {
-    var x = startX + slot * (boxW + gap);
-    podiumRects.push({ x: x, y: yBox, w: boxW, h: boxH });
-    s.ctx.font = '10px "DM Mono", monospace';
-    s.ctx.fillStyle = c.label;
-    s.ctx.textAlign = 'center';
-    s.ctx.fillText(labels[slot], x + boxW / 2, yBox - 10);
-    s.ctx.strokeStyle = podium[slot] !== null ? c.accent : c.grid;
-    s.ctx.lineWidth = 2;
-    s.ctx.strokeRect(x, yBox, boxW, boxH);
-    if (podium[slot] !== null) {
-      s.ctx.font = 'bold 20px "DM Mono", monospace';
-      s.ctx.fillStyle = c.accent;
-      s.ctx.textBaseline = 'middle';
-      s.ctx.fillText(podium[slot], x + boxW / 2, yBox + boxH / 2);
-    } else {
-      s.ctx.font = '16px "DM Mono", monospace';
-      s.ctx.fillStyle = c.grid;
-      s.ctx.textBaseline = 'middle';
-      s.ctx.fillText('–', x + boxW / 2, yBox + boxH / 2);
-    }
-  }
+  drawPodium(s.ctx, s.w, c, null, 0);
+
   s.ctx.textAlign = 'start';
   s.ctx.textBaseline = 'alphabetic';
 
@@ -247,18 +275,66 @@ function redraw() {
   renderMath(line);
 }
 
+function pulsePodium(slot) {
+  Plot.tween(400, function (t) {
+    var s = Plot.setup('cVar', 'wVar');
+    var c = Plot.colors();
+    s.ctx.fillStyle = c.bg;
+    s.ctx.fillRect(0, 0, s.w, s.h);
+    s.ctx.font = '11px "DM Mono", monospace';
+    s.ctx.fillStyle = c.label;
+    s.ctx.textAlign = 'start';
+    s.ctx.fillText('Verfügbar', 12, 18);
+    var L = poolLayout(s.w);
+    pool.forEach(function (val, i) {
+      drawChipC(s.ctx, (i + 1) * L.spacing, 55, L.r, val, c.curve, c.bg);
+    });
+    var strength = Math.sin(t * Math.PI);
+    drawPodium(s.ctx, s.w, c, slot, strength);
+  }, redraw);
+}
+
+function animateAssign(val, fromPt, toSlot) {
+  animating = true;
+  Plot.tween(280, function (t) {
+    var s = Plot.setup('cVar', 'wVar');
+    var c = Plot.colors();
+    s.ctx.fillStyle = c.bg;
+    s.ctx.fillRect(0, 0, s.w, s.h);
+    s.ctx.font = '11px "DM Mono", monospace';
+    s.ctx.fillStyle = c.label;
+    s.ctx.textAlign = 'start';
+    s.ctx.fillText('Verfügbar', 12, 18);
+    var L = poolLayout(s.w);
+    pool.forEach(function (val2, i) {
+      if (val2 === val) return;
+      drawChipC(s.ctx, (i + 1) * L.spacing, 55, L.r, val2, c.curve, c.bg);
+    });
+    drawPodium(s.ctx, s.w, c, null, 0);
+    var target = podiumBoxCenter(s.w, toSlot);
+    var x = fromPt.px + (target.cx - fromPt.px) * t;
+    var y = fromPt.py + (target.cy - fromPt.py) * t;
+    drawChipC(s.ctx, x, y, 18, val, c.accent, c.bg);
+  }, function () {
+    podium[toSlot] = val;
+    pool.splice(pool.indexOf(val), 1);
+    animating = false;
+    redraw();
+    if (podium.indexOf(null) === -1) pulsePodium(toSlot);
+  });
+}
+
 function onCanvasClick(ev) {
+  if (animating) return;
   var canvas = document.getElementById('cVar');
   var rect = canvas.getBoundingClientRect();
   var mx = ev.clientX - rect.left, my = ev.clientY - rect.top;
 
-  var idx = Plot.nearest(poolPts, mx, my, 24);
+  var idx = Plot.nearest(poolPts, mx, my, curHitR);
   if (idx !== null) {
     var freeSlot = podium.indexOf(null);
     if (freeSlot !== -1) {
-      podium[freeSlot] = poolPts[idx].value;
-      pool.splice(pool.indexOf(poolPts[idx].value), 1);
-      redraw();
+      animateAssign(poolPts[idx].value, poolPts[idx], freeSlot);
     }
     return;
   }
@@ -277,8 +353,10 @@ function onCanvasClick(ev) {
 
 window.addEventListener('load', function () {
   resetPodium();
-  document.getElementById('cVar').addEventListener('click', onCanvasClick);
-  if (window.Plot && Plot.onRedraw) Plot.onRedraw(redraw);
+  var canvas = document.getElementById('cVar');
+  canvas.style.touchAction = 'manipulation';
+  canvas.addEventListener('click', onCanvasClick);
+  if (window.Plot && Plot.onRedraw) Plot.onRedraw(function () { if (!animating) redraw(); });
 });
 </script>
 
