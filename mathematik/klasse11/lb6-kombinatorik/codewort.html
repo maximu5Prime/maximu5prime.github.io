@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sammelseite: Codewort – Kombinatorik · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <script defer src="/static/codeword.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/">Grundlagen der Kombinatorik</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/team-challenge.html">Team-Challenge</a>
+      <span>/</span>
+      <span>Sammelseite: Codewort</span>
+    </nav>
+    <h1 class="site-title">Sammelseite<br><em>Sammelt alle 5 Codewörter</em></h1>
+    <p class="site-sub">Jedes Team hat sein eigenes Wort erspielt. Erst wenn <strong>alle 5</strong>
+      Wörter hier eingetragen sind, schaltet sich die Überraschung frei — dafür müsst ihr euch
+      gegenseitig eure Wörter verraten.</p>
+  </div>
+</header>
+
+<main class="container container--narrow">
+
+  <div class="card" id="progressPanel">
+    <p class="section-label">Dein Team-Fortschritt</p>
+    <div class="tag-row" id="letterStrip"></div>
+    <p id="progressText">0 von 5 Buchstaben gefunden.</p>
+    <p class="wiki-entry-caption">Noch nicht alle 5 Buchstaben?
+      Zurück zur <a href="team-challenge.html">Team-Challenge</a> und weiterlösen.</p>
+  </div>
+
+  <div class="card" id="classPanel">
+    <p class="section-label">Klassen-Sammlung</p>
+    <div class="tag-row" id="wordStrip"></div>
+    <p id="classProgressText">0 von 5 Wörtern gesammelt.</p>
+    <p class="wiki-entry-caption">Jedes Team nennt sein Wort — tragt sie hier nacheinander alle
+      ein.</p>
+  </div>
+
+  <div class="card" id="wordCheck">
+    <p class="section-label">Codewort eingeben</p>
+    <div class="btn-row">
+      <input type="text" id="wordInput" class="input" placeholder="Codewort eines Teams" autocomplete="off">
+      <button class="btn" id="checkWordBtn">Eintragen</button>
+    </div>
+    <div class="feedback" id="wordFeedback"></div>
+  </div>
+
+  <nav class="pager" aria-label="Wiki-Navigation">
+    <a class="pager-prev" href="team-challenge.html">
+      <span class="pager-label">← Zurück</span>
+      Team-Challenge
+    </a>
+    <a class="pager-next" href="index.html">
+      <span class="pager-label">Weiter →</span>
+      Übersicht Kombinatorik
+    </a>
+  </nav>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb6-kombinatorik/">← LB 6 · Grundlagen der Kombinatorik</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('load', function () {
+  function updateProgress() {
+    var progress = Codeword.getProgress();
+    var strip = document.getElementById('letterStrip');
+    strip.innerHTML = '';
+    Codeword.SECTIONS.forEach(function (id) {
+      var span = document.createElement('span');
+      if (progress[id]) {
+        span.className = 'value-badge';
+        span.textContent = Codeword.getLetter(id);
+      } else {
+        span.className = 'tag';
+        span.textContent = '?';
+      }
+      strip.appendChild(span);
+    });
+    document.getElementById('progressText').textContent =
+      Codeword.countSolved() + ' von 5 Buchstaben gefunden.';
+  }
+  function updateClassProgress() {
+    var collected = Codeword.getCollected();
+    var strip = document.getElementById('wordStrip');
+    strip.innerHTML = '';
+    Codeword.WORDS.forEach(function (w) {
+      var span = document.createElement('span');
+      if (collected.indexOf(w) !== -1) {
+        span.className = 'value-badge';
+        span.textContent = w;
+      } else {
+        span.className = 'tag';
+        span.textContent = '?????';
+      }
+      strip.appendChild(span);
+    });
+    document.getElementById('classProgressText').textContent =
+      collected.length + ' von 5 Wörtern gesammelt.';
+  }
+
+  updateProgress();
+  updateClassProgress();
+
+  function submitWord() {
+    var fb = document.getElementById('wordFeedback');
+    var input = document.getElementById('wordInput');
+    var status = Codeword.collectWord(input.value);
+
+    if (status === 'invalid') {
+      fb.className = 'feedback show err';
+      fb.textContent = 'Das ist kein gültiges Codewort — prüft die Schreibweise.';
+    } else if (status === 'duplicate') {
+      fb.className = 'feedback show err';
+      fb.textContent = 'Dieses Wort wurde schon eingetragen — fragt ein anderes Team nach seinem.';
+    } else if (status === 'added') {
+      input.value = '';
+      updateClassProgress();
+      var missing = Codeword.WORDS.length - Codeword.getCollected().length;
+      fb.className = 'feedback show ok';
+      fb.textContent = 'Eingetragen! Noch ' + missing + ' ' + (missing === 1 ? 'Wort' : 'Wörter') + ' bis zur Überraschung.';
+    } else if (status === 'complete') {
+      updateClassProgress();
+      fb.className = 'feedback show ok';
+      fb.textContent = 'Alle 5 Wörter beisammen! Ihr werdet weitergeleitet …';
+      Codeword.setUnlockedFlag();
+      setTimeout(function () { location.href = 'ueberraschung.html'; }, 900);
+    }
+  }
+
+  document.getElementById('checkWordBtn').addEventListener('click', submitWord);
+  document.getElementById('wordInput').addEventListener('keydown', function (ev) {
+    if (ev.key === 'Enter') submitWord();
+  });
+});
+</script>
+
+</body>
+</html>

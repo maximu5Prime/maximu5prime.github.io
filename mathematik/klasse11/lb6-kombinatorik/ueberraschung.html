@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geschafft! – Kombinatorik-FunFacts · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/codeword.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/">Grundlagen der Kombinatorik</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/codewort.html">Sammelseite</a>
+      <span>/</span>
+      <span>Überraschung</span>
+    </nav>
+    <h1 class="site-title">Geschafft!<br><em>Herzlichen Glückwunsch</em></h1>
+    <p class="site-sub">Ihr habt das Codewort geknackt. Zur Belohnung: 7 FunFacts, bei denen selbst
+      kleine Zahlen wie $n=30$ zu unfassbar großen Ergebnissen führen. Klickt eine Karte an, um die
+      Antwort aufzudecken.</p>
+  </div>
+</header>
+
+<main class="container container--narrow">
+
+  <div class="note" id="accessNote" style="display:none">
+    <p>Diese Seite ist eigentlich die Belohnung für ein gelöstes Codewort auf der
+      <a href="codewort.html">Sammelseite</a>. Schaut euch die FunFacts trotzdem gerne an — probiert
+      aber auch mal das Codewort-Rätsel in der <a href="team-challenge.html">Team-Challenge</a>!</p>
+  </div>
+
+  <p class="section-label">Kombinatorik-FunFacts</p>
+
+  <div class="card-grid card-grid--wide">
+
+    <button class="card flip-card" type="button">
+      <div class="flip-card-inner">
+        <div class="flip-card-face">
+          <span class="flip-card-icon">🃏</span>
+          <p class="card-title">Ein Kartenspiel, das es noch nie gab</p>
+          <p>Wie viele verschiedene Reihenfolgen hat ein einmal gemischtes 52er-Kartenspiel?</p>
+          <p class="flip-card-hint">Zum Aufdecken klicken →</p>
+        </div>
+        <div class="flip-card-face flip-card-face--back">
+          <p>$52! \approx 8{,}07 \times 10^{67}$ mögliche Anordnungen — weit mehr als die Sekunden
+            seit dem Urknall.</p>
+          <div class="factbar">
+            <div class="factbar-row">
+              <span class="factbar-label">Anordnungen</span>
+              <span class="factbar-track"><span class="factbar-fill factbar-fill--accent" style="width:100%"></span></span>
+              <span class="factbar-value">$10^{68}$</span>
+            </div>
+            <div class="factbar-row">
+              <span class="factbar-label">Sek. seit Urknall</span>
+              <span class="factbar-track"><span class="factbar-fill" style="width:26%"></span></span>
+              <span class="factbar-value">$10^{18}$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button class="card flip-card" type="button">
+      <div class="flip-card-inner">
+        <div class="flip-card-face">
+          <span class="flip-card-icon">🏖️</span>
+          <p class="card-title">Mehr als Sandkörner am Strand</p>
+          <p>Wie viele verschiedene Sitzordnungen gibt es für eine Klasse mit 30 Schüler*innen?</p>
+          <p class="flip-card-hint">Zum Aufdecken klicken →</p>
+        </div>
+        <div class="flip-card-face flip-card-face--back">
+          <p>$30! \approx 2{,}65 \times 10^{32}$ mögliche Sitzordnungen — mehr als alle Sandkörner
+            an allen Stränden der Erde zusammen.</p>
+          <div class="factbar">
+            <div class="factbar-row">
+              <span class="factbar-label">Sitzordnungen</span>
+              <span class="factbar-track"><span class="factbar-fill factbar-fill--accent" style="width:100%"></span></span>
+              <span class="factbar-value">$10^{32}$</span>
+            </div>
+            <div class="factbar-row">
+              <span class="factbar-label">Sandkörner Erde</span>
+              <span class="factbar-track"><span class="factbar-fill" style="width:58%"></span></span>
+              <span class="factbar-value">$10^{19}$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button class="card flip-card" type="button">
+      <div class="flip-card-inner">
+        <div class="flip-card-face">
+          <span class="flip-card-icon">🧩</span>
+          <p class="card-title">Der Rubik's Cube</p>
+          <p>Wie viele legale Stellungen hat ein Rubik's Cube?</p>
+          <p class="flip-card-hint">Zum Aufdecken klicken →</p>
+        </div>
+        <div class="flip-card-face flip-card-face--back">
+          <p>Genau 43.252.003.274.489.856.000 (rund 43,25 Trillionen) legale Stellungen.</p>
+          <div class="factbar">
+            <div class="factbar-row">
+              <span class="factbar-label">Stellungen</span>
+              <span class="factbar-track"><span class="factbar-fill factbar-fill--accent" style="width:100%"></span></span>
+              <span class="factbar-value">4,3·10¹⁹</span>
+            </div>
+            <div class="factbar-row">
+              <span class="factbar-label">Nötige Züge</span>
+              <span class="factbar-track"><span class="factbar-fill" style="width:3%"></span></span>
+              <span class="factbar-value">≤ 20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button class="card flip-card" type="button">
+      <div class="flip-card-inner">
+        <div class="flip-card-face">
+          <span class="flip-card-icon">🎂</span>
+          <p class="card-title">Das Geburtstagsparadoxon</p>
+          <p>Ab wie vielen Personen im Raum ist es wahrscheinlicher als nicht, dass zwei denselben
+            Geburtstag haben?</p>
+          <p class="flip-card-hint">Zum Aufdecken klicken →</p>
+        </div>
+        <div class="flip-card-face flip-card-face--back">
+          <p>Schon ab 23 Personen (genau $\approx 50{,}7\,\%$) — bei einer 30-köpfigen Klasse ist
+            es also fast sicher der Fall.</p>
+          <div class="factbar">
+            <div class="factbar-row">
+              <span class="factbar-label">Nötige Personen</span>
+              <span class="factbar-track"><span class="factbar-fill factbar-fill--accent" style="width:6%"></span></span>
+              <span class="factbar-value">23</span>
+            </div>
+            <div class="factbar-row">
+              <span class="factbar-label">Mögliche Tage</span>
+              <span class="factbar-track"><span class="factbar-fill" style="width:100%"></span></span>
+              <span class="factbar-value">365</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button class="card flip-card" type="button">
+      <div class="flip-card-inner">
+        <div class="flip-card-face">
+          <span class="flip-card-icon">🍀</span>
+          <p class="card-title">Lottchance im Großformat</p>
+          <p>Wie viele mögliche Tipps gibt es bei EuroMillions (5 aus 50 + 2 aus 12)?</p>
+          <p class="flip-card-hint">Zum Aufdecken klicken →</p>
+        </div>
+        <div class="flip-card-face flip-card-face--back">
+          <p>$\binom{50}{5} \cdot \binom{12}{2} = 2.118.760 \cdot 66 = 139.838.160$ mögliche Tipps.</p>
+          <div class="factbar">
+            <div class="factbar-row">
+              <span class="factbar-label">Alle Tipps</span>
+              <span class="factbar-track"><span class="factbar-fill factbar-fill--accent" style="width:100%"></span></span>
+              <span class="factbar-value">139,8 Mio.</span>
+            </div>
+            <div class="factbar-row">
+              <span class="factbar-label">Dein Gewinn-Tipp</span>
+              <span class="factbar-track"><span class="factbar-fill" style="width:1%"></span></span>
+              <span class="factbar-value">1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button class="card flip-card" type="button">
+      <div class="flip-card-inner">
+        <div class="flip-card-face">
+          <span class="flip-card-icon">♟️</span>
+          <p class="card-title">Mehr als Atome im Universum?</p>
+          <p>Was gibt es mehr von: mögliche Schachpartien oder Atome im beobachtbaren Universum?</p>
+          <p class="flip-card-hint">Zum Aufdecken klicken →</p>
+        </div>
+        <div class="flip-card-face flip-card-face--back">
+          <p>Schätzungen für mögliche Schachpartien liegen bei etwa $10^{120}$ (Shannon-Zahl) —
+            mehr als die Atome im beobachtbaren Universum.</p>
+          <div class="factbar">
+            <div class="factbar-row">
+              <span class="factbar-label">Schachpartien</span>
+              <span class="factbar-track"><span class="factbar-fill factbar-fill--accent" style="width:100%"></span></span>
+              <span class="factbar-value">$10^{120}$</span>
+            </div>
+            <div class="factbar-row">
+              <span class="factbar-label">Atome im Universum</span>
+              <span class="factbar-track"><span class="factbar-fill" style="width:67%"></span></span>
+              <span class="factbar-value">$10^{80}$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button class="card flip-card" type="button">
+      <div class="flip-card-inner">
+        <div class="flip-card-face">
+          <span class="flip-card-icon">🔢</span>
+          <p class="card-title">Alle gültigen Sudokus</p>
+          <p>Wie viele unterschiedliche, vollständig gültige 9×9-Sudoku-Raster gibt es?</p>
+          <p class="flip-card-hint">Zum Aufdecken klicken →</p>
+        </div>
+        <div class="flip-card-face flip-card-face--back">
+          <p>Exakt 6.670.903.752.021.072.936.960 — 2005 durch erschöpfende Computerberechnung
+            exakt bestimmt.</p>
+          <div class="factbar">
+            <div class="factbar-row">
+              <span class="factbar-label">Gültige Raster</span>
+              <span class="factbar-track"><span class="factbar-fill factbar-fill--accent" style="width:100%"></span></span>
+              <span class="factbar-value">6,67·10²¹</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </button>
+
+  </div>
+
+  <nav class="pager" aria-label="Wiki-Navigation">
+    <a class="pager-prev" href="codewort.html">
+      <span class="pager-label">← Zurück</span>
+      Sammelseite
+    </a>
+    <a class="pager-next" href="index.html">
+      <span class="pager-label">Weiter →</span>
+      Übersicht Kombinatorik
+    </a>
+  </nav>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb6-kombinatorik/">← LB 6 · Grundlagen der Kombinatorik</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('load', function () {
+  if (!Codeword.isUnlocked()) document.getElementById('accessNote').style.display = 'block';
+
+  document.querySelectorAll('.flip-card').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('flipped');
+    });
+  });
+});
+</script>
+
+</body>
+</html>

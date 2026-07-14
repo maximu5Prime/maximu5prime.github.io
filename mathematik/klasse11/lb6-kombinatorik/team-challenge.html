@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team-Challenge: Codewort – Kombinatorik · Mathe 11</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/codeword.js"></script>
+  <script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/mathematik/klasse11/lb6-kombinatorik/">Grundlagen der Kombinatorik</a>
+      <span>/</span>
+      <span>Team-Challenge: Codewort</span>
+    </nav>
+    <h1 class="site-title">Team-Challenge<br><em>Finde das Codewort</em></h1>
+    <p class="site-sub">5 Rätsel, 2 Aufgaben pro Rätsel — welche Formel jeweils passt, verrät euch
+      niemand. Findet es selbst heraus (Reihenfolge? Wiederholung?). Für jedes gelöste Rätsel
+      schaltet ihr einen Buchstaben eures Codeworts frei.</p>
+  </div>
+</header>
+
+<main class="container container--narrow">
+
+  <div class="card" id="progressPanel">
+    <p class="section-label">Dein Fortschritt</p>
+    <div class="tag-row" id="letterStrip"></div>
+    <p id="progressText">0 von 5 Buchstaben gefunden.</p>
+    <p class="wiki-entry-caption">Dein Gerät hat automatisch eines von 5 gültigen Codewörtern
+      zugelost — nicht jedes Team hat dasselbe Wort. Auf der Sammelseite müssen am Ende
+      <strong>alle 5</strong> unterschiedlichen Wörter der Klasse zusammenkommen, bevor sich die
+      Überraschung freischaltet — verratet euch also gegenseitig eure Wörter.</p>
+    <div class="btn-row">
+      <a class="btn btn--ghost" href="codewort.html" id="sammelseiteLink">Zur Sammelseite →</a>
+    </div>
+  </div>
+
+  <section class="wiki-section" data-challenge="zaehlprinzip">
+    <h2>Rätsel 1</h2>
+
+    <div class="quiz-task" data-quiz="fill">
+      <p class="quiz-q"><strong>1 ·</strong> Die Eisdiele am Schulweg bietet 8 Eissorten, 3 Soßen
+        und 2 Streusel-Arten an. Ein Becher besteht aus genau einer Sorte, einer Soße und einer
+        Streusel-Art. Wie viele verschiedene Becher sind möglich?</p>
+      <p>Anzahl: <input class="input quiz-input" data-ans="48" data-tol="0"></p>
+      <div class="hint" data-quiz-hint>Überlege dir die drei Entscheidungen (Sorte, Soße, Streusel)
+        einzeln: Wie viele Möglichkeiten hast du bei jeder einzelnen Entscheidung, unabhängig von
+        den anderen?</div>
+    </div>
+
+    <div class="quiz-task" data-quiz="mcq" data-ans="1">
+      <p class="quiz-q"><strong>2 ·</strong> Eine Schulband sucht aus 8 Mitgliedern eine*n
+        Sänger*in, eine*n Gitarrist*in und eine*n Schlagzeuger*in — jede Person übernimmt höchstens
+        eine Rolle. Warum liefert $8 \cdot 8 \cdot 8$ hier <em>nicht</em> die richtige Anzahl?</p>
+      <div class="quiz-opts">
+        <button class="quiz-opt">Weil 8 keine Primzahl ist.</button>
+        <button class="quiz-opt">Weil die drei Rollen nicht unabhängig sind — wer schon eine Rolle
+          hat, scheidet für die nächste aus.</button>
+        <button class="quiz-opt">Weil das Zählprinzip nur für genau zwei Stufen gilt.</button>
+      </div>
+      <div class="hint" data-quiz-hint>Frag dich: Stehen für die zweite Rolle noch genauso viele
+        Personen zur Auswahl wie für die erste?</div>
+    </div>
+
+    <p class="wiki-entry-caption">Formel unsicher?
+      <a href="index.html">Zur Themen-Übersicht →</a></p>
+
+    <div class="reward-box">
+      <div class="empty reward-locked">
+        <p class="kicker">Gesperrt</p>
+        <p>Löse beide Aufgaben oben, um einen Buchstaben deines Codeworts freizuschalten.</p>
+      </div>
+      <div class="result-box reward-unlocked" style="display:none">
+        <p>Buchstabe freigeschaltet: <span class="value-badge"></span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wiki-section" data-challenge="permutation">
+    <h2>Rätsel 2</h2>
+
+    <div class="quiz-task" data-quiz="fill">
+      <p class="quiz-q"><strong>1 ·</strong> Ein Sportverein stellt 5 unterschiedliche Pokale
+        nebeneinander in eine Vitrine. Auf wie viele Arten lassen sich die 5 Pokale anordnen?</p>
+      <p>Anzahl: <input class="input quiz-input" data-ans="120" data-tol="0"></p>
+      <div class="hint" data-quiz-hint>Für den ersten Platz hast du 5 Pokale zur Auswahl. Wie viele
+        bleiben für den zweiten Platz übrig? Und für den dritten?</div>
+    </div>
+
+    <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F">
+      <p class="quiz-q"><strong>2 ·</strong> Wahr oder falsch?</p>
+      <table class="ankreuz">
+        <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr><td>6 Freund*innen stellen sich für ein Gruppenfoto in eine Reihe. Dafür gibt es
+            $6! = 720$ mögliche Aufstellungen.</td><td></td><td></td></tr>
+          <tr><td>Müssen zwei bestimmte der 6 Personen dabei zwingend nebeneinanderstehen, bleibt
+            die Anzahl unverändert bei 720.</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="hint" data-quiz-hint>Was passiert, wenn du die zwei Personen, die zusammenbleiben
+        müssen, gedanklich zu einer einzigen Einheit zusammenfasst? Wie viele Einheiten ordnest du
+        dann an — und was kannst du innerhalb der Einheit noch vertauschen?</div>
+    </div>
+
+    <p class="wiki-entry-caption">Formel unsicher?
+      <a href="index.html">Zur Themen-Übersicht →</a></p>
+
+    <div class="reward-box">
+      <div class="empty reward-locked">
+        <p class="kicker">Gesperrt</p>
+        <p>Löse beide Aufgaben oben, um einen Buchstaben deines Codeworts freizuschalten.</p>
+      </div>
+      <div class="result-box reward-unlocked" style="display:none">
+        <p>Buchstabe freigeschaltet: <span class="value-badge"></span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wiki-section" data-challenge="variation-ohne">
+    <h2>Rätsel 3</h2>
+
+    <div class="quiz-task" data-quiz="fill">
+      <p class="quiz-q"><strong>1 ·</strong> Bei einem Schwimmwettbewerb mit 8 Teilnehmerinnen
+        werden Gold, Silber und Bronze vergeben. Wie viele mögliche Reihenfolgen für die ersten
+        drei Plätze gibt es?</p>
+      <p>Anzahl: <input class="input quiz-input" data-ans="336" data-tol="0"></p>
+      <div class="hint" data-quiz-hint>Für Gold hast du 8 Schwimmerinnen zur Auswahl. Wie viele
+        bleiben noch für Silber übrig, wenn Gold schon vergeben ist?</div>
+    </div>
+
+    <div class="quiz-task" data-quiz="mcq" data-ans="1">
+      <p class="quiz-q"><strong>2 ·</strong> Ein Vereinsvorstand mit 9 Mitgliedern wählt aus seiner
+        Mitte eine*n Vorsitzende*n, eine*n Kassierer*in und eine*n Schriftführer*in. Wie viele
+        Besetzungen sind möglich?</p>
+      <div class="quiz-opts">
+        <button class="quiz-opt">$\binom{9}{3}=84$</button>
+        <button class="quiz-opt">$V(9,3)=9 \cdot 8 \cdot 7=504$</button>
+        <button class="quiz-opt">$9^3=729$</button>
+      </div>
+      <div class="hint" data-quiz-hint>Macht es einen Unterschied, ob Person A Vorsitz und Person B
+        Kasse übernimmt, oder umgekehrt?</div>
+    </div>
+
+    <p class="wiki-entry-caption">Formel unsicher?
+      <a href="index.html">Zur Themen-Übersicht →</a></p>
+
+    <div class="reward-box">
+      <div class="empty reward-locked">
+        <p class="kicker">Gesperrt</p>
+        <p>Löse beide Aufgaben oben, um einen Buchstaben deines Codeworts freizuschalten.</p>
+      </div>
+      <div class="result-box reward-unlocked" style="display:none">
+        <p>Buchstabe freigeschaltet: <span class="value-badge"></span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wiki-section" data-challenge="variation-mit">
+    <h2>Rätsel 4</h2>
+
+    <div class="quiz-task" data-quiz="fill">
+      <p class="quiz-q"><strong>1 ·</strong> Ein Fahrradschloss hat 4 Ringe mit den Ziffern 0–9,
+        jede Ziffer darf auf mehreren Ringen vorkommen. Wie viele Einstellungen sind möglich?</p>
+      <p>Anzahl: <input class="input quiz-input" data-ans="10000" data-tol="0"></p>
+      <div class="hint" data-quiz-hint>Kann dieselbe Ziffer auf mehreren Ringen gleichzeitig
+        vorkommen? Wie viele Möglichkeiten hat dann jeder einzelne Ring für sich betrachtet?</div>
+    </div>
+
+    <div class="quiz-task" data-quiz="mcq" data-ans="0">
+      <p class="quiz-q"><strong>2 ·</strong> Ein Angreifer probiert $10^7$ Kombinationen pro
+        Sekunde durch. Ein Code aus 5 Ziffern (0–9) mit Wiederholung ist im schlechtesten Fall
+        ungefähr in welcher Zeit vollständig durchprobiert?</p>
+      <div class="quiz-opts">
+        <button class="quiz-opt">≈ 0,01 Sekunden</button>
+        <button class="quiz-opt">≈ 1 Sekunde</button>
+        <button class="quiz-opt">≈ 10 Sekunden</button>
+      </div>
+      <div class="hint" data-quiz-hint>Überlege zuerst, wie viele verschiedene 5-stellige Codes es
+        überhaupt gibt — teile diese Anzahl anschließend durch die Versuche pro Sekunde.</div>
+    </div>
+
+    <p class="wiki-entry-caption">Formel unsicher?
+      <a href="index.html">Zur Themen-Übersicht →</a></p>
+
+    <div class="reward-box">
+      <div class="empty reward-locked">
+        <p class="kicker">Gesperrt</p>
+        <p>Löse beide Aufgaben oben, um einen Buchstaben deines Codeworts freizuschalten.</p>
+      </div>
+      <div class="result-box reward-unlocked" style="display:none">
+        <p>Buchstabe freigeschaltet: <span class="value-badge"></span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wiki-section" data-challenge="kombination-ohne">
+    <h2>Rätsel 5</h2>
+
+    <div class="quiz-task" data-quiz="fill">
+      <p class="quiz-q"><strong>1 ·</strong> Aus einer Klasse mit 24 Schüler*innen soll ein
+        4-köpfiges Organisationsteam für den Abschlussball gebildet werden (keine unterschiedlichen
+        Rollen). Wie viele verschiedene Teams sind möglich?</p>
+      <p>Anzahl: <input class="input quiz-input" data-ans="10626" data-tol="0"></p>
+      <div class="hint" data-quiz-hint>Spielt es eine Rolle, in welcher Reihenfolge die 4
+        Team-Mitglieder gewählt werden, oder zählt nur, WER am Ende im Team ist?</div>
+    </div>
+
+    <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F">
+      <p class="quiz-q"><strong>2 ·</strong> Wahr oder falsch?</p>
+      <table class="ankreuz">
+        <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+        <tbody>
+          <tr><td>Beim Doppelkopf erhält jede*r Spielende 12 Karten aus einem 48er-Blatt — nur
+            welche Karten in der Hand liegen zählt, nicht die Reihenfolge des Ziehens. Das ist eine
+            Kombination ohne Wiederholung.</td><td></td><td></td></tr>
+          <tr><td>Wählst du dagegen nacheinander eine*n Präsident*in, eine*n Vize und eine*n
+            Kassierer*in aus 12 Vereinsmitgliedern, ist das ebenfalls eine Kombination ohne
+            Wiederholung.</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="hint" data-quiz-hint>Vergleiche die zwei Situationen: Bei welcher davon würde ein
+        Tausch zweier Personen etwas an der Auswahl ändern?</div>
+    </div>
+
+    <p class="wiki-entry-caption">Formel unsicher?
+      <a href="index.html">Zur Themen-Übersicht →</a></p>
+
+    <div class="reward-box">
+      <div class="empty reward-locked">
+        <p class="kicker">Gesperrt</p>
+        <p>Löse beide Aufgaben oben, um einen Buchstaben deines Codeworts freizuschalten.</p>
+      </div>
+      <div class="result-box reward-unlocked" style="display:none">
+        <p>Buchstabe freigeschaltet: <span class="value-badge"></span></p>
+      </div>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="Wiki-Navigation">
+    <a class="pager-prev" href="index.html">
+      <span class="pager-label">← Zurück</span>
+      Übersicht Kombinatorik
+    </a>
+    <a class="pager-next" href="codewort.html">
+      <span class="pager-label">Weiter →</span>
+      Sammelseite: Codewort
+    </a>
+  </nav>
+
+  <script>
+  (function () {
+    function shuffle(arr) {
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+      }
+      return arr;
+    }
+    /* Aufgaben-Reihenfolge innerhalb jedes Rätsels mischen */
+    document.querySelectorAll('[data-challenge]').forEach(function (sec) {
+      var anchor = sec.querySelector('.wiki-entry-caption');
+      var tasks = shuffle(Array.prototype.slice.call(sec.querySelectorAll('.quiz-task')));
+      tasks.forEach(function (t) { sec.insertBefore(t, anchor); });
+    });
+    /* Rätsel-Reihenfolge mischen + neu nummerieren — läuft synchron, also
+       bevor quiz.js (defer) seine [data-quiz]-Elemente scannt. */
+    var main = document.querySelector('main');
+    var pager = document.querySelector('.pager');
+    var sections = shuffle(Array.prototype.slice.call(document.querySelectorAll('[data-challenge]')));
+    sections.forEach(function (sec, i) {
+      sec.querySelector('h2').textContent = 'Rätsel ' + (i + 1);
+      main.insertBefore(sec, pager);
+    });
+  })();
+  </script>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <a href="/mathematik/klasse11/lb6-kombinatorik/">← LB 6 · Grundlagen der Kombinatorik</a>
+    <nav class="site-footer-links">
+      <a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('load', function () {
+  function reveal(section, id, animate) {
+    var box = section.querySelector('.reward-box');
+    box.querySelector('.reward-locked').style.display = 'none';
+    var u = box.querySelector('.reward-unlocked');
+    u.style.display = 'block';
+    u.querySelector('.value-badge').textContent = Codeword.getLetter(id);
+    if (animate) u.style.animation = 'fade-up .3s ease';
+  }
+
+  function updateProgress() {
+    var progress = Codeword.getProgress();
+    var strip = document.getElementById('letterStrip');
+    strip.innerHTML = '';
+    Codeword.SECTIONS.forEach(function (id) {
+      var span = document.createElement('span');
+      if (progress[id]) {
+        span.className = 'value-badge';
+        span.textContent = Codeword.getLetter(id);
+      } else {
+        span.className = 'tag';
+        span.textContent = '?';
+      }
+      strip.appendChild(span);
+    });
+    document.getElementById('progressText').textContent =
+      Codeword.countSolved() + ' von 5 Buchstaben gefunden.';
+
+    var link = document.getElementById('sammelseiteLink');
+    if (Codeword.countSolved() >= 5) {
+      link.textContent = '🎉 Alle Buchstaben gefunden! Zur Sammelseite →';
+      link.classList.remove('btn--ghost');
+    } else {
+      link.textContent = 'Zur Sammelseite →';
+      link.classList.add('btn--ghost');
+    }
+  }
+
+  document.querySelectorAll('[data-challenge]').forEach(function (section) {
+    var id = section.dataset.challenge;
+    if (Codeword.getProgress()[id]) reveal(section, id, false);
+    section.addEventListener('quiz:solved', function () {
+      var total = section.querySelectorAll('[data-quiz]').length;
+      var solved = section.querySelectorAll('.feedback.show.ok').length;
+      if (total > 0 && solved >= total) {
+        Codeword.markSolved(id);
+        reveal(section, id, true);
+        updateProgress();
+      }
+    });
+  });
+
+  updateProgress();
+});
+</script>
+
+</body>
+</html>

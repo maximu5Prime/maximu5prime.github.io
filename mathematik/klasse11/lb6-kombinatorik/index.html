@@ -8,6 +8,10 @@
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/static/fonts.css">
   <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
   <script defer src="/static/site.js"></script>
   <script defer src="/static/reveal.js"></script>
 </head>
@@ -38,6 +42,63 @@
 </header>
 
 <main class="container container--narrow">
+
+  <section id="entscheidungsbaum">
+    <p class="section-label">Welche Formel brauche ich?</p>
+
+    <div class="dtree" id="dtree">
+      <ul class="dtree-root">
+        <li>
+          <div class="dtree-node">Reihenfolge<br>wichtig?</div>
+          <ul class="dtree-level">
+            <li>
+              <button class="dtree-edge" data-branch="q1-ja">Ja</button>
+              <div class="dtree-node">Wiederholung<br>erlaubt?</div>
+              <ul class="dtree-level">
+                <li>
+                  <button class="dtree-edge" data-branch="q1-ja-q2-ja">Ja</button>
+                  <a class="dtree-leaf" href="variation-mit-wiederholung.html" data-leaf="q1-ja-q2-ja">
+                    <span class="dtree-leaf-name">Variation<br>mit W.</span>
+                    <span class="dtree-leaf-formula">$n^k$</span>
+                  </a>
+                </li>
+                <li>
+                  <button class="dtree-edge" data-branch="q1-ja-q2-nein">Nein</button>
+                  <a class="dtree-leaf" href="variation-ohne-wiederholung.html" data-leaf="q1-ja-q2-nein">
+                    <span class="dtree-leaf-name">Variation<br>ohne W.</span>
+                    <span class="dtree-leaf-formula">$\frac{n!}{(n-k)!}$</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <button class="dtree-edge" data-branch="q1-nein">Nein</button>
+              <div class="dtree-node">Wiederholung<br>erlaubt?</div>
+              <ul class="dtree-level">
+                <li>
+                  <button class="dtree-edge" data-branch="q1-nein-q2-ja">Ja</button>
+                  <span class="dtree-leaf dtree-leaf--muted" data-leaf="q1-nein-q2-ja">
+                    <span class="dtree-leaf-name">Kombination<br>mit W.</span>
+                    <span class="dtree-leaf-formula">$\binom{n+k-1}{k}$</span>
+                  </span>
+                </li>
+                <li>
+                  <button class="dtree-edge" data-branch="q1-nein-q2-nein">Nein</button>
+                  <a class="dtree-leaf" href="kombination-ohne-wiederholung.html" data-leaf="q1-nein-q2-nein">
+                    <span class="dtree-leaf-name">Kombination<br>ohne W.</span>
+                    <span class="dtree-leaf-formula">$\binom{n}{k}$</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <button class="dtree-reset" id="dtreeReset">Hervorhebung zurücksetzen</button>
+    <p class="wiki-entry-caption" style="text-align:center">Blass = nicht Teil dieses Lernbereichs.</p>
+  </section>
 
   <p class="section-label">Themen</p>
 
@@ -93,6 +154,17 @@
       <div class="row-side"><span class="tag">Wiki</span><span class="row-arrow">→</span></div>
     </a>
 
+    <a class="row-card" href="/mathematik/klasse11/lb6-kombinatorik/team-challenge.html">
+      <div class="row-num">6</div>
+      <div class="row-body">
+        <p class="row-title">Team-Challenge: Codewort</p>
+        <p class="row-desc">Alle 5 Themen in neuen Aufgaben — löse jeden Block und schalte einen
+          Buchstaben deines Codeworts frei.</p>
+        <div class="row-tags"><span class="tag">Codewort</span><span class="tag tag--interaktiv">interaktiv</span></div>
+      </div>
+      <div class="row-side"><span class="tag">Challenge</span><span class="row-arrow">→</span></div>
+    </a>
+
   </div>
 
 </main>
@@ -103,6 +175,30 @@
     <nav class="site-footer-links"><a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a></nav>
   </div>
 </footer>
+
+<script>
+window.addEventListener('load', function () {
+  var dtree = document.getElementById('dtree');
+  document.querySelectorAll('.dtree-edge').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var branch = btn.dataset.branch;
+      dtree.classList.add('has-highlight');
+      document.querySelectorAll('.dtree-edge').forEach(function (e) {
+        e.classList.toggle('dtree-edge--active', branch.indexOf(e.dataset.branch) === 0);
+      });
+      document.querySelectorAll('.dtree-leaf').forEach(function (leaf) {
+        leaf.classList.toggle('dtree-leaf--active', leaf.dataset.leaf.indexOf(branch) === 0);
+      });
+    });
+  });
+  document.getElementById('dtreeReset').addEventListener('click', function () {
+    dtree.classList.remove('has-highlight');
+    document.querySelectorAll('.dtree-edge, .dtree-leaf').forEach(function (el) {
+      el.classList.remove('dtree-edge--active', 'dtree-leaf--active');
+    });
+  });
+});
+</script>
 
 </body>
 </html>

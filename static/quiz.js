@@ -30,7 +30,10 @@
 
    Prüfen-/Zurücksetzen-Buttons und .feedback injiziert quiz.js in jede
    Task. KaTeX im Feedback wird gezielt nachgerendert. Kein Score, kein
-   Fortschritts-Chrome — bewusst schlank (siehe CLAUDE.md). */
+   Fortschritts-Chrome — bewusst schlank (siehe CLAUDE.md). Bei korrekter
+   Lösung feuert die Task ein bubbelndes CustomEvent 'quiz:solved' (keine
+   sichtbare UI-Änderung) — externe Skripte wie static/codeword.js können
+   darauf lauschen, ohne quiz.js selbst Zustand tragen zu lassen. */
 (function () {
   'use strict';
 
@@ -55,6 +58,7 @@
     fb.className = 'feedback show ' + (ok ? 'ok' : 'err');
     fb.innerHTML = msg;
     renderMath(fb);
+    if (ok) task.dispatchEvent(new CustomEvent('quiz:solved', { bubbles: true }));
   }
 
   function hideFeedback(task) {

@@ -425,6 +425,87 @@ a.card:hover .card-title { color: var(--accent); }
   margin-top: 1rem;
 }
 
+
+/* ── 8b · Flip-Cards (Frage/Antwort-Karten, z. B. FunFacts) ───────────── */
+
+.flip-card.card {
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  perspective: 1200px;
+}
+.flip-card-inner {
+  position: relative;
+  height: 310px;
+  transform-style: preserve-3d;
+  transition: transform .6s var(--ease-out);
+}
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .5rem;
+  overflow-y: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 1.5rem 1.7rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.flip-card-face--back {
+  transform: rotateY(180deg);
+  background: color-mix(in srgb, var(--ok) 6%, var(--surface));
+}
+.flip-card-hint {
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--faint);
+}
+.flip-card:hover .flip-card-face { border-color: var(--accent); box-shadow: var(--shadow-md); }
+.flip-card-icon { font-size: 1.9rem; line-height: 1; }
+
+/* Zahlenvergleich-Balken auf der Rückseite (Größenordnung als Länge) */
+.factbar { display: flex; flex-direction: column; gap: .35rem; margin-top: .3rem; }
+.factbar-row { display: flex; align-items: center; gap: .5rem; }
+.factbar-label {
+  width: 84px;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-tag);
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.2;
+}
+.factbar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.factbar-fill { height: 100%; border-radius: 999px; background: var(--line-strong); }
+.factbar-fill--accent { background: var(--accent); }
+.factbar-value {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  color: var(--muted);
+  min-width: 3.2em;
+}
+.flip-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
 /* Aufgaben-Box (Arbeitsblätter) */
 .task {
   background: var(--surface);
@@ -1167,6 +1248,180 @@ input[type=range]:focus-visible {
 }
 
 
+/* ── 14b · Entscheidungsbaum (dtree) — Pure-CSS-Baum, alles sofort sichtbar ─ */
+
+.dtree {
+  --dtree-gap: 1rem; /* einheitlicher Astabstand: Box→Verzweigung UND Ja/Nein→Box */
+  overflow-x: auto;
+  padding: var(--sp-4) 0 var(--sp-2);
+}
+
+/* .dtree-root = äußerste Liste (nur die Wurzelfrage, kein eingehender Konnektor).
+   .dtree-level = jede "Kinder-Zeile" (Äste einer Frage) — bekommt Konnektor-Linien
+   zu ihrem Elternknoten. Getrennte Klassen, damit die Konnektor-Regeln nicht auch
+   fälschlich auf die Wurzel selbst greifen (sonst falsche Positionierung). */
+.dtree-root, .dtree-level {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.dtree-root > li { padding: 0 .7rem; text-align: center; }
+
+.dtree-level {
+  position: relative;
+  padding-top: var(--dtree-gap);
+}
+.dtree-level li {
+  position: relative;
+  padding: 0 .7rem;
+  text-align: center;
+}
+/* Konnektor als drei EINZELNE, durchgehende Linien statt aus zwei
+   Ast-Hälften zusammengesetzt (die alte Technik ließ bei Subpixel-Rendering
+   eine sichtbare Doppel-/Versatzlinie genau an der Verzweigung entstehen).
+   Gilt für exakt 2 Kinder pro Zeile (Ja/Nein) — deshalb feste 25%/75%. */
+.dtree-level::before {
+  /* Stamm: vom Elternknoten hinunter zur Mitte des Querbalkens */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: calc(var(--dtree-gap) / 2);
+  border-left: 1px solid var(--line-strong);
+}
+.dtree-level::after {
+  /* Querbalken: eine durchgehende Linie zwischen den Zentren der 2 Äste */
+  content: '';
+  position: absolute;
+  top: calc(var(--dtree-gap) / 2);
+  left: 25%;
+  right: 25%;
+  height: 0;
+  border-top: 1px solid var(--line-strong);
+}
+.dtree-level li::before {
+  /* Abzweig: vom Querbalken hinunter zu diesem einen Kind */
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--dtree-gap) / 2);
+  left: 50%;
+  width: 0;
+  height: calc(var(--dtree-gap) / 2);
+  border-left: 1px solid var(--line-strong);
+}
+
+.dtree-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 116px;
+  min-height: 3rem;
+  margin: 0 auto;
+  font-family: var(--font-sans);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  padding: .5rem .6rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  text-align: center;
+}
+.dtree-edge {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line-strong);
+  cursor: pointer;
+  padding: .1rem 0 .15rem;
+  transition: color .15s, border-color .15s;
+}
+.dtree-edge:hover {
+  color: var(--accent);
+  border-color: currentColor;
+}
+/* Verbindungsstück von der Ja/Nein-Beschriftung hinunter zur Box darunter —
+   ohne das würde die Astlinie oben an der Beschriftung enden und die Box
+   wirkt „abgehängt". */
+.dtree-edge::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: var(--dtree-gap);
+  margin: 0 auto;
+  border-left: 1px solid var(--line-strong);
+}
+
+.dtree-leaf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .3rem;
+  width: 116px;
+  min-height: 4.6rem;
+  padding: .6rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  transition: border-color .2s, background .2s, transform .2s var(--ease-out);
+}
+a.dtree-leaf:hover {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+  transform: translateY(-2px);
+}
+.dtree-leaf-name {
+  font-family: var(--font-sans);
+  font-size: var(--fs-tag);
+  font-weight: 500;
+}
+.dtree-leaf-formula { font-family: var(--font-mono); font-size: var(--fs-small); }
+.dtree-leaf--muted {
+  cursor: default;
+  color: var(--faint);
+  border-color: var(--line);
+}
+
+/* Pfad-Hervorhebung per Klick auf .dtree-edge (JS togglet diese Klassen) */
+.dtree.has-highlight .dtree-edge,
+.dtree.has-highlight .dtree-leaf { opacity: .35; transition: opacity .2s; }
+.dtree.has-highlight .dtree-edge.dtree-edge--active,
+.dtree.has-highlight .dtree-leaf.dtree-leaf--active { opacity: 1; }
+.dtree-edge--active {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  font-weight: 700;
+}
+.dtree-leaf--active { border-color: var(--accent) !important; }
+
+.dtree-reset {
+  display: block;
+  margin: var(--sp-2) auto 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.dtree-reset:hover { color: var(--accent); }
+
+
 /* ── 15 · Footer ─────────────────────────────────────────────────────── */
 
 .site-footer {
@@ -1261,6 +1516,17 @@ input[type=range]:focus-visible {
   .site-footer { display: none !important; }
 
   .tab-panel { display: block !important; }
+
+  .dtree { overflow: visible !important; }
+
+  .flip-card-inner { height: auto !important; transform: none !important; }
+  .flip-card-face { position: static !important; }
+  .flip-card-face--back {
+    transform: none !important;
+    border-top: 1px dashed var(--line);
+    margin-top: .5rem;
+  }
+  .flip-card-hint { display: none !important; }
 
   .task, .card, .solution { break-inside: avoid; }
   .card, .row-card { box-shadow: none !important; transform: none !important; }
