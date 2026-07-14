@@ -1422,6 +1422,47 @@ a.dtree-leaf:hover {
 .dtree-reset:hover { color: var(--accent); }
 
 
+/* ── 14c · Splash-Screen (Erfolgs-Zwischenseite, z. B. codewort.html) ─── */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: var(--sp-4);
+  animation: splash-in .4s var(--ease-out);
+}
+.splash-inner { max-width: 480px; text-align: center; }
+.splash-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tag);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--accent);
+  margin-bottom: .9rem;
+}
+.splash-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 1.3rem + 4vw, 3.4rem);
+  line-height: 1.15;
+  margin-bottom: .6rem;
+}
+.splash-sub {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 2.2rem;
+}
+@keyframes splash-in {
+  from { opacity: 0; transform: scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+
 /* ── 15 · Footer ─────────────────────────────────────────────────────── */
 
 .site-footer {
@@ -1482,6 +1523,22 @@ a.dtree-leaf:hover {
     gap: .6rem;
   }
   input[type=range] { width: 140px; }
+
+  /* FunFacts-Grid: eine Spalte statt 340px-Mindestbreite (sonst Overflow) */
+  .card-grid--wide { grid-template-columns: 1fr; }
+  .flip-card-inner { height: 280px; }
+  .factbar-label { width: 68px; font-size: .68rem; }
+
+  /* Entscheidungsbaum: kompaktere Boxen, damit möglichst wenig seitlich
+     gescrollt werden muss (.dtree hat overflow-x:auto als Fallback) */
+  .dtree { --dtree-gap: .75rem; }
+  .dtree-node, .dtree-leaf { width: 84px; }
+  .dtree-node { min-height: 2.6rem; padding: .4rem .5rem; font-size: .82rem; }
+  .dtree-leaf { min-height: 4rem; padding: .5rem; }
+  .dtree-level li, .dtree-root > li { padding-left: .4rem; padding-right: .4rem; }
+
+  /* Sammelseite: Eingabefeld nimmt die volle Zeile, Button springt darunter */
+  #wordInput { flex: 1 1 100%; }
 }
 
 
@@ -1513,6 +1570,7 @@ a.dtree-leaf:hover {
   .breadcrumb,
   .pager,
   .btn-row,
+  .splash,
   .site-footer { display: none !important; }
 
   .tab-panel { display: block !important; }

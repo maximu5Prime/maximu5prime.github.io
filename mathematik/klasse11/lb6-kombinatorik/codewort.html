@@ -74,6 +74,15 @@
 
 </main>
 
+<div class="splash" id="splash" style="display:none">
+  <div class="splash-inner">
+    <p class="splash-eyebrow">Codewort geknackt</p>
+    <h2 class="splash-title">Niemals ohne<br>mein Team!</h2>
+    <p class="splash-sub">Stark W11b!</p>
+    <button class="btn" id="splashContinue">Weiter zu den FunFacts →</button>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="container site-footer-inner">
     <a href="/mathematik/klasse11/lb6-kombinatorik/">← LB 6 · Grundlagen der Kombinatorik</a>
@@ -145,15 +154,18 @@ window.addEventListener('load', function () {
     } else if (status === 'complete') {
       updateClassProgress();
       fb.className = 'feedback show ok';
-      fb.textContent = 'Alle 5 Wörter beisammen! Ihr werdet weitergeleitet …';
+      fb.textContent = 'Alle 5 Wörter beisammen!';
       Codeword.setUnlockedFlag();
-      setTimeout(function () { location.href = 'ueberraschung.html'; }, 900);
+      document.getElementById('splash').style.display = 'flex';
     }
   }
 
   document.getElementById('checkWordBtn').addEventListener('click', submitWord);
   document.getElementById('wordInput').addEventListener('keydown', function (ev) {
     if (ev.key === 'Enter') submitWord();
+  });
+  document.getElementById('splashContinue').addEventListener('click', function () {
+    location.href = 'ueberraschung.html';
   });
 });
 </script>
