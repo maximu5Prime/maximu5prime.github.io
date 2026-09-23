@@ -1,0 +1,44 @@
+/* farben.css — Farben und Schriften der neuen Seiten (Entwurf A „hell & kräftig“, gewählt 23.09.2026). */
+:root {
+  color-scheme: light;
+  --font-body: 'DM Sans V', system-ui, sans-serif;
+  --font-head: 'DM Sans V', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono V', ui-monospace, monospace;
+  --radius: 20px;
+  --shadow: 0 1px 2px rgba(15,23,42,.06), 0 8px 30px rgba(15,23,42,.07);
+  --c-bg: #ffffff; --c-surface: #f3f5fb; --c-surface-2: #e7ebf6; --c-line: #d6dcea;
+  --c-text: #0b1220; --c-muted: #4a5568;
+  --c-accent: #2450e6; --c-on-accent: #ffffff; --c-mark: #ffe45c;
+  --c-mission: #e3ebff; --c-mission-text: #1a3cb3;
+  --c-aha: #ffe45c; --c-aha-text: #1c1600;
+  --c-k: #e5484d; --c-e: #2450e6;
+  --c-gain: #12a150; --c-gain-fill: rgba(18,161,80,.16);
+  --c-loss: #e5484d; --c-loss-fill: rgba(229,72,77,.12);
+  --c-grid: #e6eaf3; --c-axis: #0b1220;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --shadow: none;
+  --c-bg: #0b1020; --c-surface: #141b31; --c-surface-2: #1d2642; --c-line: #2a3556;
+  --c-text: #f3f6ff; --c-muted: #a9b4d0;
+  --c-accent: #6b8cff; --c-on-accent: #0b1020; --c-mark: #6b5a00;
+  --c-mission: #1d2a57; --c-mission-text: #c9d6ff;
+  --c-aha: #ffe45c; --c-aha-text: #1c1600;
+  --c-k: #ff6b70; --c-e: #6b8cff;
+  --c-gain: #2fd07a; --c-gain-fill: rgba(47,208,122,.18);
+  --c-loss: #ff6b70; --c-loss-fill: rgba(255,107,112,.14);
+  --c-grid: #1f2945; --c-axis: #cfd8f2;
+}}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --shadow: none;
+  --c-bg: #0b1020; --c-surface: #141b31; --c-surface-2: #1d2642; --c-line: #2a3556;
+  --c-text: #f3f6ff; --c-muted: #a9b4d0;
+  --c-accent: #6b8cff; --c-on-accent: #0b1020; --c-mark: #6b5a00;
+  --c-mission: #1d2a57; --c-mission-text: #c9d6ff;
+  --c-aha: #ffe45c; --c-aha-text: #1c1600;
+  --c-k: #ff6b70; --c-e: #6b8cff;
+  --c-gain: #2fd07a; --c-gain-fill: rgba(47,208,122,.18);
+  --c-loss: #ff6b70; --c-loss-fill: rgba(255,107,112,.14);
+  --c-grid: #1f2945; --c-axis: #cfd8f2;
+}

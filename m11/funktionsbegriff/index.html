@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funktion oder nicht? · M11</title>
+  <meta name="description" content="Senkrechtentest zum Ausprobieren: Wann gehört ein Graph zu einer Funktion?">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Funktionsbegriff</div>
+    <h1>Funktion oder <mark>nicht</mark>?</h1>
+    <p>Eine Funktion ordnet jedem $x$ genau ein $y$ zu. Aber wie sieht man das einem Graphen an?</p>
+  </header>
+
+  <section class="stage" aria-label="Ausprobieren">
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span>Ihr Auftrag: Entscheiden Sie bei allen vier Graphen, ob sie zu einer Funktion gehören.</span></div>
+    <div class="wahl" id="wahl"></div>
+    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graph mit senkrechter Prüflinie"></canvas></div>
+    <p class="tipp-zeile">Ziehen oder tippen Sie im Diagramm: Die senkrechte Linie zeigt, wie viele Punkte des Graphen zu diesem $x$ gehören.</p>
+    <div class="antwort">
+      <button type="button" id="ja">Funktion</button>
+      <button type="button" id="nein">keine Funktion</button>
+      <span class="urteil" id="urteil"></span>
+    </div>
+  </section>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    <b>Senkrechtentest:</b> Trifft <b>jede senkrechte Linie</b> den Graphen <b>höchstens einmal</b>, gehört er zu einer Funktion.
+    Denn die senkrechte Linie sammelt alle Punkte mit demselben $x$ — und davon darf es nur einen geben.
+  </div>
+
+  <details class="warum">
+    <summary>Warum? Die Idee dahinter</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>Eine <b>Funktion</b> ist eine Zuordnung, die jedem $x$ aus der Definitionsmenge $D$ <b>genau ein</b> $y$ zuordnet.</div></div>
+      <div class="schritt"><span>2</span><div>Alle Punkte auf einer senkrechten Linie haben dasselbe $x$. Zwei Treffer heißen: <b>ein</b> $x$ mit <b>zwei</b> $y$-Werten — das ist keine Funktion.</div></div>
+      <div class="schritt"><span>3</span><div>Kein Treffer ist erlaubt: Dieses $x$ gehört dann einfach nicht zur Definitionsmenge.</div></div>
+      <div class="schritt"><span>4</span><div>Waagrecht darf der Graph mehrfach getroffen werden (S-Kurve): Verschiedene $x$ dürfen dasselbe $y$ haben.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> mit einer <b>waagrechten</b> Linie prüfen. Die S-Kurve wird dann fälschlich aussortiert.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="0">
+    <p class="quiz-q">1 · Jeder Person im Bus wird ihr Geburtsjahr zugeordnet. Ist das eine Funktion?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">Ja — jede Person hat genau ein Geburtsjahr.</button>
+      <button class="quiz-opt">Nein — mehrere Personen haben dasselbe Geburtsjahr.</button>
+      <button class="quiz-opt">Nein — ein Jahr ist keine Person.</button>
+    </div>
+    <div class="hint" data-quiz-hint>Entscheidend ist: Bekommt jede Person (jedes $x$) genau einen Wert? Dass zwei Personen denselben Wert haben, ist erlaubt.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="fill">
+    <p class="quiz-q">2 · $f(x) = 2x - 1$. Berechnen Sie den Funktionswert an der Stelle $3$.</p>
+    <p>$f(3) =$ <input class="input quiz-input" data-ans="5" inputmode="decimal"></p>
+    <div class="hint" data-quiz-hint>Setzen Sie für jedes $x$ im Term die $3$ ein.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
+    <p class="quiz-q">3 · Wahr oder falsch?</p>
+    <table class="ankreuz">
+      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+      <tbody>
+        <tr><td>Uhrzeit → Temperatur an einem Ort ist eine Funktion.</td><td></td><td></td></tr>
+        <tr><td>Temperatur → Uhrzeit ist eine Funktion.</td><td></td><td></td></tr>
+        <tr><td>Eine senkrechte Linie darf den Graphen einer Funktion auch gar nicht treffen.</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="hint" data-quiz-hint>Kann dieselbe Temperatur zu mehreren Uhrzeiten auftreten?</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span><span>Zurück zum Arbeitsblatt 1.1: Weiter mit Ihrer Stufe.</span></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <span></span>
+    <a class="next" href="/m11/lineare-funktionen/"><span>Nächstes Thema →</span>Lineare Funktionen</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  var sq = function (v) { return Math.sqrt(Math.max(0, v)); };
+  var G = [
+    { name: 'Wurfbahn',  zw: [function (x) { return -0.4 * (x - 0.5) * (x - 0.5) + 3; }], von: -4.5, bis: 4.5, fkt: true },
+    { name: 'Kreis',     zw: [function (x) { return sq(9 - x * x); }, function (x) { return -sq(9 - x * x); }], von: -3, bis: 3, fkt: false },
+    { name: 'S-Kurve',   zw: [function (x) { return 0.15 * x * x * x - x; }], von: -4.5, bis: 4.5, fkt: true },
+    { name: 'Liegende Parabel', zw: [function (x) { return sq(2 * (x + 3)); }, function (x) { return -sq(2 * (x + 3)); }], von: -3, bis: 4.5, fkt: false }
+  ];
+  var cur = 0, xs = 1.5, antw = [null, null, null, null];
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: -4.5, xMax: 4.5, yMin: -4.5, yMax: 4.5 },
+    step: { x: 1, y: 1 }, label: { x: 1, y: 1 }, ratio: 0.62, maxH: 480, padL: 40 });
+  var wahl = Aha.$('wahl');
+  G.forEach(function (g, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = g.name;
+    b.addEventListener('click', function () { cur = i; Aha.$('urteil').textContent = ''; Aha.$('urteil').className = 'urteil'; zeichne(); });
+    wahl.appendChild(b);
+  });
+  function treffer() {
+    var g = G[cur], ys = [];
+    if (xs < g.von - 1e-9 || xs > g.bis + 1e-9) return ys;
+    g.zw.forEach(function (f) { var y = f(xs); if (!ys.some(function (u) { return Math.abs(u - y) < 0.05; })) ys.push(y); });
+    return ys;
+  }
+  function zeichne() {
+    Array.prototype.forEach.call(wahl.children, function (b, i) {
+      b.classList.toggle('aktiv', i === cur);
+      b.classList.toggle('ok', antw[i] === true); b.classList.toggle('err', antw[i] === false);
+    });
+    P.setup().grid();
+    var C = P.C, g = G[cur];
+    g.zw.forEach(function (f) { P.curve(f, C.e, 4, g.von, g.bis); });
+    var ys = treffer(), farbe = ys.length > 1 ? C.loss : C.gain;
+    P.segment(xs, -4.5, xs, 4.5, farbe, 3, [8, 6]);
+    ys.forEach(function (y) { P.dot(xs, y, farbe, 8); });
+    P.badge('x = ' + Aha.de(xs, 1) + ': ' + ys.length + (ys.length === 1 ? ' Treffer' : ' Treffer') +
+      (ys.length > 1 ? ' → zwei y-Werte!' : ''), xs, farbe);
+  }
+  function urteile(sagtFkt) {
+    var richtig = sagtFkt === G[cur].fkt, u = Aha.$('urteil');
+    antw[cur] = richtig;
+    u.textContent = richtig ? 'Richtig!' : 'Nicht ganz — schieben Sie die Linie über den ganzen Graphen.';
+    u.className = 'urteil ' + (richtig ? 'ok' : 'err');
+    zeichne();
+    Aha.mission(antw.every(function (a) { return a === true; }));
+  }
+  Aha.$('ja').addEventListener('click', function () { urteile(true); });
+  Aha.$('nein').addEventListener('click', function () { urteile(false); });
+  P.pointer(function (x) { xs = Math.max(-4.5, Math.min(4.5, Math.round(x * 10) / 10)); zeichne(); });
+  Aha.onRedraw(zeichne);
+});
+</script>
+</body>
+</html>

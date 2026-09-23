@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schnittpunkte zweier Geraden · M11</title>
+  <meta name="description" content="Zwei Tarife vergleichen: Gleichsetzen, parallel oder identisch — zum Ausprobieren.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Schnittpunkte</div>
+    <h1>Werden zwei Tarife <mark>immer</mark> irgendwann gleich teuer?</h1>
+    <p>Carsharing: Anbieter A kostet $0{,}30$ € je Minute, $a(x) = 0{,}3x$. Anbieter B stellen Sie selbst ein: $b(x) = m\,x + t$.</p>
+  </header>
+
+  <section class="stage" aria-label="Ausprobieren">
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span>Ihr Auftrag: Stellen Sie Tarif B so ein, dass sich die beiden Geraden nie schneiden.</span></div>
+    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Zwei Tarif-Geraden"></canvas></div>
+    <p class="tipp-zeile">Tippen oder fahren Sie über den Graphen: Die Lupe vergleicht beide Preise für diese Fahrzeit.</p>
+    <div class="regler">
+      <div><label for="m">B: Preis je Minute <output id="mVal"></output></label>
+        <input type="range" id="m" min="0" max="0.5" step="0.05" value="0.15"></div>
+      <div><label for="t">B: Grundgebühr <output id="tVal"></output></label>
+        <input type="range" id="t" min="0" max="20" step="1" value="9"></div>
+    </div>
+    <div class="ergebnis">
+      <div class="gross" id="lage"></div>
+      <div class="rechnung" id="gleich"></div>
+    </div>
+  </section>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Gleiche <b>Steigung</b>, verschiedener Startwert: Die Geraden sind <b>parallel</b> und schneiden sich nie.
+    Beim Gleichsetzen verschwindet $x$ — übrig bleibt eine <b>falsche Aussage</b>:<br>
+    <span class="lmenge" id="lMenge"></span>
+  </div>
+
+  <details class="warum">
+    <summary>Warum? So rechnen Sie es</summary>
+    <div class="warum-inhalt">
+      <p>Gemeinsame Punkte finden Sie durch <b>Gleichsetzen</b>. Beispiel mit B: $b(x) = 0{,}15x + 9$.</p>
+      <div class="schritt"><span>1</span><div>$0{,}3x = 0{,}15x + 9 \quad | -0{,}15x$</div></div>
+      <div class="schritt"><span>2</span><div>$0{,}15x = 9 \quad | :0{,}15 \quad\Rightarrow\quad x = 60$</div></div>
+      <div class="schritt"><span>3</span><div>$y$-Wert: $a(60) = 18$, also $S(60\,|\,18)$ — nach 60 Minuten kosten beide 18 €.</div></div>
+      <p><b>Drei Fälle:</b> verschiedene Steigungen → genau ein Schnittpunkt ·
+        gleiche Steigung, verschiedenes $t$ → parallel, falsche Aussage wie $0 = 9$ ·
+        gleiche Steigung und gleiches $t$ → identisch, wahre Aussage $0 = 0$.</p>
+      <div class="fehler"><b>Typischer Fehler:</b> Aus „$0 = 9$“ wird „$x = 0$“. Falsch! Die Variable ist verschwunden, es gibt <b>keine</b> Lösung.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="fill">
+    <p class="quiz-q">1 · Wo schneiden sich $f(x) = 2x + 1$ und $g(x) = -x + 7$?</p>
+    <p>$x =$ <input class="input quiz-input" data-ans="2" inputmode="decimal"> &emsp; $y =$ <input class="input quiz-input" data-ans="5" inputmode="decimal"></p>
+    <div class="hint" data-quiz-hint>Gleichsetzen: $2x + 1 = -x + 7$. Den $y$-Wert mit $f$ oder $g$ berechnen.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="0">
+    <p class="quiz-q">2 · Beim Gleichsetzen zweier Geraden erhalten Sie $4 = 4$. Was folgt daraus?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">Die Geraden sind identisch.</button>
+      <button class="quiz-opt">Sie schneiden sich bei $x = 4$.</button>
+      <button class="quiz-opt">Sie sind parallel und haben keinen Schnittpunkt.</button>
+    </div>
+  </div>
+
+  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,W,F">
+    <p class="quiz-q">3 · Wahr oder falsch?</p>
+    <table class="ankreuz">
+      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+      <tbody>
+        <tr><td>$f(x) = 3x - 2$ und $g(x) = 3x + 1$ sind parallel.</td><td></td><td></td></tr>
+        <tr><td>$h(x) = -2x + 5$ und $k(x) = 0{,}5x + 5$ schneiden sich auf der $y$-Achse.</td><td></td><td></td></tr>
+        <tr><td>$f(x) = x$ und $g(x) = -x$ sind parallel.</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span><span>Zurück zum Arbeitsblatt 1.3: Aufgabe 1 — Schnittpunkte berechnen.</span></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/lineare-funktionen/"><span>← Voriges Thema</span>Lineare Funktionen</a>
+    <a class="next" href="/m11/ungleichungen/"><span>Nächstes Thema →</span>Ungleichungen</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  var S = { m: 0.15, t: 9, probe: null };
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 120, yMin: 0, yMax: 40 },
+    step: { x: 10, y: 5 }, label: { x: 20, y: 10 }, xLabel: 'x in min', yLabel: 'y in €' });
+  var a = function (x) { return 0.3 * x; }, b = function (x) { return S.m * x + S.t; };
+  var gleicheM = function () { return Math.abs(S.m - 0.3) < 1e-9; };
+  var xs = function () { return S.t / (0.3 - S.m); };
+  function zeichne() {
+    P.setup().grid();
+    var C = P.C;
+    P.curve(a, C.e, 4).curve(b, C.k, 4);
+    P.text('A', 120, Math.min(a(120), 40), C.e, 'right', -6, a(120) > 38 ? 18 : -10);
+    P.text('B', 120, Math.min(b(120), 40), C.k, 'right', -6, b(120) > a(120) ? -10 : 22);
+    if (!gleicheM() && xs() >= 0 && xs() <= 120 && a(xs()) <= 40) {
+      P.segment(xs(), 0, xs(), a(xs()), C.axis, 1.5, [5, 5]).dot(xs(), a(xs()), C.gain, 9);
+      P.text('S', xs(), a(xs()), C.gain, 'right', -12, -10);
+    }
+    if (S.probe !== null) {
+      var x = S.probe, d = b(x) - a(x);
+      P.segment(x, a(x), x, b(x), C.text, 3);
+      P.badge(Math.round(x) + ' min: A ' + Aha.de(a(x), 2) + ' € · B ' + Aha.de(b(x), 2) + ' €', x, Math.abs(d) < 0.01 ? C.gain : C.accent);
+    }
+  }
+  function aktualisiere() {
+    Aha.$('mVal').textContent = Aha.de(S.m, 2) + ' €';
+    Aha.$('tVal').textContent = Aha.de(S.t) + ' €';
+    var ms = Aha.de(S.m, 2), gl = '0{,}3x = ' + (S.m ? ms.replace(',', '{,}') + 'x + ' : '') + S.t;
+    if (gleicheM()) {
+      Aha.$('lage').innerHTML = S.t === 0 ? 'Immer gleich teuer: <b>identisch</b>' : 'Nie gleich teuer: <b>parallel</b>';
+      Aha.tex('gleich', gl + '\\;\\Rightarrow\\; 0 = ' + S.t + (S.t ? '\\;\\text{(falsch)}' : '\\;\\text{(wahr)}'));
+      Aha.tex('lMenge', gl + '\\;\\Rightarrow\\; 0 = ' + S.t);
+    } else if (xs() >= 0) {
+      Aha.$('lage').innerHTML = 'Gleich teuer nach <b>' + Aha.de(xs(), 1) + '</b> min';
+      Aha.tex('gleich', gl + '\\;\\Rightarrow\\; x = ' + Aha.de(xs(), 1).replace(',', '{,}'));
+    } else {
+      Aha.$('lage').innerHTML = 'B ist <b>immer</b> teurer';
+      Aha.tex('gleich', '\\text{Schnittpunkt bei } x = ' + Aha.de(xs(), 1).replace(',', '{,}') + '\\text{ — keine echte Fahrzeit}');
+    }
+    zeichne();
+    Aha.mission(gleicheM() && S.t > 0);
+  }
+  Aha.$('m').addEventListener('input', function () { S.m = +this.value; aktualisiere(); });
+  Aha.$('t').addEventListener('input', function () { S.t = +this.value; aktualisiere(); });
+  P.pointer(function (x) { S.probe = (x >= 0 && x <= 120) ? Math.round(x) : null; zeichne(); },
+            function () { S.probe = null; zeichne(); });
+  Aha.onRedraw(aktualisiere);
+});
+</script>
+</body>
+</html>

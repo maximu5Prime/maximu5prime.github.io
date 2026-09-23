@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VORLAGE Aha-Seite — Kopie nach /<kurs>/<thema>/index.html, dann Inhalt ersetzen</title>
+  <meta name="description" content="Gewinnschwelle einer Bar: Wo ist e(x) > k(x)? Ungleichungen zum Ausprobieren.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Ungleichungen</div>
+    <h1>Ab wie vielen Getränken macht die Bar <mark>Gewinn</mark>?</h1>
+    <p>Bar 3.0: Kosten $k(x) = 2x + 2000$, Erlös $e(x) = 6x$. Gesucht sind alle $x$ mit $e(x) > k(x)$.</p>
+  </header>
+
+  <section class="stage" aria-label="Ausprobieren">
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span>Ihr Auftrag: Bringen Sie die Gewinnschwelle unter 400 Getränke.</span></div>
+    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graphen von Kosten und Erlös"></canvas></div>
+    <p class="tipp-zeile">Tippen oder fahren Sie über den Graphen: Die Lupe zeigt Gewinn oder Verlust an dieser Stelle.</p>
+    <div class="regler">
+      <div><label for="p">Preis je Getränk <output id="pVal"></output></label>
+        <input type="range" id="p" min="3" max="10" step="0.5" value="6"></div>
+      <div><label for="f">Fixkosten im Monat <output id="fVal"></output></label>
+        <input type="range" id="f" min="1000" max="3000" step="100" value="2000"></div>
+    </div>
+    <div class="ergebnis">
+      <div class="gross">Gewinn ab <b id="bigNum">501</b> Getränken</div>
+      <div class="rechnung" id="rechnung"></div>
+    </div>
+  </section>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Der <b>Schnittpunkt</b> ist die Grenze: links davon Verlust, rechts davon Gewinn.
+    Die Lösung einer Ungleichung ist deshalb keine einzelne Zahl, sondern ein <b>ganzer Bereich</b>:<br>
+    <span class="lmenge" id="lMenge"></span>
+  </div>
+
+  <details class="warum">
+    <summary>Warum? So rechnen Sie es</summary>
+    <div class="warum-inhalt">
+      <p>Eine Ungleichung formen Sie um wie eine Gleichung — mit einer Ausnahme (unten).</p>
+      <div class="schritt"><span>1</span><div>Ansetzen: $6x > 2x + 2000$</div></div>
+      <div class="schritt"><span>2</span><div>$x$ auf eine Seite: $\;| -2x \quad\Rightarrow\quad 4x > 2000$</div></div>
+      <div class="schritt"><span>3</span><div>Auflösen: $\;| :4 \quad\Rightarrow\quad x > 500$, also $\mathbb{L} = \;]\,500;\ \infty\,[$</div></div>
+      <div class="schritt"><span>4</span><div>Im Sachkontext: Getränke gibt es nur ganz → Gewinn ab <b>501</b> Getränken.
+        Probe mit einer Testzahl: $x = 600$: $e = 3600 > k = 3200$ ✓</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Beim Multiplizieren oder Dividieren mit einer
+        <b>negativen</b> Zahl dreht sich das Zeichen um: $-2x > 8 \;\Rightarrow\; x < -4$.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="fill">
+    <p class="quiz-q">1 · Lösen Sie $3x + 4 > x + 10$. Die Lösung lautet $x > \dots$</p>
+    <p>$x >$ <input class="input quiz-input" data-ans="3" inputmode="decimal"></p>
+    <div class="hint" data-quiz-hint>Erst $-x$, dann $-4$, dann durch $2$ teilen.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">2 · Welche Lösung hat $-2x > 8$?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">$x > -4$</button>
+      <button class="quiz-opt">$x < -4$</button>
+      <button class="quiz-opt">$x > 4$</button>
+    </div>
+    <div class="hint" data-quiz-hint>Sie teilen durch eine negative Zahl. Was passiert dann mit dem Zeichen?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
+    <p class="quiz-q">3 · Eine andere Bar: Erlös $e(x) = 5x$, Kosten $k(x) = x + 1200$. Wahr oder falsch?</p>
+    <table class="ankreuz">
+      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+      <tbody>
+        <tr><td>Bei 300 Getränken ist der Gewinn genau 0 €.</td><td></td><td></td></tr>
+        <tr><td>Bei 250 Getränken macht die Bar Gewinn.</td><td></td><td></td></tr>
+        <tr><td>$\mathbb{L} = \;]\,300;\ \infty\,[$ löst $e(x) > k(x)$.</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="hint" data-quiz-hint>Setzen Sie $e(x) = k(x)$ und lösen Sie nach $x$ auf.</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Arbeitsblatt 1.3: Stimmt die Werbung der Moonshine Bar? (Aufgabe 2)</span></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/schnittpunkte/"><span>← Voriges Thema</span>Schnittpunkte</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  var S = { p: 6, F: 2000, probe: null };
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 1000, yMin: 0, yMax: 10000 },
+    step: { x: 100, y: 1000 }, label: { x: 200, y: 2000 }, xLabel: 'x in Getränken', yLabel: 'y in €', padL: 58,
+    fmtX: function (n) { return String(Math.round(n)); }, fmtY: function (n) { return Math.round(n).toLocaleString('de-DE'); } });
+  var k = function (x) { return 2 * x + S.F; }, e = function (x) { return S.p * x; };
+  var T = function () { return S.F / (S.p - 2); };
+  function zeichne() {
+    P.setup();
+    var C = P.C, t = Math.min(T(), 1000);
+    P.grid();
+    P.between(e, k, 0, t, C.lossFill).between(e, k, t, 1000, C.gainFill);
+    P.curve(k, C.k, 4).curve(e, C.e, 4);
+    var xe = Math.min(1000, 10000 / S.p) * 0.97;
+    P.text('Kosten k', 1000, k(1000), C.k, 'right', -4, 22).text('Erlös e', xe, e(xe), C.e, 'right', -14, -8);
+    if (T() < 1000) {
+      P.segment(T(), 0, 1000, 0, C.gain, 8).dot(T(), 0, C.gain, 7, true);
+      P.segment(T(), 0, T(), e(T()), C.axis, 1.5, [5, 5]).dot(T(), e(T()), C.gain, 8);
+      P.text('S', T(), e(T()), C.gain, 'right', -12, -10);
+    }
+    if (S.probe !== null) {
+      var x = S.probe, g = e(x) - k(x), col = g > 0 ? C.gain : C.loss;
+      P.segment(x, Math.min(e(x), 10000), x, Math.min(k(x), 10000), col, 3);
+      P.badge('x = ' + Math.round(x) + ': ' + (g > 0 ? 'Gewinn ' : 'Verlust ') + Math.abs(Math.round(g)).toLocaleString('de-DE') + ' €', x, col);
+    }
+  }
+  function aktualisiere() {
+    var t = T(), ganz = Math.abs(t - Math.round(t)) < 1e-9, ts = ganz ? String(Math.round(t)) : Aha.de(t, 1).replace(',', '{,}');
+    Aha.$('pVal').textContent = Aha.de(S.p, 2) + ' €';
+    Aha.$('fVal').textContent = S.F.toLocaleString('de-DE') + ' €';
+    Aha.$('bigNum').textContent = ganz ? Math.round(t) + 1 : Math.ceil(t);
+    Aha.tex('rechnung', Aha.de(S.p, 2).replace(',', '{,}') + 'x > 2x + ' + S.F + '\\;\\Rightarrow\\; x > ' + ts);
+    Aha.tex('lMenge', '\\mathbb{L} = \\;]\\,' + ts + ';\\ \\infty\\,[');
+    zeichne();
+    Aha.mission(t < 400);
+  }
+  Aha.$('p').addEventListener('input', function () { S.p = +this.value; aktualisiere(); });
+  Aha.$('f').addEventListener('input', function () { S.F = +this.value; aktualisiere(); });
+  P.pointer(function (x) { S.probe = (x >= 0 && x <= 1000) ? x : null; zeichne(); },
+            function () { S.probe = null; zeichne(); });
+  Aha.onRedraw(aktualisiere);
+});
+</script>
+</body>
+</html>

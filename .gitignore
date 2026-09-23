@@ -1,7 +1,7 @@
 # Internes Referenzdokument — nicht veröffentlichen
 WEBSITE.md
 
-# PDFs — gehören nach 01_Materialien/, nicht ins Website-Repo
+# PDFs — gehören nach ../04_Kurse/, nicht ins Website-Repo
 *.pdf
 
 # macOS
@@ -27,3 +27,7 @@ npm-debug.log*
 # Python
 __pycache__/
 *.pyc
+
+# Arbeitsdateien für Claude/Lehrkraft — nicht veröffentlichen
+CLAUDE.md
+Konzept_*.md
