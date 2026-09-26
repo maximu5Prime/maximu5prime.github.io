@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trainer Kurvendiskussion · M12</title>
+  <meta name="description" content="Kurvendiskussion ganzrationaler Funktionen üben: immer neue Aufgaben vom Ableiten bis zum Beurteilen, mit Rückmeldung.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m12/">← M12</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M12 · Trainer</div>
+    <h1>Kurvendiskussion — <mark>fit</mark> für die Kurzarbeit?</h1>
+    <p>Immer neue Funktionen. ⭐ Ableiten und Berechnen, ⭐⭐ Punkte bestimmen und das Vorgehen erläutern,
+      ⭐⭐⭐ Aussagen beurteilen und Fehler finden. Rechnen Sie auf Papier, tippen Sie nur das Ergebnis ein.</p>
+  </header>
+
+  <section id="trainer" aria-label="Übungsaufgaben"></section>
+
+  <details class="warum">
+    <summary>So geht's: Extrem- und Wendepunkte</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>Ableitungen bilden: $f'(x)$ und $f''(x)$.</div></div>
+      <div class="schritt"><span>2</span><div><b>Notwendige Bedingung:</b> $f'(x) = 0$ lösen → mögliche Extremstellen.</div></div>
+      <div class="schritt"><span>3</span><div><b>Hinreichende Bedingung:</b> $f''(x_0) < 0$ → HoP, $f''(x_0) > 0$ → TiP.
+        Bei $f''(x_0) = 0$: Vorzeichenwechsel von $f'$ prüfen (kein Wechsel → Terrassenpunkt).</div></div>
+      <div class="schritt"><span>4</span><div>$y$-Wert immer in $f$ einsetzen (nicht in $f'$!) und den Punkt mit Art angeben.</div></div>
+      <div class="schritt"><span>5</span><div>Wendepunkt: $f''(x) = 0$ lösen, Vorzeichenwechsel von $f''$ prüfen, $y$-Wert in $f$.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> „$f'(x_0) = 0$, also Extrempunkt.“ Die Bedingung ist nur <b>notwendig</b> —
+        bei $f(x) = x^3$ ist $f'(0) = 0$, aber $(0\,|\,0)$ ist ein Terrassenpunkt.</div>
+    </div>
+  </details>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Weiter mit der Lerntheke Kurvendiskussion — und Ihre Punkte auf dem Laufzettel eintragen.</span></div>
+
+  <p class="notiz">Mehr Aufgaben mit Funktionenscharen und Sachkontext:
+    <a href="/archiv/kurvendiskussion-uebungen-2025.html">ältere Übungsseite</a>.</p>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+// Trainer ohne Canvas: bei DOMContentLoaded starten (KaTeX-Schriften laden dann mit der Seite).
+document.addEventListener('DOMContentLoaded', function () {
+  var z = Aha.zufall, eins = Aha.eins;
+
+  /* ── Hilfen: Polynom als LaTeX, Zahl in Klammern ── */
+  function poly(k) {           // k = [a3, a2, a1, a0]
+    var s = '';
+    [3, 2, 1, 0].forEach(function (e, i) {
+      var c = k[i]; if (!c) return;
+      var abs = Math.abs(c), teil = e === 0 ? String(abs) : (abs === 1 ? '' : abs) + 'x' + (e > 1 ? '^' + e : '');
+      s += s ? (c < 0 ? ' - ' : ' + ') + teil : (c < 0 ? '-' : '') + teil;
+    });
+    return s || '0';
+  }
+  function kl(n) { return n < 0 ? '(' + n + ')' : String(n); }
+  function P(x, y) { return '(' + x + '\\,|\\,' + y + ')'; }
+  function schritt(n, html) { return '<div class="schritt"><span>' + n + '</span><div>' + html + '</div></div>'; }
+
+  /* ── Zufallsfunktion 3. Grades mit ganzzahligen Extremstellen p < q:
+        f'(x) = 3a(x − p)(x − q), Wendestelle w = (p + q)/2 ── */
+  function kubisch() {
+    var a = eins([1, -1]), p = z(-3, 2), q = p + eins([2, 4]);
+    var b = -1.5 * a * (p + q), c = 3 * a * p * q, d = z(-3, 3);
+    var F = {
+      a: a, p: p, q: q, w: (p + q) / 2, k: [a, b, c, d],
+      f: function (x) { return a * x * x * x + b * x * x + c * x + d; },
+      f1: function (x) { return 3 * a * x * x + 2 * b * x + c; },
+      f2: function (x) { return 6 * a * x + 2 * b; }
+    };
+    F.tex = poly(F.k); F.tex1 = poly([0, 3 * a, 2 * b, c]); F.tex2 = poly([0, 0, 6 * a, 2 * b]);
+    F.hop = a > 0 ? p : q; F.tip = a > 0 ? q : p;
+    return F;
+  }
+  function fDef(F) { return '$f(x) = ' + F.tex + '$'; }
+
+  var ART = ['Hochpunkt (HoP)', 'Tiefpunkt (TiP)', 'Terrassenpunkt'];
+
+  /* ── ⭐ Angeben, Berechnen ── */
+  var STUFE1 = [
+    function () {
+      var F = kubisch();
+      return { operator: 'Geben Sie an', frage: 'Gegeben ist ' + fDef(F) + '. Geben Sie die erste Ableitung $f\'(x)$ an.',
+        felder: [{ typ: 'term', label: "$f'(x) =$", ans: F.f1 }],
+        tipp: 'Potenzregel: $x^n \\to n \\cdot x^{n-1}$, die Konstante fällt weg.',
+        weg: schritt(1, "$f'(x) = " + F.tex1 + '$') };
+    },
+    function () {
+      var F = kubisch();
+      return { operator: 'Geben Sie an', frage: 'Gegeben ist ' + fDef(F) + '. Geben Sie die zweite Ableitung $f\'\'(x)$ an.',
+        felder: [{ typ: 'term', label: "$f''(x) =$", ans: F.f2 }],
+        tipp: 'Erst $f\'(x)$ bilden, dann noch einmal ableiten.',
+        weg: schritt(1, "$f'(x) = " + F.tex1 + '$') + schritt(2, "$f''(x) = " + F.tex2 + '$') };
+    },
+    function () {
+      var F = kubisch();
+      return { operator: 'Berechnen Sie', frage: 'Gegeben ist ' + fDef(F) + '. Berechnen Sie die Stellen, an denen $G_f$ eine waagrechte Tangente hat.',
+        felder: [{ typ: 'zahl', label: '$x_1 =$', ans: F.p }, { typ: 'zahl', label: '$x_2 =$', ans: F.q }],
+        tipp: 'Waagrechte Tangente heißt $f\'(x) = 0$. Klammern Sie $' + 3 * F.a + '$ aus. Tragen Sie die kleinere Stelle bei $x_1$ ein.',
+        weg: schritt(1, "$f'(x) = " + F.tex1 + ' = ' + (3 * F.a) + '\\,(' + poly([0, 1, -(F.p + F.q), F.p * F.q]).replace(/^/, '') + ')$') +
+             schritt(2, "$f'(x) = 0 \\;\\Rightarrow\\; x_1 = " + F.p + ',\\ x_2 = ' + F.q + '$ (z. B. mit der Lösungsformel)') };
+    },
+    function () {
+      var F = kubisch(), plus = F.a > 0;
+      return { operator: 'Geben Sie an', frage: 'Gegeben ist ' + fDef(F) + '. Geben Sie das Verhalten von $f(x)$ an den Rändern an.',
+        felder: [{ typ: 'wahl', label: 'für $x \\to -\\infty$: $f(x) \\to$', optionen: ['$-\\infty$', '$+\\infty$'], ans: plus ? 0 : 1 },
+                 { typ: 'wahl', label: 'für $x \\to +\\infty$: $f(x) \\to$', optionen: ['$-\\infty$', '$+\\infty$'], ans: plus ? 1 : 0 }],
+        tipp: 'Entscheidend ist nur der Summand mit der höchsten Potenz: $' + (plus ? '' : '-') + 'x^3$.',
+        weg: schritt(1, 'Höchste Potenz: $' + (plus ? '' : '-') + 'x^3$, ungerader Grad, Leitkoeffizient ' + (plus ? 'positiv' : 'negativ') + '.') +
+             schritt(2, plus ? 'Von links unten nach rechts oben: $-\\infty$ bzw. $+\\infty$.' : 'Von links oben nach rechts unten: $+\\infty$ bzw. $-\\infty$.') };
+    }
+  ];
+
+  /* ── ⭐⭐ Bestimmen, Erläutern ── */
+  var STUFE2 = [
+    function () {
+      var F = kubisch(), x0 = F.p, art = x0 === F.hop ? 0 : 1, y0 = F.f(x0);
+      return { operator: 'Bestimmen Sie', frage: 'Gegeben ist ' + fDef(F) + '. Bestimmen Sie Art und Lage des Extrempunkts mit der <b>kleineren</b> $x$-Koordinate.',
+        felder: [{ typ: 'wahl', label: 'Art:', optionen: ART.slice(0, 2), ans: art },
+                 { typ: 'zahl', label: '$x =$', ans: x0 }, { typ: 'zahl', label: '$y =$', ans: y0 }],
+        tipp: "$f'(x) = 0$ lösen, dann mit $f''$ die Art prüfen und den $y$-Wert in $f$ (nicht in $f'$) berechnen.",
+        weg: schritt(1, "$f'(x) = " + F.tex1 + ' = 0 \\;\\Rightarrow\\; x_1 = ' + F.p + ',\\ x_2 = ' + F.q + '$') +
+             schritt(2, "$f''(x) = " + F.tex2 + ",\\quad f''(" + x0 + ') = ' + F.f2(x0) + (F.f2(x0) < 0 ? ' < 0' : ' > 0') + '$ → ' + (art ? 'TiP' : 'HoP')) +
+             schritt(3, '$f(' + x0 + ') = ' + y0 + '$ → ' + (art ? 'TiP' : 'HoP') + '$' + P(x0, y0) + '$') };
+    },
+    function () {
+      var F = kubisch(), yw = F.f(F.w);
+      return { operator: 'Bestimmen Sie', frage: 'Gegeben ist ' + fDef(F) + '. Bestimmen Sie den Wendepunkt $W$ von $G_f$.',
+        felder: [{ typ: 'zahl', label: '$x_W =$', ans: F.w }, { typ: 'zahl', label: '$y_W =$', ans: yw }],
+        tipp: "$f''(x) = 0$ lösen; $f''$ ist eine Gerade und wechselt dort das Vorzeichen.",
+        weg: schritt(1, "$f''(x) = " + F.tex2 + ' = 0 \\;\\Rightarrow\\; x_W = ' + F.w + '$ (Vorzeichenwechsel, da $f\'\'$ linear)') +
+             schritt(2, '$f(' + F.w + ') = ' + yw + '$ → $W' + P(F.w, yw) + '$') };
+    },
+    function () {
+      var F = kubisch(), m = F.f1(F.w), yw = F.f(F.w), t = yw - m * F.w;
+      return { operator: 'Bestimmen Sie', frage: 'Gegeben ist ' + fDef(F) + '. Der Wendepunkt ist $W' + P(F.w, yw) + '$. Bestimmen Sie die Gleichung der Wendetangente.',
+        felder: [{ typ: 'term', label: '$y =$', ans: function (x) { return m * x + t; } }],
+        tipp: "Steigung $m = f'(x_W)$. Dann $W$ in $y = mx + t$ einsetzen und nach $t$ auflösen.",
+        weg: schritt(1, "$m = f'(" + F.w + ') = ' + m + '$') +
+             schritt(2, '$' + yw + ' = ' + m + '\\cdot' + kl(F.w) + ' + t \\;\\Rightarrow\\; t = ' + t + '$') +
+             schritt(3, '$y = ' + poly([0, 0, m, t]) + '$') };
+    },
+    function () {
+      var ep = Math.random() < .6;
+      var S = ep
+        ? ["Ableitungen $f'$ und $f''$ bilden", "$f'(x) = 0$ lösen (notwendige Bedingung)", "Art mit $f''$ oder Vorzeichenwechsel von $f'$ prüfen (hinreichende Bedingung)",
+           '$y$-Werte durch Einsetzen in $f$ berechnen', 'Punkte mit Art angeben, z. B. HoP$(1\\,|\\,4)$']
+        : ["Ableitungen $f'$, $f''$ (und ggf. $f'''$) bilden", "$f''(x) = 0$ lösen (notwendige Bedingung)", "Vorzeichenwechsel von $f''$ prüfen (hinreichende Bedingung)",
+           '$y$-Wert durch Einsetzen in $f$ berechnen', 'Wendepunkt angeben; ist dort auch $f\'(x) = 0$: Terrassenpunkt'];
+      return { operator: 'Erläutern Sie', frage: 'Erläutern Sie das Vorgehen: Wie bestimmt man die <b>' + (ep ? 'Extrempunkte' : 'Wendepunkte') + '</b> einer Funktion?',
+        felder: [{ typ: 'reihenfolge', schritte: S }],
+        tipp: 'Erst die Bedingung, die jeder solche Punkt erfüllen <i>muss</i>, dann die Prüfung, ob er es wirklich ist.',
+        weg: S.map(function (x, i) { return schritt(i + 1, x); }).join('') };
+    }
+  ];
+
+  /* ── ⭐⭐⭐ Beurteilen, Begründen, Fehler finden ── */
+  function begruendung(richtig, falsche) {       // mischt Begründungen, liefert Feld mit passender Rückmeldung
+    var alle = Aha.mischen([[richtig, null]].concat(falsche));
+    var ans = 0; alle.forEach(function (b, i) { if (b[1] === null) ans = i; });
+    return { typ: 'wahl', label: 'Begründung:', optionen: alle.map(function (b) { return b[0]; }), ans: ans,
+             warum: alle.map(function (b) { return b[1]; }) };
+  }
+  var STUFE3 = [
+    function () {       // Terrassenpunkt: f'(s) = 0 ist nicht hinreichend
+      var a = eins([1, -1]), s = z(-2, 2), e = z(-3, 3, [0]);
+      var lin = s === 0 ? 'x' : '(x ' + (s < 0 ? '+ ' + (-s) : '- ' + s) + ')';
+      var k = [a, -3 * a * s, 3 * a * s * s, -a * s * s * s + e];
+      return { operator: 'Beurteilen Sie',
+        frage: 'Gegeben ist $f(x) = ' + poly(k) + '$. Ein Mitschüler rechnet $f\'(' + s + ') = 0$ und schreibt: „Also hat $G_f$ bei $x = ' + s + '$ einen Extrempunkt.“ Beurteilen Sie die Aussage.',
+        felder: [{ typ: 'wahl', label: 'Die Aussage ist …', optionen: ['richtig', 'falsch'], ans: 1,
+                   warum: ['Rechnen Sie nach: Wechselt $f\'$ bei $x = ' + s + '$ wirklich das Vorzeichen?', null] },
+                 begruendung("$f'$ wechselt bei $x = " + s + ' das Vorzeichen nicht — dort liegt ein Terrassenpunkt.', [
+                   ["$f'(x_0) = 0$ ist notwendig und hinreichend für einen Extrempunkt.", "$f'(x_0) = 0$ ist nur <b>notwendig</b>. Hinreichend ist erst ein Vorzeichenwechsel von $f'$ (oder $f''(x_0) \\neq 0$)."],
+                   ['$f(' + s + ') \\neq 0$, deshalb kann dort kein Extrempunkt liegen.', 'Der Funktionswert entscheidet nicht über die Art des Punktes.'],
+                   ["$f''(" + s + ') = 0$, also liegt dort sicher kein Extrempunkt.', "$f''(x_0) = 0$ allein entscheidet nichts: Bei $f(x) = x^4$ ist $f''(0) = 0$, und doch liegt dort ein Tiefpunkt."]])],
+        tipp: "Schreiben Sie $f'(x)$ als $" + 3 * a + lin + "^2$. Welches Vorzeichen hat $f'$ links und rechts?",
+        weg: schritt(1, "$f'(x) = " + poly([0, 3 * a, -6 * a * s, 3 * a * s * s]) + ' = ' + 3 * a + '\\,' + lin + '^2$') +
+             schritt(2, "Das Quadrat ist nie negativ: $f'(x) " + (a > 0 ? '\\geq' : '\\leq') + ' 0$ links und rechts von $x = ' + s + '$ — <b>kein Vorzeichenwechsel</b>.') +
+             schritt(3, 'Also Terrassenpunkt $' + P(s, e) + '$, kein Extrempunkt: Die Aussage ist <b>falsch</b>.') };
+    },
+    function () {       // Hochpunkt ist nicht der höchste Punkt
+      var F = kubisch(), yh = F.f(F.hop), rand = F.a > 0 ? '+\\infty' : '-\\infty';
+      return { operator: 'Beurteilen Sie',
+        frage: fDef(F) + ' hat den Hochpunkt HoP$' + P(F.hop, yh) + '$. Beurteilen Sie die Aussage: „$' + yh + '$ ist der größte Funktionswert von $f$.“',
+        felder: [{ typ: 'wahl', label: 'Die Aussage ist …', optionen: ['richtig', 'falsch'], ans: 1,
+                   warum: ['Setzen Sie einmal eine große Zahl ein, z. B. $x = ' + (F.a > 0 ? 10 : -10) + '$.', null] },
+                 begruendung('Für $x \\to ' + rand + '$ wächst $f(x)$ über alle Grenzen; der Hochpunkt ist nur ein lokales Maximum.', [
+                   ['Ein Hochpunkt ist immer der höchste Punkt des Graphen.', 'Ein Hochpunkt ist nur <b>in seiner Umgebung</b> am höchsten (lokales Maximum).'],
+                   ['Der Tiefpunkt hat den größeren Funktionswert.', 'Nein, hier liegt der Tiefpunkt tiefer. Der Grund ist das Verhalten am Rand.'],
+                   ["$f'$ hat zwei Nullstellen, deshalb gibt es keinen größten Wert.", "Die Anzahl der Nullstellen von $f'$ entscheidet das nicht; auch mit zwei Extremstellen kann es ein absolutes Maximum geben (z. B. auf einem Intervall)."]])],
+        tipp: 'Denken Sie an das Verhalten von $f(x)$ für $x \\to \\pm\\infty$ (Thema T1: absolute Extrema).',
+        weg: schritt(1, 'Grad 3, Leitkoeffizient ' + (F.a > 0 ? 'positiv' : 'negativ') + ': für $x \\to ' + rand + '$ gilt $f(x) \\to +\\infty$.') +
+             schritt(2, 'Also gibt es Funktionswerte größer als $' + yh + '$, z. B. $f(' + (F.a > 0 ? 10 : -10) + ') = ' + F.f(F.a > 0 ? 10 : -10) + '$. Die Aussage ist <b>falsch</b>.') };
+    },
+    function () {       // Wendestelle in der Mitte — Aussage richtig
+      var F = kubisch();
+      return { operator: 'Beurteilen Sie',
+        frage: 'Gegeben ist ' + fDef(F) + ' mit den Extremstellen $x = ' + F.p + '$ und $x = ' + F.q + '$. Beurteilen Sie die Aussage: „Die Wendestelle liegt bei $x = ' + F.w + '$.“',
+        felder: [{ typ: 'wahl', label: 'Die Aussage ist …', optionen: ['richtig', 'falsch'], ans: 0,
+                   warum: [null, "Rechnen Sie nach: Wo ist $f''(x) = 0$?"] },
+                 begruendung("$f''(x) = " + F.tex2 + '$ hat genau bei $x = ' + F.w + '$ eine Nullstelle mit Vorzeichenwechsel.', [
+                   ["$f'(" + F.w + ') = 0$, deshalb liegt dort die Wendestelle.', "Im Gegenteil: $f'(" + F.w + ') = ' + F.f1(F.w) + ' \\neq 0$. Ein Wendepunkt braucht keine waagrechte Tangente.'],
+                   ['Jede Wendestelle liegt in der Mitte zwischen zwei Extremstellen.', 'Das gilt nur für Funktionen 3. Grades (ihr Graph ist punktsymmetrisch zum Wendepunkt), nicht allgemein.'],
+                   ['$f(' + F.w + ') = 0$, deshalb liegt dort die Wendestelle.', 'Der Funktionswert entscheidet nicht; hier ist $f(' + F.w + ') = ' + F.f(F.w) + '$.']])],
+        tipp: "Bilden Sie $f''(x)$ und lösen Sie $f''(x) = 0$.",
+        weg: schritt(1, "$f''(x) = " + F.tex2 + ' = 0 \\;\\Rightarrow\\; x = ' + F.w + '$') +
+             schritt(2, "$f''$ ist linear und nicht konstant, wechselt also bei $x = " + F.w + '$ das Vorzeichen. Die Aussage ist <b>richtig</b>.') };
+    },
+    function () {       // Fehler finden in einer vorgerechneten Lösung
+      var F = kubisch(), x0 = F.p, hop = x0 === F.hop, fehler = eins([3, 4, 5]);
+      var f2falsch = poly([0, 0, 6 * F.a, F.k[1]]), f2x0 = F.f2(x0), f2x0f = 6 * F.a * x0 + F.k[1];
+      var Z = [
+        "$f'(x) = " + F.tex1 + '$',
+        "$f'(x) = 0 \\;\\Rightarrow\\; x_1 = " + F.p + ',\\ x_2 = ' + F.q + '$',
+        "$f''(x) = " + (fehler === 3 ? f2falsch : F.tex2) + '$',
+        '', ''
+      ];
+      var w = fehler === 3 ? f2x0f : f2x0, art = fehler === 4 ? !(w < 0) : w < 0;   // bei Fehler 4 Art vertauscht
+      Z[3] = "$f''(" + x0 + ') = ' + w + (w < 0 ? ' < 0' : w > 0 ? ' > 0' : ' = 0') + ' \\;\\Rightarrow$ ' + (art ? 'Hochpunkt' : 'Tiefpunkt');
+      Z[4] = fehler === 5 ? "$f'(" + x0 + ') = 0 \\;\\Rightarrow$ ' + (art ? 'HoP' : 'TiP') + '$' + P(x0, 0) + '$'
+                          : '$f(' + x0 + ') = ' + F.f(x0) + ' \\;\\Rightarrow$ ' + (art ? 'HoP' : 'TiP') + '$' + P(x0, F.f(x0)) + '$';
+      var erkl = { 3: 'Zeile 3: Die Ableitung von $' + 2 * F.k[1] + 'x$ ist $' + 2 * F.k[1] + '$, nicht $' + F.k[1] + "$. Richtig ist $f''(x) = " + F.tex2 + '$.',
+                   4: "Zeile 4: $f''(x_0) < 0$ bedeutet Rechtskrümmung, also <b>Hochpunkt</b>; $f''(x_0) > 0$ bedeutet Tiefpunkt.",
+                   5: "Zeile 5: Der $y$-Wert kommt aus $f$, nicht aus $f'$. Richtig ist $f(" + x0 + ') = ' + F.f(x0) + '$.' };
+      if (fehler === 3 && f2x0f === f2x0) return STUFE3[3]();   // Fehler wäre unsichtbar → neue Aufgabe
+      return { operator: 'Finden Sie den Fehler',
+        frage: 'Ein Mitschüler bestimmt für ' + fDef(F) + ' den Extrempunkt bei $x = ' + x0 + '$. In genau einer Zeile passiert der erste Fehler. Finden Sie ihn.',
+        felder: [{ typ: 'zeilen', zeilen: Z, ans: fehler - 1, warum: 'Prüfen Sie jede Zeile einzeln: Ableitung, Einsetzen, Vorzeichen, Art.' }],
+        tipp: 'Rechnen Sie die Zeilen selbst nach — auch die Ableitungen.',
+        weg: schritt('!', erkl[fehler]) + schritt('✓', 'Richtig wäre: ' + (hop ? 'HoP' : 'TiP') + '$' + P(x0, F.f(x0)) + '$') };
+    }
+  ];
+
+  var zuletzt = {};
+  Aha.Trainer({ el: 'trainer', stufen: ['Berechnen', 'Bestimmen', 'Beurteilen'], neu: function (stufe) {
+    var L = [STUFE1, STUFE2, STUFE3][stufe - 1], i;
+    do { i = z(0, L.length - 1); } while (L.length > 1 && i === zuletzt[stufe]);   // nicht zweimal derselbe Typ
+    zuletzt[stufe] = i;
+    return L[i]();
+  } });
+});
+</script>
+</body>
+</html>

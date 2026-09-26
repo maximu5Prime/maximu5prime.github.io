@@ -43,7 +43,9 @@
     var p = location.pathname, ziel = null;
     if (/^\/mathematik\/klasse11\//.test(p)) ziel = ['/m11/', 'M11'];
     else if (/^\/mathematik\/klasse12\//.test(p)) ziel = ['/m12/', 'M12'];
+    else if (/^\/archiv\/kurvendiskussion/.test(p)) ziel = ['/m12/', 'M12'];
     else if (/^\/(mathematik|physik|kit|projekte|uebungen)\//.test(p)) ziel = ['/', 'Startseite'];
+    else if (/^\/archiv\/.+\.html$/.test(p)) ziel = ['/', 'Startseite'];
     if (!ziel || document.querySelector('.slide')) return;   // nicht auf Vollbild-Folien
     var s = document.createElement('div');
     s.className = 'alt-hinweis';

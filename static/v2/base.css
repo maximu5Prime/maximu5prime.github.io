@@ -219,3 +219,27 @@ body::before { content: ''; display: block; height: 6px; background: var(--c-acc
 .kachel.dezent { box-shadow: inset 0 6px 0 var(--c-accent), inset 0 0 0 2px var(--c-line); }
 /* Startseite gehört keinem Fach: Kopfband in allen Fachfarben */
 body.start::before { background: linear-gradient(90deg, var(--ma) 0 25%, var(--ph) 25% 50%, var(--kit) 50% 75%, var(--fpv) 75%); }
+
+/* Trainer: Antwortformen Reihenfolge und Fehlerzeile (26.09.2026) */
+.tr-block { display: block; width: 100%; }
+.tr-label { display: block; font-weight: 700; margin-bottom: 6px; }
+.tr-term .quiz-input { width: 13em; max-width: 100%; }
+.tr-reihe { display: grid; gap: 8px; }
+.tr-reihe button, .tr-zeilen button {
+  display: flex; gap: .7em; align-items: center; width: 100%; text-align: left; font: inherit; min-height: 44px; cursor: pointer;
+  padding: .55em .9em; border-radius: 12px; border: 2px solid var(--c-line); background: var(--c-bg); color: var(--c-text);
+}
+.tr-reihe button:hover, .tr-zeilen button:hover { border-color: var(--c-accent); }
+.tr-platz { flex: 0 0 1.8em; height: 1.8em; border-radius: 50%; display: grid; place-items: center; font-weight: 800;
+  background: var(--c-surface-2); color: var(--c-muted); }
+.tr-reihe button.aktiv .tr-platz { background: var(--c-accent); color: var(--c-on-accent); }
+.tr-reihe button.ok, .tr-zeilen button.ok { border-color: var(--c-gain); background: var(--c-gain-fill); }
+.tr-reihe button.err, .tr-zeilen button.err { border-color: var(--c-loss); background: var(--c-loss-fill); }
+.tr-zeilen { margin: 0; padding-left: 1.6em; display: grid; gap: 8px; }
+.tr-zeilen li::marker { font-family: var(--font-mono); font-weight: 700; color: var(--c-muted); }
+.tr-zeilen button.aktiv { border-color: var(--c-accent); box-shadow: inset 0 0 0 1px var(--c-accent); }
+.tr-zurueck { margin-top: 8px; font: inherit; font-size: .9rem; background: none; border: 0; color: var(--c-muted); text-decoration: underline; cursor: pointer; padding: 4px 0; }
+.tr-block .wahl { margin: 0; }
+.trainer .feedback.show { display: block; }
+.tr-text { flex: 1 1 auto; min-width: 0; }
+.aha-btn[hidden] { display: none; }

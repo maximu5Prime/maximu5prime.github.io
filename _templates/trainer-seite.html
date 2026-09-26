@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VORLAGE Trainer — Kopie nach /<kurs>/<thema>/index.html, dann Inhalt ersetzen</title>
+  <meta name="description" content="Steigung einer Geraden aus zwei Punkten berechnen — immer neue Aufgaben mit Rückmeldung.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<!-- Seitentyp „Trainer“: Übung ohne Applet. Reihenfolge: Frage → Trainer → „So geht's“ (aufklappbar) → Blatt → Pager.
+     data-fach auf <html>: mathematik | physik | kit | fpv (Fachfarbe). -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Trainer</div>
+    <h1>Geraden durch zwei Punkte — <mark>sicher</mark>?</h1>
+    <p>Immer neue Aufgaben. Wählen Sie die Stufe — vom Berechnen übers Bestimmen bis zum Beurteilen —, rechnen Sie auf Papier und tippen Sie das Ergebnis ein.
+      Ziel: fünf richtig in Folge.</p>
+  </header>
+
+  <section id="trainer" aria-label="Übungsaufgaben"></section>
+
+  <details class="warum">
+    <summary>So geht's</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>Differenz der $y$-Werte durch Differenz der $x$-Werte:
+        $m = \dfrac{y_2 - y_1}{x_2 - x_1}$</div></div>
+      <div class="schritt"><span>2</span><div>Beide Differenzen in <b>derselben</b> Reihenfolge bilden.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> oben $y_2 - y_1$, unten aber $x_1 - x_2$ → falsches Vorzeichen.</div>
+    </div>
+  </details>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Arbeitsblatt 1.2, Aufgabe 3.</span></div>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+// Trainer ohne Canvas: schon bei DOMContentLoaded starten (aha-lib und KaTeX sind dann geladen),
+// damit die KaTeX-Schriften mit der Seite geladen werden.
+document.addEventListener('DOMContentLoaded', function () {
+  var z = Aha.zufall;
+  function kl(n) { return n < 0 ? '(' + n + ')' : String(n); }   // negative Zahlen in Klammern
+  // Stufen nach Operatoren: ⭐ AFB I · ⭐⭐ AFB II · ⭐⭐⭐ AFB III — jede Stufe mit eigener Antwortform
+  // (Zahl · Term · Entscheidung + Begründung). Ausführliches Beispiel mit allen Formen: /m12/kurvendiskussion/
+  Aha.Trainer({ el: 'trainer', stufen: ['Berechnen', 'Bestimmen', 'Beurteilen'], neu: function (stufe) {
+    var x1 = z(-5, 4), dx = z(1, 4), m = z(-3, 3, [0]), y1 = z(-5, 5);
+    var x2 = x1 + dx, y2 = y1 + m * dx, t = y1 - m * x1;
+    var P = '$P{(' + x1 + '\\,|\\,' + y1 + ')}$', Q = '$Q{(' + x2 + '\\,|\\,' + y2 + ')}$';
+    var schrittM = '<div class="schritt"><span>1</span><div>$m = \\dfrac{' + y2 + ' - ' + kl(y1) + '}{' + x2 + ' - ' + kl(x1) + '} = \\dfrac{' + (y2 - y1) + '}{' + dx + '} = ' + m + '$</div></div>';
+    var schrittT = '<div class="schritt"><span>2</span><div>$P$ einsetzen: $' + y1 + ' = ' + m + '\\cdot' + kl(x1) + ' + t \\;\\Rightarrow\\; t = ' + t + '$</div></div>';
+    if (stufe === 1) return {
+      frage: 'Die Gerade geht durch ' + P + ' und ' + Q + '. Berechnen Sie die Steigung $m$.',
+      felder: [{ label: '$m =$', ans: m }],
+      tipp: '$m = \\dfrac{y_Q - y_P}{x_Q - x_P}$ — oben und unten dieselbe Reihenfolge.',
+      weg: schrittM };
+    if (stufe === 2) return {
+      frage: 'Bestimmen Sie die Gleichung $y = mx + t$ der Geraden durch ' + P + ' und ' + Q + '.',
+      felder: [{ label: '$m =$', ans: m }, { label: '$t =$', ans: t }],
+      tipp: 'Erst $m$ berechnen, dann einen Punkt in $y = mx + t$ einsetzen und nach $t$ auflösen.',
+      weg: schrittM + schrittT };
+    // Stufe 3: beurteilen — liegt R auf der Geraden? Entscheidung mit Begründung über den y-Wert
+    var xr = z(-6, 6, [x1, x2]), drauf = Math.random() < .5, yr = m * xr + t + (drauf ? 0 : Aha.eins([-2, -1, 1, 2]));
+    return {
+      frage: 'Ein Mitschüler behauptet: „$R{(' + xr + '\\,|\\,' + yr + ')}$ liegt auf der Geraden durch ' + P + ' und ' + Q + '.“ ' +
+             'Beurteilen Sie die Aussage. Begründen Sie mit dem $y$-Wert der Geraden bei $x = ' + xr + '$.',
+      felder: [{ label: 'Die Gerade hat bei $x = ' + xr + '$ den Wert $y =$', ans: m * xr + t },
+               { label: 'Die Aussage ist …', optionen: ['richtig', 'falsch'], ans: drauf ? 0 : 1 }],
+      tipp: 'Bestimmen Sie zuerst die Geradengleichung. Setzen Sie dann $x = ' + xr + '$ ein und vergleichen Sie mit dem $y$-Wert von $R$.',
+      weg: schrittM + schrittT + '<div class="schritt"><span>3</span><div>$y = ' + m + '\\cdot' + kl(xr) + ' + ' + kl(t) + ' = ' + (m * xr + t) + '$ ' +
+           (drauf ? '— stimmt mit $R$ überein: Die Aussage ist <b>richtig</b>.' : '$\\neq ' + yr + '$: Die Aussage ist <b>falsch</b>.') + '</div></div>' };
+  } });
+});
+</script>
+</body>
+</html>

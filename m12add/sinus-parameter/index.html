@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sinus-Parameter a, b, c, d · M12+</title>
+  <meta name="description" content="Die allgemeine Sinusfunktion a·sin(bx − c) + d: Regler bewegen und eine Zielkurve treffen.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    .regler.vier { grid-template-columns: 1fr 1fr; }
+    .deckung { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-weight: 700; width: 100%; }
+    .deckung .spur { height: 12px; border-radius: 999px; background: var(--c-surface-2); overflow: hidden; }
+    .deckung .balken { height: 100%; width: 0; border-radius: 999px; background: var(--c-accent); transition: width .25s, background .25s; }
+    .deckung .balken.voll { background: var(--c-gain); }
+    .deckung output { font-family: var(--font-mono); min-width: 3.5em; text-align: right; }
+    .hinweis-falle { display: none; margin-top: 10px; padding: .6em 1em; border-radius: 10px; background: var(--c-aha); color: var(--c-aha-text); font-weight: 600; }
+    .hinweis-falle.an { display: block; }
+    .klein-btn { font: inherit; font-size: .9rem; background: none; border: 0; color: var(--c-muted); text-decoration: underline; cursor: pointer; padding: 6px 0; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m12add/">← M12+</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M12+ · Allgemeine Sinusfunktion</div>
+    <h1>Was machen <mark>a, b, c, d</mark> mit der Sinuskurve?</h1>
+    <p>$f(x) = a\cdot\sin(bx - c) + d$ — vier Regler, eine Kurve. Bewegen Sie erst jeden Regler einzeln
+      und vergleichen Sie mit $\sin(x)$ (grau). Dann nehmen Sie sich die Zielkurve vor.</p>
+  </header>
+
+  <section class="stage" aria-label="Ausprobieren">
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span>Ihr Auftrag: Legen Sie Ihre Kurve genau auf die gestrichelte Zielkurve.</span></div>
+    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graph der Sinusfunktion mit Zielkurve"></canvas></div>
+    <div class="regler vier">
+      <div><label for="ra">$a$ <output id="va"></output></label>
+        <input type="range" id="ra" min="-3" max="3" step="0.5" value="1"></div>
+      <div><label for="rb">$b$ <output id="vb"></output></label>
+        <input type="range" id="rb" min="0.5" max="3" step="0.5" value="1"></div>
+      <div><label for="rc">$c$ <output id="vc"></output></label>
+        <input type="range" id="rc" min="-8" max="8" step="1" value="0"></div>
+      <div><label for="rd">$d$ <output id="vd"></output></label>
+        <input type="range" id="rd" min="-2" max="2" step="0.5" value="0"></div>
+    </div>
+    <button class="klein-btn" id="reset" type="button">Zurück auf $\sin(x)$</button>
+    <div class="hinweis-falle" id="falle"></div>
+    <div class="ergebnis">
+      <div class="gross" id="term"></div>
+      <div class="deckung"><span>Deckung</span><div class="spur"><div class="balken" id="balken"></div></div><output id="prozent"></output></div>
+    </div>
+  </section>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Die Kurve wandert nicht um $c$, sondern um $\dfrac{c}{b}$. Für die Zielkurve (um $\frac{\pi}{4}$ nach rechts, $b = 2$)
+    braucht man deshalb $c = \frac{\pi}{2}$:
+    $$\sin\bigl(2x - \tfrac{\pi}{2}\bigr) = \sin\bigl(2\,(x - \tfrac{\pi}{4})\bigr)$$
+  </div>
+
+  <details class="warum">
+    <summary>Warum? Klammern Sie $b$ aus</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>Die Sinuskurve „startet“ (Mittellinie, steigend), wo das Argument null ist: $bx - c = 0$.</div></div>
+      <div class="schritt"><span>2</span><div>Auflösen: $x = \dfrac{c}{b}$ — das ist der neue Startpunkt, also die Verschiebung.</div></div>
+      <div class="schritt"><span>3</span><div>Dasselbe sieht man durch Ausklammern: $\;bx - c = b\bigl(x - \tfrac{c}{b}\bigr)$.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> $\sin(2x - \pi)$ „um $\pi$ nach rechts“. Richtig ist $\frac{\pi}{2}$,
+        denn $\sin(2x - \pi) = \sin\bigl(2(x - \tfrac{\pi}{2})\bigr)$.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">1 · ⭐ Geben Sie die Periode von $f(x) = \sin(3x)$ an.</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">$3\pi$</button>
+      <button class="quiz-opt">$\frac{2}{3}\pi$</button>
+      <button class="quiz-opt">$\frac{\pi}{3}$</button>
+      <button class="quiz-opt">$6\pi$</button>
+    </div>
+    <div class="hint" data-quiz-hint>Stellen Sie $b$ im Applet auf $3$ und zählen Sie: Wie viele ganze Wellen passen in $[0;\,2\pi]$?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie, wie der Graph von $f(x) = \sin\bigl(2x + \frac{\pi}{2}\bigr)$ gegenüber $\sin(2x)$ verschoben ist.</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">um $\frac{\pi}{2}$ nach links</button>
+      <button class="quiz-opt">um $\frac{\pi}{4}$ nach links</button>
+      <button class="quiz-opt">um $\frac{\pi}{4}$ nach rechts</button>
+      <button class="quiz-opt">um $\frac{\pi}{2}$ nach rechts</button>
+    </div>
+    <div class="hint" data-quiz-hint>Schreiben Sie das Argument als $2x - c$. Wie groß ist $c$? Dann $\frac{c}{b}$ berechnen.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="2">
+    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie die Aussage: „Die Graphen von $-\sin(x)$ und $\sin(x - \pi)$ sind gleich.“</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">Falsch: Bei $-\sin(x)$ ist $a$ negativ, bei $\sin(x - \pi)$ nicht — also verschiedene Kurven.</button>
+      <button class="quiz-opt">Falsch: Eine Verschiebung ändert auch die Amplitude.</button>
+      <button class="quiz-opt">Richtig: Spiegeln an der $x$-Achse und Verschieben um eine halbe Periode ergeben hier dasselbe Bild.</button>
+    </div>
+    <div class="hint" data-quiz-hint>Probieren Sie es im Applet: einmal $a = -1$, einmal $c = \pi$. Vergleichen Sie auch Werte, z. B. bei $x = \frac{\pi}{2}$.</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Skript 2.5 A: Bewegen Sie jeden Regler einzeln und ergänzen Sie die Sätze zu $a$, $b$, $c$ und $d$.</span></div>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  var PI = Math.PI, S = { a: 1, b: 1, k: 0, d: 0 };          // c = k·π/4
+  var Z = { a: 1.5, b: 2, c: PI / 2, d: 0.5 };                  // Zielkurve 1,5·sin(2x − π/2) + 0,5
+  var ziel = function (x) { return Z.a * Math.sin(Z.b * x - Z.c) + Z.d; };
+  var f = function (x) { return S.a * Math.sin(S.b * x - S.k * PI / 4) + S.d; };
+
+  /* Vielfache von π als Text: k/n·π gekürzt (für Achse, Regler und KaTeX) */
+  function ggt(a, b) { return b ? ggt(b, a % b) : Math.abs(a); }
+  function piText(z, n, tex) {                                // z/n · π
+    if (z === 0) return '0';
+    var g = ggt(z, n); z /= g; n /= g;
+    var s = z < 0 ? (tex ? '-' : '−') : '', a = Math.abs(z), p = tex ? '\\pi' : 'π';
+    if (n === 1) return s + (a === 1 ? '' : a) + p;
+    return tex ? s + '\\frac{' + (a === 1 ? '' : a) + p + '}{' + n + '}' : s + (a === 1 ? '' : a) + p + '/' + n;
+  }
+  function zahlTex(v) { return Aha.dt(v, 1); }
+
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: -PI / 2, xMax: 2 * PI + PI / 4, yMin: -3.5, yMax: 4 },
+    step: { x: PI / 4, y: 0.5 }, label: { x: PI / 2, y: 1 }, xLabel: 'x', yLabel: 'y', padL: 36, ratio: 0.62, minH: 320,
+    fmtX: function (n) { return piText(Math.round(n / (PI / 4)), 4, false); },
+    fmtY: function (n) { return Aha.de(n, 1); } });
+
+  function deckung() {
+    var s = 0, n = 120, v = P.o.view;
+    for (var i = 0; i <= n; i++) { var x = v.xMin + (v.xMax - v.xMin) * i / n; s += Math.abs(f(x) - ziel(x)); }
+    return Math.max(0, Math.round(100 - s / (n + 1) * 60));
+  }
+  function zeichne() {
+    P.setup(); var C = P.C; P.grid();
+    P.curve(Math.sin, C.text, 1.5);                                                // Vergleich: sin(x), dünn und grau
+    P.ctx.setLineDash([9, 7]); P.curve(ziel, C.k, 3); P.ctx.setLineDash([]);
+    P.curve(f, C.e, 4);
+  }
+  function aktualisiere() {
+    Aha.$('va').textContent = Aha.de(S.a, 1); Aha.$('vb').textContent = Aha.de(S.b, 1);
+    Aha.$('vc').textContent = piText(S.k, 4, false); Aha.$('vd').textContent = Aha.de(S.d, 1);
+    var a = S.a === 1 ? '' : S.a === -1 ? '-' : zahlTex(S.a) + '\\cdot ';
+    var b = S.b === 1 ? '' : zahlTex(S.b);
+    var c = S.k === 0 ? '' : (S.k > 0 ? ' - ' : ' + ') + piText(Math.abs(S.k), 4, true);
+    var d = S.d === 0 ? '' : (S.d > 0 ? ' + ' : ' - ') + zahlTex(Math.abs(S.d));
+    Aha.tex('term', 'f(x) = ' + (S.a === 0 ? '0' : a + '\\sin(' + b + 'x' + c + ')') + (S.a === 0 ? '' : d));
+    var p = deckung();
+    Aha.$('balken').style.width = p + '%'; Aha.$('balken').classList.toggle('voll', p >= 99);
+    Aha.$('prozent').textContent = p + ' %';
+    // Die typische Falle: a, b, d stimmen, aber c = π/4 (Verschiebung um c statt c/b gedacht)
+    var falle = S.a === Z.a && S.b === Z.b && S.d === Z.d && S.k === 1;
+    var h = Aha.$('falle');
+    h.classList.toggle('an', falle);
+    if (falle) { h.innerHTML = 'Fast! Mit $c = ' + piText(S.k, 4, true) + '$ ist Ihre Kurve nur um $' + piText(S.k, 8, true) +
+      '$ verschoben, die Zielkurve aber um $\\frac{\\pi}{4}$. Woran liegt das?'; if (window.renderMathInElement) renderMathInElement(h, { delimiters: [{ left: '$', right: '$', display: false }] }); }
+    zeichne();
+    Aha.mission(p >= 99);
+  }
+  [['ra', 'a'], ['rb', 'b'], ['rc', 'k'], ['rd', 'd']].forEach(function (r) {
+    Aha.$(r[0]).addEventListener('input', function () { S[r[1]] = +this.value; aktualisiere(); });
+  });
+  Aha.$('reset').addEventListener('click', function () {
+    S = { a: 1, b: 1, k: 0, d: 0 };
+    Aha.$('ra').value = 1; Aha.$('rb').value = 1; Aha.$('rc').value = 0; Aha.$('rd').value = 0;
+    aktualisiere();
+  });
+  Aha.onRedraw(aktualisiere);
+});
+</script>
+</body>
+</html>
