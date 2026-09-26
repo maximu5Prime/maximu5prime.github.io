@@ -1,4 +1,5 @@
-/* farben.css — Farben und Schriften der neuen Seiten (Entwurf A „hell & kräftig“, gewählt 23.09.2026). */
+/* farben.css — Farben und Schriften der neuen Seiten (Entwurf A „hell & kräftig“, gewählt 23.09.2026).
+   Fachfarben (26.09.2026): Mathematik Blau, Physik Orange, KIT Grün, fpV Violett — Auswahl über data-fach, siehe unten. */
 :root {
   color-scheme: light;
   --font-body: 'DM Sans V', system-ui, sans-serif;
@@ -8,8 +9,15 @@
   --shadow: 0 1px 2px rgba(15,23,42,.06), 0 8px 30px rgba(15,23,42,.07);
   --c-bg: #ffffff; --c-surface: #f3f5fb; --c-surface-2: #e7ebf6; --c-line: #d6dcea;
   --c-text: #0b1220; --c-muted: #4a5568;
-  --c-accent: #2450e6; --c-on-accent: #ffffff; --c-mark: #ffe45c;
-  --c-mission: #e3ebff; --c-mission-text: #1a3cb3;
+  --c-on-accent: #ffffff; --c-mark: #ffe45c;
+  --ma: #2450e6; --ma-soft: #e3ebff; --ma-text: #1a3cb3;
+  --ph: #c2410c; --ph-soft: #ffedd5; --ph-text: #9a3412;
+  --kit: #047857; --kit-soft: #d1fae5; --kit-text: #065f46;
+  --fpv: #7c3aed; --fpv-soft: #ede9fe; --fpv-text: #5b21b6;
+  --ma-surface: #f3f5fb; --ma-surface-2: #e7ebf6;
+  --ph-surface: #fdf3ea; --ph-surface-2: #f8e3d0;
+  --kit-surface: #edf8f2; --kit-surface-2: #d8f0e3;
+  --fpv-surface: #f4f0fe; --fpv-surface-2: #e7dffc;
   --c-aha: #ffe45c; --c-aha-text: #1c1600;
   --c-k: #e5484d; --c-e: #2450e6;
   --c-gain: #12a150; --c-gain-fill: rgba(18,161,80,.16);
@@ -18,11 +26,18 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   color-scheme: dark;
-  --shadow: none;
+  --shadow: 0 0 0 transparent;   /* nicht „none“: sonst verwirft der Browser Schattenlisten wie auf .kachel */
   --c-bg: #0b1020; --c-surface: #141b31; --c-surface-2: #1d2642; --c-line: #2a3556;
   --c-text: #f3f6ff; --c-muted: #a9b4d0;
-  --c-accent: #6b8cff; --c-on-accent: #0b1020; --c-mark: #6b5a00;
-  --c-mission: #1d2a57; --c-mission-text: #c9d6ff;
+  --c-on-accent: #0b1020; --c-mark: #6b5a00;
+  --ma: #6b8cff; --ma-soft: #1d2a57; --ma-text: #c9d6ff;
+  --ph: #ff9a4d; --ph-soft: #3a2212; --ph-text: #ffd8b5;
+  --kit: #34d399; --kit-soft: #0f3328; --kit-text: #b7f5da;
+  --fpv: #b69cff; --fpv-soft: #2a1f4d; --fpv-text: #ddd2ff;
+  --ma-surface: #141b31; --ma-surface-2: #1d2642;
+  --ph-surface: #221915; --ph-surface-2: #33241b;
+  --kit-surface: #11211c; --kit-surface-2: #193029;
+  --fpv-surface: #1b1730; --fpv-surface-2: #272040;
   --c-aha: #ffe45c; --c-aha-text: #1c1600;
   --c-k: #ff6b70; --c-e: #6b8cff;
   --c-gain: #2fd07a; --c-gain-fill: rgba(47,208,122,.18);
@@ -31,14 +46,36 @@
 }}
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --shadow: none;
+  --shadow: 0 0 0 transparent;   /* nicht „none“: sonst verwirft der Browser Schattenlisten wie auf .kachel */
   --c-bg: #0b1020; --c-surface: #141b31; --c-surface-2: #1d2642; --c-line: #2a3556;
   --c-text: #f3f6ff; --c-muted: #a9b4d0;
-  --c-accent: #6b8cff; --c-on-accent: #0b1020; --c-mark: #6b5a00;
-  --c-mission: #1d2a57; --c-mission-text: #c9d6ff;
+  --c-on-accent: #0b1020; --c-mark: #6b5a00;
+  --ma: #6b8cff; --ma-soft: #1d2a57; --ma-text: #c9d6ff;
+  --ph: #ff9a4d; --ph-soft: #3a2212; --ph-text: #ffd8b5;
+  --kit: #34d399; --kit-soft: #0f3328; --kit-text: #b7f5da;
+  --fpv: #b69cff; --fpv-soft: #2a1f4d; --fpv-text: #ddd2ff;
+  --ma-surface: #141b31; --ma-surface-2: #1d2642;
+  --ph-surface: #221915; --ph-surface-2: #33241b;
+  --kit-surface: #11211c; --kit-surface-2: #193029;
+  --fpv-surface: #1b1730; --fpv-surface-2: #272040;
   --c-aha: #ffe45c; --c-aha-text: #1c1600;
   --c-k: #ff6b70; --c-e: #6b8cff;
   --c-gain: #2fd07a; --c-gain-fill: rgba(47,208,122,.18);
   --c-loss: #ff6b70; --c-loss-fill: rgba(255,107,112,.14);
   --c-grid: #1f2945; --c-axis: #cfd8f2;
 }
+
+/* Fachfarbe: data-fach auf <html> (ganze Seite) oder auf einer Kachel.
+   :root[…] braucht es, damit die Regel die Dunkel-Blöcke oben (gleiche Spezifität) schlägt. Ohne Angabe gilt Mathematik. Die Tokens --ma/--ph/--kit/--fpv wechseln oben mit Hell/Dunkel. */
+:root, :root[data-fach="mathematik"], [data-fach="mathematik"] {
+  --c-accent: var(--ma); --c-mission: var(--ma-soft); --c-mission-text: var(--ma-text);
+  --c-surface: var(--ma-surface); --c-surface-2: var(--ma-surface-2); }
+:root[data-fach="physik"], [data-fach="physik"] {
+  --c-accent: var(--ph); --c-mission: var(--ph-soft); --c-mission-text: var(--ph-text); --c-e: var(--ph);
+  --c-surface: var(--ph-surface); --c-surface-2: var(--ph-surface-2); }
+:root[data-fach="kit"], [data-fach="kit"] {
+  --c-accent: var(--kit); --c-mission: var(--kit-soft); --c-mission-text: var(--kit-text); --c-e: var(--kit);
+  --c-surface: var(--kit-surface); --c-surface-2: var(--kit-surface-2); }
+:root[data-fach="fpv"], [data-fach="fpv"] {
+  --c-accent: var(--fpv); --c-mission: var(--fpv-soft); --c-mission-text: var(--fpv-text); --c-e: var(--fpv);
+  --c-surface: var(--fpv-surface); --c-surface-2: var(--fpv-surface-2); }

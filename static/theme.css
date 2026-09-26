@@ -1610,3 +1610,13 @@ a.dtree-leaf:hover {
     scroll-behavior: auto !important;
   }
 }
+
+/* Hinweisstreifen „Ältere Seite“ (site.js, 26.09.2026) — Farben fest wie im neuen Stil (static/v2/farben.css) */
+.alt-hinweis {
+  display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: center; align-items: center;
+  padding: 8px 3.4rem; background: #2450e6; color: #fff; font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: .9rem; line-height: 1.4; text-align: center;
+}
+.alt-hinweis span { opacity: .85; }
+.alt-hinweis a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media print { .alt-hinweis { display: none; } }

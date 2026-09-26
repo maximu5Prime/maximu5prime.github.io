@@ -193,6 +193,105 @@
     var b = $('ahaBtn'); if (b) b.hidden = true;
   }
 
+  /* Trainer: Übungsaufgaben mit Zufallszahlen (Seitentyp „Trainer“, 26.09.2026).
+     Aha.Trainer({ el: 'trainer', stufen: ['Berechnen', 'Bestimmen', 'Beurteilen'], neu: function (stufe) { return {
+       frage: 'HTML mit $…$', felder: [{ label: '$x =$', ans: 3, tol: 0.01, einheit: 'm' }],
+       tipp: 'HTML', weg: 'HTML (Lösungsweg)' }; } })
+     Stufen richten sich nach den Operatoren (Anforderungsbereich I/II/III): stufen = drei Operatoren (oder true = nur Sterne).
+     Feld: ans als Zahl (Eingabe mit Komma, Bruch a/b erlaubt), als Text (Groß-/Kleinschreibung egal)
+     oder Auswahl { label, optionen: ['ja', 'nein'], ans: 0 } — für Beurteilen/Entscheiden. */
+  function mathe(el) {
+    if (window.renderMathInElement) renderMathInElement(el, { delimiters: [{ left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }], throwOnError: false });
+  }
+  function zahl(s) {
+    s = String(s).trim().replace(/\s/g, '').replace(/−/g, '-').replace(',', '.');
+    var m = s.match(/^([+-]?[\d.]+)\/([+-]?[\d.]+)$/);
+    if (m) return parseFloat(m[1]) / parseFloat(m[2]);
+    return s === '' || isNaN(+s) ? NaN : +s;
+  }
+  function Trainer(o) {
+    var box = typeof o.el === 'string' ? $(o.el) : o.el, stufe = o.start || 1, serie = 0, nr = 0, A, versuche, weggesehen;
+    box.classList.add('trainer');
+    var ops = Array.isArray(o.stufen) ? o.stufen : ['', '', ''], sterne = ['⭐', '⭐⭐', '⭐⭐⭐'];
+    box.innerHTML =
+      '<div class="tr-kopf">' + (o.stufen ? '<div class="wahl tr-stufen" role="group" aria-label="Anforderung">' +
+        sterne.map(function (st, i) { return '<button type="button" data-s="' + (i + 1) + '">' + st + (ops[i] ? ' ' + ops[i] : '') + '</button>'; }).join('') +
+        '</div>' : '<span></span>') +
+      '<span class="tr-serie"></span></div>' +
+      '<div class="tr-nr"></div><div class="tr-frage"></div><div class="tr-felder"></div>' +
+      '<div class="btn-row"><button type="button" class="btn tr-pruefen">Prüfen</button>' +
+      '<button type="button" class="btn btn--ghost tr-tipp">Tipp</button>' +
+      '<button type="button" class="btn btn--ghost tr-zeigen">Lösungsweg</button>' +
+      '<button type="button" class="btn btn--ghost tr-neu">Neue Aufgabe →</button></div>' +
+      '<div class="feedback"></div><div class="hint"></div><div class="tr-weg" hidden></div>';
+    function q(c) { return box.querySelector(c); }
+    function zeigeSerie() { q('.tr-serie').textContent = serie ? serie + ' richtig in Folge' + (serie >= 5 ? ' 🔥' : '') : ''; }
+    function neu() {
+      A = o.neu(stufe); nr++; versuche = 0; weggesehen = false;
+      q('.tr-nr').textContent = 'Aufgabe ' + nr + (o.stufen ? ' · ' + sterne[stufe - 1] + (ops[stufe - 1] ? ' ' + ops[stufe - 1] : '') : '');
+      q('.tr-frage').innerHTML = A.frage;
+      q('.tr-felder').innerHTML = A.felder.map(function (f, i) {
+        if (f.optionen) return '<div class="tr-feld tr-auswahl" data-i="' + i + '">' + (f.label ? '<span>' + f.label + '</span>' : '') +
+          '<div class="wahl">' + f.optionen.map(function (t, j) { return '<button type="button" data-j="' + j + '">' + t + '</button>'; }).join('') + '</div></div>';
+        return '<label class="tr-feld"><span>' + (f.label || '') + '</span><input class="input quiz-input" data-i="' + i +
+          '" inputmode="' + (typeof f.ans === 'number' ? 'decimal' : 'text') + '" autocomplete="off">' +
+          (f.einheit ? '<span>' + f.einheit + '</span>' : '') + '</label>';
+      }).join('');
+      q('.hint').innerHTML = A.tipp || ''; q('.hint').classList.remove('open'); q('.tr-tipp').hidden = !A.tipp;
+      q('.tr-weg').innerHTML = A.weg || ''; q('.tr-weg').hidden = true; q('.tr-zeigen').hidden = !A.weg;
+      q('.feedback').className = 'feedback';
+      mathe(box);
+      var inp = box.querySelector('.tr-felder input'); if (inp && o.fokus !== false && nr > 1) inp.focus();
+    }
+    function pruefen() {
+      var alle = true;
+      box.querySelectorAll('.tr-auswahl').forEach(function (w) {
+        var f = A.felder[+w.dataset.i], a = w.querySelector('button.aktiv'), ok = !!a && +a.dataset.j === f.ans;
+        w.querySelectorAll('button').forEach(function (b) { b.classList.remove('ok', 'err'); });
+        if (a) a.classList.add(ok ? 'ok' : 'err');
+        if (!ok) alle = false;
+      });
+      box.querySelectorAll('.tr-felder input').forEach(function (inp) {
+        var f = A.felder[+inp.dataset.i], ok;
+        if (typeof f.ans === 'number') {
+          var v = zahl(inp.value), tol = f.tol == null ? 0.01 : f.tol;
+          ok = !isNaN(v) && Math.abs(v - f.ans) <= tol * Math.max(1, f.rel ? Math.abs(f.ans) : 1);
+        } else ok = inp.value.trim().toLowerCase().replace(/\s+/g, ' ') === String(f.ans).toLowerCase();
+        inp.classList.toggle('ok', ok); inp.classList.toggle('err', !ok); if (!ok) alle = false;
+      });
+      versuche++;
+      var fb = q('.feedback');
+      fb.className = 'feedback show ' + (alle ? 'ok' : 'err');
+      fb.textContent = alle ? (versuche === 1 && !weggesehen ? 'Richtig!' : 'Richtig — jetzt noch eine ohne Hilfe?') : 'Noch nicht. Prüfen Sie Ihre Rechnung oder holen Sie sich einen Tipp.';
+      if (alle && versuche === 1 && !weggesehen) serie++;
+      else if (!alle) serie = 0;
+      zeigeSerie();
+    }
+    box.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' && ev.target.tagName === 'INPUT') pruefen(); });
+    q('.tr-pruefen').addEventListener('click', pruefen);
+    q('.tr-tipp').addEventListener('click', function () { q('.hint').classList.add('open'); });
+    q('.tr-zeigen').addEventListener('click', function () { q('.tr-weg').hidden = false; weggesehen = true; serie = 0; zeigeSerie(); });
+    q('.tr-neu').addEventListener('click', neu);
+    q('.tr-felder').addEventListener('click', function (ev) {
+      var b = ev.target.closest('.tr-auswahl button'); if (!b) return;
+      b.parentNode.querySelectorAll('button').forEach(function (c) { c.classList.toggle('aktiv', c === b); c.classList.remove('ok', 'err'); });
+    });
+    if (o.stufen) box.querySelectorAll('.tr-stufen button').forEach(function (b) {
+      b.classList.toggle('aktiv', +b.dataset.s === stufe);
+      b.addEventListener('click', function () {
+        stufe = +b.dataset.s;
+        box.querySelectorAll('.tr-stufen button').forEach(function (c) { c.classList.toggle('aktiv', c === b); });
+        neu();
+      });
+    });
+    zeigeSerie(); neu();
+    return { neu: neu };
+  }
+  /* Zufallshilfen für Trainer: ganze Zahl in [a, b] (ohne die Werte in ohne), Element aus Liste */
+  function zufall(a, b, ohne) { var z; do { z = a + Math.floor(Math.random() * (b - a + 1)); } while (ohne && ohne.indexOf(z) >= 0); return z; }
+  function eins(liste) { return liste[Math.floor(Math.random() * liste.length)]; }
+
   window.addEventListener('load', function () {
     initTheme();
     var b = $('ahaBtn'); if (b) b.addEventListener('click', function () { showAha(false); });
@@ -202,6 +301,7 @@
 
   window.Aha = {
     $: $, css: css, de: de, dt: dt, tex: tex, colors: colors, Plot: Plot, mission: mission, showAha: showAha,
+    Trainer: Trainer, zufall: zufall, eins: eins, zahl: zahl,
     onRedraw: function (f) { redrawFns.push(f); f(); }
   };
 })();

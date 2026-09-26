@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VORLAGE Werkzeug — Kopie nach /<adresse>/index.html, dann Inhalt ersetzen</title>
+  <meta name="description" content="Kurzbeschreibung des Werkzeugs.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <!-- eigene Stile/Skripte des Werkzeugs hier, Klassen mit eigenem Präfix (z. B. .fap-…), damit nichts kollidiert -->
+</head>
+<body class="werkzeug-breit">
+<!-- Seitentyp „Werkzeug“: eine große eigenständige Anwendung (FAP-Browser, Team-Challenge).
+     Nur die Hülle ist einheitlich: Kopfleiste, kurzer Kopf, Fachfarben, Fuß. Die Logik bleibt, wie sie ist. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/">← Start</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">Werkzeug</div>
+    <h1>Titel des Werkzeugs</h1>
+    <p>Ein Satz: Was kann man hier tun?</p>
+  </header>
+
+  <section class="werkzeug" aria-label="Werkzeug">
+    <!-- Inhalt des Werkzeugs -->
+  </section>
+
+  <footer class="fuss">
+    <span>Lernportal · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+</body>
+</html>

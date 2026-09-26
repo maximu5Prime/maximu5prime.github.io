@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="kit">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt-Baukasten · KIT 11</title>
+  <meta name="description" content="Warum antwortet die KI so allgemein? Prompt-Bausteine zu- und abschalten und sehen, wie sich die Antwort ändert.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    /* Seiten-eigene Bausteine: Prompt-Fenster, Spielraum-Balken, Antwort, Eigenschaften */
+    .baustein-wahl button { min-width: 0; }
+    .baustein-wahl button b { color: var(--c-accent); margin-right: .3em; }
+    .baustein-wahl button.aktiv b { color: inherit; }
+    .fenster { margin-top: 14px; background: var(--c-bg); border-radius: 14px; padding: 12px 16px; box-shadow: inset 0 0 0 2px var(--c-line); }
+    .fenster-kopf { font-family: var(--font-mono); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-muted); margin-bottom: 6px; }
+    .prompt-text { font-family: var(--font-mono); font-size: .95rem; line-height: 1.55; }
+    .prompt-text span { display: inline; }
+    .prompt-text .neu { background: var(--c-mission); color: var(--c-mission-text); border-radius: 4px; padding: 0 .15em; transition: background .6s; }
+    .spielraum { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; margin-top: 14px; font-weight: 700; font-size: .95rem; }
+    .spielraum .spur { height: 14px; border-radius: 999px; background: var(--c-surface-2); overflow: hidden; }
+    .spielraum .balken { height: 100%; border-radius: 999px; background: var(--c-accent); transition: width .5s cubic-bezier(.2,1,.3,1); }
+    .spielraum output { font-family: var(--font-mono); color: var(--c-accent); min-width: 6.5em; text-align: right; }
+    .antwort-text { font-size: 1rem; }
+    .antwort-text p { margin: .3em 0; }
+    .antwort-text ol { margin: .3em 0; padding-left: 1.4em; }
+    .antwort-text li { margin: .2em 0; }
+    .antwort-text .rueckfrage { color: var(--c-muted); font-style: italic; }
+    .woerter { font-family: var(--font-mono); font-size: .8rem; color: var(--c-muted); text-align: right; margin-top: 4px; }
+    .merkmale { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .merkmale li { padding: .3em .8em; border-radius: 999px; font-weight: 700; font-size: .95rem; background: var(--c-loss-fill); color: var(--c-loss); }
+    .merkmale li::before { content: '✗ '; }
+    .merkmale li.ja { background: var(--c-gain-fill); color: var(--c-gain); }
+    .merkmale li.ja::before { content: '✓ '; }
+    .ergebnis .gross { width: 100%; }
+    @media (prefers-reduced-motion: reduce) { .spielraum .balken, .prompt-text .neu { transition: none; } }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/kit11/">← KIT 11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">KIT 11 · Prompt-Baukasten</div>
+    <h1>Warum antwortet die KI so <mark>allgemein</mark>?</h1>
+    <p>Ein Schüler tippt nur „Elektromotor“ in den Chat. Bauen Sie seinen Prompt mit den Bausteinen
+      <b>R</b>olle · <b>O</b>peration · <b>L</b>imits · <b>E</b>rwartetes Format · <b>S</b>til aus und beobachten Sie die Antwort.</p>
+  </header>
+
+  <section class="stage" aria-label="Ausprobieren">
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span>Ihr Auftrag: Die Antwort soll konkret, kurz, in Schritten und verständlich sein. Schalten Sie die Bausteine zu, die das bewirken.</span></div>
+
+    <div class="wahl baustein-wahl" id="bausteine" role="group" aria-label="Prompt-Bausteine">
+      <button type="button" data-b="R" aria-pressed="false"><b>R</b>Rolle</button>
+      <button type="button" data-b="O" aria-pressed="false"><b>O</b>Operation</button>
+      <button type="button" data-b="L" aria-pressed="false"><b>L</b>Limits</button>
+      <button type="button" data-b="E" aria-pressed="false"><b>E</b>Format</button>
+      <button type="button" data-b="S" aria-pressed="false"><b>S</b>Stil</button>
+    </div>
+
+    <div class="fenster">
+      <div class="fenster-kopf">Ihr Prompt</div>
+      <div class="prompt-text" id="prompt"></div>
+    </div>
+
+    <div class="spielraum">
+      <span>Spielraum der KI</span>
+      <div class="spur"><div class="balken" id="balken"></div></div>
+      <output id="spielraum"></output>
+    </div>
+
+    <div class="fenster">
+      <div class="fenster-kopf">Antwort der KI (Beispiel)</div>
+      <div class="antwort-text" id="antwort"></div>
+      <div class="woerter" id="woerter"></div>
+    </div>
+
+    <div class="ergebnis">
+      <ul class="merkmale" id="merkmale" aria-label="Eigenschaften der Antwort"></ul>
+    </div>
+  </section>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Jeder Baustein legt <b>eine</b> Eigenschaft der Antwort fest: <b>O</b> macht sie konkret, <b>L</b> kurz,
+    <b>E</b> übersichtlich, <b>S</b> verständlich, <b>R</b> praxisnah. Was nicht im Prompt steht, muss die KI raten —
+    <b>Garbage in, garbage out</b>. Nicht jeder Baustein ist immer nötig: Wählen Sie die, die Ihr Ziel braucht.
+  </div>
+
+  <details class="warum">
+    <summary>Warum? So „denkt“ ein Sprachmodell</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>Ein Sprachmodell berechnet Wort für Wort (genauer: Token für Token), welche <b>Fortsetzung</b>
+        nach dem bisherigen Text am wahrscheinlichsten ist.</div></div>
+      <div class="schritt"><span>2</span><div>Auf „Elektromotor“ passen unzählige Fortsetzungen: Geschichte, Bauarten, Preise, Reparatur …
+        Die KI liefert deshalb Allerweltstext oder fragt zurück.</div></div>
+      <div class="schritt"><span>3</span><div>Jeder Baustein <b>streicht</b> Fortsetzungen: „4 Schritte“ schließt Fließtext aus,
+        „11. Klasse“ schließt Fachsprache aus. Übrig bleibt eine Antwort, die zu Ihnen passt.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Ein guter Prompt garantiert keine richtige Antwort. Auch eine gut
+        formulierte Antwort kann erfundene Zahlen oder Fakten enthalten → Antwort immer <b>prüfen</b> (das „+ P“ auf Ihrem Spickzettel).</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="2">
+    <p class="quiz-q">1 · ⭐ Ordnen Sie zu: Zu welchem Baustein gehört der Satz „Antworte in höchstens fünf Sätzen.“?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">R — Rolle</button>
+      <button class="quiz-opt">O — Operation</button>
+      <button class="quiz-opt">L — Limits</button>
+      <button class="quiz-opt">E — Erwartetes Format</button>
+    </div>
+    <div class="hint" data-quiz-hint>Der Satz legt eine Grenze fest — wie lang die Antwort höchstens sein darf.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W,W">
+    <p class="quiz-q">2 · ⭐⭐ Analysieren Sie den Prompt: „Du bist Physiklehrer. Erkläre das ohmsche Gesetz für die 11. Klasse FOS
+      als Tabelle mit drei Spalten.“ Wahr oder falsch?</p>
+    <table class="ankreuz">
+      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+      <tbody>
+        <tr><td>Der Prompt enthält eine Rolle.</td><td></td><td></td></tr>
+        <tr><td>Der Prompt enthält ein Limit.</td><td></td><td></td></tr>
+        <tr><td>Der Prompt gibt das Format vor.</td><td></td><td></td></tr>
+        <tr><td>Der Prompt nennt die Zielgruppe.</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="hint" data-quiz-hint>Gehen Sie R, O, L, E, S der Reihe nach durch. Steht irgendwo eine Grenze wie Länge, Zeit oder Umfang?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie: Die KI schreibt in ihrer Erklärung „Der erste Elektromotor wurde 1950 gebaut.“
+      Wie gehen Sie mit dieser Angabe am besten um?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">Übernehmen — der Prompt war ja genau.</button>
+      <button class="quiz-opt">An einer zweiten Stelle prüfen (Schulbuch, Lexikon), bevor ich sie verwende.</button>
+      <button class="quiz-opt">Den Prompt länger machen, dann stimmt die Jahreszahl sicher.</button>
+    </div>
+    <div class="hint" data-quiz-hint>Ein Sprachmodell wählt wahrscheinliche Wörter — nicht geprüfte Fakten. Was heißt das für Jahreszahlen?</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zu M3: Füllen Sie Ihren Prompt-Spickzettel aus — rechte Spalte mit Formulierungen aus Ihrer Station.</span></div>
+
+  <footer class="fuss">
+    <span>KIT · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var an = { R: false, O: false, L: false, E: false, S: false }, zuletzt = null;
+
+  var TEIL = {
+    R: 'Du bist Ausbilder in einem Elektrobetrieb.',
+    O: 'Erkläre mir, wie ein Gleichstrommotor funktioniert.',
+    L: 'Höchstens 80 Wörter, keine Formeln.',
+    E: 'Gliedere die Antwort in 4 nummerierte Schritte.',
+    S: 'Ich bin in der 11. Klasse FOS Technik – erkläre einfach, mit einem Beispiel aus dem Alltag.'
+  };
+  // Beispielantworten: Schritte in Fachsprache bzw. einfach; Zusätze nur ohne Limits
+  var SCHRITTE = {
+    fach: ['Über Bürsten und Kommutator fließt Strom in die drehbar gelagerte Ankerwicklung.',
+           'Im Feld der Permanentmagneten des Stators wirkt auf die stromdurchflossenen Leiter die Lorentzkraft.',
+           'Die Kräfte auf beiden Seiten der Wicklung erzeugen ein Drehmoment, der Anker rotiert.',
+           'Der Kommutator polt den Strom nach jeder halben Umdrehung um, sodass das Drehmoment immer in dieselbe Richtung wirkt.'],
+    einfach: ['Strom fließt über zwei Schleifkontakte in eine Drahtspule, die sich drehen kann.',
+              'Die Spule wird dadurch selbst zu einem Magneten.',
+              'Die festen Magnete außen herum ziehen die Spule an und stoßen sie ab – sie dreht sich.',
+              'Nach jeder halben Drehung wird der Strom umgepolt, damit sie immer weiterdreht. So läuft auch der Motor in einem Akkuschrauber.']
+  };
+  var ZUSATZ = {
+    fach: 'Für die Kraft auf einen Leiter gilt $F = I \\cdot l \\cdot B$. Das Drehmoment wächst also mit Stromstärke, Leiterlänge und Flussdichte. ' +
+          'Einen der ersten brauchbaren Elektromotoren baute Moritz Hermann Jacobi 1834. Heute ersetzen bürstenlose, elektronisch kommutierte Motoren (BLDC) ' +
+          'den klassischen Gleichstrommotor in vielen Anwendungen, weil sie verschleißärmer und effizienter sind.',
+    einfach: 'Wer es genauer wissen will: Die Kraft hängt von der Stromstärke, der Drahtlänge und der Stärke der Magnete ab, $F = I \\cdot l \\cdot B$. ' +
+             'Motoren ohne Schleifkontakte (bürstenlose Motoren) steuern das Umpolen mit Elektronik – sie halten länger.'
+  };
+  var ROLLE_VORN = 'Stellen Sie sich einen zerlegten Motor auf der Werkbank vor.',
+      ROLLE_HINTEN = 'Tipp aus der Werkstatt: Funkt ein alter Motor stark, sind meist die Kohlebürsten abgenutzt.';
+  var ALLGEMEIN = 'Ein Elektromotor ist eine Maschine, die elektrische Energie in mechanische Energie umwandelt. ' +
+    'Es gibt viele Bauarten, zum Beispiel Gleichstrom-, Wechselstrom-, Drehstrom- und Schrittmotoren. ' +
+    'Elektromotoren stecken in Haushaltsgeräten, Fahrzeugen, Werkzeugen und Industrieanlagen.';
+
+  function prompt() {
+    var teile = [];
+    ['R', 'O', 'L', 'E', 'S'].forEach(function (b) { if (an[b]) teile.push([b, TEIL[b]]); });
+    if (!an.O) teile.splice(an.R ? 1 : 0, 0, ['-', 'Elektromotor']);
+    Aha.$('prompt').innerHTML = teile.map(function (t) {
+      return '<span' + (t[0] === zuletzt ? ' class="neu"' : '') + '>' + t[1] + '</span>';
+    }).join(' ');
+  }
+
+  function antwort() {
+    var html, reg = an.S ? 'einfach' : 'fach';
+    if (!an.O) {
+      html = '<p>' + ALLGEMEIN + '</p><p class="rueckfrage">Was möchten Sie genau wissen: Geschichte, Bauarten, Funktionsweise oder Kaufberatung?</p>';
+    } else {
+      var s = SCHRITTE[reg];
+      html = an.E ? '<ol>' + s.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol>' : '<p>' + s.join(' ') + '</p>';
+      if (!an.L) html += '<p>' + ZUSATZ[reg] + '</p>';
+      if (an.R) html = '<p>' + ROLLE_VORN + '</p>' + html + (an.L ? '' : '<p>' + ROLLE_HINTEN + '</p>');
+    }
+    var el = Aha.$('antwort');
+    el.innerHTML = html;
+    if (window.renderMathInElement) renderMathInElement(el, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+    var text = el.cloneNode(true);
+    text.querySelectorAll('.katex').forEach(function (k) { k.textContent = 'F'; });
+    Aha.$('woerter').textContent = '≈ ' + text.textContent.trim().split(/\s+/).length + ' Wörter';
+  }
+
+  function aktualisiere() {
+    var n = Object.keys(an).filter(function (b) { return an[b]; }).length;
+    var breite = [100, 68, 44, 27, 15, 8][n], wort = ['riesig', 'groß', 'mittel', 'klein', 'sehr klein', 'eng'][n];
+    Aha.$('balken').style.width = breite + '%';
+    Aha.$('spielraum').textContent = wort;
+    prompt(); antwort();
+    var M = [['konkret', an.O], ['kurz', an.O && an.L], ['in Schritten', an.O && an.E], ['verständlich', an.O && an.S], ['praxisnah', an.O && an.R]];
+    Aha.$('merkmale').innerHTML = M.map(function (m) { return '<li' + (m[1] ? ' class="ja"' : '') + '>' + m[0] + '</li>'; }).join('');
+    Aha.mission(an.O && an.L && an.E && an.S);
+  }
+
+  Aha.$('bausteine').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b) return;
+    var k = b.dataset.b;
+    an[k] = !an[k];
+    zuletzt = an[k] ? k : null;
+    b.classList.toggle('aktiv', an[k]);
+    b.setAttribute('aria-pressed', an[k]);
+    aktualisiere();
+  });
+  aktualisiere();
+});
+</script>
+</body>
+</html>

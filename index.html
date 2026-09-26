@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lernportal · FOS Technik</title>
-  <meta name="description" content="Interaktive Übungen und Applets zu Mathematik an der FOS Technik.">
+  <meta name="description" content="Interaktive Übungen und Applets zu Mathematik und KIT an der FOS Technik.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/static/v2/base.css">
   <link rel="stylesheet" href="/static/v2/farben.css">
   <script defer src="/static/v2/aha-lib.js"></script>
 </head>
-<body>
+<body class="start">
 <div class="wrap">
 
   <nav class="bar">
@@ -27,16 +27,18 @@
   </header>
 
   <div class="kacheln">
-    <a class="kachel" href="/m11/"><div class="kuerzel">M11</div><h3>Mathematik 11</h3>
+    <a class="kachel" data-fach="mathematik" href="/m11/"><div class="kuerzel">M11</div><h3>Mathematik 11</h3>
       <p>Funktionen, Geraden, Ungleichungen</p></a>
-    <a class="kachel" href="/m12/"><div class="kuerzel">M12</div><h3>Mathematik 12</h3>
+    <a class="kachel" data-fach="mathematik" href="/m12/"><div class="kuerzel">M12</div><h3>Mathematik 12</h3>
       <p>Differenzialrechnung und Prüfungsvorbereitung</p></a>
-    <a class="kachel" href="/m12add/"><div class="kuerzel">M12+</div><h3>Mathematik 12 Additum</h3>
+    <a class="kachel" data-fach="mathematik" href="/m12add/"><div class="kuerzel">M12+</div><h3>Mathematik 12 Additum</h3>
       <p>Trigonometrische Funktionen</p></a>
+    <a class="kachel" data-fach="kit" href="/kit11/"><div class="kuerzel">KIT11</div><h3>Künstliche Intelligenz, Informatik und Technologie</h3>
+      <p>Prompts bauen, Antworten prüfen</p></a>
     <a class="kachel dezent" href="/fap/"><div class="kuerzel">FAP</div><h3>Abschlussprüfungen</h3>
       <p>Alle Aufgaben 2013–2025 zum Durchblättern</p></a>
   </div>
-  <p class="notiz">Ältere Seiten (auch Physik und KIT) finden Sie im <a href="/archiv/">Archiv</a>.</p>
+  <p class="notiz">Ältere Seiten (auch Physik) finden Sie im <a href="/archiv/">Archiv</a>.</p>
 
   <footer class="fuss">
     <span>Lernportal · FOS Technik</span>
