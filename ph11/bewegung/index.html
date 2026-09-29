@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="physik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gleichförmige Bewegung — Trainer · Physik 11</title>
+  <meta name="description" content="t-x- und t-v-Diagramme lesen, Bewegungsgleichung aufstellen, Treffpunkt bestimmen — immer neue Aufgaben mit Rückmeldung.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    /* Diagramme im Trainer: SVG ohne $…$ (KaTeX würde sonst in die Beschriftung schreiben) */
+    .tr-diagramm { display: block; width: 100%; max-width: 440px; margin: .6rem 0 .2rem; }
+    .tr-diagramm text { font: 11px var(--font-body); fill: var(--c-muted); }
+    .tr-diagramm .name { font-weight: 700; font-size: 12px; }
+  </style>
+</head>
+<body>
+<!-- Seitentyp „Trainer“ (Physik 11, Übung U02). Stufen = Operatoren: ⭐ Ablesen/Berechnen · ⭐⭐ Bestimmen/Erläutern · ⭐⭐⭐ Beurteilen. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/ph11/">← Ph11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">Ph11 · Trainer</div>
+    <h1>Gleichförmige Bewegung — Diagramme <mark>lesen</mark>?</h1>
+    <p>Immer neue Diagramme. ⭐ Ablesen und Berechnen, ⭐⭐ Bewegungsgleichung und Treffpunkt bestimmen, ⭐⭐⭐ Aussagen über Diagramme beurteilen.
+      Rechnen Sie auf Papier und tippen Sie nur das Ergebnis ein. Ziel: fünf richtig in Folge.</p>
+  </header>
+
+  <section id="trainer" aria-label="Übungsaufgaben"></section>
+
+  <details class="warum">
+    <summary>So geht's: t-x-Diagramm, t-v-Diagramm, Bewegungsgleichung</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div><b>t-x-Diagramm:</b> Die Steigung ist die Geschwindigkeit, $v = \dfrac{\Delta x}{\Delta t}$. Fällt der Graph, ist $v$ negativ; waagrecht heißt Ruhe.</div></div>
+      <div class="schritt"><span>2</span><div><b>t-v-Diagramm:</b> Die Fläche zwischen Graph und $t$-Achse ist die Ortsänderung $\Delta x$ — unter der Achse negativ.</div></div>
+      <div class="schritt"><span>3</span><div><b>Bewegungsgleichung:</b> $x(t) = x_0 + v \cdot t$ mit dem Startort $x_0$ (bei $t = 0$) und der Steigung $v$.</div></div>
+      <div class="schritt"><span>4</span><div><b>Treffpunkt:</b> $x_A(t) = x_B(t)$ setzen, nach $t$ auflösen, dann $t$ einsetzen.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> „Am Schnittpunkt sind beide gleich schnell.“ — Dort sind sie am <b>gleichen Ort</b>; gleich schnell hieße gleiche Steigung.</div>
+    </div>
+  </details>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Übungsblatt U02 — und bei Problemen mit km/h und m/s: Trainer „Einheiten“ auf der Kursseite.</span></div>
+
+  <footer class="fuss">
+    <span>Physik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+// Trainer ohne Canvas: bei DOMContentLoaded starten (KaTeX-Schriften laden dann mit der Seite).
+document.addEventListener('DOMContentLoaded', function () {
+  var z = Aha.zufall, eins = Aha.eins;
+
+  /* ── Hilfen ── */
+  function rund(x) { return +(+x).toPrecision(10); }
+  function de(x) { return String(rund(x)).replace('.', '{,}'); }
+  function kl(n) { return n < 0 ? '(' + de(n) + ')' : de(n); }
+  function schritt(n, html) { return '<div class="schritt"><span>' + n + '</span><div>' + html + '</div></div>'; }
+  function U(e) { return '\\,\\text{' + e + '}'; }
+  var MS = '\\,\\tfrac{\\text{m}}{\\text{s}}';
+  function vz(v) { return (v < 0 ? '-' : '') + de(Math.abs(v)); }
+  function gl(x0, v) {         // x(t) = x0 + v·t, ohne „0 m +“
+    return 'x(t) = ' + (x0 ? de(x0) + U('m') + (v < 0 ? ' - ' : ' + ') : (v < 0 ? '-' : '')) + de(Math.abs(v)) + MS + ' \\cdot t';
+  }
+  function begruendung(richtig, falsche) {
+    var alle = Aha.mischen([[richtig, null]].concat(falsche));
+    var ans = 0; alle.forEach(function (b, i) { if (b[1] === null) ans = i; });
+    return { typ: 'wahl', label: 'Begründung:', optionen: alle.map(function (b) { return b[0]; }), ans: ans,
+             warum: alle.map(function (b) { return b[1]; }) };
+  }
+
+  /* ── Diagramm als SVG: o = {tmax, dt, xmin, xmax, dx, tL, xL, linien:[{pts, farbe, name}], punkt} ── */
+  function diagramm(o) {
+    var W = 360, H = 230, l = 44, r = 46, t = 14, b = 30;
+    function X(tt) { return l + tt / o.tmax * (W - l - r); }
+    function Y(x) { return t + (o.xmax - x) / (o.xmax - o.xmin) * (H - t - b); }
+    var s = '<svg class="tr-diagramm" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + o.xL + ' über ' + o.tL + '">';
+    var nt = Math.round(o.tmax / o.dt), jedeT = nt > 10 ? 2 : 1;
+    for (var i = 0; i <= nt; i++) {
+      var tt = i * o.dt;
+      s += '<line x1="' + X(tt) + '" y1="' + Y(o.xmax) + '" x2="' + X(tt) + '" y2="' + Y(o.xmin) + '" stroke="var(--c-grid)" stroke-width="1"/>';
+      if (i > 0 && i % jedeT === 0) s += '<text x="' + X(tt) + '" y="' + (Y(0) + 13) + '" text-anchor="middle">' + String(rund(tt)).replace('.', ',') + '</text>';
+    }
+    var nx = Math.round((o.xmax - o.xmin) / o.dx), jedeX = nx > 8 ? 2 : 1;
+    for (var k = 0; k <= nx; k++) {
+      var x = o.xmin + k * o.dx;
+      s += '<line x1="' + X(0) + '" y1="' + Y(x) + '" x2="' + X(o.tmax) + '" y2="' + Y(x) + '" stroke="var(--c-grid)" stroke-width="1"/>';
+      if (Math.abs(x) > 1e-9 && k % jedeX === 0) s += '<text x="' + (X(0) - 5) + '" y="' + (Y(x) + 4) + '" text-anchor="end">' + String(rund(x)).replace('.', ',') + '</text>';
+    }
+    s += '<line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + (X(o.tmax) + 14) + '" y2="' + Y(0) + '" stroke="var(--c-axis)" stroke-width="1.5"/>' +
+         '<line x1="' + X(0) + '" y1="' + Y(o.xmin) + '" x2="' + X(0) + '" y2="' + (Y(o.xmax) - 8) + '" stroke="var(--c-axis)" stroke-width="1.5"/>' +
+         '<text x="' + (X(o.tmax) + 14) + '" y="' + (Y(0) + 13) + '" text-anchor="end">' + o.tL + '</text>' +
+         '<text x="' + (X(0) + 5) + '" y="' + (Y(o.xmax) - 2) + '">' + o.xL + '</text>';
+    (o.flaechen || []).forEach(function (f) {
+      s += '<rect x="' + X(f[0]) + '" y="' + Math.min(Y(0), Y(f[2])) + '" width="' + (X(f[1]) - X(f[0])) + '" height="' + Math.abs(Y(0) - Y(f[2])) + '" fill="var(--ph-soft)" opacity=".7"/>';
+    });
+    o.linien.forEach(function (L) {
+      s += '<polyline fill="none" stroke="' + L.farbe + '" stroke-width="3" stroke-linejoin="round" points="' +
+           L.pts.map(function (p) { return X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }).join(' ') + '"/>';
+      if (L.name) { var e = L.pts[L.pts.length - 1]; s += '<text class="name" x="' + (X(e[0]) + 5) + '" y="' + (Y(e[1]) + 4) + '" style="fill:' + L.farbe + '">' + L.name + '</text>'; }
+    });
+    return s + '</svg>';
+  }
+  var FA = 'var(--ph)', FB = 'var(--ma)';
+
+  /* Zufällige Fahrt aus 3 Abschnitten mit ganzzahligen Ecken: t in s, x in m */
+  function fahrt() {
+    var pts = [[0, eins([0, 0, 10, 20])]], tt = 0;
+    for (var i = 0; i < 3; i++) {
+      var d = eins([10, 20]), x0 = pts[pts.length - 1][1], v;
+      do { v = eins([-3, -2, -1, 0, 1, 2, 3]); } while (x0 + v * d < 0 || x0 + v * d > 80 || (i === 0 && v === 0));
+      tt += d; pts.push([tt, x0 + v * d]);
+    }
+    return pts;
+  }
+  function fahrtDiagramm(pts) {
+    return diagramm({ tmax: pts[3][0] + 5, dt: 5, xmin: 0, xmax: 90, dx: 10, tL: 't in s', xL: 'x in m', linien: [{ pts: pts, farbe: FA }] });
+  }
+  function ortBei(pts, tt) {
+    for (var i = 1; i < pts.length; i++) if (tt <= pts[i][0]) {
+      var a = pts[i - 1], b = pts[i]; return a[1] + (b[1] - a[1]) * (tt - a[0]) / (b[0] - a[0]);
+    }
+    return pts[pts.length - 1][1];
+  }
+
+  /* ── ⭐ Ablesen, Berechnen ── */
+  var STUFE1 = [
+    function () {       // Ort ablesen
+      var P = fahrt(), tt; do { tt = 5 * z(1, P[3][0] / 5); } while (ortBei(P, tt) % 5 !== 0);
+      var x = ortBei(P, tt);
+      return { operator: 'Lesen Sie ab', frage: 'Das t-x-Diagramm zeigt die Fahrt eines Transportwagens. Lesen Sie den Ort zur Zeit $t = ' + tt + U('s') + '$ ab.' + fahrtDiagramm(P),
+        felder: [{ typ: 'zahl', label: '$x(' + tt + U('s') + ') =$', ans: x, tol: 1, einheit: 'm' }],
+        tipp: 'Von $t = ' + tt + U('s') + '$ senkrecht nach oben bis zum Graphen, dann waagrecht zur $x$-Achse.',
+        weg: schritt(1, 'Bei $t = ' + tt + U('s') + '$ liegt der Graph auf der Höhe $x = ' + x + U('m') + '$.') };
+    },
+    function () {       // Geschwindigkeit in einem Abschnitt
+      var P = fahrt(), i = z(1, 3), a = P[i - 1], b = P[i], v = (b[1] - a[1]) / (b[0] - a[0]);
+      return { operator: 'Berechnen Sie', frage: 'Berechnen Sie aus dem t-x-Diagramm die Geschwindigkeit im Abschnitt von $' + a[0] + U('s') + '$ bis $' + b[0] + U('s') + '$ (mit Vorzeichen).' + fahrtDiagramm(P),
+        felder: [{ typ: 'zahl', label: '$v =$', ans: v, tol: 0.01, einheit: 'm/s' }],
+        tipp: '$v = \\dfrac{x_2 - x_1}{t_2 - t_1}$: Endort minus Anfangsort, geteilt durch die Dauer. Fällt der Graph, ist $v$ negativ.',
+        weg: schritt(1, '$v = \\dfrac{' + b[1] + U('m') + ' - ' + a[1] + U('m') + '}{' + b[0] + U('s') + ' - ' + a[0] + U('s') + '} = \\dfrac{' + (b[1] - a[1]) + U('m') + '}{' + (b[0] - a[0]) + U('s') + '} = ' + vz(v) + MS + '$') +
+             (v === 0 ? schritt(2, 'Waagrechter Graph: Der Wagen ruht.') : '') };
+    },
+    function () {       // Bewegungsgleichung auswerten
+      var x0 = eins([0, 5, 10, 12, 20, 30, 50]), v = eins([-2.5, -2, -1.5, 1.5, 2, 2.5, 3, 4]), tt = eins([2, 4, 6, 8, 10]);
+      if (x0 + v * tt < 0) x0 += Math.ceil(-(x0 + v * tt) / 10) * 10 + 10;
+      var x = x0 + v * tt;
+      return { operator: 'Berechnen Sie', frage: 'Ein Körper bewegt sich nach $' + gl(x0, v) + '$. Berechnen Sie seinen Ort nach $' + tt + U('s') + '$.',
+        felder: [{ typ: 'zahl', label: '$x(' + tt + U('s') + ') =$', ans: x, tol: 0.01, einheit: 'm' }],
+        tipp: 'Setzen Sie $t = ' + tt + U('s') + '$ ein. Die Sekunden kürzen sich, übrig bleiben Meter.',
+        weg: schritt(1, '$x(' + tt + U('s') + ') = ' + de(x0) + U('m') + ' + ' + kl(v) + MS + ' \\cdot ' + tt + U('s') + ' = ' + de(x) + U('m') + '$') };
+    }
+  ];
+
+  /* ── ⭐⭐ Bestimmen, Erläutern ── */
+  var STUFE2 = [
+    function () {       // Bewegungsgleichung aus dem Diagramm
+      var x0 = eins([0, 10, 20, 30, 40, 60, 80]), v, tmax = 20;
+      do { v = eins([-4, -3, -2, -1, 1, 2, 3, 4]); } while (x0 + v * tmax < 0 || x0 + v * tmax > 90);
+      var D = diagramm({ tmax: tmax + 2, dt: 2, xmin: 0, xmax: 90, dx: 10, tL: 't in s', xL: 'x in m', linien: [{ pts: [[0, x0], [tmax, x0 + v * tmax]], farbe: FA }] });
+      return { operator: 'Bestimmen Sie', frage: 'Bestimmen Sie die Bewegungsgleichung $x(t) = x_0 + v \\cdot t$ zum Diagramm.' + D,
+        felder: [{ typ: 'zahl', label: '$x_0 =$', ans: x0, tol: 0.5, einheit: 'm' }, { typ: 'zahl', label: '$v =$', ans: v, tol: 0.05, einheit: 'm/s' }],
+        tipp: '$x_0$: Wo schneidet der Graph die $x$-Achse? $v$: Steigung mit einem großen Steigungsdreieck, z. B. von $t = 0$ bis $t = ' + tmax + U('s') + '$.',
+        weg: schritt(1, 'Start bei $x_0 = ' + x0 + U('m') + '$.') +
+             schritt(2, '$v = \\dfrac{' + (x0 + v * tmax) + U('m') + ' - ' + x0 + U('m') + '}{' + tmax + U('s') + '} = ' + vz(v) + MS + '$') +
+             schritt(3, '$' + gl(x0, v) + '$') };
+    },
+    function () {       // Treffpunkt zweier Körper
+      var ts = z(3, 10), xs = 5 * z(4, 14), va, vb;
+      do { va = eins([1, 2, 3, 4, 5]); vb = eins([-4, -3, -2, -1, 1, 2]); } while (va === vb || xs - va * ts < 0 || xs - vb * ts < 0 || xs - vb * ts > 120);
+      var xa = xs - va * ts, xb = xs - vb * ts;
+      return { operator: 'Bestimmen Sie',
+        frage: 'Zwei Wagen fahren auf derselben Schiene: $x_A(t) = ' + gl(xa, va).slice(7) + '$ und $x_B(t) = ' + gl(xb, vb).slice(7) + '$. Bestimmen Sie Zeit und Ort des Treffpunkts.',
+        felder: [{ typ: 'zahl', label: '$t =$', ans: ts, tol: 0.05, einheit: 's' }, { typ: 'zahl', label: '$x =$', ans: xs, tol: 0.5, einheit: 'm' }],
+        tipp: 'Gleichsetzen: $x_A(t) = x_B(t)$. Alle $t$ auf eine Seite, alle Zahlen auf die andere. Dann $t$ in eine Gleichung einsetzen.',
+        weg: schritt(1, '$' + de(xa) + ' + ' + va + 't = ' + de(xb) + (vb < 0 ? ' - ' + (-vb) : ' + ' + vb) + 't$') +
+             schritt(2, '$' + (va - vb) + 't = ' + (xb - xa) + ' \\;\\Rightarrow\\; t = ' + ts + U('s') + '$') +
+             schritt(3, '$x_A(' + ts + U('s') + ') = ' + de(xa) + U('m') + ' + ' + va + MS + ' \\cdot ' + ts + U('s') + ' = ' + xs + U('m') + '$') };
+    },
+    function () {       // t-v-Diagramm: Fläche = Ortsänderung
+      var v = eins([-4, -3, -2, 2, 3, 4, 5]), d = eins([6, 8, 10, 12]), x0 = v < 0 ? eins([60, 80, 100]) : eins([0, 10, 20]);
+      var D = diagramm({ tmax: 14, dt: 2, xmin: -5, xmax: 6, dx: 1, tL: 't in s', xL: 'v in m/s', flaechen: [[0, d, v]], linien: [{ pts: [[0, v], [d, v]], farbe: FA }] });
+      return { operator: 'Bestimmen Sie', frage: 'Ein Körper startet bei $x_0 = ' + x0 + U('m') + '$ und bewegt sich nach dem t-v-Diagramm. Bestimmen Sie die Ortsänderung und seinen Ort bei $t = ' + d + U('s') + '$.' + D,
+        felder: [{ typ: 'zahl', label: '$\\Delta x =$', ans: v * d, tol: 0.5, einheit: 'm' }, { typ: 'zahl', label: '$x(' + d + U('s') + ') =$', ans: x0 + v * d, tol: 0.5, einheit: 'm' }],
+        tipp: 'Die Fläche des Rechtecks ist $v \\cdot \\Delta t$. Liegt es unter der $t$-Achse, ist sie negativ.',
+        weg: schritt(1, '$\\Delta x = ' + kl(v) + MS + ' \\cdot ' + d + U('s') + ' = ' + (v * d) + U('m') + '$') +
+             schritt(2, '$x = x_0 + \\Delta x = ' + x0 + U('m') + ' + ' + kl(v * d) + U('m') + ' = ' + (x0 + v * d) + U('m') + '$') };
+    },
+    function () {       // Vorgehen erläutern
+      var S = ['Bewegungsgleichungen $x_A(t)$ und $x_B(t)$ aufstellen', 'Gleichsetzen: $x_A(t) = x_B(t)$', 'Die Gleichung nach $t$ auflösen',
+               '$t$ in eine der beiden Gleichungen einsetzen: Treffort $x$', 'Antwortsatz mit Zeit und Ort des Treffpunkts'];
+      return { operator: 'Erläutern Sie', frage: 'Erläutern Sie das Vorgehen: Wie bestimmt man rechnerisch, wann und wo sich zwei gleichförmig bewegte Körper treffen?',
+        felder: [{ typ: 'reihenfolge', schritte: S }],
+        tipp: 'Am Treffpunkt sind beide Körper zur selben Zeit am selben Ort.',
+        weg: S.map(function (x, i) { return schritt(i + 1, x); }).join('') };
+    }
+  ];
+
+  /* ── ⭐⭐⭐ Beurteilen, Fehler finden ── */
+  function zweiLinien() {           // zwei Körper mit Schnittpunkt im Bild
+    var ts = 2 * z(2, 7), xs = 10 * z(2, 6), va, vb;
+    do { va = eins([-4, -3, -2, -1, 1, 2, 3, 4, 5]); vb = eins([-4, -3, -2, -1, 1, 2, 3, 4, 5]); }
+    while (va === vb || Math.abs(va) === Math.abs(vb) || xs - va * ts < 0 || xs - vb * ts < 0 || xs - va * ts > 90 || xs - vb * ts > 90 ||
+           xs + va * (20 - ts) < 0 || xs + vb * (20 - ts) < 0 || xs + va * (20 - ts) > 90 || xs + vb * (20 - ts) > 90);
+    var A = { x0: xs - va * ts, v: va }, B = { x0: xs - vb * ts, v: vb };
+    A.D = [[0, A.x0], [20, A.x0 + 20 * va]]; B.D = [[0, B.x0], [20, B.x0 + 20 * vb]];
+    return { A: A, B: B, ts: ts, xs: xs,
+      svg: diagramm({ tmax: 22, dt: 2, xmin: 0, xmax: 90, dx: 10, tL: 't in s', xL: 'x in m', linien: [{ pts: A.D, farbe: FA, name: 'A' }, { pts: B.D, farbe: FB, name: 'B' }] }) };
+  }
+  var RF = ['richtig', 'falsch'];
+  var STUFE3 = [
+    function () {       // Schnittpunkt ≠ gleiche Geschwindigkeit
+      var K = zweiLinien();
+      return { operator: 'Beurteilen Sie',
+        frage: 'Ein Mitschüler sagt: „Bei $t = ' + K.ts + U('s') + '$ schneiden sich die Graphen. Also sind A und B dort gleich schnell.“ Beurteilen Sie die Aussage.' + K.svg,
+        felder: [{ typ: 'wahl', label: 'Die Aussage ist …', optionen: RF, ans: 1, warum: ['Vergleichen Sie die Steigungen der beiden Geraden.', null] },
+                 begruendung('Am Schnittpunkt sind A und B am gleichen Ort; ihre Geschwindigkeiten (Steigungen) sind verschieden.', [
+                   ['Am Schnittpunkt haben beide Graphen denselben Funktionswert, also dieselbe Geschwindigkeit.', 'Der Funktionswert im t-x-Diagramm ist der <b>Ort</b>, nicht die Geschwindigkeit.'],
+                   ['Gleich schnell sind sie nur, wenn sie auch zur gleichen Zeit gestartet sind.', 'Der Startzeitpunkt hat mit der Geschwindigkeit nichts zu tun — die zeigt die Steigung.']])],
+        tipp: 'Was liest man im t-x-Diagramm auf der Hochachse ab — und woran sieht man die Geschwindigkeit?',
+        weg: schritt(1, 'Schnittpunkt: gleicher Ort $x = ' + K.xs + U('m') + '$ zur gleichen Zeit.') +
+             schritt(2, '$v_A = ' + vz(K.A.v) + MS + '$, $v_B = ' + vz(K.B.v) + MS + '$ — verschieden. Die Aussage ist <b>falsch</b>.') };
+    },
+    function () {       // Wer ist schneller?
+      var K = zweiLinien(), wahr = Math.abs(K.A.v) > Math.abs(K.B.v);
+      return { operator: 'Beurteilen Sie',
+        frage: 'Beurteilen Sie die Aussage: „Körper A ist schneller als Körper B.“' + K.svg,
+        felder: [{ typ: 'wahl', label: 'Die Aussage ist …', optionen: RF, ans: wahr ? 0 : 1, warum: ['Bestimmen Sie beide Steigungen und vergleichen Sie die Beträge.', 'Bestimmen Sie beide Steigungen und vergleichen Sie die Beträge.'] },
+                 begruendung('Entscheidend ist der Betrag der Steigung: $|v_A| = ' + de(Math.abs(K.A.v)) + MS + '$, $|v_B| = ' + de(Math.abs(K.B.v)) + MS + '$.', [
+                   ['Der Graph, der weiter oben liegt, gehört zum schnelleren Körper.', 'Weiter oben heißt nur: weiter vom Nullpunkt entfernt. Die Geschwindigkeit zeigt die <b>Steigung</b>.'],
+                   ['Ein fallender Graph gehört immer zum langsameren Körper.', 'Fallend heißt: gegen die Pfeilrichtung. Wie schnell, zeigt der <b>Betrag</b> der Steigung.']])],
+        tipp: 'Steigungsdreieck an beiden Geraden. „Schneller“ vergleicht nur den Betrag, nicht die Richtung.',
+        weg: schritt(1, '$v_A = ' + vz(K.A.v) + MS + '$, $v_B = ' + vz(K.B.v) + MS + '$') +
+             schritt(2, 'Die Aussage ist <b>' + (wahr ? 'richtig' : 'falsch') + '</b>.') };
+    },
+    function () {       // Bewegt sich B auf den Nullpunkt zu?
+      var K = zweiLinien(), W = eins(['A', 'B']), L = K[W], zu = L.v < 0;
+      return { operator: 'Beurteilen Sie',
+        frage: 'Beurteilen Sie die Aussage: „Körper ' + W + ' bewegt sich zwischen $t = 0$ und $t = 20' + U('s') + '$ auf den Nullpunkt zu.“' + K.svg,
+        felder: [{ typ: 'wahl', label: 'Die Aussage ist …', optionen: RF, ans: zu ? 0 : 1, warum: ['Wird $x$ von ' + W + ' größer oder kleiner?', 'Wird $x$ von ' + W + ' größer oder kleiner?'] },
+                 begruendung(zu ? 'Der Graph von ' + W + ' fällt: $x$ wird kleiner, der Abstand zum Nullpunkt nimmt ab.'
+                                : 'Der Graph von ' + W + ' steigt: $x$ wird größer, der Körper entfernt sich vom Nullpunkt.', [
+                   ['Man sieht es am Startort: ' + W + ' startet ' + (L.x0 > 0 ? 'nicht im Nullpunkt.' : 'im Nullpunkt.'), 'Der Startort sagt nichts über die Richtung. Entscheidend ist, ob der Graph steigt oder fällt.'],
+                   ['Jeder Körper, der sich bewegt, kommt irgendwann am Nullpunkt vorbei.', 'Nur wenn er sich in Richtung Nullpunkt bewegt — also $x$ kleiner wird.']])],
+        tipp: 'Fallender Graph: $v < 0$, $x$ wird kleiner. Steigender Graph: $x$ wird größer.',
+        weg: schritt(1, '$v_' + W + ' = ' + vz(L.v) + MS + '$: ' + (zu ? '$x$ nimmt ab.' : '$x$ nimmt zu.')) +
+             schritt(2, 'Die Aussage ist <b>' + (zu ? 'richtig' : 'falsch') + '</b>.') };
+    },
+    function () {       // Fehler finden: Steigung aus dem Diagramm
+      var P = fahrt(), i, a, b;
+      do { i = z(1, 3); a = P[i - 1]; b = P[i]; } while (b[1] === a[1]);
+      var v = (b[1] - a[1]) / (b[0] - a[0]), fehler = eins([2, 3]);
+      var Z = ['Abschnitt von $' + a[0] + U('s') + '$ bis $' + b[0] + U('s') + '$: $x$ geht von $' + a[1] + U('m') + '$ auf $' + b[1] + U('m') + '$.',
+               fehler === 2 ? '$\\Delta x = ' + a[1] + U('m') + ' - ' + b[1] + U('m') + ' = ' + (a[1] - b[1]) + U('m') + '$'
+                            : '$\\Delta x = ' + b[1] + U('m') + ' - ' + a[1] + U('m') + ' = ' + (b[1] - a[1]) + U('m') + '$',
+               fehler === 3 ? '$v = \\dfrac{\\Delta x}{\\Delta t} = \\dfrac{' + (b[1] - a[1]) + U('m') + '}{' + b[0] + U('s') + '} = ' + de(rund((b[1] - a[1]) / b[0])) + MS + '$'
+                            : '$v = \\dfrac{\\Delta x}{\\Delta t} = \\dfrac{' + (a[1] - b[1]) + U('m') + '}{' + (b[0] - a[0]) + U('s') + '} = ' + vz(-v) + MS + '$'];
+      if (fehler === 3 && a[0] === 0) return STUFE3[3]();   // Δt = t₂ wäre kein Fehler
+      var erkl = fehler === 2 ? 'Zeile 2: $\\Delta x$ ist Endort minus Anfangsort: $' + b[1] + ' - ' + a[1] + ' = ' + (b[1] - a[1]) + '$. Richtig: $v = ' + vz(v) + MS + '$.'
+                              : 'Zeile 3: $\\Delta t = ' + b[0] + U('s') + ' - ' + a[0] + U('s') + ' = ' + (b[0] - a[0]) + U('s') + '$, nicht $' + b[0] + U('s') + '$. Richtig: $v = ' + vz(v) + MS + '$.';
+      return { operator: 'Finden Sie den Fehler',
+        frage: 'Eine Mitschülerin bestimmt die Geschwindigkeit in einem Abschnitt. In genau einer Zeile passiert der erste Fehler. Finden Sie ihn.' + fahrtDiagramm(P),
+        felder: [{ typ: 'zeilen', zeilen: Z, ans: fehler - 1, warum: 'Prüfen Sie: Endort minus Anfangsort? Dauer des Abschnitts?' }],
+        tipp: 'Rechnen Sie $\\Delta x$ und $\\Delta t$ selbst aus dem Diagramm aus.',
+        weg: schritt('!', erkl) };
+    }
+  ];
+
+  var zuletzt = {};
+  Aha.Trainer({ el: 'trainer', stufen: ['Ablesen', 'Bestimmen', 'Beurteilen'], neu: function (stufe) {
+    var L = [STUFE1, STUFE2, STUFE3][stufe - 1], i;
+    do { i = z(0, L.length - 1); } while (L.length > 1 && i === zuletzt[stufe]);
+    zuletzt[stufe] = i;
+    return L[i]();
+  } });
+});
+</script>
+</body>
+</html>

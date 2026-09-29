@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="physik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einheiten und Formeln — Trainer · Physik 11</title>
+  <meta name="description" content="Einheiten umrechnen, Formeln umstellen, Zehnerpotenzen und gültige Ziffern — immer neue Aufgaben mit Rückmeldung.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<!-- Seitentyp „Trainer“ (Physik 11, Übung U01). Stufen = Operatoren: ⭐ Umrechnen/Angeben · ⭐⭐ Bestimmen/Berechnen · ⭐⭐⭐ Beurteilen. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/ph11/">← Ph11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">Ph11 · Trainer</div>
+    <h1>Einheiten und Formeln — <mark>sattelfest</mark>?</h1>
+    <p>Immer neue Aufgaben. ⭐ Umrechnen und Angeben, ⭐⭐ mit echten Größen rechnen, ⭐⭐⭐ Aussagen beurteilen und Fehler finden.
+      Rechnen Sie auf Papier und tippen Sie nur das Ergebnis ein — als Dezimalzahl mit Komma. Ziel: fünf richtig in Folge.</p>
+  </header>
+
+  <section id="trainer" aria-label="Übungsaufgaben"></section>
+
+  <details class="warum">
+    <summary>So geht's: Umrechnen, Umstellen, Runden</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div><b>Vorsilben</b> sind Zehnerpotenzen: k $= 10^3$, c $= 10^{-2}$, m $= 10^{-3}$, µ $= 10^{-6}$.
+        $2{,}5\,\text{km} = 2{,}5 \cdot 10^3\,\text{m} = 2500\,\text{m}$.</div></div>
+      <div class="schritt"><span>2</span><div>$\text{km/h} \xrightarrow{\;:\,3{,}6\;} \text{m/s}$, denn $1\,\tfrac{\text{km}}{\text{h}} = \tfrac{1000\,\text{m}}{3600\,\text{s}}$.</div></div>
+      <div class="schritt"><span>3</span><div><b>Umstellen:</b> auf beiden Seiten dasselbe tun, bis die gesuchte Größe allein im Zähler steht:
+        $v = \dfrac{s}{t} \;\Rightarrow\; t = \dfrac{s}{v}$.</div></div>
+      <div class="schritt"><span>4</span><div><b>Einheitenprobe:</b> Einheiten mitrechnen. $\dfrac{\text{m}}{\text{m/s}} = \text{s}$ — passt.</div></div>
+      <div class="schritt"><span>5</span><div><b>Gültige Ziffern:</b> ab der ersten Ziffer $\neq 0$ zählen. Das Ergebnis bekommt so viele wie der ungenaueste Messwert.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> $t = \dfrac{v}{s}$ — die Einheitenprobe liefert $\tfrac{1}{\text{s}}$, also keine Zeit.</div>
+    </div>
+  </details>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Übungsblatt U01 — und dort Ihren häufigsten Fehler notieren.</span></div>
+
+  <footer class="fuss">
+    <span>Physik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+// Trainer ohne Canvas: bei DOMContentLoaded starten (KaTeX-Schriften laden dann mit der Seite).
+document.addEventListener('DOMContentLoaded', function () {
+  var z = Aha.zufall, eins = Aha.eins;
+
+  /* ── Hilfen ── */
+  function rund(x) { return +(+x).toPrecision(10); }
+  function de(x) { return String(rund(x)).replace('.', '{,}'); }            // für KaTeX
+  function de1(x) { return x.toFixed(1).replace('.', '{,}'); }             // eine Nachkommastelle, End-Null bleibt
+  function gz(x, n) { return +(+x).toPrecision(n); }                        // auf n gültige Ziffern
+  function schritt(n, html) { return '<div class="schritt"><span>' + n + '</span><div>' + html + '</div></div>'; }
+  function U(e) { return '\\,\\text{' + e + '}'; }
+  function begruendung(richtig, falsche) {       // mischt Begründungen, liefert Feld mit passender Rückmeldung
+    var alle = Aha.mischen([[richtig, null]].concat(falsche));
+    var ans = 0; alle.forEach(function (b, i) { if (b[1] === null) ans = i; });
+    return { typ: 'wahl', label: 'Begründung:', optionen: alle.map(function (b) { return b[0]; }), ans: ans,
+             warum: alle.map(function (b) { return b[1]; }) };
+  }
+
+  var GROESSE = {
+    'Länge': { km: 1000, m: 1, cm: 0.01, mm: 0.001 },
+    'Masse': { t: 1000, kg: 1, g: 0.001, mg: 0.000001 },
+    'Zeit':  { h: 3600, min: 60, s: 1, ms: 0.001 }
+  };
+  var WERTE = [0.5, 1.2, 2.5, 4, 7.5, 12, 25, 40, 150, 250, 800];
+
+  /* ── ⭐ Umrechnen, Angeben ── */
+  var STUFE1 = [
+    function () {       // Vorsilben und Zeiteinheiten
+      var art, E, von, nach, w, ans;
+      do {
+        art = eins(Object.keys(GROESSE)); E = GROESSE[art];
+        von = eins(Object.keys(E)); nach = eins(Object.keys(E)); w = eins(WERTE);
+        ans = rund(w * E[von] / E[nach]);
+      } while (von === nach || ans < 0.001 || ans > 1e6 || Math.abs(Math.log10(E[von] / E[nach])) > 4);
+      var f = rund(E[von] / E[nach]);
+      return { operator: 'Rechnen Sie um', frage: art + ': Rechnen Sie $' + de(w) + U(von) + '$ in ' + nach + ' um.',
+        felder: [{ typ: 'zahl', label: '$' + de(w) + U(von) + ' =$', ans: ans, tol: 1e-6, rel: true, einheit: nach }],
+        tipp: 'Wie viele ' + nach + ' sind $1' + U(von) + '$? Dann mit ' + de(w) + ' malnehmen.',
+        weg: schritt(1, '$1' + U(von) + ' = ' + de(f) + U(nach) + '$') +
+             schritt(2, '$' + de(w) + U(von) + ' = ' + de(w) + ' \\cdot ' + de(f) + U(nach) + ' = ' + de(ans) + U(nach) + '$') };
+    },
+    function () {       // km/h ↔ m/s
+      var ms = eins([5, 10, 15, 20, 25, 30, 35, 40, 50]), kmh = ms * 3.6, hin = Math.random() < .5;
+      return { operator: 'Rechnen Sie um',
+        frage: 'Rechnen Sie $' + (hin ? de(kmh) + U('km/h') : ms + U('m/s')) + '$ in ' + (hin ? 'm/s' : 'km/h') + ' um.',
+        felder: [{ typ: 'zahl', label: '$' + (hin ? de(kmh) + U('km/h') : ms + U('m/s')) + ' =$', ans: hin ? ms : kmh, tol: 1e-6, rel: true, einheit: hin ? 'm/s' : 'km/h' }],
+        tipp: 'Von km/h nach m/s: durch $3{,}6$ teilen. Von m/s nach km/h: mit $3{,}6$ malnehmen. Kontrolle: Die Zahl in km/h ist immer die größere.',
+        weg: schritt(1, '$1' + U('km/h') + ' = \\dfrac{1000' + U('m') + '}{3600' + U('s') + '} = \\dfrac{1}{3{,}6}' + U('m/s') + '$') +
+             schritt(2, hin ? '$' + de(kmh) + U('km/h') + ' : 3{,}6 = ' + ms + U('m/s') + '$' : '$' + ms + U('m/s') + ' \\cdot 3{,}6 = ' + de(kmh) + U('km/h') + '$') };
+    },
+    function () {       // gültige Ziffern zählen
+      var n = z(1, 4), d = String(z(1, 9));
+      for (var i = 1; i < n; i++) d += z(0, 9);
+      var s, tex, erkl;
+      if (Math.random() < .25) {                       // Zehnerpotenz
+        var e = eins([-6, -3, 3, 5, 8]);
+        s = d[0] + (n > 1 ? '{,}' + d.slice(1) : '');
+        tex = s + ' \\cdot 10^{' + e + '}' + U(eins(['m', 's', 'kg', 'm/s']));
+        erkl = 'Bei der Zehnerpotenz zählt nur die Zahl vor $\\cdot 10^{' + e + '}$: ' + n + ' Ziffer' + (n > 1 ? 'n' : '') + '.';
+      } else {
+        var k = z(1, 5);                                 // Nachkommastellen
+        if (k >= n) s = '0{,}' + '0'.repeat(k - n) + d; else s = d.slice(0, n - k) + '{,}' + d.slice(n - k);
+        tex = s + U(eins(['m', 's', 'kg', 'g', 'm/s']));
+        erkl = (k >= n ? 'Die führenden Nullen zählen nicht. ' : '') + (d[n - 1] === '0' ? 'Die Null am Ende zählt mit. ' : '') + 'Also ' + n + ' gültige Ziffer' + (n > 1 ? 'n' : '') + '.';
+      }
+      return { operator: 'Geben Sie an', frage: 'Geben Sie die Anzahl der gültigen Ziffern an: $' + tex + '$',
+        felder: [{ typ: 'zahl', label: 'Anzahl:', ans: n, tol: 0 }],
+        tipp: 'Zählen Sie ab der ersten Ziffer, die nicht $0$ ist. Nullen am Ende hinter dem Komma zählen mit.',
+        weg: schritt(1, 'Gültige Ziffern: <b>' + d.split('').join(' ') + '</b>') + schritt(2, erkl) };
+    }
+  ];
+
+  /* ── ⭐⭐ Bestimmen, Berechnen ── */
+  var FORMELN = [   // [Formel, gesucht, richtig, [falsch, Rückmeldung]…]
+    ['v = \\dfrac{s}{t}', 't', 't = \\dfrac{s}{v}', [['t = \\dfrac{v}{s}', 'Einheitenprobe: $\\tfrac{\\text{m/s}}{\\text{m}} = \\tfrac{1}{\\text{s}}$ — das ist keine Zeit.'], ['t = s \\cdot v', 'Einheitenprobe: $\\text{m} \\cdot \\tfrac{\\text{m}}{\\text{s}} = \\tfrac{\\text{m}^2}{\\text{s}}$ — keine Zeit.'], ['t = v - s', 'Man darf nicht von einer Geschwindigkeit eine Strecke abziehen. Beide Seiten mit $t$ malnehmen, dann durch $v$ teilen.']]],
+    ['v = \\dfrac{s}{t}', 's', 's = v \\cdot t', [['s = \\dfrac{v}{t}', 'Einheitenprobe: $\\tfrac{\\text{m/s}}{\\text{s}} = \\tfrac{\\text{m}}{\\text{s}^2}$ — keine Strecke.'], ['s = \\dfrac{t}{v}', 'Einheitenprobe: $\\tfrac{\\text{s}}{\\text{m/s}} = \\tfrac{\\text{s}^2}{\\text{m}}$ — keine Strecke.'], ['s = v + t', 'Geschwindigkeit und Zeit kann man nicht addieren. Beide Seiten mit $t$ malnehmen.']]],
+    ['\\rho = \\dfrac{m}{V}', 'V', 'V = \\dfrac{m}{\\rho}', [['V = \\dfrac{\\rho}{m}', 'Einheitenprobe: $\\tfrac{\\text{kg/m}^3}{\\text{kg}} = \\tfrac{1}{\\text{m}^3}$ — kein Volumen.'], ['V = \\rho \\cdot m', 'Einheitenprobe: $\\tfrac{\\text{kg}}{\\text{m}^3} \\cdot \\text{kg}$ — kein Volumen.'], ['V = m - \\rho', 'Masse und Dichte kann man nicht subtrahieren.']]],
+    ['F = m \\cdot a', 'a', 'a = \\dfrac{F}{m}', [['a = F \\cdot m', 'Um $m$ auf der rechten Seite loszuwerden, teilt man durch $m$ — nicht malnehmen.'], ['a = \\dfrac{m}{F}', 'Das ist der Kehrwert. Test mit Zahlen: $6 = 2 \\cdot a$ ergibt $a = 3 = \\tfrac{6}{2}$.'], ['a = F - m', 'Aus einem Produkt wird durch Teilen, nicht durch Abziehen.']]],
+    ['a = \\dfrac{v}{t}', 't', 't = \\dfrac{v}{a}', [['t = \\dfrac{a}{v}', 'Einheitenprobe: $\\tfrac{\\text{m/s}^2}{\\text{m/s}} = \\tfrac{1}{\\text{s}}$ — keine Zeit.'], ['t = v \\cdot a', 'Einheitenprobe: $\\tfrac{\\text{m}}{\\text{s}} \\cdot \\tfrac{\\text{m}}{\\text{s}^2}$ — keine Zeit.'], ['t = v - a', 'Aus einem Bruch wird durch Malnehmen und Teilen, nicht durch Abziehen.']]],
+    ['P = \\dfrac{W}{t}', 't', 't = \\dfrac{W}{P}', [['t = \\dfrac{P}{W}', 'Das ist der Kehrwert. Test mit Zahlen: $5 = \\tfrac{20}{t}$ ergibt $t = 4 = \\tfrac{20}{5}$.'], ['t = W \\cdot P', 'Test mit Zahlen: $5 = \\tfrac{20}{t}$ ergibt $t = 4$, nicht $100$.'], ['t = W - P', 'Aus einem Bruch wird durch Malnehmen und Teilen, nicht durch Abziehen.']]]
+  ];
+  var LICHT = [['zum Mond', 3.8e8], ['von der Sonne zur Erde', 1.5e11], ['zum Mars (geringster Abstand)', 5.6e10], ['zum Jupiter (geringster Abstand)', 5.9e11]];
+  function zp(x) {                // 1.5e11 → 1{,}5 \cdot 10^{11}
+    var e = Math.floor(Math.log10(x)), m = rund(x / Math.pow(10, e));
+    return de(m) + ' \\cdot 10^{' + e + '}';
+  }
+  var STUFE2 = [
+    function () {       // Fahrzeit: Umstellen + Umrechnen
+      var F = eins([['Ein Radfahrer', 18, [3, 6, 9, 12]], ['Ein Bus', 45, [6, 9, 15, 30]], ['Ein Zug', 120, [20, 50, 80, 140]], ['Eine Läuferin', 12, [2, 3, 5, 10]]]);
+      var v = F[1], s = eins(F[2]), tmin = rund(s / v * 60);
+      return { operator: 'Berechnen Sie', frage: F[0] + ' fährt im Mittel $' + v + U('km/h') + '$. Berechnen Sie, wie lange er für $' + s + U('km') + '$ braucht — in Minuten.',
+        felder: [{ typ: 'zahl', label: '$t =$', ans: tmin, tol: 0.5, einheit: 'min' }],
+        tipp: '$v = \\dfrac{s}{t}$ nach $t$ umstellen: $t = \\dfrac{s}{v}$. Das Ergebnis ist in Stunden — dann mal $60$.',
+        weg: schritt(1, '$t = \\dfrac{s}{v} = \\dfrac{' + s + U('km') + '}{' + v + U('km/h') + '} = ' + de(rund(s / v)) + U('h') + '$') +
+             schritt(2, '$' + de(rund(s / v)) + U('h') + ' \\cdot 60 = ' + de(tmin) + U('min') + '$') };
+    },
+    function () {       // Gewitter
+      var t = eins([1.5, 2.0, 2.5, 3.5, 4.5, 6.0, 7.5, 9.0]), sm = 343 * t, skm = gz(sm / 1000, 2);
+      return { operator: 'Bestimmen Sie', frage: 'Zwischen Blitz und Donner vergehen $' + de1(t) + U('s') + '$. Schall legt $343' + U('m/s') + '$ zurück. Bestimmen Sie die Entfernung des Gewitters in km.',
+        felder: [{ typ: 'zahl', label: '$s \\approx$', ans: sm / 1000, tol: 0.06, einheit: 'km' }],
+        tipp: 'Gesucht ist eine Strecke: $s = v \\cdot t$. Das Ergebnis ist in m — durch $1000$ teilen.',
+        weg: schritt(1, '$s = v \\cdot t = 343' + U('m/s') + ' \\cdot ' + de1(t) + U('s') + ' = ' + de(sm) + U('m') + '$') +
+             schritt(2, '$\\approx ' + de(skm) + U('km') + '$ (zwei gültige Ziffern wie die Zeitangabe)') };
+    },
+    function () {       // Lichtlaufzeit mit Zehnerpotenzen
+      var L = eins(LICHT), t = L[1] / 3.0e8, inMin = t > 120;
+      var ans = inMin ? t / 60 : t;
+      return { operator: 'Berechnen Sie', frage: 'Licht legt $3{,}0 \\cdot 10^{8}' + U('m/s') + '$ zurück. Die Entfernung ' + L[0] + ' beträgt $' + zp(L[1]) + U('m') + '$. Berechnen Sie die Laufzeit des Lichts in ' + (inMin ? 'Minuten' : 'Sekunden') + '.',
+        felder: [{ typ: 'zahl', label: '$t \\approx$', ans: ans, tol: 0.03, rel: true, einheit: inMin ? 'min' : 's' }],
+        tipp: '$t = \\dfrac{s}{c}$. Im Taschenrechner die Zehnerpotenzen mit der Taste $\\times 10^x$ eingeben (oder den Nenner in Klammern).',
+        weg: schritt(1, '$t = \\dfrac{' + zp(L[1]) + U('m') + '}{3{,}0 \\cdot 10^{8}' + U('m/s') + '} \\approx ' + de(gz(t, 2)) + U('s') + '$') +
+             (inMin ? schritt(2, '$' + de(gz(t, 2)) + U('s') + ' : 60 \\approx ' + de(gz(t / 60, 2)) + U('min') + '$') : '') };
+    },
+    function () {       // Formel umstellen, Rückmeldung über Einheitenprobe
+      var F = eins(FORMELN);
+      var alle = Aha.mischen([[F[2], null]].concat(F[3]));
+      var ans = 0; alle.forEach(function (o, i) { if (o[1] === null) ans = i; });
+      return { operator: 'Bestimmen Sie', frage: 'Bestimmen Sie die richtige Umstellung von $' + F[0] + '$ nach $' + F[1] + '$.',
+        felder: [{ typ: 'wahl', label: 'Richtig ist:', optionen: alle.map(function (o) { return '$' + o[0] + '$'; }), ans: ans,
+                   warum: alle.map(function (o) { return o[1]; }) }],
+        tipp: 'Machen Sie die Einheitenprobe — oder setzen Sie einfache Zahlen ein und prüfen Sie.',
+        weg: schritt(1, 'Auf beiden Seiten dasselbe tun, bis $' + F[1] + '$ allein im Zähler steht: $' + F[2] + '$') };
+    }
+  ];
+
+  /* ── ⭐⭐⭐ Beurteilen, Fehler finden ── */
+  var TEMPO = [   // [Name, Zahl, Einheit, Wert in m/s]
+    ['ein Gepard', 110, 'km/h'], ['Usain Bolt (Mittel über 100 m)', 10.4, 'm/s'], ['ein Radfahrer', 25, 'km/h'],
+    ['eine Brieftaube', 20, 'm/s'], ['ein Stadtbus', 50, 'km/h'], ['ein Formel-1-Wagen', 90, 'm/s'],
+    ['ein Verkehrsflugzeug', 900, 'km/h'], ['der Schall', 343, 'm/s'], ['ein Wanderer', 5, 'km/h'], ['eine Rolltreppe', 0.5, 'm/s'],
+    ['ein ICE', 300, 'km/h'], ['ein Sprinter-Pferd', 19, 'm/s']
+  ];
+  function ms(T) { return T[2] === 'm/s' ? T[1] : T[1] / 3.6; }
+  var STUFE3 = [
+    function () {       // Zwei Geschwindigkeiten in verschiedenen Einheiten vergleichen
+      var A, B;
+      do { A = eins(TEMPO); B = eins(TEMPO); } while (A === B || A[2] === B[2] || Math.abs(ms(A) / ms(B) - 1) < 0.08);
+      var wahr = ms(A) > ms(B), aMs = gz(ms(A), 3), bMs = gz(ms(B), 3);
+      var aKmh = A[2] === 'km/h' ? A : null;
+      return { operator: 'Beurteilen Sie',
+        frage: 'Beurteilen Sie die Aussage: „' + A[0].charAt(0).toUpperCase() + A[0].slice(1) + ' mit $' + de(A[1]) + U(A[2]) + '$ ist schneller als ' + B[0] + ' mit $' + de(B[1]) + U(B[2]) + '$.“',
+        felder: [{ typ: 'wahl', label: 'Die Aussage ist …', optionen: ['richtig', 'falsch'], ans: wahr ? 0 : 1,
+                   warum: ['Rechnen Sie beide Werte in m/s um und vergleichen Sie dann.', 'Rechnen Sie beide Werte in m/s um und vergleichen Sie dann.'] },
+                 begruendung('In derselben Einheit: $' + de(aMs) + U('m/s') + '$ ' + (wahr ? '&gt;' : '&lt;') + ' $' + de(bMs) + U('m/s') + '$.', [
+                   ['Man vergleicht die Zahlen: $' + de(A[1]) + (A[1] > B[1] ? ' > ' : ' < ') + de(B[1]) + '$.', 'Zahlen darf man nur vergleichen, wenn die Einheiten gleich sind. Hier sind sie verschieden.'],
+                   ['Werte in km/h sind immer größer, deshalb ist das in km/h Angegebene schneller.', 'Die <i>Zahl</i> in km/h ist größer, das <i>Tempo</i> nicht: $36' + U('km/h') + ' = 10' + U('m/s') + '$.'],
+                   ['Umgerechnet mit $\\cdot 3{,}6$: ' + (aKmh ? '$' + de(A[1]) + U('km/h') + ' = ' + de(gz(A[1] * 3.6, 3)) + U('m/s') + '$' : '$' + de(B[1]) + U('km/h') + ' = ' + de(gz(B[1] * 3.6, 3)) + U('m/s') + '$') + '.', 'Von km/h nach m/s wird durch $3{,}6$ <b>geteilt</b>. Die Zahl in m/s ist die kleinere.']])],
+        tipp: 'Rechnen Sie die km/h-Angabe in m/s um (durch $3{,}6$) und vergleichen Sie erst dann.',
+        weg: schritt(1, '$' + de(A[1]) + U(A[2]) + ' \\approx ' + de(aMs) + U('m/s') + '$ und $' + de(B[1]) + U(B[2]) + ' \\approx ' + de(bMs) + U('m/s') + '$') +
+             schritt(2, 'Die Aussage ist <b>' + (wahr ? 'richtig' : 'falsch') + '</b>.') };
+    },
+    function () {       // Fehler in einer Umrechnung finden
+      var T = eins(['kmh', 'flaeche', 'zeit']), Z, fehler, erkl;
+      if (T === 'kmh') {
+        var w = eins([36, 54, 72, 90, 108]), r = w / 3.6;
+        fehler = eins([1, 2]);
+        var nenner = fehler === 1 ? '60' : '3600', zaehler = fehler === 2 ? '100' : '1000', erg = rund(w * +zaehler / +nenner);
+        Z = ['$' + w + U('km/h') + ' = ' + w + U('km') + ' \\,/\\, 1' + U('h') + '$',
+             '$= ' + w + ' \\cdot ' + zaehler + U('m') + ' \\,/\\, ' + nenner + U('s') + '$',
+             '$= ' + de(erg) + U('m/s') + '$'];
+        Z[1] = fehler === 1 ? '$1' + U('h') + ' = 60' + U('s') + '$, also $' + w + U('km/h') + ' = \\dfrac{' + w + '\\,000' + U('m') + '}{60' + U('s') + '}$'
+                            : '$1' + U('km') + ' = 100' + U('m') + '$, also $' + w + U('km/h') + ' = \\dfrac{' + (w * 100) + U('m') + '}{3600' + U('s') + '}$';
+        erkl = fehler === 1 ? 'Zeile 2: $1' + U('h') + ' = 3600' + U('s') + '$, nicht $60' + U('s') + '$. Richtig: $' + w + U('km/h') + ' = ' + de(r) + U('m/s') + '$.'
+                            : 'Zeile 2: $1' + U('km') + ' = 1000' + U('m') + '$, nicht $100' + U('m') + '$. Richtig: $' + w + U('km/h') + ' = ' + de(r) + U('m/s') + '$.';
+      } else if (T === 'flaeche') {
+        var a = eins([1.5, 2.5, 3, 4.2, 0.8]); fehler = 2;
+        Z = ['$1' + U('m') + ' = 100' + U('cm') + '$', '$1' + U('m') + '^2 = 100' + U('cm') + '^2$', '$' + de(a) + U('m') + '^2 = ' + de(a * 100) + U('cm') + '^2$'];
+        erkl = 'Zeile 2: $1' + U('m') + '^2 = 100' + U('cm') + ' \\cdot 100' + U('cm') + ' = 10\\,000' + U('cm') + '^2$. Richtig: $' + de(a) + U('m') + '^2 = ' + de(a * 10000) + U('cm') + '^2$.';
+      } else {
+        var h = eins([1.5, 2.5, 1.25, 3.5]), min = h * 60; fehler = 1;
+        var falsch = Math.floor(h) + ' h ' + Math.round((h % 1) * 100) + ' min';
+        Z = ['$' + de(h) + U('h') + ' = ' + falsch.replace(/ h /, '\\,\\text{h}\\;').replace(/ min/, '\\,\\text{min}') + '$',
+             '$= ' + (Math.floor(h) * 60 + Math.round((h % 1) * 100)) + U('min') + '$',
+             '$= ' + ((Math.floor(h) * 60 + Math.round((h % 1) * 100)) * 60) + U('s') + '$'];
+        erkl = 'Zeile 1: Die Nachkommastellen sind Bruchteile einer Stunde, keine Minuten. $' + de(h) + U('h') + ' = ' + de(h) + ' \\cdot 60' + U('min') + ' = ' + de(min) + U('min') + '$.';
+      }
+      return { operator: 'Finden Sie den Fehler',
+        frage: 'Eine Mitschülerin rechnet um. In genau einer Zeile passiert der erste Fehler. Finden Sie ihn.',
+        felder: [{ typ: 'zeilen', zeilen: Z, ans: fehler - 1, warum: 'Prüfen Sie jede Umrechnungszahl: $1' + U('km') + ' = 1000' + U('m') + '$, $1' + U('h') + ' = 3600' + U('s') + '$, $1' + U('m') + '^2 = 10\\,000' + U('cm') + '^2$.' }],
+        tipp: 'Rechnen Sie jede Zeile selbst nach — besonders die Umrechnungszahlen.',
+        weg: schritt('!', erkl) };
+    },
+    function () {       // Wie genau darf das Ergebnis sein?
+      var s, t, v, ok, opt;
+      do {                                             // eindeutige Optionen, Ergebnis nicht auf 0 endend (sonst mehrdeutig)
+        s = z(11, 95); t = z(12, 99) / 10; v = s / t; ok = gz(v, 2);
+        opt = [[de(ok), null],
+          [de(rund(v.toFixed(4))), 'Das täuscht eine Genauigkeit vor, die die Messung nicht hat: Die Messwerte haben nur zwei gültige Ziffern.'],
+          [de(gz(v, 1)), 'Zu grob: Beide Messwerte haben zwei gültige Ziffern, das Ergebnis darf also auch zwei haben.'],
+          [de(gz(v, 4)), 'Vier gültige Ziffern sind zu viele. Das Ergebnis bekommt so viele wie der ungenaueste Messwert.']];
+      } while (ok % 10 === 0 || new Set(opt.map(function (o) { return o[0]; })).size < 4);
+      var alle = Aha.mischen(opt), ans = 0; alle.forEach(function (o, i) { if (o[1] === null) ans = i; });
+      return { operator: 'Beurteilen Sie',
+        frage: 'Gemessen: $s = ' + s + U('m') + '$ und $t = ' + de1(t) + U('s') + '$. Beurteilen Sie, welche Angabe für $v = \\tfrac{s}{t}$ sinnvoll ist.',
+        felder: [{ typ: 'wahl', label: '$v \\approx \\ldots\\,\\text{m/s}$', optionen: alle.map(function (o) { return '$' + o[0] + '$'; }), ans: ans,
+                   warum: alle.map(function (o) { return o[1]; }) }],
+        tipp: 'Wie viele gültige Ziffern haben $' + s + U('m') + '$ und $' + de1(t) + U('s') + '$? So viele darf auch das Ergebnis haben.',
+        weg: schritt(1, '$v = \\dfrac{' + s + U('m') + '}{' + de1(t) + U('s') + '} = ' + de(rund(v.toFixed(5))) + '\\ldots' + U('m/s') + '$') +
+             schritt(2, 'Beide Messwerte haben zwei gültige Ziffern, also $v \\approx ' + de(ok) + U('m/s') + '$.') };
+    }
+  ];
+
+  var zuletzt = {};
+  Aha.Trainer({ el: 'trainer', stufen: ['Umrechnen', 'Bestimmen', 'Beurteilen'], neu: function (stufe) {
+    var L = [STUFE1, STUFE2, STUFE3][stufe - 1], i;
+    do { i = z(0, L.length - 1); } while (L.length > 1 && i === zuletzt[stufe]);   // nicht zweimal derselbe Typ
+    zuletzt[stufe] = i;
+    return L[i]();
+  } });
+});
+</script>
+</body>
+</html>
