@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="kit">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KI-Fail-Detektor · KIT 11</title>
+  <meta name="description" content="Halluzination, Wissensgrenze oder Bias? KI-Antworten prüfen: Stolperstein erkennen, verdächtige Zeile finden, passende Prüfung wählen.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    /* Chat-Ausschnitt in der Aufgabe */
+    .chat { display: grid; gap: 8px; margin: 10px 0 4px; font-size: 1rem; font-weight: 400; }
+    .chat .frage { justify-self: end; max-width: 85%; background: var(--c-accent); color: var(--c-on-accent); border-radius: 14px 14px 4px 14px; padding: 8px 12px; }
+    .chat .antwort { justify-self: start; max-width: 92%; background: var(--c-surface-2); border-radius: 14px 14px 14px 4px; padding: 8px 12px; }
+    .chat .antwort p { margin: .25em 0; }
+    .befund { margin-top: 8px; font-size: .95rem; font-weight: 600; color: var(--c-muted); }
+    .befund b { color: var(--c-text, inherit); }
+    .tr-weg p { margin: .3em 0; }
+    /* lange Antwortoptionen (Stufe 3) linksbündig und weniger rund */
+    #trainer .tr-block .wahl button { text-align: left; border-radius: 14px; }
+  </style>
+</head>
+<body>
+<!-- Seitentyp „Trainer“ (KIT E3, 29.09.2026). Alle Chats sind ausgedacht; keine Aufgabe des Blatts 3.2_v2 wird hier gelöst
+     (Blatt: Festival, Bus, Chefarzt, Schulordnung; Karten: Kino/FCN, Schokokäse/Einstein, Berufs-Steckbriefe).
+     Stufen nach Operatoren: ⭐ Zuordnen (Stolperstein) · ⭐⭐ Analysieren (Zeile finden + Stolperstein) · ⭐⭐⭐ Beurteilen (Prüfung wählen). -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/kit11/">← KIT 11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">KIT 11 · Trainer</div>
+    <h1>Klingt gut — aber <mark>stimmt</mark> es?</h1>
+    <p>Zehn KI-Antworten, jede mit einem Haken. Erkennen Sie den Stolperstein, finden Sie die verdächtige Stelle und wählen Sie die passende Prüfung.
+      Ziel: fünf richtig in Folge. Alle Chats sind ausgedacht.</p>
+  </header>
+
+  <section id="trainer" aria-label="Übungsaufgaben"></section>
+
+  <details class="warum">
+    <summary>So geht's: die drei Stolpersteine</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>H</span><div><b>Halluzination:</b> Die KI erfindet Fakten, Quellen, Zitate oder Werte — weil sie die wahrscheinlichste Fortsetzung
+        berechnet, nicht nachschlägt. Verdächtig: <b>genaue Details</b> (Titel, Jahreszahl, Zahlenwert), die man nicht sofort überprüfen kann.</div></div>
+      <div class="schritt"><span>W</span><div><b>Wissensgrenze:</b> Das Training endet an einem Stichtag. Verdächtig: alles, was sich <b>ändern kann</b> —
+        „aktuell“, „derzeit“, „morgen“, Preise, Fahrpläne, Ergebnisse.</div></div>
+      <div class="schritt"><span>B</span><div><b>Bias:</b> Die KI übernimmt Klischees aus ihren Trainingstexten. Verdächtig: <b>Urteile über Menschen</b>,
+        die sich auf Geschlecht, Herkunft oder Alter stützen statt auf Fakten.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> „Ich frag die KI einfach, ob sie sich sicher ist.“ Auch die Bestätigung ist nur eine wahrscheinliche
+        Fortsetzung — prüfen Sie an einer <b>unabhängigen</b> Stelle.</div>
+    </div>
+  </details>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Blatt M3: Ergänzen Sie in Ihrem KI-Fail-Kompass die Spalte „Schutzstrategie“ um ein Beispiel von hier.</span></div>
+
+  <footer class="fuss">
+    <span>KIT · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var NAME = { H: 'Halluzination', W: 'Wissensgrenze', B: 'Bias' };
+  var TYPEN = ['H', 'W', 'B'];
+  // Warum eine falsche Zuordnung nicht trägt — je (richtig, gewählt)
+  var WARUM_TYP = {
+    H: { W: 'Es geht nicht um etwas Neues, das nach dem Training passiert ist — die Angabe war nie richtig.',
+         B: 'Hier wird niemand wegen einer Gruppe benachteiligt — es wurde etwas erfunden oder falsch angegeben.' },
+    W: { H: 'Die Angabe war früher einmal richtig — sie ist nur veraltet. Das ist die Wissensgrenze.',
+         B: 'Kein Klischee über Menschen, sondern ein veralteter Stand.' },
+    B: { H: 'Nichts ist frei erfunden — die KI beurteilt Menschen nach einem Klischee.',
+         W: 'Das hat nichts mit dem Datum zu tun — die Schieflage steckt in den Trainingstexten.' }
+  };
+
+  // Fälle: zeilen = Antwort der KI (Zeile k ist die verdächtige), befund = was die Prüfung ergab, pruefen = Optionen (0 = richtig)
+  var FAELLE = [
+    { t: 'H', frage: 'Nenne mir ein Fachbuch als Quelle für mein Referat über Windkraft.',
+      zeilen: ['Gern! Für ein Referat eignet sich ein Grundlagenbuch.',
+               'Empfehlenswert ist „Windenergie kompakt“ von Prof. Dr. Klaus Wernthaler (Fachverlag Technik, 2019).',
+               'Es erklärt Aufbau, Leistung und Wirkungsgrad von Windkraftanlagen verständlich.',
+               'Viel Erfolg bei Ihrem Referat!'], k: 1,
+      befund: 'Im Katalog der Stadtbibliothek und im Buchhandel: kein Buch mit diesem Titel, kein Autor mit diesem Namen.',
+      pruefen: ['Titel und Autor im Bibliothekskatalog oder im Buchhandel suchen.',
+                'Die KI fragen: „Gibt es das Buch wirklich?“',
+                'Übernehmen — Titel, Verlag und Jahr klingen seriös.',
+                'Den Prompt noch einmal abschicken und vergleichen.'],
+      warum: ['', 'Auch die Bestätigung ist nur eine wahrscheinliche Fortsetzung. Die KI kann ein erfundenes Buch „bestätigen“.',
+              'Genaue Angaben sind kein Beleg — Halluzinationen klingen genauso seriös.',
+              'Eine zweite Antwort desselben Modells ist keine unabhängige Quelle.'] },
+    { t: 'H', frage: 'In welcher Einheit gibt man das Drehmoment an?',
+      zeilen: ['Das Drehmoment beschreibt, wie stark eine Kraft etwas in Drehung versetzt.',
+               'Es ist das Produkt aus Kraft und Hebelarm.',
+               'Angegeben wird es in Joule (J), weil es eine Energie ist.',
+               'Mit einem längeren Schraubenschlüssel erreicht man bei gleicher Kraft ein größeres Drehmoment.'], k: 2,
+      befund: 'Tabellenbuch: Das Drehmoment hat die Einheit Newtonmeter (N·m). Es ist keine Energie, auch wenn die Einheit gleich aufgebaut ist.',
+      pruefen: ['Im Tabellenbuch oder in der Formelsammlung nachschlagen.',
+                'Die Antwort übernehmen — die Erklärung mit Kraft und Hebelarm stimmt ja.',
+                'Eine zweite KI fragen und die Mehrheit gelten lassen.',
+                'Die KI bitten, die Antwort ausführlicher zu begründen.'],
+      warum: ['', 'Eine richtige Zeile macht die anderen nicht richtig. Jeder Fakt wird einzeln geprüft.',
+              'Zwei Sprachmodelle können denselben Fehler aus ähnlichen Trainingstexten haben.',
+              'Eine längere Begründung klingt überzeugender, ist aber nicht geprüft.'] },
+    { t: 'H', frage: 'Welches Zitat von Goethe passt zum Thema Technik?',
+      zeilen: ['Goethe hat sich oft mit Naturwissenschaft beschäftigt.',
+               'Passend ist sein Satz: „Die Maschine dient dem Menschen nur so lange, wie der Mensch sie versteht.“',
+               'Er schrieb auch eine Farbenlehre.',
+               'Das Zitat eignet sich gut als Einstieg in eine Präsentation.'], k: 1,
+      befund: 'In keiner Goethe-Ausgabe und in keiner Zitatsammlung mit Quellenangabe zu finden.',
+      pruefen: ['Nach dem Zitat in einer Quelle mit Werkangabe suchen (Werk, Seite).',
+                'Übernehmen — Goethe hat sich ja wirklich mit Naturwissenschaft beschäftigt.',
+                'Das Zitat in eine Suchmaschine tippen: Wenn es auf vielen Seiten steht, stimmt es.',
+                'Die KI bitten, das Zitat genauer zu erklären.'],
+      warum: ['', 'Richtige Nebeninfos machen das Zitat nicht echt.',
+              'Falsche Zitate verbreiten sich im Netz schnell. Zählen Sie nur Quellen mit Werk- und Seitenangabe.',
+              'Eine Erklärung eines erfundenen Zitats ist ebenfalls erfunden.'] },
+    { t: 'H', frage: 'Wie hoch ist die Zugfestigkeit von Baustahl S235?',
+      zeilen: ['S235 ist ein häufig verwendeter unlegierter Baustahl.',
+               'Die Zahl 235 steht für die Mindest-Streckgrenze in N/mm².',
+               'Seine Zugfestigkeit beträgt ebenfalls 235 N/mm².',
+               'Er lässt sich gut schweißen.'], k: 2,
+      befund: 'Tabellenbuch: Streckgrenze 235 N/mm², Zugfestigkeit 360 bis 510 N/mm². Die KI hat zwei Kennwerte verwechselt.',
+      pruefen: ['Den Wert im Tabellenbuch oder in der Norm nachschlagen.',
+                'Übernehmen — die Zeile davor stimmt, also stimmt auch diese.',
+                'Die KI fragen: „Bist du sicher?“',
+                'Mit einem Sicherheitsfaktor rechnen, dann ist ein kleiner Fehler egal.'],
+      warum: ['', 'Gerade neben richtigen Sätzen fallen falsche Werte nicht auf.',
+              'Die KI kann auch ihre Bestätigung erfinden — sie prüft nicht gegen die Wirklichkeit.',
+              'Ein Sicherheitsfaktor ersetzt keinen richtigen Kennwert. Mit dem falschen Wert rechnen Sie das Bauteil falsch.'] },
+    { t: 'W', frage: 'Fährt morgen früh die S-Bahn von Fürth nach Erlangen normal?',
+      zeilen: ['Die S-Bahn zwischen Fürth und Erlangen fährt werktags regelmäßig.',
+               'Die Fahrt dauert etwa eine Viertelstunde.',
+               'Störungen oder Streiks für morgen sind nicht bekannt, du kannst also normal fahren.',
+               'Plane trotzdem ein paar Minuten Puffer ein.'], k: 2,
+      befund: 'Die App der Bahn meldet für morgen früh einen Streik.',
+      pruefen: ['In der Bahn-App oder beim Verkehrsverbund nachsehen — kurz vor der Fahrt.',
+                'Der KI glauben — sie sagt ja, dass nichts bekannt ist.',
+                'Die KI fragen, ob sie sicher ist.',
+                'Den Fahrplan vom letzten Monat anschauen.'],
+      warum: ['', '„Nicht bekannt“ heißt hier nur: nach dem Trainingsende nicht im Wissen. Die KI kann von morgen nichts wissen.',
+              'Ohne Websuche hat die KI keinen Zugang zu neuen Meldungen — nachfragen ändert daran nichts.',
+              'Auch ein alter Fahrplan kennt keine Störung von morgen.'] },
+    { t: 'W', frage: 'Wer ist aktuell Fußball-Weltmeister der Männer?',
+      zeilen: ['Die Weltmeisterschaft findet alle vier Jahre statt.',
+               'Aktueller Weltmeister ist Argentinien (Finale 2022 gegen Frankreich).',
+               'Das Finale wurde im Elfmeterschießen entschieden.',
+               'Die nächste WM findet in Nordamerika statt.'], k: 1,
+      befund: 'Inzwischen hat die WM 2026 in Nordamerika stattgefunden. Die Antwort ist veraltet.',
+      pruefen: ['Eine aktuelle Quelle ansehen (Sportseite, Nachrichten).',
+                'Übernehmen — das Finale 2022 stimmt doch.',
+                'Die KI fragen, bis wann ihr Wissen reicht, und dann übernehmen.',
+                'Eine zweite KI ohne Websuche fragen.'],
+      warum: ['', 'Die Angabe war einmal richtig. „Aktuell“ ist sie nicht mehr — genau das ist die Wissensgrenze.',
+              'Das Trainingsende zu kennen hilft beim Einschätzen, liefert aber nicht das neue Ergebnis.',
+              'Eine zweite KI ohne Websuche hat dieselbe Grenze.'] },
+    { t: 'W', frage: 'Welche Grafikkarte ist gerade die schnellste für Gaming?',
+      zeilen: ['Für Gaming zählen vor allem Rechenleistung und Grafikspeicher.',
+               'Die schnellste Karte auf dem Markt ist derzeit das Modell, das vor zwei Jahren erschienen ist; neuere gibt es nicht.',
+               'Achte auch auf ein ausreichend starkes Netzteil.',
+               'Für Full-HD reicht oft auch eine günstigere Karte.'], k: 1,
+      befund: 'Im Online-Shop: Seitdem sind mehrere neuere, schnellere Modelle erschienen.',
+      pruefen: ['Aktuelle Tests und Händlerseiten ansehen.',
+                'Übernehmen — die Tipps zum Netzteil stimmen ja auch.',
+                'Die KI bitten, die Antwort mit Quellen zu belegen, und die Quellen ungelesen übernehmen.',
+                'Den Prompt genauer formulieren (ROLES), dann ist die Antwort aktuell.'],
+      warum: ['', 'Allgemeine Tipps altern langsam, „derzeit schnellste“ veraltet schnell.',
+              'Nur geöffnete Quellen sind geprüfte Quellen. Ohne Websuche kann die KI Quellen sogar erfinden.',
+              'Ein besserer Prompt verschiebt keine Wissensgrenze.'] },
+    { t: 'B', frage: 'Sortiere diese vier gleich guten Bewerbungen für eine Ausbildung in der Kfz-Werkstatt nach Eignung.',
+      zeilen: ['1. Lukas — Praktikum in einer Werkstatt, Note in Mathe 2.',
+               '2. Jonas — Praktikum in einer Werkstatt, Note in Mathe 2.',
+               '3. Tim — Praktikum in einem Autohaus, Note in Mathe 2.',
+               '4. Aylin — Praktikum in einer Werkstatt, Note in Mathe 2; passt vermutlich weniger gut ins Team.'], k: 3,
+      befund: 'Alle vier haben gleiche Noten und vergleichbare Praktika. Ein Grund für Platz 4 steht nirgends in den Unterlagen.',
+      pruefen: ['Nach nachvollziehbaren Kriterien selbst vergleichen; die Entscheidung trifft ein Mensch.',
+                'Übernehmen — eine KI hat keine Vorurteile, sie ist ja eine Maschine.',
+                'Die Namen weglassen, dann ist das Problem vollständig gelöst.',
+                'Die KI bitten, ihre Reihenfolge zu begründen, und die Begründung übernehmen.'],
+      warum: ['', 'KI lernt aus menschlichen Texten und übernimmt deren Schieflagen.',
+              'Das hilft, reicht aber nicht: Bias steckt auch in anderen Merkmalen (Hobbys, Lücken, Schule).',
+              'Die KI kann eine gut klingende Begründung nachträglich erfinden.'] },
+    { t: 'B', frage: 'Beschreibe in drei Sätzen einen typischen Gamer in Deutschland.',
+      zeilen: ['Gamer spielen am PC, an der Konsole oder am Handy.',
+               'Der typische Gamer ist ein Junge zwischen 14 und 18 Jahren.',
+               'Beliebt sind Sport-, Action- und Aufbauspiele.',
+               'Viele spielen gemeinsam online.'], k: 1,
+      befund: 'Laut Branchenverband ist fast die Hälfte der Spielenden in Deutschland weiblich, der Altersdurchschnitt liegt deutlich über 30 Jahren.',
+      pruefen: ['Mit einer Statistik vergleichen (Branchenverband, Statistisches Bundesamt).',
+                'Übernehmen — das Bild passt zu dem, was man aus Filmen kennt.',
+                'Die KI bitten, „neutral“ zu antworten, und dann übernehmen.',
+                'Eine zweite KI fragen und vergleichen.'],
+      warum: ['', 'Genau das ist das Problem: Filme und Texte zeigen oft das Klischee — daraus hat die KI gelernt.',
+              'Das kann helfen, aber ob die Antwort dann stimmt, zeigt erst der Vergleich mit echten Zahlen.',
+              'Zwei Modelle können mit ähnlichen Texten dasselbe Klischee gelernt haben.'] },
+    { t: 'B', frage: 'Schreibe kurze Zwischenbeurteilungen für die Azubis Lena und Mehmet. Beide haben die gleichen Leistungen.',
+      zeilen: ['Lena ist fleißig, zuverlässig und freundlich im Umgang mit Kunden.',
+               'Mehmet ist fleißig und freundlich im Umgang mit Kunden.',
+               'Mehmet sollte noch an seiner Pünktlichkeit arbeiten.',
+               'Beide haben ihre Aufgaben im Betrieb gut erledigt.'], k: 2,
+      befund: 'Im Ausbildungsnachweis: Beide waren immer pünktlich. Die Kritik stammt nicht aus den Unterlagen.',
+      pruefen: ['Jede Aussage mit den Unterlagen abgleichen und unbelegte Urteile streichen.',
+                'Übernehmen — die Beurteilung ist ja überwiegend positiv.',
+                'Die KI fragen, ob sie Vorurteile hat.',
+                'Nur die Namen tauschen und schauen, ob es dann besser klingt.'],
+      warum: ['', 'Ein einziger unbelegter Satz kann einem Menschen schaden — gerade in einem Zeugnis.',
+              'Die KI kann das verneinen, ohne es zu prüfen. Entscheidend ist der Abgleich mit den Fakten.',
+              'Der Namenstausch zeigt den Bias vielleicht, beseitigt ihn aber nicht. Prüfen Sie jede Aussage.'] }
+  ];
+
+  var letzter = -1;
+  function fall() {
+    var i; do { i = Math.floor(Math.random() * FAELLE.length); } while (i === letzter && FAELLE.length > 1);
+    letzter = i; return FAELLE[i];
+  }
+  function chat(F, mitBefund) {
+    return '<div class="chat"><div class="frage">' + F.frage + '</div><div class="antwort">' +
+      F.zeilen.map(function (z) { return '<p>' + z + '</p>'; }).join('') + '</div></div>' +
+      (mitBefund ? '<div class="befund">🔎 Prüfung: <b>' + F.befund + '</b></div>' : '');
+  }
+  function typFeld(F, label) {
+    return { typ: 'wahl', label: label, optionen: TYPEN.map(function (t) { return NAME[t]; }), ans: TYPEN.indexOf(F.t),
+      warum: TYPEN.map(function (t) { return t === F.t ? '' : WARUM_TYP[F.t][t]; }) };
+  }
+  function weg(F) {
+    return '<p><b>Stolperstein:</b> ' + NAME[F.t] + '.</p><p><b>Verdächtig:</b> Zeile ' + (F.k + 1) + ' — „' + F.zeilen[F.k] + '“</p>' +
+      '<p><b>Prüfung:</b> ' + F.pruefen[0] + '</p><p>🔎 ' + F.befund + '</p>';
+  }
+
+  Aha.Trainer({ el: 'trainer', stufen: ['Zuordnen', 'Analysieren', 'Beurteilen'], neu: function (stufe) {
+    var F = fall();
+    if (stufe === 1) return {
+      operator: 'Ordnen Sie zu',
+      frage: 'Welcher Stolperstein steckt in dieser KI-Antwort?' + chat(F, true),
+      felder: [typFeld(F)],
+      tipp: 'War die Angabe <b>nie</b> richtig (Halluzination), ist sie <b>veraltet</b> (Wissensgrenze) oder urteilt die KI nach einem <b>Klischee</b> über Menschen (Bias)?',
+      weg: weg(F) };
+    if (stufe === 2) return {
+      operator: 'Analysieren Sie',
+      frage: 'Welche Zeile prüfen Sie zuerst, bevor Sie die Antwort verwenden — und welcher Stolperstein droht dort?' +
+        '<div class="chat"><div class="frage">' + F.frage + '</div></div>',
+      felder: [{ typ: 'zeilen', label: 'Antwort der KI — tippen Sie die verdächtige Zeile an:', zeilen: F.zeilen, ans: F.k,
+                 warum: 'Diese Zeile ist allgemein oder leicht zu durchschauen. Suchen Sie die Zeile mit einer genauen, überprüfbaren Behauptung — oder einem Urteil über Menschen.' },
+               typFeld(F, 'Stolperstein:')],
+      tipp: 'Verdächtig sind genaue Angaben (Titel, Werte, „aktuell“, „morgen“) und Urteile über Menschen ohne Beleg.',
+      weg: weg(F) };
+    // Stufe 3: beurteilen — welche Prüfung passt? Optionen gemischt, Rückmeldung je Fehlvorstellung
+    var reihe = Aha.mischen([0, 1, 2, 3]);
+    return {
+      operator: 'Beurteilen Sie',
+      frage: 'Sie wollen diese Antwort verwenden. Welche Prüfung ist hier angemessen?' + chat(F, false),
+      felder: [{ typ: 'wahl', optionen: reihe.map(function (j) { return F.pruefen[j]; }), ans: reihe.indexOf(0),
+                 warum: reihe.map(function (j) { return F.warum[j]; }) }],
+      tipp: 'Eine gute Prüfung nutzt eine <b>unabhängige</b> Stelle: nicht dieselbe KI, nicht eine zweite KI ohne Websuche.',
+      weg: weg(F) };
+  } });
+});
+</script>
+</body>
+</html>
