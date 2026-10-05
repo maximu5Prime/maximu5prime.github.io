@@ -1,9 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0f0f0f"/>
-  <rect x=".5" y=".5" width="31" height="31" rx="5.5" fill="none" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="16" y="23.5"
-    text-anchor="middle"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-size="21"
-    fill="#e8c547">∑</text>
+  <clipPath id="r"><rect width="32" height="32" rx="7"/></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="32" height="32" fill="#0b1220"/>
+    <rect width="8" height="5" fill="#6b8cff"/>
+    <rect x="8" width="8" height="5" fill="#ff9a4d"/>
+    <rect x="16" width="8" height="5" fill="#34d399"/>
+    <rect x="24" width="8" height="5" fill="#b69cff"/>
+  </g>
+  <path d="M5 26 C 9 26, 10.5 15, 15 15 S 20.5 22, 27 11" fill="none" stroke="#f3f6ff" stroke-width="3.2" stroke-linecap="round"/>
+  <circle cx="15" cy="15" r="3.4" fill="#6b8cff"/>
 </svg>
