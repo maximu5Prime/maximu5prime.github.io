@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M12 · Änderungsrate und stärkster Anstieg</title>
+  <meta name="description" content="Erklärvideo: Wann steigt das Hochwasser am schnellsten? Lokale Änderungsrate und Wendestelle. Mit Selbsttest.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<!-- Aha-Seite mit Video statt Applet (05.10.2026), FT12 LB1 UE 2. QR auf Info-Blatt 1.2 (Teil B).
+     Video: Quelle 04_Kurse/01_Mathematik/FT12/LB01_…/02_Aenderungsrate_Staerkste_Zunahme/video/ — nach Neubau hierher kopieren. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m12/">← M12</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M12 · Änderungsrate</div>
+    <h1>Am höchsten heißt nicht am <mark>schnellsten</mark></h1>
+    <p>Wie hoch das Wasser steht, sagt $h(t)$. Wie schnell es steigt, sagt $h'(t)$ — und am schnellsten steigt es an der
+      Wendestelle, nicht am höchsten Pegel.</p>
+  </header>
+
+  <figure class="video">
+    <video controls playsinline preload="metadata" poster="MT12_VID_Schnellster_Anstieg.jpg">
+      <source src="MT12_VID_Schnellster_Anstieg.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT12_VID_Schnellster_Anstieg.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video · Wann steigt das Wasser am schnellsten?</b> (81 s) — Pegel und Anstieg nebeneinander. Bei der Frage kurz
+      anhalten und selbst schätzen.</figcaption>
+  </figure>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Video gesehen? Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Die Stelle <b>stärkster Zunahme</b> ist ein <b>Maximum von $f'$</b> — also eine <b>Wendestelle</b> von $f$.
+    Am Hochpunkt von $f$ ist die Änderungsrate dagegen $0$.
+  </div>
+
+  <details class="warum">
+    <summary>So rechnen Sie es</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>$f'(x)$ und $f''(x)$ bilden; Einheit der Änderungsrate: Einheit von $y$ pro Einheit von $x$.</div></div>
+      <div class="schritt"><span>2</span><div>Kandidaten: $f''(x) = 0$ lösen.</div></div>
+      <div class="schritt"><span>3</span><div>Auf einem Intervall $[a;\,b]$ zusätzlich $f'(a)$ und $f'(b)$ berechnen.</div></div>
+      <div class="schritt"><span>4</span><div>Alle $f'$-Werte vergleichen: größter positiver Wert = stärkste Zunahme, kleinster negativer = stärkste Abnahme.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> nur die Wendestelle ausrechnen und die <b>Ränder</b> vergessen —
+        dort kann die Änderungsrate noch größer sein.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="fill">
+    <p class="quiz-q">1 · ⭐ Berechnen Sie für $f(x) = -x^3 + 6x^2$ die Stelle, an der $f'$ maximal ist: $x = \dots$</p>
+    <p>$x =$ <input class="input quiz-input" data-ans="2" inputmode="decimal"></p>
+    <div class="hint" data-quiz-hint>$f''(x) = -6x + 12$ gleich null setzen.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="2">
+    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie: $s(t)$ ist ein Weg in m, $t$ in s. In welcher Einheit wird $s'(t)$ angegeben?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">m</button>
+      <button class="quiz-opt">s pro m</button>
+      <button class="quiz-opt">m pro s</button>
+    </div>
+    <div class="hint" data-quiz-hint>Einheit von $y$ <em>pro</em> Einheit von $x$.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="ankreuz" data-ans="F,W">
+    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie für $g(x) = x^3 - 3x^2$ auf $[-1;\,4]$ (es gilt $g'(-1) = 9$, $g'(1) = -3$, $g'(4) = 24$):</p>
+    <table class="ankreuz">
+      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+      <tbody>
+        <tr><td>Die stärkste Zunahme liegt an der Wendestelle $x = 1$.</td><td></td><td></td></tr>
+        <tr><td>Die stärkste Zunahme liegt am Rand $x = 4$.</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="hint" data-quiz-hint>Vergleichen Sie alle drei $g'$-Werte. Bei $x = 1$ ist $g'$ sogar negativ.</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Arbeitsblatt 1.2: Wann steigt das Hochwasser am schnellsten? (Aufgabe 2)</span></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a class="next" href="/m12/ableitungsgraph/"><span>Nächstes Thema →</span>Graph von f und f′</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+// Aha erscheint, sobald ein Video bis zum Ende angesehen wurde (oder per Knopf)
+window.addEventListener('load', function () {
+  document.querySelectorAll('video').forEach(function (v) {
+    v.addEventListener('ended', function () { Aha.mission(true); });
+  });
+});
+</script>
+</body>
+</html>

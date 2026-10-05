@@ -1,0 +1,37 @@
+WEBVTT
+
+00:00.000 --> 00:06.652
+Bei Hochwasser zählt nicht nur, wie hoch das Wasser steht, sondern auch, wie schnell es steigt. Wann steigt es am schnellsten?
+
+00:08.000 --> 00:12.365
+Der Graph zeigt den Pegel h in Zentimetern, t Stunden nach Beginn der Messung.
+
+00:12.700 --> 00:19.642
+Rechts sehen Sie zwei Anzeigen: den Pegel selbst und den Anstieg, also wie viele Zentimeter pro Stunde gerade dazukommen.
+
+00:19.966 --> 00:27.071
+Der Anstieg ist die Steigung der Tangente, also die Ableitung h′. Zu Beginn liegt die Tangente waagrecht. Das Wasser steigt noch nicht.
+
+00:27.400 --> 00:32.647
+Bevor es weitergeht: Wann steigt das Wasser am schnellsten? Halten Sie kurz an und schätzen Sie.
+
+00:35.966 --> 00:40.250
+Der Pegel steigt, und die Tangente wird immer steiler. Der Anstieg wächst.
+
+00:40.600 --> 00:48.053
+Nach sechs Stunden ist der Anstieg am größten: achtzehn Zentimeter pro Stunde. Genau hier wechselt der Graph seine Krümmung. Das ist der Wendepunkt.
+
+00:48.400 --> 00:52.858
+Danach steigt der Pegel weiter, aber immer langsamer. Der Anstieg wird kleiner.
+
+00:53.200 --> 00:58.668
+Nach zwölf Stunden ist der Pegel am höchsten. Doch die Tangente liegt waagrecht: Das Wasser steigt gar nicht mehr.
+
+00:59.000 --> 01:05.536
+Am höchsten heißt also nicht am schnellsten. Der Anstieg ist nach sechs Stunden am größten, der Pegel erst nach zwölf Stunden.
+
+01:05.866 --> 01:11.276
+Rechnerisch finden Sie diese Stelle mit der zweiten Ableitung: h′′ wird null bei t gleich sechs.
+
+01:12.600 --> 01:18.706
+Merken Sie sich: Die Stelle stärkster Zunahme ist eine Wendestelle. Auf einem Intervall prüfen Sie zusätzlich die Ränder.
