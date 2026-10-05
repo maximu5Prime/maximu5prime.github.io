@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M12 · Graph von f und Graph von f′</title>
+  <meta name="description" content="Zwei Erklärvideos: vom Graphen von f zum Graphen der Ableitung und zurück. Mit Selbsttest.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<!-- Aha-Seite mit Videos statt Applet (05.10.2026), FT12 LB1 UE 3. QR auf Info-Blatt 1.3 (A und D) und Lsg.
+     Videos: Quelle 04_Kurse/01_Mathematik/FT12/LB01_…/03_Graph_f_Ableitungsgraph/video/ — nach Neubau hierher kopieren (mp4, vtt, jpg). -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m12/">← M12</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M12 · Graph von f und f′</div>
+    <h1>Was verrät die <mark>Steigung</mark> von $G_f$?</h1>
+    <p>Die Steigung von $G_f$ an einer Stelle ist der $y$-Wert von $G_{f'}$ an derselben Stelle. Zwei kurze Videos zeigen,
+      wie man daraus Graphen skizziert — in beide Richtungen.</p>
+  </header>
+
+  <figure class="video">
+    <video controls playsinline preload="metadata" poster="MT12_VID_Ableitungsgraph.jpg">
+      <source src="MT12_VID_Ableitungsgraph.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT12_VID_Ableitungsgraph.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video 1 · Von $G_f$ zu $G_{f'}$</b> (87 s) — Eine Tangente gleitet über $G_f$, Punkt für Punkt entsteht $G_{f'}$.</figcaption>
+  </figure>
+
+  <!-- Video 2 (f′ → f) folgt nach dem Einsprechen mit eigener Stimme — dann diesen Kommentar durch den Block ersetzen:
+  <figure class="video" id="zurueck">
+    <video controls playsinline preload="metadata" poster="MT12_VID_Graph_f_aus_Ableitung.jpg">
+      <source src="MT12_VID_Graph_f_aus_Ableitung.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT12_VID_Graph_f_aus_Ableitung.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video 2 · Von $G_{f'}$ zurück zu $G_f$</b> (77 s) — Ablesen, zeichnen, und warum ein Punkt die Höhe festlegt.</figcaption>
+  </figure>
+  -->
+  <p class="notiz" id="zurueck">Video 2 · Von $G_{f'}$ zurück zu $G_f$ — folgt in Kürze.</p>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Video gesehen? Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Am <b>Hochpunkt</b> von $G_f$ ist die Tangente waagrecht — dort hat $G_{f'}$ eine <b>Nullstelle</b>, keinen Hochpunkt.
+    Wo $G_f$ am <b>steilsten</b> ist (Wendepunkt), hat $G_{f'}$ seinen <b>Extrempunkt</b>.
+  </div>
+
+  <details class="warum">
+    <summary>Die Regeln auf einen Blick</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>$G_f$ steigt $\Leftrightarrow$ $f' > 0$ ($G_{f'}$ über der $x$-Achse); $G_f$ fällt $\Leftrightarrow$ $f' < 0$.</div></div>
+      <div class="schritt"><span>2</span><div>Extremstelle von $f$ $\Leftrightarrow$ Nullstelle von $f'$ <b>mit</b> Vorzeichenwechsel.</div></div>
+      <div class="schritt"><span>3</span><div>Terrassenstelle von $f$ $\Leftrightarrow$ Nullstelle von $f'$ <b>ohne</b> Vorzeichenwechsel ($G_{f'}$ berührt nur).</div></div>
+      <div class="schritt"><span>4</span><div>Wendestelle von $f$ $\Leftrightarrow$ Extremstelle von $f'$. Linksgekrümmt $\Leftrightarrow$ $G_{f'}$ steigt.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> $G_f$ „abmalen“ — also $y$-Werte übertragen statt <b>Steigungen</b>.
+        Und: $G_{f'}$ verrät nicht, wie hoch $G_f$ liegt. Dafür braucht man einen Punkt.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">1 · ⭐ Geben Sie an: $G_f$ hat bei $x = 1$ einen Hochpunkt. Was hat $G_{f'}$ bei $x = 1$?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">einen Hochpunkt</button>
+      <button class="quiz-opt">eine Nullstelle mit Vorzeichenwechsel von $+$ nach $-$</button>
+      <button class="quiz-opt">eine Nullstelle mit Vorzeichenwechsel von $-$ nach $+$</button>
+    </div>
+    <div class="hint" data-quiz-hint>Wie liegt die Tangente am Hochpunkt? Und steigt $G_f$ davor oder fällt er?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
+    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie, ob die Aussage stimmt. $G_{f'}$ ist eine nach oben geöffnete Parabel mit den Nullstellen $-1$ und $3$.</p>
+    <table class="ankreuz">
+      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+      <tbody>
+        <tr><td>$G_f$ hat bei $x = -1$ einen Hochpunkt.</td><td></td><td></td></tr>
+        <tr><td>$G_f$ fällt für $x > 3$.</td><td></td><td></td></tr>
+        <tr><td>$G_f$ hat bei $x = 1$ einen Wendepunkt.</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="hint" data-quiz-hint>Skizzieren Sie die Parabel: Wo liegt sie über, wo unter der $x$-Achse? Ihr Scheitel liegt in der Mitte der Nullstellen.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="2">
+    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie: Es gilt $f'(x) = (x - 2)^2$. Was hat $G_f$ bei $x = 2$?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">einen Tiefpunkt, weil $f'(2) = 0$ ist</button>
+      <button class="quiz-opt">einen Hochpunkt</button>
+      <button class="quiz-opt">einen Terrassenpunkt</button>
+    </div>
+    <div class="hint" data-quiz-hint>$f'(2) = 0$ allein reicht nicht. Wechselt $(x - 2)^2$ bei $2$ das Vorzeichen?</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Arbeitsblatt 1.3: Wann stand das Auto am Berg am weitesten hinten? (Aufgabe 5)</span></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m12/"><span>← Übersicht</span>M12</a><!-- später: /m12/aenderungsrate/ Änderungsrate -->
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+// Aha erscheint, sobald ein Video bis zum Ende angesehen wurde (oder per Knopf)
+window.addEventListener('load', function () {
+  document.querySelectorAll('video').forEach(function (v) {
+    v.addEventListener('ended', function () { Aha.mission(true); });
+  });
+});
+</script>
+</body>
+</html>
