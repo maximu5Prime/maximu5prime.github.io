@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M11 · Parabel verschieben</title>
+  <meta name="description" content="Erklärvideo: Wohin wandert die Parabel bei (x − 3)²? Scheitelpunktform verstehen, mit Selbsttest.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<!-- Aha-Seite mit Video (05.10.2026), FT11 LB1 UE 5. QR auf Info-Blatt 1.5 C.
+     Video: Quelle 04_Kurse/01_Mathematik/FT11/LB01_…/05_Quadratische_Funktionen_Speerwurf/video/ — nach Neubau hierher kopieren (mp4, vtt, jpg). -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Quadratische Funktionen</div>
+    <h1>Wohin wandert die <mark>Parabel</mark>?</h1>
+    <p>In der Scheitelpunktform $f(x) = a\,(x - x_S)^2 + y_S$ steht der Scheitel $S(x_S\,|\,y_S)$ schon drin.
+      Aber Vorsicht beim Vorzeichen in der Klammer: Wandert $(x - 3)^2$ nach links oder nach rechts?</p>
+  </header>
+
+  <figure class="video">
+    <video controls playsinline preload="metadata" poster="MT11_VID_Parabel_verschieben.jpg">
+      <source src="MT11_VID_Parabel_verschieben.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT11_VID_Parabel_verschieben.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video · Parabel verschieben</b> (107 s) — Die Normalparabel wandert nach oben, unten, rechts und links.</figcaption>
+  </figure>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Video gesehen? Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Fragen Sie: <b>Wo wird die Klammer null?</b> $(x - 3)^2$ wird bei $x = 3$ null — dort liegt der Scheitel.
+    Die Parabel wandert also nach <b>rechts</b>. Plus in der Klammer — Scheitel links.
+  </div>
+
+  <details class="warum">
+    <summary>Die Regeln auf einen Blick</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>$+\,y_S$ hinter der Klammer: um $y_S$ nach <b>oben</b> (negativ: nach unten).</div></div>
+      <div class="schritt"><span>2</span><div>$(x - x_S)^2$: um $x_S$ nach <b>rechts</b>; $(x + 2)^2 = (x - (-2))^2$: um 2 nach <b>links</b>.</div></div>
+      <div class="schritt"><span>3</span><div>Der Faktor $a$ streckt oder staucht ($a < 0$: nach unten geöffnet). Der Scheitel bleibt, wo er ist.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> $f(x) = (x + 3)^2$ hat den Scheitel bei $x = -3$, nicht bei $x = 3$.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">1 · ⭐ Geben Sie den Scheitelpunkt von $f(x) = (x + 4)^2 - 2$ an.</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">$S(4\,|\,{-2})$</button>
+      <button class="quiz-opt">$S({-4}\,|\,{-2})$</button>
+      <button class="quiz-opt">$S({-4}\,|\,2)$</button>
+    </div>
+    <div class="hint" data-quiz-hint>Wo wird die Klammer $(x + 4)$ null?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie den Term: Die Normalparabel wird um 2 nach rechts und um 3 nach oben verschoben.</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">$f(x) = (x + 2)^2 + 3$</button>
+      <button class="quiz-opt">$f(x) = (x - 2)^2 + 3$</button>
+      <button class="quiz-opt">$f(x) = (x - 3)^2 + 2$</button>
+    </div>
+    <div class="hint" data-quiz-hint>Nach rechts heißt: Der Scheitel liegt bei $x = 2$. Für welche Klammer ist das die Nullstelle?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,F">
+    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie die Aussagen.</p>
+    <table class="ankreuz">
+      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+      <tbody>
+        <tr><td>$g(x) = -(x - 1)^2 + 4$ hat den Scheitel $S(1\,|\,4)$.</td><td></td><td></td></tr>
+        <tr><td>Bei $h(x) = 2\,(x + 3)^2$ liegt der Scheitel bei $x = 3$.</td><td></td><td></td></tr>
+        <tr><td>Ändert man $a$, wandert der Scheitel mit.</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="hint" data-quiz-hint>Lesen Sie $x_S$ immer mit Vorzeichen ab: $(x - x_S)$. Und $a$ steht vor der Klammer — ändert es die Nullstelle der Klammer?</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Arbeitsblatt 1.5: Wie weit fliegt der Speer?</span></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/ungleichungen/"><span>← Voriges Thema</span>Ungleichungen</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+// Aha erscheint, sobald ein Video bis zum Ende angesehen wurde (oder per Knopf)
+window.addEventListener('load', function () {
+  document.querySelectorAll('video').forEach(function (v) {
+    v.addEventListener('ended', function () { Aha.mission(true); });
+  });
+});
+</script>
+</body>
+</html>

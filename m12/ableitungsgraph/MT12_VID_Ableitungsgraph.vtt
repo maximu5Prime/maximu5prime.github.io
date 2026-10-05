@@ -1,37 +1,37 @@
 WEBVTT
 
-00:00.000 --> 00:05.371
-Wie sieht der Graph der Ableitung aus, wenn Sie nur den Graphen von f kennen? Das sehen wir uns jetzt an.
+00:00.800 --> 00:08.514
+Du kennst nur den Graphen von f. Wie sieht dann der Graph der Ableitung aus? Das schauen wir uns jetzt an.
 
-00:06.700 --> 00:14.125
-Oben sehen Sie den Graphen von f. Das untere Koordinatensystem ist noch leer. Dort entsteht gleich der Graph von f′.
+00:09.833 --> 00:17.474
+Oben siehst du den Graphen von f. Unten ist noch alles leer. Dort entsteht gleich der Graph von f′.
 
-00:14.466 --> 00:22.874
-Die Ableitung an einer Stelle ist die Steigung der Tangente an dieser Stelle. Hier steigt der Graph steil an, die Steigung beträgt zwei Komma fünf.
+00:17.800 --> 00:27.887
+Die Ableitung an einer Stelle ist die Steigung der Tangente. Hier steigt der Graph steil. Die Steigung ist zwei Komma fünf.
 
-00:23.200 --> 00:28.971
-Diesen Wert tragen Sie unten als y-Wert ein. So entsteht ein Punkt des Graphen von f′.
+00:28.233 --> 00:34.512
+Diesen Wert trägst du unten als y-Wert ein. So entsteht ein Punkt auf dem Graphen von f′.
 
-00:29.300 --> 00:34.267
-Wandert die Tangente nach rechts, wird sie immer flacher. Die Werte von f′ werden kleiner.
+00:34.833 --> 00:41.821
+Die Tangente wandert nach rechts und wird immer flacher. Die Werte von f′ werden kleiner.
 
-00:34.633 --> 00:41.694
+00:42.200 --> 00:48.553
 Am Hochpunkt liegt die Tangente waagrecht. Die Steigung ist null. Also hat f′ hier eine Nullstelle.
 
-00:42.066 --> 00:49.728
-Danach fällt der Graph von f. Die Steigung ist negativ, der Graph von f′ verläuft unter der x-Achse.
+00:48.933 --> 00:55.365
+Danach fällt der Graph von f. Die Steigung ist negativ. Der Graph von f′ liegt unter der x-Achse.
 
-00:50.100 --> 00:55.469
+00:55.733 --> 01:01.034
 An der Wendestelle fällt f am steilsten. Hier hat f′ seinen Tiefpunkt.
 
-00:55.833 --> 01:03.031
-Rechts davon wird f wieder flacher, bis die Tangente am Tiefpunkt waagrecht liegt. Das ist die zweite Nullstelle von f′.
+01:01.400 --> 01:09.515
+Rechts davon wird f wieder flacher. Am Tiefpunkt liegt die Tangente waagrecht. Das ist die zweite Nullstelle von f′.
 
-01:03.400 --> 01:07.459
-Danach steigt f immer steiler. f′ ist positiv und wächst.
+01:09.866 --> 01:14.910
+Danach steigt f immer steiler. f′ ist positiv und wird größer.
 
-01:09.333 --> 01:16.267
+01:16.766 --> 01:23.973
 Kurz gesagt: Wo f steigt, liegt der Graph von f′ über der x-Achse. Wo f fällt, liegt er darunter.
 
-01:17.600 --> 01:24.751
-Diese drei Zusammenhänge helfen Ihnen, zu jedem Graphen den Graphen der Ableitung zu skizzieren. Probieren Sie es gleich auf dem Arbeitsblatt aus.
+01:25.300 --> 01:29.818
+Mit diesen drei Regeln kannst du zu jedem Graphen die Ableitung skizzieren. Probier es gleich auf dem Arbeitsblatt aus.
