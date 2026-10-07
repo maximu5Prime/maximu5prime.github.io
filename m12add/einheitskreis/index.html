@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M12+ · Einheitskreis, Tangens und Bogenmaß</title>
+  <meta name="description" content="Vier Erklärvideos: Sinus und Kosinus am Einheitskreis, sin² + cos² = 1, der Tangens als Strecke, und warum 180° dasselbe ist wie π. Mit Selbsttest.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<!-- Aha-Seite mit Videos (07.10.2026), Additum LB2 Kap. 2.2 und 2.3. QR folgt in der nächsten Fassung des Skripts.
+     Videos: Quelle 04_Kurse/01_Mathematik/FT12_Additum/LB02_Trigonometrische_Funktionen/video/ — nach Neubau hierher kopieren (mp4, vtt, jpg). -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m12add/">← M12+</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M12+ · Einheitskreis, Tangens und Bogenmaß</div>
+    <h1>Sinus und Kosinus — für <mark>jeden</mark> Winkel</h1>
+    <p>Im Dreieck gibt es nur Winkel bis 90°. Am Einheitskreis liest man Sinus und Kosinus für jeden Winkel als Koordinaten ab.
+      Und ein Winkel lässt sich auch als Länge messen: das Bogenmaß.</p>
+  </header>
+
+  <figure class="video">
+    <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Einheitskreis.jpg">
+      <source src="MT12Add_LB02_VID_Einheitskreis.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT12Add_LB02_VID_Einheitskreis.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video 1 · Einheitskreis</b> (140 s) — Die Gondel dreht sich, Kosinus und Sinus laufen mit — durch die Hypotenuse 1 teilen ändert nichts.</figcaption>
+  </figure>
+
+  <figure class="video" id="pythagoras">
+    <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Pythagoras.jpg">
+      <source src="MT12Add_LB02_VID_Pythagoras.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT12Add_LB02_VID_Pythagoras.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video 2 · Pythagoras</b> (78 s) — $\sin^2\alpha + \cos^2\alpha = 1$, bei jedem Winkel.</figcaption>
+  </figure>
+
+  <figure class="video" id="tangens">
+    <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Tangens.jpg">
+      <source src="MT12Add_LB02_VID_Tangens.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT12Add_LB02_VID_Tangens.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video 3 · Tangens</b> (106 s) — Die Strecke auf der Senkrechten, und warum es $\tan 90^\circ$ nicht gibt. Mit Strahlensatz für Profis ⭐⭐⭐.</figcaption>
+  </figure>
+
+  <figure class="video" id="bogenmass">
+    <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Bogenmass.jpg">
+      <source src="MT12Add_LB02_VID_Bogenmass.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT12Add_LB02_VID_Bogenmass.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video 4 · Bogenmaß</b> (83 s) — Ein Radius wird auf den Kreis gebogen.</figcaption>
+  </figure>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Video gesehen? Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Der Punkt auf dem Einheitskreis ist $P(\cos\alpha \,|\, \sin\alpha)$: <b>Kosinus = $x$</b>, <b>Sinus = $y$</b> — für jeden Winkel.
+    Auf den halben Kreis passt der Radius gut dreimal: <b>$180^\circ \;\widehat{=}\; \pi$</b>.
+  </div>
+
+  <details class="warum">
+    <summary>Die Regeln auf einen Blick</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div>Zum Winkel $\alpha$ gehört auf dem Einheitskreis der Punkt $P(\cos\alpha \,|\, \sin\alpha)$.</div></div>
+      <div class="schritt"><span>2</span><div>Sinus oben positiv, unten negativ. Kosinus rechts positiv, links negativ.</div></div>
+      <div class="schritt"><span>3</span><div>$-1 \le \sin\alpha \le 1$, $-1 \le \cos\alpha \le 1$ und $\sin^2\alpha + \cos^2\alpha = 1$.</div></div>
+      <div class="schritt"><span>T</span><div>$\tan\alpha = \frac{\sin\alpha}{\cos\alpha}$ für $\cos\alpha \neq 0$ — am Einheitskreis die Strecke $\overline{RS}$ auf der Senkrechten $x = 1$. $\tan 90^\circ$ gibt es nicht.</div></div>
+      <div class="schritt"><span>4</span><div>Bogenmaß $x$ = Länge des Bogens am Einheitskreis: $180^\circ \;\widehat{=}\; \pi$, $360^\circ \;\widehat{=}\; 2\pi$,
+        $x = \frac{\alpha}{360^\circ}\cdot 2\pi$. Beim Kreis mit Radius $r$: $b = r\cdot x$.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Der Taschenrechner steht im falschen Modus. Gradmaß → <b>DEG</b>, Bogenmaß → <b>RAD</b>.
+        Test: $\sin(30) = 0{,}5$ nur im DEG-Modus.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">1 · ⭐ Geben Sie an: Welche Vorzeichen haben $\sin(200^\circ)$ und $\cos(200^\circ)$?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">$\sin$ positiv, $\cos$ negativ</button>
+      <button class="quiz-opt">beide negativ</button>
+      <button class="quiz-opt">$\sin$ negativ, $\cos$ positiv</button>
+    </div>
+    <div class="hint" data-quiz-hint>200° liegt zwischen 180° und 270°. In welchem Quadranten liegt der Punkt — links oder rechts, oben oder unten?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
+    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie, ob die Aussage stimmt.</p>
+    <table class="ankreuz">
+      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
+      <tbody>
+        <tr><td>$\sin(150^\circ) = \sin(30^\circ)$</td><td></td><td></td></tr>
+        <tr><td>$\cos(250^\circ) > 0$</td><td></td><td></td></tr>
+        <tr><td>$90^\circ \;\widehat{=}\; \frac{\pi}{2}$</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="hint" data-quiz-hint>Skizzieren Sie den Einheitskreis: 30° und 150° liegen gleich hoch. 90° ist ein Viertel des Kreises.</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie die Aussage: „Ein Winkel mit dem Bogenmaß 1 ist fast ein rechter Winkel.“</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">Stimmt, 1 ist fast $\frac{\pi}{2}$.</button>
+      <button class="quiz-opt">Falsch, das Bogenmaß 1 entspricht etwa 57°.</button>
+      <button class="quiz-opt">Falsch, das Bogenmaß 1 entspricht genau 1°.</button>
+    </div>
+    <div class="hint" data-quiz-hint>Rechnen Sie um: $\alpha = \frac{x}{2\pi}\cdot 360^\circ$. Und: $\frac{\pi}{2} \approx 1{,}57$.</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Skript 2.2: Wie hoch über der Nabe ist die Gondel bei 150° und 250°? (Leitfrage)</span></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m12add/sinus-parameter/"><span>Nächstes Thema →</span>Parameter a, b, c, d</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+// Aha erscheint, sobald ein Video bis zum Ende angesehen wurde (oder per Knopf)
+window.addEventListener('load', function () {
+  document.querySelectorAll('video').forEach(function (v) {
+    v.addEventListener('ended', function () { Aha.mission(true); });
+  });
+});
+</script>
+</body>
+</html>

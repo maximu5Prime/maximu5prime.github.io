@@ -1,0 +1,49 @@
+WEBVTT
+
+00:00.800 --> 00:13.523
+Ein Riesenrad dreht sich. Wie hoch über der Nabe ist die Gondel? Mit dem Dreieck geht das nur bis neunzig Grad. Am Kreis geht es immer.
+
+00:14.866 --> 00:20.435
+Die Gondel startet rechts, auf Höhe der Nabe. Das Rad dreht sich gegen den Uhrzeigersinn.
+
+00:20.766 --> 00:28.891
+Jetzt machen wir daraus den Einheitskreis: Radius eins, Mittelpunkt im Ursprung. Die Gondel bleibt, wo sie ist.
+
+00:29.233 --> 00:36.323
+Von der Nabe zur Gondel geht ein Zeiger der Länge eins. Er ist um den Winkel α gedreht.
+
+00:36.666 --> 00:46.425
+Bei vierzig Grad siehst du das rechtwinklige Dreieck aus Kap. 2.1. Die Hypotenuse ist der Zeiger. Sie ist genau eins lang.
+
+00:46.766 --> 00:52.093
+Aus Kapitel zwei eins weißt du: Sinus ist Gegenkathete durch Hypotenuse.
+
+00:52.433 --> 00:59.027
+Die Hypotenuse ist hier der Zeiger. Sie ist eins lang. Und durch eins teilen ändert nichts.
+
+00:59.366 --> 01:04.213
+Also ist der Sinus einfach die Gegenkathete: die rote Höhe.
+
+01:04.533 --> 01:09.999
+Genauso beim Kosinus: Ankathete durch eins ist die Ankathete, die blaue Strecke nach rechts.
+
+01:11.433 --> 01:18.663
+Der Punkt P hat also die Koordinaten: Kosinus α und Sinus α.
+
+01:20.000 --> 01:30.050
+Jetzt dreht sich das Rad weiter, über neunzig Grad. Ein Dreieck mit so einem Winkel gibt es nicht. Was sind dann Sinus und Kosinus? Halte kurz an.
+
+01:33.400 --> 01:38.607
+Die Regel bleibt ganz einfach: Der Sinus ist die y-Koordinate, der Kosinus die x-Koordinate.
+
+01:38.933 --> 01:45.270
+Bei hundertfünfzig Grad liegt der Punkt links oben. Der Kosinus ist negativ, der Sinus noch positiv.
+
+01:45.600 --> 01:49.865
+Bei zweihundertfünfzig Grad liegt der Punkt links unten. Jetzt sind beide negativ.
+
+01:50.200 --> 02:03.653
+Einmal ganz herum: Oben ist der Sinus positiv, unten negativ. Rechts ist der Kosinus positiv, links negativ.
+
+02:05.000 --> 02:17.461
+Merk dir: Zu jedem Winkel gehört der Punkt P mit Kosinus α und Sinus α. Beide Werte liegen immer zwischen minus eins und eins.
