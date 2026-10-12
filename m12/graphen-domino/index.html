@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graphen-Domino · M12</title>
+  <meta name="description" content="Graphen-Domino: Zu jedem Graphen G_f die Karte mit dem Graphen der Ableitung anlegen – jede Runde eine neue Kette.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/quiz.js"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    .modus { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .modus button { font: inherit; font-weight: 700; font-size: .92rem; border: 0; border-radius: 999px; padding: .35em .9em; min-height: 40px;
+      cursor: pointer; background: var(--c-surface-2); color: var(--c-text); }
+    .modus button.aktiv { background: var(--c-accent); color: var(--c-on-accent); }
+    .kette { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 10px; margin: 10px 0 4px; scroll-behavior: smooth; }
+    .mini { display: flex; flex: 0 0 auto; border: 2px solid var(--c-line); border-radius: 8px; background: var(--c-bg); overflow: hidden; }
+    .mini canvas { display: block; width: 58px; height: 58px; }
+    .mini canvas + canvas { border-left: 2px solid var(--c-line); }
+    .mini.neu { border-color: var(--c-gain); }
+    .offen { display: grid; grid-template-columns: minmax(0, 260px) 1fr; gap: 16px; align-items: center; margin-top: 8px; }
+    .offen .gross { border: 2px solid var(--c-accent); border-radius: 12px; background: var(--c-bg); overflow: hidden; }
+    .offen .gross canvas { display: block; width: 100%; aspect-ratio: 1; }
+    .offen p { margin: 0; font-weight: 600; }
+    @media (max-width: 560px) { .offen { grid-template-columns: 1fr; } .offen .gross { max-width: 260px; } }
+    .wahl { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; margin-top: 14px; }
+    .wahl button { padding: 0; border: 2px solid var(--c-line); border-radius: 12px; background: var(--c-bg); cursor: pointer; overflow: hidden; }
+    .wahl button canvas { display: block; width: 100%; aspect-ratio: 1; }
+    .wahl button:hover { border-color: var(--c-accent); }
+    .wahl button.falsch { border-color: var(--c-loss); animation: wackeln .35s; }
+    @keyframes wackeln { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    @media (prefers-reduced-motion: reduce) { .wahl button.falsch { animation: none; } }
+    .rueck { display: none; margin-top: 12px; padding: .6em 1em; border-radius: 10px; background: var(--c-aha); color: var(--c-aha-text); font-weight: 600; }
+    .rueck.an { display: block; }
+    .stand { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--c-line); font-weight: 700; }
+    .stand output { font-family: var(--font-mono); color: var(--c-accent); }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m12/">← M12</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M12 · Graph von f und f′</div>
+    <h1>Welche Karte passt <mark>daneben</mark>?</h1>
+    <p>Jede Dominokarte zeigt links einen Graphen $G_{f'}$ und rechts einen Graphen $G_f$. Neben $G_f$ gehört immer der Graph
+      seiner <b>Ableitung</b>. Legen Sie die Kette, bis sie sich schließt. Jede Runde ist eine neue Kette.</p>
+  </header>
+
+  <section class="stage" aria-label="Domino">
+    <div class="modus" id="modus">
+      <button type="button" data-m="1" class="aktiv">⭐ Zuordnen: $f \to f'$</button>
+      <button type="button" data-m="2">⭐⭐ Rückwärts: $f' \to f$</button>
+    </div>
+    <div class="mission" id="mission"><span class="icon"></span><span id="auftrag"></span></div>
+    <div class="kette" id="kette" aria-label="gelegte Karten"></div>
+    <div class="offen">
+      <div class="gross"><canvas id="offen" aria-label="offenes Ende der Kette"></canvas></div>
+      <p id="offenText"></p>
+    </div>
+    <div class="wahl" id="wahl"></div>
+    <div class="rueck" id="rueck"></div>
+    <div class="stand">
+      <span>Karten: <output id="anzahl"></output></span>
+      <span>Fehlversuche: <output id="fehler">0</output></span>
+      <button class="btn btn--ghost" id="neu" type="button">Neue Runde</button>
+    </div>
+  </section>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Sie brauchen nur die <b>waagrechten Tangenten</b> von $G_f$: Genau dort hat $G_{f'}$ seine Nullstellen.
+    Extrempunkt $\Rightarrow$ $G_{f'}$ schneidet die $x$-Achse, Terrassenpunkt $\Rightarrow$ $G_{f'}$ berührt sie.
+    Dazwischen gilt: $G_f$ steigt $\Leftrightarrow$ $G_{f'}$ liegt oberhalb der $x$-Achse.
+  </div>
+
+  <details class="warum">
+    <summary>So gehen Sie vor (NEW-Regel)</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div><b>N</b>ullstellen von $f'$ = Stellen mit waagrechter Tangente von $G_f$ (Hoch-, Tief-, Terrassenpunkte).</div></div>
+      <div class="schritt"><span>2</span><div><b>E</b>xtremstellen von $f'$ = Wendestellen von $G_f$ (dort ist $G_f$ am steilsten).</div></div>
+      <div class="schritt"><span>3</span><div><b>W</b>endestellen von $f'$ = Extremstellen von $f''$.</div></div>
+      <div class="schritt"><span>4</span><div>Vorzeichen: Wo $G_f$ steigt, liegt $G_{f'}$ oberhalb der $x$-Achse; wo $G_f$ fällt, darunter.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> zwei gleich aussehende Graphen aneinanderlegen. Neben $G_f$ gehört nicht
+        „dasselbe Bild“, sondern die Steigung von $G_f$ als eigener Graph.</div>
+    </div>
+  </details>
+
+  <h2>Selbst üben</h2>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="2">
+    <p class="quiz-q">1 · ⭐ Geben Sie an: $G_f$ hat bei $x = 2$ einen Hochpunkt. Was gilt für $G_{f'}$ bei $x = 2$?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">$G_{f'}$ hat dort ebenfalls einen Hochpunkt.</button>
+      <button class="quiz-opt">$G_{f'}$ berührt dort die $x$-Achse.</button>
+      <button class="quiz-opt">$G_{f'}$ schneidet dort die $x$-Achse von oben nach unten.</button>
+      <button class="quiz-opt">$G_{f'}$ schneidet dort die $x$-Achse von unten nach oben.</button>
+    </div>
+    <div class="hint" data-quiz-hint>Vor dem Hochpunkt steigt $G_f$, danach fällt $G_f$. Wo liegt $G_{f'}$ also links und rechts von $x = 2$?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="1">
+    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie: $G_{f'}$ liegt für $x < 1$ oberhalb und für $x > 1$ ebenfalls oberhalb der $x$-Achse,
+      bei $x = 1$ gilt $f'(1) = 0$. Welchen besonderen Punkt hat $G_f$ bei $x = 1$?</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">einen Tiefpunkt</button>
+      <button class="quiz-opt">einen Terrassenpunkt</button>
+      <button class="quiz-opt">einen Hochpunkt</button>
+      <button class="quiz-opt">eine Nullstelle</button>
+    </div>
+    <div class="hint" data-quiz-hint>Wechselt das Vorzeichen von $f'$ bei $x = 1$?</div>
+  </div>
+
+  <div class="quiz-task" data-quiz="mcq" data-ans="0">
+    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie: „Liegt $G_{f'}$ ganz oberhalb der $x$-Achse, dann liegt auch $G_f$ ganz oberhalb der $x$-Achse.“</p>
+    <div class="quiz-opts">
+      <button class="quiz-opt">Falsch: $G_f$ steigt dann zwar überall, kann aber unterhalb der $x$-Achse beginnen, z.&nbsp;B. $f(x) = x$ mit $f'(x) = 1$.</button>
+      <button class="quiz-opt">Richtig: $f'(x) > 0$ bedeutet $f(x) > 0$.</button>
+      <button class="quiz-opt">Falsch: Dann liegt $G_f$ ganz unterhalb der $x$-Achse.</button>
+    </div>
+    <div class="hint" data-quiz-hint>$G_{f'}$ sagt etwas über die Steigung von $G_f$, nicht über seine Höhe.</div>
+  </div>
+
+  <div class="blatt"><span class="pfeil">✎</span>
+    <span>Zurück zum Domino auf Papier: In Aufgabe 2 erläutern Sie drei Anlegestellen mit je einem Merkmal.</span></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m12/ableitungsgraph/"><span>← Voriges Thema</span>Graph von f und f′</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  /* Pool: f, Ableitung d und die Nullstellen von f′ ([x, 'v' = Vorzeichenwechsel | 'b' = Berührung]).
+     Bewusst ohne die Funktionen des Papier-Dominos (AB UE 3) und des Memorys, damit die Seite das Blatt nicht löst. */
+  var POOL = [
+    { f: function (x) { return (x - 1) * (x - 1) / 2 - 1.5; }, d: function (x) { return x - 1; }, n: [[1, 'v']] },
+    { f: function (x) { return -(x + 1) * (x + 1) / 2 + 2; }, d: function (x) { return -(x + 1); }, n: [[-1, 'v']] },
+    { f: function (x) { return x * x / 4 + 1; }, d: function (x) { return x / 2; }, n: [[0, 'v']] },
+    { f: function (x) { return -x * x * x / 6 + 1.5 * x; }, d: function (x) { return -x * x / 2 + 1.5; }, n: [[-1.7, 'v'], [1.7, 'v']] },
+    { f: function (x) { return x * x * x / 6 - 1.5 * x; }, d: function (x) { return x * x / 2 - 1.5; }, n: [[-1.7, 'v'], [1.7, 'v']] },
+    { f: function (x) { return x * x * x / 3 + x * x - 1; }, d: function (x) { return x * x + 2 * x; }, n: [[-2, 'v'], [0, 'v']] },
+    { f: function (x) { return -x * x * x / 3 + x * x + 1; }, d: function (x) { return -x * x + 2 * x; }, n: [[0, 'v'], [2, 'v']] },
+    { f: function (x) { return -x * x * x / 6 + 1; }, d: function (x) { return -x * x / 2; }, n: [[0, 'b']] },
+    { f: function (x) { return Math.pow(x - 1, 3) / 4; }, d: function (x) { return 0.75 * (x - 1) * (x - 1); }, n: [[1, 'b']] },
+    { f: function (x) { return 0.5 * x + 1; }, d: function () { return 0.5; }, n: [] },
+    { f: function (x) { return -x + 2; }, d: function () { return -1; }, n: [] },
+    { f: function (x) { return Math.pow(x, 4) / 16 - x * x / 2; }, d: function (x) { return x * x * x / 4 - x; }, n: [[-2, 'v'], [0, 'v'], [2, 'v']] },
+    { f: function (x) { return -Math.pow(x, 4) / 12 + x * x - 1; }, d: function (x) { return -x * x * x / 3 + 2 * x; }, n: [[-2.4, 'v'], [0, 'v'], [2.4, 'v']] },
+    { f: function (x) { return Math.pow(x, 4) / 8 - x * x * x / 3; }, d: function (x) { return x * x * x / 2 - x * x; }, n: [[0, 'b'], [2, 'v']] },
+    { f: function (x) { return -x * x * x / 6 - x / 2; }, d: function (x) { return -x * x / 2 - 0.5; }, n: [] },
+    { f: function (x) { return x * x * x / 9 + x * x / 3 - x; }, d: function (x) { return (x + 3) * (x - 1) / 3; }, n: [[-3, 'v'], [1, 'v']] }
+  ];
+  var N = 8, modus = 1, R, karten, kette, fehler, fertig;
+
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function mathe(el) { if (window.renderMathInElement) renderMathInElement(el, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false }); }
+  function mischen(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  /* kleines Koordinatensystem, x und y in [−3,3; 3,3], Kästchen = 1 */
+  function zeichne(cv, g, name) {
+    var dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 58, H = cv.clientHeight || W;
+    cv.width = W * dpr; cv.height = H * dpr;
+    var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+    var m = 3.3, X = function (x) { return (x + m) / (2 * m) * W; }, Y = function (y) { return H - (y + m) / (2 * m) * H; };
+    c.strokeStyle = css('--c-grid'); c.lineWidth = 1;
+    for (var k = -3; k <= 3; k++) { c.beginPath(); c.moveTo(X(k), 0); c.lineTo(X(k), H); c.moveTo(0, Y(k)); c.lineTo(W, Y(k)); c.stroke(); }
+    c.strokeStyle = css('--c-axis'); c.lineWidth = 1.5;
+    c.beginPath(); c.moveTo(0, Y(0)); c.lineTo(W, Y(0)); c.moveTo(X(0), 0); c.lineTo(X(0), H); c.stroke();
+    c.save(); c.beginPath(); c.rect(0, 0, W, H); c.clip();
+    c.strokeStyle = css('--c-e'); c.lineWidth = W > 100 ? 3.5 : 2.2; c.lineJoin = 'round'; c.lineCap = 'round';
+    c.beginPath();
+    for (var i = 0; i <= 160; i++) { var x = -m + 2 * m * i / 160, y = Math.max(-8, Math.min(8, g(x))); if (i) c.lineTo(X(x), Y(y)); else c.moveTo(X(x), Y(y)); }
+    c.stroke(); c.restore();
+    if (name) {
+      c.font = '700 ' + (W > 100 ? 16 : 11) + 'px ' + css('--font-body'); c.textAlign = 'left';
+      var tw = c.measureText(name).width;
+      c.fillStyle = css('--c-bg'); c.fillRect(2, 2, tw + 8, W > 100 ? 22 : 15);
+      c.fillStyle = css('--c-text'); c.fillText(name, 6, W > 100 ? 18 : 13);
+    }
+  }
+
+  function neueRunde() {
+    R = mischen(POOL.map(function (_, i) { return i; })).slice(0, N);
+    // Karte k: links Ableitung von R[k], rechts Funktion R[k+1]; geschlossene Kette
+    karten = R.map(function (p, k) { return { L: p, Rt: R[(k + 1) % N], id: k }; });
+    kette = [karten[0]]; fehler = 0; fertig = false;
+    Aha.$('rueck').classList.remove('an');
+    Aha.$('mission').classList.remove('done');
+    zeige();
+  }
+  function offenesEnde() { return modus === 1 ? kette[kette.length - 1].Rt : kette[0].L; }
+  function rest() { return karten.filter(function (k) { return kette.indexOf(k) < 0; }); }
+
+  function zeige() {
+    var auftrag = modus === 1
+      ? '⭐ Ordnen Sie zu: Welche Karte zeigt <b>links</b> den Graphen der Ableitung von $G_f$?'
+      : '⭐⭐ Bestimmen Sie: Welche Karte zeigt <b>rechts</b> einen Graphen $G_f$, dessen Ableitung $G_{f\'}$ ist?';
+    var a = Aha.$('auftrag'); a.innerHTML = fertig ? 'Geschafft: Die Kette ist geschlossen!' : auftrag; mathe(a);
+    // Kette
+    var k = Aha.$('kette'); k.innerHTML = '';
+    kette.forEach(function (karte, i) {
+      var d = document.createElement('div'); d.className = 'mini' + ((modus === 1 ? i === kette.length - 1 : i === 0) && kette.length > 1 ? ' neu' : '');
+      var l = document.createElement('canvas'), r = document.createElement('canvas');
+      d.appendChild(l); d.appendChild(r); k.appendChild(d);
+      zeichne(l, POOL[karte.L].d, 'f′'); zeichne(r, POOL[karte.Rt].f, 'f');
+    });
+    k.scrollLeft = modus === 1 ? k.scrollWidth : 0;
+    // offenes Ende
+    var p = offenesEnde();
+    zeichne(Aha.$('offen'), modus === 1 ? POOL[p].f : POOL[p].d, modus === 1 ? 'f' : 'f′');
+    var t = Aha.$('offenText');
+    t.innerHTML = fertig ? 'Die letzte Karte passt wieder an die erste. Starten Sie eine neue Runde oder wechseln Sie die Stufe.'
+      : modus === 1 ? 'Offenes Ende der Kette: $G_f$. Tippen Sie unten die Karte an, deren <b>linke</b> Hälfte $G_{f\'}$ dazu passt.'
+        : 'Offenes Ende der Kette: $G_{f\'}$. Tippen Sie unten die Karte an, deren <b>rechte</b> Hälfte $G_f$ dazu passt.';
+    mathe(t);
+    // Auswahl
+    var w = Aha.$('wahl'); w.innerHTML = '';
+    if (!fertig) rest().forEach(function (karte) {
+      var b = document.createElement('button'); b.type = 'button';
+      b.setAttribute('aria-label', 'Karte wählen');
+      var cv = document.createElement('canvas'); b.appendChild(cv); w.appendChild(b);
+      zeichne(cv, modus === 1 ? POOL[karte.L].d : POOL[karte.Rt].f, modus === 1 ? 'f′' : 'f');
+      b.addEventListener('click', function () { waehle(karte, b); });
+    });
+    Aha.$('anzahl').textContent = kette.length + ' / ' + N;
+    Aha.$('fehler').textContent = fehler;
+  }
+
+  function liste(n) { return n.map(function (z) { return Aha.dt(z[0], 1); }).join(';\\ '); }
+  function vorzeichen(p) { return [-3.1, -0.37, 0.63, 3.1].map(function (x) { return Math.sign(POOL[p].d(x)); }).join(); }
+  function gleicheStellen(a, b) {
+    return a.length === b.length && a.every(function (z, i) { return Math.abs(z[0] - b[i][0]) < 0.05; });
+  }
+  /* Rückmeldung: gegeben = Funktion, deren waagrechte Tangenten zählen; gewaehlt = Funktion der gewählten Hälfte */
+  function rueckmeldung(gegeben, gewaehlt) {
+    var ng = POOL[gegeben].n, nw = POOL[gewaehlt].n, s;
+    var fName = modus === 1 ? '$G_f$' : 'der gesuchte Graph $G_f$';
+    if (gleicheStellen(ng, nw)) {
+      var typ = ng.filter(function (z, i) { return z[1] !== nw[i][1]; })[0];
+      if (typ) s = 'Die Stellen passen, aber nicht die Art: Bei $x = ' + Aha.dt(typ[0], 1) + '$ ' +
+        (typ[1] === 'b' ? 'liegt ein Terrassenpunkt – dort <b>berührt</b> $G_{f\'}$ die $x$-Achse.' : 'liegt ein Extrempunkt – dort <b>schneidet</b> $G_{f\'}$ die $x$-Achse.');
+      else s = 'Die Stellen passen, aber das Vorzeichen nicht: Wo $G_f$ steigt, muss $G_{f\'}$ <b>oberhalb</b> der $x$-Achse liegen.';
+    } else if (modus === 1) {
+      s = (ng.length ? '$G_f$ hat waagrechte Tangenten bei $x \\approx ' + liste(ng) + '$. '
+        : '$G_f$ hat keine waagrechte Tangente, es ' + (POOL[gegeben].d(0) > 0 ? 'steigt' : 'fällt') + ' überall. ') +
+        (nw.length ? 'Ihre Wahl hat Nullstellen bei $x \\approx ' + liste(nw) + '$.' : 'Ihre Wahl hat keine Nullstelle.');
+    } else {
+      s = (ng.length ? '$G_{f\'}$ hat Nullstellen bei $x \\approx ' + liste(ng) + '$. '
+        : '$G_{f\'}$ hat keine Nullstelle, liegt also ganz ' + (POOL[gegeben].d(0) > 0 ? 'oberhalb' : 'unterhalb') + ' der $x$-Achse. ') +
+        (nw.length ? 'Ihre Wahl hat waagrechte Tangenten bei $x \\approx ' + liste(nw) + '$.' : 'Ihre Wahl hat keine waagrechte Tangente.');
+    }
+    return s;
+  }
+
+  function waehle(karte, b) {
+    var p = offenesEnde(), ok = modus === 1 ? karte.L === p : karte.Rt === p;
+    var r = Aha.$('rueck');
+    if (!ok) {
+      fehler++; Aha.$('fehler').textContent = fehler;
+      b.classList.remove('falsch'); void b.offsetWidth; b.classList.add('falsch');
+      r.innerHTML = 'Passt nicht. ' + rueckmeldung(p, modus === 1 ? karte.L : karte.Rt);
+      r.classList.add('an'); mathe(r);
+      return;
+    }
+    r.classList.remove('an');
+    if (modus === 1) kette.push(karte); else kette.unshift(karte);
+    if (kette.length === N) {
+      fertig = true;
+      Aha.mission(true);
+      Aha.$('mission').classList.add('done');
+    }
+    zeige();
+  }
+
+  Aha.$('modus').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b) return;
+    modus = +b.dataset.m;
+    Aha.$('modus').querySelectorAll('button').forEach(function (x) { x.classList.toggle('aktiv', x === b); });
+    neueRunde();
+  });
+  Aha.$('neu').addEventListener('click', neueRunde);
+  neueRunde();
+  Aha.onRedraw(zeige);
+});
+</script>
+</body>
+</html>
