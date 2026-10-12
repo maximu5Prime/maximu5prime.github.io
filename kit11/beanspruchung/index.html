@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="kit">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KIT 11 · Belastung und Beanspruchung</title>
+  <meta name="description" content="Kraft-Labor: Kräfte an einen Stab setzen und sehen, wie er sich verformt — Zug, Druck, Biegung, Abscherung, Torsion. Mit Erklärvideo und Trainer.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    .labor { display: block; width: 100%; height: auto; margin: 10px 0 0; }
+    .labor .koerper { fill: var(--c-mission); stroke: var(--c-accent); stroke-width: 2.5; stroke-linejoin: round; }
+    .labor .mantel { fill: none; stroke: var(--c-accent); stroke-width: 1.6; opacity: .75; }
+    .labor .kraft { stroke: var(--c-text); stroke-width: 4.5; fill: none; stroke-linecap: round; }
+    .labor .spitze { fill: var(--c-text); }
+    .labor .wand { fill: var(--c-line); }
+    .labor .schnitt { stroke: var(--c-loss); stroke-width: 2; stroke-dasharray: 6 4; }
+    .labor text { font: 700 14px var(--font-body, sans-serif); }
+    .labor .dehn { fill: var(--c-gain); } .labor .stauch { fill: var(--c-loss); }
+    .kraftbilder { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+    .kraftbilder button { font: inherit; min-height: 52px; min-width: 76px; padding: 4px 8px; border-radius: 12px; cursor: pointer;
+      border: 2px solid var(--c-line); background: var(--c-bg); color: var(--c-text); }
+    .kraftbilder button.aktiv { border-color: var(--c-accent); box-shadow: inset 0 0 0 1px var(--c-accent); }
+    .kraftbilder button.fertig { border-color: var(--c-gain); background: var(--c-gain-fill); }
+    .kraftbilder svg { width: 64px; height: 36px; display: block; }
+    .kraftbilder .stab { fill: var(--c-mission); stroke: var(--c-accent); stroke-width: 1.4; }
+    .kraftbilder .p { stroke: currentColor; stroke-width: 3; fill: none; marker-end: url(#spitze); }
+    .namefrage { font-weight: 700; margin: 10px 0 0; min-height: 1.4em; }
+    .rueck { margin: 8px 0 0; min-height: 1.4em; }
+    .rueck.ok { color: var(--c-gain); } .rueck.err { color: var(--c-loss); }
+    .stand { font-family: var(--font-head); font-weight: 800; }
+    details.hilfe { margin: 6px 0; } details.hilfe summary { font-weight: 700; cursor: pointer; }
+    details.hilfe p { margin: .4em 0 .4em 1.2em; }
+  </style>
+</head>
+<body>
+<!-- Seite „Belastung und Beanspruchung“ (12.10.2026, überarbeitet am selben Tag): eigenständig nutzbar, NICHT auf eine Stunde zugeschnitten.
+     Bewusst ohne Kran: Der Kran ist Aufgabe 1 auf dem Auftragsblatt KIT11_UE01_AB_Belastungsarten (Lehrkraft: Seite darf das Blatt nicht lösen).
+     Beispiele im Kraft-Labor, Video und Trainer überschneiden sich nicht mit dem Blatt (Abschleppseil, Sprungbrett, Schraubendreher, Stanze, Kran).
+     Hinweise zum Blatt stehen nur ganz unten („Im Unterricht“). Video: Quelle 04_Kurse/03_KIT/FT11/LB03_Maschinenbau/01_Kran_Belastungsarten/video/
+     — nach Neubau hierher kopieren (mp4, vtt, jpg). -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/kit11/">← KIT 11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">KIT 11 · Maschinenbau</div>
+    <h1>Was macht eine Kraft mit einem <mark>Bauteil</mark>?</h1>
+    <p>Jedes Bauteil einer Maschine muss Kräfte aushalten. Die Kraft von außen heißt <b>Belastung</b>. Was sie im Inneren
+      bewirkt, heißt <b>Beanspruchung</b> — und die erkennen Sie daran, wie sich das Bauteil verformt.</p>
+  </header>
+
+  <figure class="video">
+    <video controls playsinline preload="metadata" poster="KIT11_UE01_VID_Beanspruchung.jpg">
+      <source src="KIT11_UE01_VID_Beanspruchung.mp4" type="video/mp4">
+      <track kind="subtitles" src="KIT11_UE01_VID_Beanspruchung.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Video · Belastung oder Beanspruchung?</b> — Kraft von außen, Verformung im Inneren: die fünf Arten.</figcaption>
+  </figure>
+
+  <section class="stage" aria-label="Kraft-Labor">
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span>Kraft-Labor: Wählen Sie ein Kraftbild, drehen Sie die Kraft auf und benennen Sie die Beanspruchung. <span class="stand" id="stand">0/5</span></span></div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+      <marker id="spitze" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs></svg>
+    <div class="kraftbilder" id="kraftbilder" role="group" aria-label="Kraftbilder"></div>
+    <svg class="labor" id="labor" viewBox="0 0 420 200" role="img" aria-label="Stab unter Belastung"></svg>
+    <div class="regler"><div><label for="F">Kraft <output id="FVal">0 %</output></label>
+      <input type="range" id="F" min="0" max="100" step="1" value="0"></div></div>
+    <p class="namefrage" id="namefrage"></p>
+    <div class="wahl" id="namen"></div>
+    <p class="rueck" id="rueck"></p>
+  </section>
+
+  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Nicht die Größe der Kraft entscheidet über die Art der Beanspruchung, sondern ihre <b>Richtung und Lage</b>:
+    längs nach außen → <b>Zug</b>, längs nach innen → <b>Druck</b>, quer mit Abstand zur Halterung → <b>Biegung</b>,
+    quer und dicht nebeneinander → <b>Abscherung</b>, gegeneinander gedreht → <b>Torsion</b>.
+  </div>
+
+  <details class="warum">
+    <summary>Das Wichtigste auf einen Blick</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>1</span><div><b>Belastung</b> = Kraft, die <b>von außen</b> wirkt. Man zeichnet sie als Pfeil
+        (Angriffspunkt, Richtung, Betrag). Einheit Newton; 1 kg wird mit etwa 10 N nach unten gezogen.</div></div>
+      <div class="schritt"><span>2</span><div><b>Beanspruchung</b> = was die Kraft <b>im Inneren</b> bewirkt, erkennbar an der Verformung:
+        länger (Zug), kürzer (Druck), durchgebogen (Biegung), verschoben (Abscherung), in sich verdreht (Torsion).</div></div>
+      <div class="schritt"><span>3</span><div>Bei Zug und Druck steht die Kraft <b>senkrecht</b> auf der Schnittfläche (Normalspannung),
+        bei Abscherung und Torsion wirkt sie <b>in</b> der Schnittfläche (Schubspannung).</div></div>
+      <div class="schritt"><span>4</span><div>Viele Bauteile werden <b>mehrfach</b> beansprucht, zum Beispiel ein Bohrer beim Bohren:
+        Druck und Torsion. Dann nennt man beide und sagt, welche überwiegt.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Bewegung mit Verformung verwechseln. Eine Tür, die sich in den Angeln dreht,
+        wird nicht auf Torsion beansprucht — sie wird ja nicht in sich verdreht.</div>
+    </div>
+  </details>
+
+  <h2>Trainer</h2>
+  <section id="trainer" aria-label="Übungsaufgaben"></section>
+
+  <h2>Im Unterricht: Hilfe zum Auftragsblatt</h2>
+  <p class="notiz">Für das Ingenieurbüro T11d (Arbeitspaket 1). Erst Tipp 1 öffnen, dann Tipp 2.</p>
+  <details class="hilfe"><summary>Aufgabe 1 · Den Kran begutachten — Tipp 1</summary>
+    <p>Stellen Sie sich jedes Bauteil aus Gummi vor: Wird es länger, kürzer, krumm, verschoben oder verdreht?</p></details>
+  <details class="hilfe"><summary>Aufgabe 1 · Tipp 2</summary>
+    <p>Seile und Bänder können nur ziehen. Ein waagrechter Träger, an dem eine Last hängt, biegt sich. Was von oben trägt,
+      wird gedrückt. Ein Bolzen in einem Gelenk wird quer belastet, dicht nebeneinander.</p></details>
+  <details class="hilfe"><summary>Aufgabe 2 · Vergleichsbauteile — Tipp</summary>
+    <p>Zeichnen Sie in Gedanken die Kraftpfeile ein: längs oder quer? Mit Abstand zur Halterung oder dicht nebeneinander? Probieren Sie
+      das passende Kraftbild oben im Kraft-Labor aus.</p></details>
+  <details class="hilfe"><summary>Prüfauftrag Papierstütze — Tipp</summary>
+    <p>Wie wird die Stütze beansprucht? Woran ist sie gescheitert: zusammengedrückt oder seitlich ausgeknickt? Welche Form
+      verteilt die Kraft auf mehr Papier?</p></details>
+  <details class="hilfe"><summary>Zusatzauftrag — Tipp</summary>
+    <p>Verformt sich das Bauteil <b>in sich</b> — oder bewegt es sich nur? Und: Was würde der Turm ohne Gegengewicht tun, wenn
+      vorne eine schwere Last hängt?</p></details>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/kit11/ki-fails/"><span>← Voriges Thema</span>KI-Fail-Detektor</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>KIT · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  // ── Kraft-Labor ─────────────────────────────────────────────────────
+  var ARTEN = { zug: 'Zug', druck: 'Druck', biegung: 'Biegung', abscherung: 'Abscherung', torsion: 'Torsion' };
+  var REIHE = Aha.mischen(Object.keys(ARTEN));          // Kraftbilder ohne Namen, in zufälliger Reihenfolge
+  var ICON = {
+    zug: '<rect class="stab" x="20" y="13" width="24" height="10"/><path class="p" d="M20 18 H4"/><path class="p" d="M44 18 H60"/>',
+    druck: '<rect class="stab" x="20" y="13" width="24" height="10"/><path class="p" d="M2 18 H17"/><path class="p" d="M62 18 H47"/>',
+    biegung: '<rect x="6" y="4" width="4" height="28" fill="var(--c-line)"/><rect class="stab" x="10" y="13" width="44" height="10"/><path class="p" d="M51 0 V10"/>',
+    abscherung: '<rect class="stab" x="10" y="13" width="44" height="10"/><path class="p" d="M29 0 V10"/><path class="p" d="M35 36 V26"/>',
+    torsion: '<rect class="stab" x="16" y="13" width="32" height="10"/><path class="p" d="M12 28 A4 10 0 1 1 12 8"/><path class="p" d="M52 8 A4 10 0 1 1 52 28"/>' };
+  var art = null, F = 0, fertig = {};
+  var svg = document.getElementById('labor'), regler = document.getElementById('F');
+  var kb = document.getElementById('kraftbilder');
+  kb.innerHTML = REIHE.map(function (a, i) {
+    return '<button type="button" data-art="' + a + '" aria-label="Kraftbild ' + (i + 1) + '"><svg viewBox="0 0 64 36">' + ICON[a] + '</svg></button>';
+  }).join('');
+
+  function P(pkte) { return pkte.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '); }
+  function pfeil(x1, y1, x2, y2) {             // Kraftpfeil mit Spitze
+    var dx = x2 - x1, dy = y2 - y1, l = Math.hypot(dx, dy) || 1, ux = dx / l, uy = dy / l, s = 13;
+    return '<line class="kraft" x1="' + x1 + '" y1="' + y1 + '" x2="' + (x2 - ux * s * .6) + '" y2="' + (y2 - uy * s * .6) + '"/>' +
+      '<polygon class="spitze" points="' + P([[x2, y2], [x2 - ux * s - uy * s * .55, y2 - uy * s + ux * s * .55], [x2 - ux * s + uy * s * .55, y2 - uy * s - ux * s * .55]]) + '"/>';
+  }
+  function drehpfeil(cx, cy, r, links) {      // halbe Ellipse um das Stabende
+    var s = links ? 1 : -1, pts = [];
+    for (var i = 0; i <= 24; i++) { var w = -Math.PI * .45 + i / 24 * Math.PI * 1.5; pts.push([cx + s * r * .35 * Math.cos(w), cy - r * Math.sin(w)]); }
+    var a = pts[pts.length - 2], b = pts[pts.length - 1];
+    return '<polyline class="kraft" points="' + P(pts.slice(0, -1)) + '"/>' + pfeil(a[0], a[1], b[0] + (b[0] - a[0]) * 2, b[1] + (b[1] - a[1]) * 2);
+  }
+  function zeichne() {
+    var s = F / 100, html = '', N = 40, u, i, oben = [], unten = [];
+    var cx = 210, cy = 100, L = 200, h = 40;
+    if (!art) { svg.innerHTML = '<text x="210" y="105" text-anchor="middle" fill="var(--c-muted)">Wählen Sie oben ein Kraftbild.</text>'; return; }
+    if (art === 'zug' || art === 'druck') {
+      var Lz = L * (art === 'zug' ? 1 + .32 * s : 1 - .22 * s);
+      for (i = 0; i <= N; i++) {
+        u = i / N;
+        var dick = art === 'zug' ? 1 - .22 * s - .16 * s * Math.sin(Math.PI * u) : 1 + .12 * s + .28 * s * Math.sin(Math.PI * u);
+        var x = cx - Lz / 2 + u * Lz; oben.push([x, cy - h / 2 * dick]); unten.unshift([x, cy + h / 2 * dick]);
+      }
+      html += '<polygon class="koerper" points="' + P(oben.concat(unten)) + '"/>';
+      var a = 22 + 40 * s, l0 = cx - Lz / 2, r0 = cx + Lz / 2;
+      html += art === 'zug' ? pfeil(l0, cy, l0 - a, cy) + pfeil(r0, cy, r0 + a, cy) : pfeil(l0 - a - 6, cy, l0 - 6, cy) + pfeil(r0 + a + 6, cy, r0 + 6, cy);
+    }
+    if (art === 'biegung') {
+      var x0 = 90, Lb = 240, k = 70 * s;
+      for (i = 0; i <= N; i++) { u = i / N; var yb = cy + k * u * u; oben.push([x0 + u * Lb, yb - h / 2]); unten.unshift([x0 + u * Lb, yb + h / 2]); }
+      html += '<rect class="wand" x="' + (x0 - 18) + '" y="' + (cy - 60) + '" width="18" height="120"/>';
+      html += '<polygon class="koerper" points="' + P(oben.concat(unten)) + '"/>';
+      var yt = cy + k - h / 2; html += pfeil(x0 + Lb - 6, yt - 26 - 30 * s, x0 + Lb - 6, yt - 2);
+      if (s > .45) html += '<text class="dehn" x="' + (x0 + 30) + '" y="' + (cy - h / 2 - 10) + '">gedehnt</text>' +
+        '<text class="stauch" x="' + (x0 + 30) + '" y="' + (cy + h / 2 + 24) + '">gestaucht</text>';
+    }
+    if (art === 'abscherung') {
+      var d = 16 * s, m = cx, b = 14, x1 = cx - L / 2, x2 = cx + L / 2;
+      html += '<polygon class="koerper" points="' + P([[x1, cy - h / 2 + d], [m - b, cy - h / 2 + d], [m + b, cy - h / 2 - d], [x2, cy - h / 2 - d],
+        [x2, cy + h / 2 - d], [m + b, cy + h / 2 - d], [m - b, cy + h / 2 + d], [x1, cy + h / 2 + d]]) + '"/>';
+      html += '<line class="schnitt" x1="' + (m - b) + '" y1="' + (cy - h / 2 - 14) + '" x2="' + (m + b) + '" y2="' + (cy + h / 2 + 14) + '"/>';
+      html += pfeil(m - 24, cy - h / 2 + d - 48, m - 24, cy - h / 2 + d - 2) + pfeil(m + 24, cy + h / 2 - d + 48, m + 24, cy + h / 2 - d + 2);
+    }
+    if (art === 'torsion') {
+      var R = 26, Lt = 220, xl = cx - Lt / 2, th = 1.9 * s, mant = '';
+      function Ru(u) { return R * (1 - .2 * s * Math.sin(Math.PI * u)); }   // Einschnürung in der Mitte
+      for (i = 0; i <= N; i++) { u = i / N; oben.push([xl + u * Lt, cy - Ru(u)]); unten.unshift([xl + u * Lt, cy + Ru(u)]); }
+      html += '<polygon class="koerper" points="' + P(oben.concat(unten)) + '"/>';
+      // Mantellinien: Schraubenlinien auf der Oberfläche, nur die Vorderseite (cos > 0) — bleiben immer im Umriss
+      [-1.2, -.6, 0, .6, 1.2].forEach(function (p0) {
+        var seg = [];
+        for (var j = 0; j <= 60; j++) {
+          var uu = j / 60, ph = p0 + th * (uu - .5) * 2;
+          if (Math.cos(ph) > 0) seg.push([xl + uu * Lt, cy - Ru(uu) * Math.sin(ph)]);
+          else if (seg.length) { mant += '<polyline class="mantel" points="' + P(seg) + '"/>'; seg = []; }
+        }
+        if (seg.length) mant += '<polyline class="mantel" points="' + P(seg) + '"/>';
+      });
+      html += mant;
+      html += '<ellipse class="koerper" cx="' + (xl + Lt) + '" cy="' + cy + '" rx="' + (R * .35) + '" ry="' + R + '"/>';
+      if (s > .02) html += drehpfeil(xl - 4, cy, R + 14, true) + drehpfeil(xl + Lt + 12, cy, R + 14, false);
+    }
+    svg.innerHTML = html;
+  }
+  var namen = document.getElementById('namen'), rueck = document.getElementById('rueck'), nf = document.getElementById('namefrage');
+  function fragen() {
+    if (art && F >= 60 && !namen.innerHTML) {
+      nf.textContent = 'Wie heißt diese Beanspruchung?';
+      namen.innerHTML = Aha.mischen(Object.keys(ARTEN)).map(function (a) { return '<button type="button" data-a="' + a + '">' + ARTEN[a] + '</button>'; }).join('');
+    }
+  }
+  kb.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button[data-art]'); if (!b) return;
+    art = b.dataset.art; F = 0; regler.value = 0; document.getElementById('FVal').textContent = '0 %';
+    kb.querySelectorAll('button').forEach(function (c) { c.classList.toggle('aktiv', c === b); });
+    namen.innerHTML = ''; nf.textContent = fertig[art] ? 'Schon benannt: ' + ARTEN[art] + '. Drehen Sie die Kraft auf.' : 'Drehen Sie die Kraft auf.';
+    rueck.textContent = ''; rueck.className = 'rueck';
+    zeichne();
+  });
+  regler.addEventListener('input', function () {
+    F = +regler.value; document.getElementById('FVal').textContent = F + ' %'; zeichne(); if (!fertig[art]) fragen();
+  });
+  namen.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button[data-a]'); if (!b) return;
+    var ok = b.dataset.a === art;
+    namen.querySelectorAll('button').forEach(function (c) { c.classList.toggle('aktiv', c === b); c.classList.remove('ok', 'err'); });
+    b.classList.add(ok ? 'ok' : 'err');
+    rueck.className = 'rueck ' + (ok ? 'ok' : 'err');
+    var WIE = { zug: 'Die Kräfte ziehen längs nach außen — der Stab wird länger und dünner.',
+      druck: 'Die Kräfte drücken längs nach innen — der Stab wird kürzer und dicker.',
+      biegung: 'Die Kraft greift quer an, mit Abstand zur Halterung — oben gedehnt, unten gestaucht.',
+      abscherung: 'Zwei Kräfte quer und dicht nebeneinander — zwei Querschnitte verschieben sich gegeneinander.',
+      torsion: 'Die Enden werden gegeneinander gedreht — die geraden Linien werden zu Schraubenlinien.' };
+    if (ok) {
+      rueck.textContent = 'Richtig. ' + WIE[art];
+      fertig[art] = true; kb.querySelector('[data-art=' + art + ']').classList.add('fertig');
+      var n = Object.keys(fertig).length; document.getElementById('stand').textContent = n + '/5';
+      if (n === 5) Aha.mission(true);
+    } else rueck.textContent = 'Noch nicht. Schauen Sie auf die Verformung: länger, kürzer, krumm, verschoben oder verdreht?';
+  });
+  zeichne();
+  Aha.onRedraw && window.addEventListener('resize', zeichne);
+
+  // ── Trainer ─────────────────────────────────────────────────────────
+  var NAME = ['Zug', 'Druck', 'Biegung', 'Abscherung', 'Torsion'];
+  var WORAN = ['Kräfte wirken längs und ziehen nach außen', 'Kräfte wirken längs und drücken nach innen',
+    'Kraft wirkt quer, mit Abstand zur Halterung', 'zwei Kräfte wirken quer, dicht nebeneinander', 'die Enden werden gegeneinander gedreht'];
+  var TEILE = [
+    ['ein Kletterseil, an dem eine Person hängt', 0], ['eine gespannte Gitarrensaite', 0], ['die Kette eines Fahrrads beim Treten', 0],
+    ['ein Tischbein unter einer schweren Tischplatte', 1], ['eine Säule unter einer Brücke', 1], ['ein Wagenheber, der ein Auto anhebt', 1],
+    ['ein Regalbrett mit Büchern in der Mitte', 2], ['eine Angelrute, an deren Spitze ein Fisch zieht', 2], ['ein Balkon, der nur an der Hauswand befestigt ist', 2],
+    ['ein Blatt Papier zwischen den Klingen einer Schere', 3], ['ein Niet, der zwei gegeneinander gezogene Bleche verbindet', 3],
+    ['ein Schlüssel im Schloss beim Aufsperren', 4], ['ein Handtuch beim Auswringen', 4], ['die Antriebswelle eines Elektromotors', 4]];
+  var AUSSAGEN = [
+    ['„Eine Tür, die sich in den Angeln dreht, wird auf Torsion beansprucht.“', false, 'Die Tür bewegt sich nur, sie wird nicht in sich verdreht. Bewegung ist keine Verformung.'],
+    ['„Ein Bohrer wird beim Bohren auf Druck und Torsion beansprucht.“', true, 'Er wird ins Werkstück gedrückt und zugleich verdreht — mehrfache Beanspruchung.'],
+    ['„Ein Seil kann eine Last auch von unten stützen.“', false, 'Ein Seil ist biegeweich: Es nimmt nur Zug auf. Unter Druck weicht es seitlich aus.'],
+    ['„Ein Regalbrett mit Büchern wird oben gestaucht und unten gedehnt.“', true, 'Es biegt sich nach unten durch: Die Oberseite wird kürzer, die Unterseite länger.'],
+    ['„Eine Schraube wird beim Anziehen nur auf Torsion beansprucht.“', false, 'Beim Anziehen wird sie verdreht und zugleich gelängt: Torsion und Zug.'],
+    ['„Wer an der Spitze einer Angelrute zieht, beansprucht sie vor allem auf Zug.“', false, 'Die Kraft greift quer zur Rute an, mit großem Abstand zum Griff: Biegung.'],
+    ['„Beton hält viel Druck, aber wenig Zug — deshalb liegt in Betonbalken unten Stahl.“', true, 'Ein belasteter Balken wird unten gedehnt (Zug). Dort hilft der Stahl.'],
+    ['„Je größer die Kraft, desto eher wird aus Zug eine Biegung.“', false, 'Die Art hängt von Richtung und Lage der Kraft ab, nicht von ihrer Größe.']];
+  function wahlFeld(label, ans) {
+    return { typ: 'wahl', label: label, optionen: NAME, ans: ans,
+      warum: NAME.map(function (n, j) { return j === ans ? '' : 'Schauen Sie auf die Richtung der Kräfte: ' + WORAN[ans] + '.'; }) };
+  }
+  Aha.Trainer({ el: 'trainer', stufen: ['Zuordnen', 'Bestimmen', 'Beurteilen'], neu: function (stufe) {
+    if (stufe < 3) {
+      var T = Aha.eins(TEILE), a = T[1];
+      var weg = '<p><b>' + NAME[a] + '</b>: ' + WORAN[a] + '.</p>';
+      if (stufe === 1) return { operator: 'Ordnen Sie zu', frage: 'Wie wird ' + T[0] + ' beansprucht?',
+        felder: [wahlFeld('', a)], tipp: 'Stellen Sie sich das Bauteil aus Gummi vor: länger, kürzer, krumm, verschoben oder verdreht?', weg: weg };
+      return { operator: 'Bestimmen Sie', frage: 'Bestimmen Sie die Beanspruchung von ' + T[0].replace(/^ein /, 'einem ').replace(/^eine /, 'einer ').replace(/^die /, 'der ').replace(/^das /, 'dem ') + ' — und woran Sie sie erkennen.',
+        felder: [wahlFeld('Beanspruchung:', a), { typ: 'wahl', label: 'Woran erkannt?', optionen: WORAN, ans: a,
+          warum: WORAN.map(function (w, j) { return j === a ? '' : 'Passt die Richtung der Kräfte zu diesem Bauteil?'; }) }],
+        tipp: 'Zeichnen Sie in Gedanken die Kraftpfeile ein: längs oder quer? Mit Abstand oder dicht nebeneinander?', weg: weg };
+    }
+    var S = Aha.eins(AUSSAGEN);
+    return { operator: 'Beurteilen Sie', frage: 'Stimmt die Aussage? ' + S[0],
+      felder: [{ typ: 'wahl', optionen: ['stimmt', 'stimmt nicht'], ans: S[1] ? 0 : 1, warum: ['', ''].map(function () { return S[2]; }) }],
+      tipp: 'Fragen Sie: Wie verformt sich das Bauteil <b>in sich</b>? Bewegung allein zählt nicht.', weg: '<p>' + (S[1] ? 'Stimmt. ' : 'Stimmt nicht. ') + S[2] + '</p>' };
+  } });
+});
+</script>
+</body>
+</html>
