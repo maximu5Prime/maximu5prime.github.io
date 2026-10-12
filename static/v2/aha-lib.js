@@ -258,7 +258,8 @@
   function typVon(f) { return f.typ || (f.optionen ? 'wahl' : typeof f.ans === 'function' ? 'term' : typeof f.ans === 'number' ? 'zahl' : 'text'); }
 
   function Trainer(o) {
-    var box = typeof o.el === 'string' ? $(o.el) : o.el, stufe = o.start || 1, serie = 0, nr = 0, A, versuche, weggesehen;
+    var box = typeof o.el === 'string' ? $(o.el) : o.el, stufe = o.start || 1, serie = 0, nr = 0, A, versuche, weggesehen,
+      eingabe, hilfe;   // eingabe: Aufgabe hat Textfelder (sonst prüft Antippen sofort); hilfe: 0 nichts, 1 Tipp, 2 Lösungsweg gezeigt
     box.classList.add('trainer');
     var ops = Array.isArray(o.stufen) ? o.stufen : ['', '', ''], sterne = ['⭐', '⭐⭐', '⭐⭐⭐'];
     box.innerHTML =
@@ -268,8 +269,7 @@
       '<span class="tr-serie"></span></div>' +
       '<div class="tr-nr"></div><div class="tr-frage"></div><div class="tr-felder"></div>' +
       '<div class="btn-row"><button type="button" class="btn tr-pruefen">Prüfen</button>' +
-      '<button type="button" class="btn btn--ghost tr-tipp">Tipp</button>' +
-      '<button type="button" class="btn btn--ghost tr-zeigen">Lösungsweg</button>' +
+      '<button type="button" class="btn btn--ghost tr-hilfe">Hilfe</button>' +
       '<button type="button" class="btn btn--ghost tr-neu">Neue Aufgabe →</button></div>' +
       '<div class="feedback"></div><div class="hint"></div><div class="tr-weg" hidden></div>';
     function q(c) { return box.querySelector(c); }
@@ -295,8 +295,14 @@
       q('.tr-nr').textContent = 'Aufgabe ' + nr + (o.stufen ? ' · ' + sterne[stufe - 1] + ' ' + (A.operator || ops[stufe - 1] || '') : '');
       q('.tr-frage').innerHTML = A.frage;
       q('.tr-felder').innerHTML = A.felder.map(feld).join('');
-      q('.hint').innerHTML = A.tipp || ''; q('.hint').classList.remove('open'); q('.tr-tipp').hidden = !A.tipp;
-      q('.tr-weg').innerHTML = A.weg || ''; q('.tr-weg').hidden = true; q('.tr-zeigen').hidden = !A.weg;
+      q('.hint').innerHTML = A.tipp || ''; q('.hint').classList.remove('open');
+      q('.tr-weg').innerHTML = A.weg || ''; q('.tr-weg').hidden = true;
+      // Weniger Knöpfe (Lehrkraft, 12.10.2026, Handy): Auswahl prüft sich beim Antippen selbst, „Prüfen“ nur bei Eingabefeldern;
+      // Tipp und Lösungsweg teilen sich einen Knopf „Hilfe“ (1. Druck Tipp, 2. Druck Lösungsweg).
+      eingabe = A.felder.some(function (f) { var t = typVon(f); return t !== 'wahl' && t !== 'reihenfolge' && t !== 'zeilen'; });
+      q('.tr-pruefen').hidden = !eingabe;
+      hilfe = A.tipp ? 0 : 1;
+      q('.tr-hilfe').textContent = A.tipp ? 'Hilfe' : 'Lösungsweg'; q('.tr-hilfe').hidden = !A.tipp && !A.weg;
       q('.feedback').className = 'feedback';
       mathe(box);
       var inp = box.querySelector('.tr-felder input'); if (inp && o.fokus !== false && nr > 1) inp.focus();
@@ -349,8 +355,16 @@
     }
     box.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' && ev.target.tagName === 'INPUT') pruefen(); });
     q('.tr-pruefen').addEventListener('click', pruefen);
-    q('.tr-tipp').addEventListener('click', function () { q('.hint').classList.add('open'); });
-    q('.tr-zeigen').addEventListener('click', function () { q('.tr-weg').hidden = false; weggesehen = true; serie = 0; zeigeSerie(); });
+    q('.tr-hilfe').addEventListener('click', function () {
+      if (hilfe === 0) { q('.hint').classList.add('open'); hilfe = 1; q('.tr-hilfe').textContent = 'Lösungsweg'; q('.tr-hilfe').hidden = !A.weg; return; }
+      q('.tr-weg').hidden = false; weggesehen = true; serie = 0; zeigeSerie(); q('.tr-hilfe').hidden = true; hilfe = 2;
+    });
+    function vollstaendig() {   // alle Auswahl-Felder beantwortet?
+      return Array.prototype.every.call(box.querySelectorAll('.tr-block'), function (w) {
+        if (w.dataset.typ === 'reihenfolge') return !w.querySelector('.tr-reihe button:not(.aktiv)');
+        return !!w.querySelector('button.aktiv');
+      });
+    }
     q('.tr-neu').addEventListener('click', neu);
     q('.tr-felder').addEventListener('click', function (ev) {
       var w = ev.target.closest('.tr-block'); if (!w) return;
@@ -362,10 +376,12 @@
         var b = ev.target.closest('.tr-reihe button'); if (!b || b.classList.contains('aktiv')) return;
         var n = w.querySelectorAll('.tr-reihe button.aktiv').length + 1;
         b.classList.add('aktiv'); b.dataset.n = n; b.querySelector('.tr-platz').textContent = n;
+        if (!eingabe && vollstaendig()) pruefen();
         return;
       }
       var c = ev.target.closest('button[data-j]'); if (!c) return;
       w.querySelectorAll('button[data-j]').forEach(function (x) { x.classList.toggle('aktiv', x === c); x.classList.remove('ok', 'err'); });
+      if (!eingabe && vollstaendig()) pruefen();
     });
     if (o.stufen) box.querySelectorAll('.tr-stufen button').forEach(function (b) {
       b.classList.toggle('aktiv', +b.dataset.s === stufe);
