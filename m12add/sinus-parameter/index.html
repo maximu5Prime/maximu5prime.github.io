@@ -25,6 +25,21 @@
     .hinweis-falle { display: none; margin-top: 10px; padding: .6em 1em; border-radius: 10px; background: var(--c-aha); color: var(--c-aha-text); font-weight: 600; }
     .hinweis-falle.an { display: block; }
     .klein-btn { font: inherit; font-size: .9rem; background: none; border: 0; color: var(--c-muted); text-decoration: underline; cursor: pointer; padding: 6px 0; }
+    /* Level-Leiste */
+    .level { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .level button { font: inherit; font-weight: 700; font-size: .92rem; border: 0; border-radius: 999px; padding: .35em .85em; min-height: 40px;
+      cursor: pointer; background: var(--c-surface-2); color: var(--c-text); }
+    .level button.aktiv { background: var(--c-accent); color: var(--c-on-accent); }
+    .level button.geschafft::after { content: ' ✓'; }
+    .weiter-zeile { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-top: 10px; }
+    .weiter-zeile[hidden], .weiter-zeile .btn[hidden] { display: none; }
+    .profi-info { font-weight: 600; color: var(--c-muted); }
+    /* Riesenrad */
+    .rad-steuer { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-top: 12px; }
+    .rad-steuer input[type=range] { flex: 1 1 180px; }
+    .rad-steuer output { font-family: var(--font-mono); font-weight: 700; color: var(--c-accent); min-width: 6.5em; }
+    .rad-steuer label.check { display: flex; gap: 8px; align-items: center; font-weight: 600; cursor: pointer; }
+    .rad-steuer label.check input { width: 20px; height: 20px; }
   </style>
 </head>
 <body>
@@ -39,12 +54,13 @@
     <div class="kurs">M12+ · Allgemeine Sinusfunktion</div>
     <h1>Was machen <mark>a, b, c, d</mark> mit der Sinuskurve?</h1>
     <p>$f(x) = a\cdot\sin(bx - c) + d$ — vier Regler, eine Kurve. Bewegen Sie erst jeden Regler einzeln
-      und vergleichen Sie mit $\sin(x)$ (grau). Dann nehmen Sie sich die Zielkurve vor.</p>
+      und vergleichen Sie mit $\sin(x)$ (grau). Dann treffen Sie die Zielkurven: sechs Level, von einem Regler bis zu allen vier.</p>
   </header>
 
   <section class="stage" aria-label="Ausprobieren">
+    <div class="level" id="level" aria-label="Level wählen"></div>
     <div class="mission" id="mission"><span class="icon"></span>
-      <span>Ihr Auftrag: Legen Sie Ihre Kurve genau auf die gestrichelte Zielkurve.</span></div>
+      <span id="auftrag">Ihr Auftrag: Legen Sie Ihre Kurve genau auf die gestrichelte Zielkurve.</span></div>
     <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graph der Sinusfunktion mit Zielkurve"></canvas></div>
     <div class="regler vier">
       <div><label for="ra">$a$ <output id="va"></output></label>
@@ -61,6 +77,10 @@
     <div class="ergebnis">
       <div class="gross" id="term"></div>
       <div class="deckung"><span>Deckung</span><div class="spur"><div class="balken" id="balken"></div></div><output id="prozent"></output></div>
+    </div>
+    <div class="weiter-zeile" id="weiterZeile" hidden>
+      <button class="btn" id="weiter" type="button">Nächstes Level →</button>
+      <span class="profi-info" id="profiInfo"></span>
     </div>
   </section>
 
@@ -83,6 +103,30 @@
         denn $\sin(2x - \pi) = \sin\bigl(2(x - \tfrac{\pi}{2})\bigr)$.</div>
     </div>
   </details>
+
+  <h2>Vom Riesenrad zur Sinuskurve</h2>
+  <p>Ihre Gondel aus dem Skript: Einstieg unten in $2\,\text{m}$ Höhe, die Nabe liegt $27\,\text{m}$ hoch, eine Umdrehung dauert
+    $10$ Minuten. Starten Sie die Fahrt und beobachten Sie, wie aus der Kreisbewegung eine Kurve wird.</p>
+
+  <section class="stage" aria-label="Riesenrad">
+    <div class="mission" id="radMission"><span class="icon"></span>
+      <span>Ihr Auftrag: Lassen Sie das Rad eine ganze Umdrehung fahren. Welche Größen des Rads finden Sie in der Kurve wieder?</span></div>
+    <div class="plot" id="radWrap"><canvas id="rad" aria-label="Riesenrad und Höhe der Gondel über der Zeit"></canvas></div>
+    <div class="rad-steuer">
+      <button class="btn" id="radStart" type="button">▶ Fahrt starten</button>
+      <input type="range" id="radT" min="0" max="20" step="0.05" value="0" aria-label="Zeit in Minuten">
+      <output id="radTv">t = 0 min</output>
+      <label class="check"><input type="checkbox" id="radZeichen"> Bedeutung einblenden</label>
+    </div>
+  </section>
+
+  <div class="aha" id="radAha" hidden>
+    <strong>Aha!</strong>
+    Die Höhe der Gondel ist eine Sinuskurve, und jeder Parameter steckt im Rad:
+    die <b>Mittellinie</b> ist die Höhe der Nabe, die <b>Amplitude</b> ist der Radius, die <b>Periode</b> ist die Umlaufzeit.
+    Und die Verschiebung? Die Sinuskurve „startet“ auf der Mittellinie und steigt. Suchen Sie den Zeitpunkt, an dem die Gondel
+    auf Nabenhöhe nach oben fährt.
+  </div>
 
   <h2>Selbst üben</h2>
 
@@ -119,7 +163,7 @@
   </div>
 
   <div class="blatt"><span class="pfeil">✎</span>
-    <span>Zurück zum Skript 2.5 A: Bewegen Sie jeden Regler einzeln und ergänzen Sie die Sätze zu $a$, $b$, $c$ und $d$.</span></div>
+    <span>Zurück zum Skript 2.5: In Teil A ergänzen Sie die Sätze zu $a$, $b$, $c$ und $d$. Den Term für das Riesenrad bestimmen Sie in Aufgabe 5, mit Rechnung.</span></div>
 
   <footer class="fuss">
     <span>Mathematik · FOS Technik</span>
@@ -129,11 +173,26 @@
 <script>
 window.addEventListener('load', function () {
   var PI = Math.PI, S = { a: 1, b: 1, k: 0, d: 0 };          // c = k·π/4
-  var Z = { a: 1.5, b: 2, c: PI / 2, d: 0.5 };                  // Zielkurve 1,5·sin(2x − π/2) + 0,5
-  var ziel = function (x) { return Z.a * Math.sin(Z.b * x - Z.c) + Z.d; };
+
+  /* Zielkurven (c = k·π/4): von einem Regler bis zu allen vier. Keine Funktion aus dem Skript 2.5 (Aufg. 2–5). */
+  var LEVEL = [
+    { st: 1, a: 2.5, b: 1, k: 0, d: 0, auftrag: 'Ermitteln Sie den Streckfaktor $a$ der Zielkurve.' },
+    { st: 1, a: -1.5, b: 1, k: 0, d: 1, auftrag: 'Ermitteln Sie $a$ und $d$: Die Zielkurve ist gespiegelt und liegt höher.' },
+    { st: 2, a: 1.5, b: 3, k: 0, d: -1, auftrag: 'Bestimmen Sie $b$, $a$ und $d$: Die Wellen sind enger als bei $\\sin(x)$.' },
+    { st: 2, a: 1.5, b: 2, k: 2, d: 0.5, auftrag: 'Bestimmen Sie alle vier Parameter. Vorsicht bei $c$!', aha: true },
+    { st: 2, a: 2.5, b: 1, k: -3, d: -0.5, auftrag: 'Bestimmen Sie die Parameter. Die Zielkurve ist nach links verschoben: Welches Vorzeichen hat $c$?' },
+    { st: 3, a: -2, b: 1.5, k: 3, d: 1, auftrag: 'Bestimmen Sie alle vier Parameter. Beurteilen Sie dann: Gibt es eine zweite Einstellung, die mit dem anderen Vorzeichen von $a$ dieselbe Kurve ergibt?', profi: true }
+  ];
+  var SPEICHER = 'm12add-sinus-level';
+  var lv = 0, geschafft = [], profi = { neg: false, pos: false };
+  try { geschafft = JSON.parse(localStorage.getItem(SPEICHER) || '[]'); } catch (e) { geschafft = []; }
+  for (var i = 0; i < LEVEL.length; i++) if (!geschafft[i]) { lv = i; break; }
+
+  var Z = LEVEL[lv];
+  var ziel = function (x) { return Z.a * Math.sin(Z.b * x - Z.k * PI / 4) + Z.d; };
   var f = function (x) { return S.a * Math.sin(S.b * x - S.k * PI / 4) + S.d; };
 
-  /* Vielfache von π als Text: k/n·π gekürzt (für Achse, Regler und KaTeX) */
+  /* Vielfache von π als Text: z/n·π gekürzt (für Achse, Regler und KaTeX) */
   function ggt(a, b) { return b ? ggt(b, a % b) : Math.abs(a); }
   function piText(z, n, tex) {                                // z/n · π
     if (z === 0) return '0';
@@ -143,11 +202,41 @@ window.addEventListener('load', function () {
     return tex ? s + '\\frac{' + (a === 1 ? '' : a) + p + '}{' + n + '}' : s + (a === 1 ? '' : a) + p + '/' + n;
   }
   function zahlTex(v) { return Aha.dt(v, 1); }
+  function mathe(el) {
+    if (window.renderMathInElement) renderMathInElement(el, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+  }
+  function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify(geschafft)); } catch (e) {} }
 
   var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: -PI / 2, xMax: 2 * PI + PI / 4, yMin: -3.5, yMax: 4 },
     step: { x: PI / 4, y: 0.5 }, label: { x: PI / 2, y: 1 }, xLabel: 'x', yLabel: 'y', padL: 36, ratio: 0.62, minH: 320,
     fmtX: function (n) { return piText(Math.round(n / (PI / 4)), 4, false); },
     fmtY: function (n) { return Aha.de(n, 1); } });
+
+  /* Level-Leiste */
+  function leiste() {
+    Aha.$('level').innerHTML = LEVEL.map(function (L, j) {
+      return '<button type="button" data-l="' + j + '" class="' + (j === lv ? 'aktiv' : '') + (geschafft[j] ? ' geschafft' : '') +
+        '" aria-label="Level ' + (j + 1) + '">' + (j + 1) + ' ' + '⭐'.repeat(L.st) + '</button>';
+    }).join('');
+  }
+  function setzeRegler() {
+    Aha.$('ra').value = S.a; Aha.$('rb').value = S.b; Aha.$('rc').value = S.k; Aha.$('rd').value = S.d;
+  }
+  function waehle(j) {
+    lv = j; Z = LEVEL[lv];
+    S = { a: 1, b: 1, k: 0, d: 0 }; setzeRegler();
+    var t = Aha.$('auftrag');
+    t.innerHTML = 'Level ' + (lv + 1) + ' · ' + '⭐'.repeat(Z.st) + ' ' + Z.auftrag;
+    mathe(t);
+    Aha.$('weiterZeile').hidden = !geschafft[lv];
+    Aha.$('weiter').hidden = lv === LEVEL.length - 1;
+    Aha.$('profiInfo').textContent = '';
+    leiste(); aktualisiere();
+  }
+  Aha.$('level').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (b) waehle(+b.dataset.l);
+  });
+  Aha.$('weiter').addEventListener('click', function () { if (lv < LEVEL.length - 1) waehle(lv + 1); });
 
   function deckung() {
     var s = 0, n = 120, v = P.o.view;
@@ -160,6 +249,11 @@ window.addEventListener('load', function () {
     P.ctx.setLineDash([9, 7]); P.curve(ziel, C.k, 3); P.ctx.setLineDash([]);
     P.curve(f, C.e, 4);
   }
+  function profiText() {
+    if (profi.neg && profi.pos) return 'Beide gefunden: Spiegeln wirkt hier wie eine Verschiebung um eine halbe Periode.';
+    if (profi.neg) return 'Geschafft! Finden Sie jetzt die Einstellung mit $a > 0$.';
+    return 'Geschafft! Finden Sie jetzt die Einstellung mit $a < 0$.';
+  }
   function aktualisiere() {
     Aha.$('va').textContent = Aha.de(S.a, 1); Aha.$('vb').textContent = Aha.de(S.b, 1);
     Aha.$('vc').textContent = piText(S.k, 4, false); Aha.$('vd').textContent = Aha.de(S.d, 1);
@@ -168,27 +262,178 @@ window.addEventListener('load', function () {
     var c = S.k === 0 ? '' : (S.k > 0 ? ' - ' : ' + ') + piText(Math.abs(S.k), 4, true);
     var d = S.d === 0 ? '' : (S.d > 0 ? ' + ' : ' - ') + zahlTex(Math.abs(S.d));
     Aha.tex('term', 'f(x) = ' + (S.a === 0 ? '0' : a + '\\sin(' + b + 'x' + c + ')') + (S.a === 0 ? '' : d));
-    var p = deckung();
-    Aha.$('balken').style.width = p + '%'; Aha.$('balken').classList.toggle('voll', p >= 99);
+    var p = deckung(), ok = p >= 99;
+    Aha.$('balken').style.width = p + '%'; Aha.$('balken').classList.toggle('voll', ok);
     Aha.$('prozent').textContent = p + ' %';
-    // Die typische Falle: a, b, d stimmen, aber c = π/4 (Verschiebung um c statt c/b gedacht)
-    var falle = S.a === Z.a && S.b === Z.b && S.d === Z.d && S.k === 1;
+    // Typische Falle: a, b, d stimmen, aber c wurde als Verschiebung genommen (c statt c/b)
+    var kFalle = Z.k / Z.b;
+    var falle = Z.b !== 1 && Z.k !== 0 && S.a === Z.a && S.b === Z.b && S.d === Z.d && S.k === kFalle;
     var h = Aha.$('falle');
     h.classList.toggle('an', falle);
-    if (falle) { h.innerHTML = 'Fast! Mit $c = ' + piText(S.k, 4, true) + '$ ist Ihre Kurve nur um $' + piText(S.k, 8, true) +
-      '$ verschoben, die Zielkurve aber um $\\frac{\\pi}{4}$. Woran liegt das?'; if (window.renderMathInElement) renderMathInElement(h, { delimiters: [{ left: '$', right: '$', display: false }] }); }
+    if (falle) {
+      h.innerHTML = 'Fast! Mit $c = ' + piText(S.k, 4, true) + '$ ist Ihre Kurve nur um $' + piText(2 * S.k, 8 * Z.b, true) +
+        '$ verschoben, die Zielkurve aber um $' + piText(2 * Z.k, 8 * Z.b, true) + '$. Woran liegt das?';
+      mathe(h);
+    }
     zeichne();
-    Aha.mission(p >= 99);
+    if (ok) {
+      if (Z.aha) Aha.mission(true);
+      if (!geschafft[lv]) { geschafft[lv] = true; speichern(); leiste(); }
+      Aha.$('weiterZeile').hidden = false;
+      if (Z.profi) {
+        if (S.a < 0) profi.neg = true; else profi.pos = true;
+        var pi = Aha.$('profiInfo'); pi.innerHTML = profiText(); mathe(pi);
+      }
+    }
+    Aha.$('mission').classList.toggle('done', ok);
   }
   [['ra', 'a'], ['rb', 'b'], ['rc', 'k'], ['rd', 'd']].forEach(function (r) {
     Aha.$(r[0]).addEventListener('input', function () { S[r[1]] = +this.value; aktualisiere(); });
   });
   Aha.$('reset').addEventListener('click', function () {
-    S = { a: 1, b: 1, k: 0, d: 0 };
-    Aha.$('ra').value = 1; Aha.$('rb').value = 1; Aha.$('rc').value = 0; Aha.$('rd').value = 0;
-    aktualisiere();
+    S = { a: 1, b: 1, k: 0, d: 0 }; setzeRegler(); aktualisiere();
   });
+  waehle(lv);
   Aha.onRedraw(aktualisiere);
+
+  /* ── Riesenrad: Einstieg unten bei t = 0, Höhe h(t) = 27 − 25·cos(2π·t/10) in m, t in min ──
+     Bewusst ohne Höhenanzeige und ohne Term: Aufgabe 5 im Skript bleibt eine Rechenaufgabe. */
+  var R = { t: 0, laeuft: false, vorher: 0, runde: false, tMax: 20 };
+  var cv = Aha.$('rad'), ctx = cv.getContext('2d');
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function hoehe(t) { return 27 - 25 * Math.cos(2 * PI * t / 10); }
+  function pfeil(x1, y1, x2, y2, farbe) {
+    var w = Math.atan2(y2 - y1, x2 - x1), l = 8;
+    ctx.strokeStyle = farbe; ctx.fillStyle = farbe; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    [[x2, y2, w], [x1, y1, w + PI]].forEach(function (q) {
+      ctx.beginPath(); ctx.moveTo(q[0], q[1]);
+      ctx.lineTo(q[0] - l * Math.cos(q[2] - 0.45), q[1] - l * Math.sin(q[2] - 0.45));
+      ctx.lineTo(q[0] - l * Math.cos(q[2] + 0.45), q[1] - l * Math.sin(q[2] + 0.45)); ctx.fill();
+    });
+  }
+  function schild(s, x, y, farbe, align) {
+    ctx.font = '700 13px ' + css('--font-body'); ctx.textAlign = align || 'left';
+    var w = ctx.measureText(s).width, x0 = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+    ctx.fillStyle = css('--c-bg'); ctx.globalAlpha = 0.85; ctx.fillRect(x0 - 3, y - 12, w + 6, 16); ctx.globalAlpha = 1;
+    ctx.fillStyle = farbe; ctx.fillText(s, x, y);
+  }
+  function radZeichne() {
+    var wrap = Aha.$('radWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, schmal = W < 560;
+    var H = schmal ? 240 : Math.round(Math.max(320, Math.min(440, W * 0.5)));
+    R.tMax = schmal ? 10 : 20;
+    var sl = Aha.$('radT'); if (+sl.max !== R.tMax) { sl.max = R.tMax; if (R.t > R.tMax) R.t = R.tMax; }
+    cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    var C = { grid: css('--c-grid'), axis: css('--c-axis'), text: css('--c-muted'), e: css('--c-e'), k: css('--c-k'),
+      bg: css('--c-bg'), font: css('--font-body') };
+    var oben = 26, unten = 40, yMin = -3, yMax = 57;
+    var Y = function (h) { return H - unten - (h - yMin) / (yMax - yMin) * (H - oben - unten); };
+    var r = Y(2) - Y(27), cx = 10 + r, cy = Y(27);
+    var gx0 = cx + r + (schmal ? 34 : 66), gx1 = W - (schmal ? 6 : 14);
+    var X = function (t) { return gx0 + t / R.tMax * (gx1 - gx0); };
+    var zeichen = Aha.$('radZeichen').checked;
+
+    // Boden und Gestell
+    ctx.strokeStyle = C.axis; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, Y(0)); ctx.lineTo(cx + r + 8, Y(0)); ctx.stroke();
+    ctx.lineWidth = 4; ctx.strokeStyle = C.text;
+    ctx.beginPath(); ctx.moveTo(cx - 0.45 * r, Y(0)); ctx.lineTo(cx, cy); ctx.lineTo(cx + 0.45 * r, Y(0)); ctx.stroke();
+
+    // Koordinatensystem rechts (gleicher Höhenmaßstab wie das Rad)
+    ctx.font = '600 12px ' + C.font; ctx.lineWidth = 1;
+    for (var hh = 10; hh <= 50; hh += 10) {
+      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(gx0, Y(hh)); ctx.lineTo(gx1, Y(hh)); ctx.stroke();
+      ctx.fillStyle = C.text; ctx.textAlign = 'right'; ctx.fillText(hh, gx0 - 6, Y(hh) + 4);
+    }
+    var tStep = R.tMax > 10 ? 2 : 2;
+    for (var tt = 0; tt <= R.tMax + 1e-9; tt += 1) {
+      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(X(tt), Y(0)); ctx.lineTo(X(tt), Y(54)); ctx.stroke();
+      if (tt % tStep === 0) { ctx.fillStyle = C.text; ctx.textAlign = 'center'; ctx.fillText(tt, X(tt), Y(0) + 17); }
+    }
+    ctx.strokeStyle = C.axis; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(gx0, Y(0)); ctx.lineTo(gx1 + 6, Y(0)); ctx.moveTo(gx0, Y(0)); ctx.lineTo(gx0, Y(56)); ctx.stroke();
+    ctx.fillStyle = C.text; ctx.font = '700 13px ' + C.font;
+    ctx.textAlign = 'right'; ctx.fillText('t in min', gx1, Y(0) + 34);
+    ctx.textAlign = 'right'; ctx.fillText('h in m', gx0 - 6, Y(56) + 2);
+
+    // Bedeutung: ganze Kurve blass, Mittellinie, Amplitude, Periode
+    if (zeichen) {
+      ctx.setLineDash([3, 6]); ctx.strokeStyle = C.k; ctx.lineWidth = 2; ctx.globalAlpha = 0.55;
+      ctx.beginPath();
+      for (var q = 0; q <= 200; q++) { var tq = R.tMax * q / 200; if (q) ctx.lineTo(X(tq), Y(hoehe(tq))); else ctx.moveTo(X(tq), Y(hoehe(tq))); }
+      ctx.stroke(); ctx.globalAlpha = 1;
+      ctx.setLineDash([8, 6]); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(gx1, cy); ctx.stroke(); ctx.setLineDash([]);
+      schild(schmal ? 'Mittellinie' : 'Mittellinie = Höhe der Nabe', gx1, cy - 6, C.k, 'right');
+      pfeil(X(5), cy, X(5), Y(52), C.k);
+      schild(schmal ? 'Ampl.' : 'Amplitude = Radius', X(5) + 6, (cy + Y(52)) / 2 + 4, C.k);
+      pfeil(X(0), Y(54.5), X(10), Y(54.5), C.k);
+      schild(schmal ? 'Periode' : 'Periode = Umlaufzeit', X(7.5), Y(54.5) - 6, C.k, 'center');
+    }
+
+    // Rad mit Speichen und acht Gondeln; Ihre Gondel startet unten
+    var th = 2 * PI * R.t / 10;
+    ctx.strokeStyle = C.text; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * PI); ctx.stroke();
+    ctx.lineWidth = 1.5;
+    for (var s = 0; s < 8; s++) {
+      var w = th + s * PI / 4;
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + r * Math.sin(w), cy + r * Math.cos(w)); ctx.stroke();
+    }
+    if (zeichen) { ctx.strokeStyle = C.k; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, cy - r); ctx.stroke(); }
+    for (s = 1; s < 8; s++) {
+      w = th + s * PI / 4;
+      ctx.fillStyle = C.text; ctx.beginPath(); ctx.arc(cx + r * Math.sin(w), cy + r * Math.cos(w), 5, 0, 2 * PI); ctx.fill();
+    }
+    ctx.fillStyle = C.text; ctx.beginPath(); ctx.arc(cx, cy, 5, 0, 2 * PI); ctx.fill();
+    var gx = cx + r * Math.sin(th), gy = cy + r * Math.cos(th);
+
+    // Spur der Höhe bis zum Zeitpunkt t und Verbindungslinie Gondel → Kurve
+    var tEnde = Math.min(R.t, R.tMax), py = Y(hoehe(tEnde)), px = X(tEnde);
+    ctx.strokeStyle = C.e; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    var n = Math.max(2, Math.round(240 * tEnde / R.tMax));
+    for (var m = 0; m <= n; m++) { var tm = tEnde * m / n; if (m) ctx.lineTo(X(tm), Y(hoehe(tm))); else ctx.moveTo(X(tm), Y(hoehe(tm))); }
+    if (tEnde > 0) ctx.stroke();
+    ctx.setLineDash([6, 5]); ctx.strokeStyle = C.e; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.8;
+    ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(px, py); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+    ctx.fillStyle = C.e; ctx.beginPath(); ctx.arc(px, py, 6, 0, 2 * PI); ctx.fill();
+    ctx.beginPath(); ctx.arc(gx, gy, 9, 0, 2 * PI); ctx.fill();
+    ctx.fillStyle = C.bg; ctx.beginPath(); ctx.arc(gx, gy, 3.5, 0, 2 * PI); ctx.fill();
+    if (R.t === 0) schild('Ihre Gondel', gx - 14, gy - 12, C.e, 'right');
+
+    Aha.$('radTv').textContent = 't = ' + Aha.de(Math.round(R.t * 10) / 10, 1) + ' min';
+    Aha.$('radT').value = R.t;
+  }
+  function radKnopf() {
+    Aha.$('radStart').textContent = R.laeuft ? '❚❚ Pause' : R.t >= R.tMax ? '↺ Noch einmal' : R.t > 0 ? '▶ Weiter' : '▶ Fahrt starten';
+  }
+  function radPruefe() {
+    if (R.runde || R.t < 10) return;
+    R.runde = true;
+    Aha.$('radMission').classList.add('done');
+    var box = Aha.$('radAha'); box.hidden = false; box.classList.add('verdient');
+    requestAnimationFrame(function () { box.classList.add('sichtbar'); });
+  }
+  function schritt(jetzt) {
+    if (!R.laeuft) return;
+    var dt = Math.min(0.1, (jetzt - R.vorher) / 1000); R.vorher = jetzt;
+    R.t = Math.min(R.tMax, R.t + dt);                        // 1 Sekunde = 1 Minute Fahrt
+    if (R.t >= R.tMax) R.laeuft = false;
+    radPruefe(); radZeichne(); radKnopf();
+    if (R.laeuft) requestAnimationFrame(schritt);
+  }
+  Aha.$('radStart').addEventListener('click', function () {
+    if (R.laeuft) { R.laeuft = false; radKnopf(); return; }
+    if (R.t >= R.tMax) R.t = 0;
+    R.laeuft = true; R.vorher = performance.now(); radKnopf();
+    requestAnimationFrame(schritt);
+  });
+  Aha.$('radT').addEventListener('input', function () {
+    R.laeuft = false; R.t = +this.value; radPruefe(); radZeichne(); radKnopf();
+  });
+  Aha.$('radZeichen').addEventListener('change', radZeichne);
+  Aha.onRedraw(radZeichne);
 });
 </script>
 </body>
