@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schneiden oder Berühren? · M11</title>
+  <meta name="description" content="Wie viele Nullstellen hat eine Parabel? Regler, Vorzeichenstreifen, Diskriminante und Erklärvideo: Schneiden oder Berühren.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<!-- Aha-Seite (13.10.2026), FT11 LB1 UE 6. QR auf Info-Blatt 1.6 C → #video.
+     Video: Quelle 04_Kurse/01_Mathematik/FT11/LB01_…/06_Nullstellen_Ungleichungen_Speerwurf/video/ — nach Neubau hierher kopieren (mp4, vtt, jpg).
+     Üben: andere Terme als AB 1.6 und INTRO-Ampel. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Quadratische Funktionen</div>
+    <h1>Schneiden oder <mark>Berühren</mark>?</h1>
+    <p>Wie oft trifft eine Parabel die $x$-Achse? Schieben Sie sie hin und her.</p>
+  </header>
+
+  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
+  <section class="stage" aria-label="Ausprobieren">
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span>Die Parabel soll die $x$-Achse nur berühren, nicht schneiden.</span></div>
+    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Parabel mit Vorzeichenstreifen auf der x-Achse"></canvas></div>
+    <p class="tipp-zeile">Grün: $f(x) &gt; 0$ · Rot: $f(x) &lt; 0$</p>
+    <div class="regler">
+      <div><label for="a">Streckfaktor $a$ <output id="aVal"></output></label>
+        <input type="range" id="a" min="-2" max="2" step="0.5" value="1"></div>
+      <div><label for="xs">$x_S$ <output id="xsVal"></output></label>
+        <input type="range" id="xs" min="-3" max="3" step="0.5" value="1"></div>
+      <div><label for="ys">$y_S$ <output id="ysVal"></output></label>
+        <input type="range" id="ys" min="-4" max="4" step="0.5" value="-2"></div>
+    </div>
+    <div class="ergebnis">
+      <div class="gross" id="anzahl"></div>
+      <div class="rechnung" id="rechnung"></div>
+    </div>
+  </section>
+
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Liegt der Scheitel <b>auf</b> der $x$-Achse, berührt die Parabel nur: <b>eine doppelte</b> Nullstelle, $D = 0$.
+    Der Streifen bleibt auf beiden Seiten gleich: <b>kein Vorzeichenwechsel</b>.
+  </div>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>•</span><div>Scheitel über der Achse und nach oben offen (oder unter der Achse und nach unten offen): <b>keine</b> Nullstelle.</div></div>
+      <div class="schritt"><span>•</span><div>Scheitel auf der Achse: $f(x) = a\,(x - x_S)^2 = a\,(x - x_S)(x - x_S)$. Die Klammer kommt <b>zweimal</b> vor: doppelte Nullstelle.</div></div>
+      <div class="schritt"><span>•</span><div>Sonst: <b>zwei einfache</b> Nullstellen. An jeder wechselt das Vorzeichen.</div></div>
+      <div class="schritt"><span>•</span><div>Rechnerisch: Diskriminante $D = b^2 - 4ac$. \ $D &lt; 0$ keine, $D = 0$ eine, $D &gt; 0$ zwei.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> $x^2 = 9 \;\Rightarrow\; x = 3$. Die zweite Lösung $x = -3$ fehlt.</div>
+    </div>
+  </details>
+
+  <figure class="video" id="video">
+    <video controls playsinline preload="metadata" poster="MT11_VID_Schneiden_Beruehren.jpg">
+      <source src="MT11_VID_Schneiden_Beruehren.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT11_VID_Schneiden_Beruehren.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Schneiden oder Berühren?</b> (<span id="vidDauer">ca. 90</span> s) — die Parabel wandert nach unten: keine, eine doppelte, zwei Nullstellen.</figcaption>
+  </figure>
+
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/parabel/"><span>← Voriges Thema</span>Parabel verschieben</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  var S = { a: 1, xs: 1, ys: -2 };
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: -6, xMax: 6, yMin: -5, yMax: 5 },
+    step: { x: 1, y: 1 }, label: { x: 2, y: 2 }, xLabel: 'x', yLabel: 'y' });
+  var f = function (x) { return S.a * (x - S.xs) * (x - S.xs) + S.ys; };
+  function nullstellen() {
+    var q = -S.ys / S.a;                       // (x − x_S)² = −y_S / a
+    if (Math.abs(S.ys) < 1e-9) return [S.xs];
+    if (q < 0) return [];
+    var r = Math.sqrt(q); return [S.xs - r, S.xs + r];
+  }
+  function zeichne() {
+    P.setup();
+    var C = P.C, ns = nullstellen(), v = P.o.view;
+    P.grid();
+    // Vorzeichenstreifen auf der x-Achse
+    var grenzen = [v.xMin].concat(ns.filter(function (x) { return x > v.xMin && x < v.xMax; }), [v.xMax]);
+    for (var i = 0; i < grenzen.length - 1; i++) {
+      var m = (grenzen[i] + grenzen[i + 1]) / 2, plus = f(m) > 0;
+      P.segment(grenzen[i], 0, grenzen[i + 1], 0, plus ? C.gain : C.loss, 9);
+      if (grenzen[i + 1] - grenzen[i] > 0.6) P.text(plus ? '+' : '−', m, 0, plus ? C.gain : C.loss, 'center', 0, plus ? -12 : 26);
+    }
+    P.curve(f, C.e, 4);
+    P.dot(S.xs, S.ys, C.axis, 5);
+    ns.forEach(function (x) { P.dot(x, 0, ns.length === 1 ? C.accent : C.loss, 7, true); });
+  }
+  function zahl(n) { return Aha.dt(n, 2); }
+  function aktualisiere() {
+    if (S.a === 0) { S.a = 0.5; Aha.$('a').value = 0.5; }
+    var ns = nullstellen(), D = -4 * S.a * S.ys;
+    Aha.$('aVal').textContent = Aha.de(S.a, 1);
+    Aha.$('xsVal').textContent = Aha.de(S.xs, 1);
+    Aha.$('ysVal').textContent = Aha.de(S.ys, 1);
+    Aha.$('anzahl').textContent = ns.length === 0 ? 'keine Nullstelle'
+      : ns.length === 1 ? 'eine doppelte Nullstelle: berührt' : 'zwei einfache Nullstellen: schneidet';
+    var term = 'f(x) = ' + (S.a === 1 ? '' : S.a === -1 ? '-' : zahl(S.a)) +
+      (S.xs === 0 ? 'x^2' : '(x ' + (S.xs > 0 ? '- ' + zahl(S.xs) : '+ ' + zahl(-S.xs)) + ')^2') +
+      (S.ys === 0 ? '' : S.ys > 0 ? ' + ' + zahl(S.ys) : ' - ' + zahl(-S.ys));
+    Aha.tex('rechnung', term + '\\qquad D = ' + zahl(D) + (D > 0 ? ' > 0' : D < 0 ? ' < 0' : ''));
+    zeichne();
+    Aha.mission(ns.length === 1);
+  }
+  ['a', 'xs', 'ys'].forEach(function (id) {
+    Aha.$(id).addEventListener('input', function () { S[id] = +this.value; aktualisiere(); });
+  });
+  Aha.onRedraw(aktualisiere);
+  var vid = document.querySelector('#video video');
+  vid.addEventListener('loadedmetadata', function () { if (vid.duration) Aha.$('vidDauer').textContent = Math.round(vid.duration); });
+});
+</script>
+<script>
+/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Nullstellen und Vorzeichen. Andere Terme als AB 1.6 und INTRO. */
+window.addEventListener('load', function () {
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Wie viele Nullstellen hat $f(x) = (x + 2)^2 - 1$?',
+        optionen: ['keine', 'eine', 'zwei'], ans: 2,
+        warum: ['Der Scheitel $S(-2|-1)$ liegt <b>unter</b> der Achse, die Parabel ist nach oben offen.', 'Eine gäbe es nur, wenn der Scheitel auf der Achse läge.'] },
+      { frage: 'Wie viele Nullstellen hat $f(x) = -(x - 3)^2 - 2$?',
+        optionen: ['keine', 'eine', 'zwei'], ans: 0,
+        warum: [, 'Der Scheitel $S(3|-2)$ liegt nicht auf der Achse.', 'Nach unten offen und Scheitel schon unter der Achse: Sie kommt nie hoch.'] },
+      { frage: 'Wie viele Nullstellen hat $f(x) = 0{,}5\\,(x + 1)^2$?',
+        optionen: ['keine', 'eine (doppelt)', 'zwei'], ans: 1,
+        warum: ['Setzen Sie $x = -1$ ein: $f(-1) = 0$.', , 'Der Scheitel $S(-1|0)$ liegt <b>auf</b> der Achse: Die Parabel berührt nur.'] } ],
+    [ { frage: 'Für welche $x$ ist $(x - 1)(x - 5) < 0$?',
+        optionen: ['$1 < x < 5$', '$x < 1$ oder $x > 5$', '$x < 5$'], ans: 0,
+        warum: [, 'Das ist der Bereich <b>über</b> der Achse. Nach oben offen: unter der Achse liegt sie zwischen den Nullstellen.', 'Links von $1$ liegt die Parabel wieder über der Achse, z. B. $x = 0$: $(-1)(-5) = 5 > 0$.'] },
+      { frage: 'Für welche $x$ ist $-(x + 2)(x - 4) > 0$?',
+        optionen: ['$x < -2$ oder $x > 4$', '$-2 < x < 4$', '$x > 4$'], ans: 1,
+        warum: ['Nach unten offen: Über der Achse liegt sie zwischen den Nullstellen.', , 'Probe $x = 5$: $-(7)(1) = -7 < 0$.'] },
+      { frage: 'Für welche $x$ ist $(x - 3)^2 > 0$?',
+        optionen: ['für alle $x$', 'für alle $x$ außer $3$', 'für kein $x$'], ans: 1,
+        warum: ['Bei $x = 3$ ist der Wert genau $0$, nicht größer.', , 'Nur bei $x = 3$ ist der Wert $0$, sonst immer positiv.'] } ],
+    [ { frage: '„$x^2 > 25$ hat die Lösung $x > 5$.“',
+        optionen: ['Stimmt — Wurzel ziehen.', 'Stimmt nicht — auch $x < -5$ gehört dazu.'], ans: 1,
+        warum: ['Probe $x = -6$: $36 > 25$. Die Skizze von $x^2 - 25$ zeigt zwei Bereiche.'] },
+      { frage: '„Ist $D = 0$, berührt die Parabel die $x$-Achse.“',
+        optionen: ['Stimmt — eine doppelte Nullstelle, der Scheitel liegt auf der Achse.', 'Stimmt nicht — dann gibt es keine Nullstelle.'], ans: 0,
+        warum: [, 'Keine Nullstelle gibt es bei $D < 0$.'] },
+      { frage: '„Eine nach oben offene Parabel mit $c > 0$ hat keine Nullstelle.“',
+        optionen: ['Stimmt — sie startet ja oberhalb der Achse.', 'Stimmt nicht — Gegenbeispiel $x^2 - 4x + 1$.'], ans: 1,
+        warum: ['$c$ ist nur der $y$-Achsenabschnitt. $x^2 - 4x + 1$ hat $S(2|-3)$ unter der Achse, also zwei Nullstellen.'] } ]
+  ] });
+});
+</script>
+</body>
+</html>
