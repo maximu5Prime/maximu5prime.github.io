@@ -1135,7 +1135,8 @@ input[type=range]:focus-visible {
 
 /* Bewusste Ausnahme vom 640px-Breakpoint (§16): 68ch-Text + ≥320px-Grafik brauchen ~1000px */
 @media (max-width: 1000px) {
-  .wiki-entry { grid-template-columns: 1fr; }
+  /* minmax(0, …): sonst wächst die Spalte auf die Breite von Reitern/Formeln und die Seite steht am Handy über (13.10.2026) */
+  .wiki-entry { grid-template-columns: minmax(0, 1fr); }
 }
 
 
@@ -1620,3 +1621,9 @@ a.dtree-leaf:hover {
 .alt-hinweis span { opacity: .85; }
 .alt-hinweis a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 @media print { .alt-hinweis { display: none; } }
+
+/* Handy (13.10.2026): lange Formeln und Tabellen scrollen in sich statt die Seite zu verbreitern */
+@media (max-width: 640px) {
+  .katex-display { overflow-x: auto; overflow-y: hidden; }
+  .table { display: block; overflow-x: auto; }
+}
