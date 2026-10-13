@@ -31,7 +31,26 @@ fr.onload = function () {
     }
     var n = box.querySelector('.st-nochmal'); if (!n) { fehler.push('kein Ende'); break; } n.click();
   }
-  L((fehler.length ? '✗ ' : '✓ ') + url + '  Schritte ' + etappen + (vids ? '  Videos ' + vids : '') + (box ? '  Varianten gesehen ' + Object.keys(gesehen).length : '') + (fehler.length ? '\n    ' + fehler.slice(0, 6).join('\n    ') : ''));
+  // Trainer: je Stufe 40 Aufgaben; bei reinen Auswahl-Aufgaben antippen, bis „Weiter“ erscheint → Position der richtigen Option
+  var tr = d.getElementById('trainer'), pos = {}, auswahl = 0;
+  if (tr && tr.querySelector('.tr-weiter')) {
+    var stufenKn = tr.querySelectorAll('.tr-stufen button');
+    (stufenKn.length ? Array.prototype.slice.call(stufenKn) : [null]).forEach(function (sb) {
+      if (sb) sb.click();
+      for (var r = 0; r < 40; r++) {
+        var bl = tr.querySelectorAll('.tr-block[data-typ="wahl"]');
+        if (bl.length === 1 && tr.querySelectorAll('.tr-block').length === 1 && !tr.querySelector('.tr-felder input')) {
+          var bs = bl[0].querySelectorAll('button[data-j]'), n = bs.length;
+          for (var k = 0; k < n; k++) { bs[k].click(); if (!tr.querySelector('.tr-weiter').hidden) { var key = n + ':' + (k + 1); pos[key] = (pos[key] || 0) + 1; auswahl++; break; } }
+          if (tr.querySelector('.tr-weiter').hidden) fehler.push('keine Option richtig: ' + tr.querySelector('.tr-frage').textContent.slice(0, 50));
+          tr.querySelector('.tr-weiter').click();
+        } else tr.querySelector('.tr-neu').click();
+        if (tr.querySelectorAll('.katex-error').length) { fehler.push('KaTeX-Fehler im Trainer'); break; }
+      }
+    });
+  }
+  var posText = Object.keys(pos).sort().map(function (k) { return k + '×' + pos[k]; }).join(' ');
+  L((fehler.length ? '✗ ' : '✓ ') + url + (auswahl ? '  Trainer-Auswahl ' + auswahl + ' (Optionen:Position×Anzahl ' + posText + ')' : '') + '  Schritte ' + etappen + (vids ? '  Videos ' + vids : '') + (box ? '  Varianten gesehen ' + Object.keys(gesehen).length : '') + (fehler.length ? '\n    ' + fehler.slice(0, 6).join('\n    ') : ''));
   weiter();
 };
 weiter();

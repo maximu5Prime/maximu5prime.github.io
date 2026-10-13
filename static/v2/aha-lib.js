@@ -262,22 +262,31 @@
       eingabe, hilfe;   // eingabe: Aufgabe hat Textfelder (sonst prüft Antippen sofort); hilfe: 0 nichts, 1 Tipp, 2 Lösungsweg gezeigt
     box.classList.add('trainer');
     var ops = Array.isArray(o.stufen) ? o.stufen : ['', '', ''], sterne = ['⭐', '⭐⭐', '⭐⭐⭐'];
+    // Bedienung wie Aha.Stufen (13.10.2026): schmale Stufenleiste, EIN Hauptknopf (Prüfen bzw. nach richtiger Antwort Weiter),
+    // Hilfe und Andere Aufgabe als leise Links.
     box.innerHTML =
-      '<div class="tr-kopf">' + (o.stufen ? '<div class="wahl tr-stufen" role="group" aria-label="Anforderung">' +
-        sterne.map(function (st, i) { return '<button type="button" data-s="' + (i + 1) + '">' + st + (ops[i] ? ' ' + ops[i] : '') + '</button>'; }).join('') +
+      '<div class="tr-kopf">' + (o.stufen ? '<div class="st-leiste tr-stufen" role="group" aria-label="Stufe">' +
+        sterne.map(function (st, i) { return '<button type="button" data-s="' + (i + 1) + '" title="' + (ops[i] || '') + '">' + st + '</button>'; }).join('') +
         '</div>' : '<span></span>') +
       '<span class="tr-serie"></span></div>' +
       '<div class="tr-nr"></div><div class="tr-frage"></div><div class="tr-felder"></div>' +
-      '<div class="btn-row"><button type="button" class="btn tr-pruefen">Prüfen</button>' +
-      '<button type="button" class="btn btn--ghost tr-hilfe">Hilfe</button>' +
-      '<button type="button" class="btn btn--ghost tr-neu">Neue Aufgabe →</button></div>' +
-      '<div class="feedback"></div><div class="hint"></div><div class="tr-weg" hidden></div>';
+      '<div class="feedback"></div><div class="hint"></div><div class="tr-weg" hidden></div>' +
+      '<div class="tr-aktion"><button type="button" class="btn tr-pruefen">Prüfen</button>' +
+      '<button type="button" class="btn tr-weiter" hidden>Weiter →</button>' +
+      '<button type="button" class="tr-link tr-hilfe">Hilfe</button>' +
+      '<button type="button" class="tr-link tr-neu">Andere Aufgabe</button></div>';
     function q(c) { return box.querySelector(c); }
     function zeigeSerie() { q('.tr-serie').textContent = serie ? serie + ' richtig in Folge' + (serie >= 5 ? ' 🔥' : '') : ''; }
     function feld(f, i) {
       var t = typVon(f), kopf = f.label ? '<span class="tr-label">' + f.label + '</span>' : '';
-      if (t === 'wahl') return '<div class="tr-feld tr-block" data-i="' + i + '" data-typ="wahl">' + kopf +
-        '<div class="wahl">' + f.optionen.map(function (x, j) { return '<button type="button" data-j="' + j + '">' + x + '</button>'; }).join('') + '</div></div>';
+      if (t === 'wahl') {
+        // ab drei Optionen gemischt (sonst stünde die richtige oft vorne); Paare wie richtig/falsch bleiben; f.fest erzwingt Reihenfolge
+        var idx = f.optionen.map(function (x, j) { return j; });
+        if (f.optionen.length >= 3 && !f.fest) idx = mischen(idx);
+        var lang = f.optionen.some(function (x) { return String(x).replace(/<[^>]*>|\$[^$]*\$/g, 'xx').length > 18; });
+        return '<div class="tr-feld tr-block" data-i="' + i + '" data-typ="wahl">' + kopf +
+          '<div class="wahl' + (lang ? ' liste' : '') + '">' + idx.map(function (j) { return '<button type="button" data-j="' + j + '">' + f.optionen[j] + '</button>'; }).join('') + '</div></div>';
+      }
       if (t === 'reihenfolge') {
         f._mix = mischen(f.schritte.map(function (x, j) { return j; }));
         return '<div class="tr-feld tr-block" data-i="' + i + '" data-typ="reihenfolge">' + (kopf || '<span class="tr-label">Tippen Sie die Schritte in der richtigen Reihenfolge an.</span>') +
@@ -292,7 +301,8 @@
     }
     function neu() {
       A = o.neu(stufe); nr++; versuche = 0; weggesehen = false;
-      q('.tr-nr').textContent = 'Aufgabe ' + nr + (o.stufen ? ' · ' + sterne[stufe - 1] + ' ' + (A.operator || ops[stufe - 1] || '') : '');
+      q('.tr-nr').textContent = A.operator || ops[stufe - 1] || '';
+      q('.tr-weiter').hidden = true; q('.tr-neu').hidden = false;
       q('.tr-frage').innerHTML = A.frage;
       q('.tr-felder').innerHTML = A.felder.map(feld).join('');
       q('.hint').innerHTML = A.tipp || ''; q('.hint').classList.remove('open');
@@ -303,6 +313,7 @@
       q('.tr-pruefen').hidden = !eingabe;
       hilfe = A.tipp ? 0 : 1;
       q('.tr-hilfe').textContent = A.tipp ? 'Hilfe' : 'Lösungsweg'; q('.tr-hilfe').hidden = !A.tipp && !A.weg;
+      box.querySelectorAll('.tr-felder button, .tr-felder input').forEach(function (x) { x.disabled = false; });
       q('.feedback').className = 'feedback';
       mathe(box);
       var inp = box.querySelector('.tr-felder input'); if (inp && o.fokus !== false && nr > 1) inp.focus();
@@ -349,11 +360,18 @@
       fb.innerHTML = alle ? (versuche === 1 && !weggesehen ? 'Richtig!' : 'Richtig — jetzt noch eine ohne Hilfe?')
         : (hinweise.length ? hinweise.join(' ') : 'Noch nicht. Prüfen Sie Ihre Rechnung oder holen Sie sich einen Tipp.');
       mathe(fb);
+      if (alle) {   // gelöst: nur noch „Weiter →“
+        q('.tr-pruefen').hidden = true; q('.tr-hilfe').hidden = true; q('.tr-neu').hidden = true;
+        q('.tr-weiter').hidden = false; q('.tr-weiter').focus({ preventScroll: true });
+        box.querySelectorAll('.tr-felder button, .tr-felder input').forEach(function (x) { x.disabled = true; });
+      }
       if (alle && versuche === 1 && !weggesehen) serie++;
       else if (!alle) serie = 0;
       zeigeSerie();
     }
-    box.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' && ev.target.tagName === 'INPUT') pruefen(); });
+    box.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' && ev.target.tagName === 'INPUT') { if (!q('.tr-weiter').hidden) neu(); else pruefen(); }
+    });
     q('.tr-pruefen').addEventListener('click', pruefen);
     q('.tr-hilfe').addEventListener('click', function () {
       if (hilfe === 0) { q('.hint').classList.add('open'); hilfe = 1; q('.tr-hilfe').textContent = 'Lösungsweg'; q('.tr-hilfe').hidden = !A.weg; return; }
@@ -366,6 +384,7 @@
       });
     }
     q('.tr-neu').addEventListener('click', neu);
+    q('.tr-weiter').addEventListener('click', neu);
     q('.tr-felder').addEventListener('click', function (ev) {
       var w = ev.target.closest('.tr-block'); if (!w) return;
       if (w.dataset.typ === 'reihenfolge') {

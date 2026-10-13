@@ -208,7 +208,7 @@ h2 { font-family: var(--font-head); font-weight: 800; font-size: 1.6rem; letter-
 /* ── Kursseite: Abschnitte ─────────────────────────────────────────── */
 .abschnitt { font-family: var(--font-head); font-weight: 800; font-size: 1.35rem; margin: 34px 0 4px; }
 .abschnitt + .lb-titel { margin-top: 8px; }
-.thema.training .nr { font-size: 1.3rem; }
+
 .tr-auswahl { display: block; width: 100%; }
 .tr-auswahl > span { display: block; margin-bottom: 4px; }
 .tr-auswahl .wahl { margin: 0; }
@@ -303,3 +303,19 @@ details.zusatz > summary::-webkit-details-marker { display: none; }
 details.zusatz > summary::after { content: '+'; margin-left: auto; color: var(--c-accent); font-size: 1.3rem; }
 details.zusatz[open] > summary::after { content: '–'; }
 details.zusatz[open] { padding-bottom: 6px; }
+
+/* Trainer-Bedienung wie Aha.Stufen (13.10.2026): Stufenleiste als Knöpfe, ein Hauptknopf, leise Links */
+.st-leiste button {
+  font: inherit; font-size: .85rem; font-weight: 700; padding: .25em .8em; min-height: 36px; border-radius: 999px; cursor: pointer;
+  border: 0; background: transparent; color: var(--c-muted); box-shadow: inset 0 0 0 2px var(--c-line);
+}
+.st-leiste button.aktiv { color: var(--c-text); box-shadow: inset 0 0 0 2px var(--c-accent); background: var(--c-bg); }
+.tr-kopf .st-leiste { margin: 0; }
+.trainer .tr-nr { margin-top: 14px; }
+.tr-aktion { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin-top: 14px; }
+.tr-aktion .btn[hidden], .tr-link[hidden] { display: none; }
+.tr-link { font: inherit; background: none; border: 0; padding: 6px 0; color: var(--c-muted); text-decoration: underline; cursor: pointer; }
+.wahl.liste { display: grid; gap: 8px; }
+.wahl.liste button { text-align: left; border-radius: 12px; width: 100%; padding: .55em 1em; }
+.tr-felder button[disabled], .tr-felder input[disabled] { cursor: default; }
+.tr-felder .wahl button[disabled]:not(.ok):not(.err):not(.aktiv) { opacity: .5; }

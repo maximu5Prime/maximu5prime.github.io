@@ -133,7 +133,7 @@ window.addEventListener('load', function () {
     { f: function (x) { return -x * x * x / 6 - x / 2; }, d: function (x) { return -x * x / 2 - 0.5; }, n: [] },
     { f: function (x) { return x * x * x / 9 + x * x / 3 - x; }, d: function (x) { return (x + 3) * (x - 1) / 3; }, n: [[-3, 'v'], [1, 'v']] }
   ];
-  var N = 8, modus = 1, R, karten, kette, fehler, fertig;
+  var N = 8, modus = 1, R, karten, auslage, kette, fehler, fertig;
 
   function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
   function mathe(el) { if (window.renderMathInElement) renderMathInElement(el, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false }); }
@@ -166,13 +166,14 @@ window.addEventListener('load', function () {
     R = mischen(POOL.map(function (_, i) { return i; })).slice(0, N);
     // Karte k: links Ableitung von R[k], rechts Funktion R[k+1]; geschlossene Kette
     karten = R.map(function (p, k) { return { L: p, Rt: R[(k + 1) % N], id: k }; });
+    auslage = mischen(karten);   // Auswahl gemischt auslegen — sonst läge die passende Karte immer vorne (vorwärts) bzw. hinten (rückwärts)
     kette = [karten[0]]; fehler = 0; fertig = false;
     Aha.$('rueck').classList.remove('an');
     Aha.$('mission').classList.remove('done');
     zeige();
   }
   function offenesEnde() { return modus === 1 ? kette[kette.length - 1].Rt : kette[0].L; }
-  function rest() { return karten.filter(function (k) { return kette.indexOf(k) < 0; }); }
+  function rest() { return auslage.filter(function (k) { return kette.indexOf(k) < 0; }); }
 
   function zeige() {
     var auftrag = modus === 1
