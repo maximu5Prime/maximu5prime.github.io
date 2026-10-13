@@ -3,79 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Datenschutzerklärung — Lernportal</title>
+  <title>Datenschutz · Lernportal</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
-  <link rel="stylesheet" href="/static/fonts.css">
-  <link rel="stylesheet" href="/static/theme.css">
-  <script defer src="/static/site.js"></script>
-  <script defer src="/static/reveal.js"></script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <script defer src="/static/v2/aha-lib.js"></script>
   <style>
-    main h2 { font-size: 1.15rem; margin: 2rem 0 .6rem; padding-bottom: .35rem; border-bottom: 1px solid var(--line); }
-    main h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; }
-    main p  { margin-bottom: .75rem; font-size: .95rem; }
-    main ul { margin: .4rem 0 .75rem 1.2rem; font-size: .95rem; }
-    main ul li { margin-bottom: .3rem; }
-    main a  { color: var(--accent); text-decoration: none; }
-    main a:hover { text-decoration: underline; }
+    .recht { max-width: 68ch; }
+    .recht h2 { font-size: 1.2rem; margin: 28px 0 8px; }
+    .recht p, .recht li { line-height: 1.6; }
+    .recht a { color: var(--c-accent); }
   </style>
 </head>
 <body>
+<div class="wrap">
 
-<header class="site-header site-header--compact">
-  <div class="container container--narrow">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Lernportal</a>
-      <span>/</span>
-      <span>Datenschutz</span>
-    </nav>
-    <p class="kicker kicker--muted">Rechtliches</p>
-    <h1 class="site-title">Datenschutzerklärung</h1>
-  </div>
-</header>
+  <nav class="bar">
+    <a class="back" href="/">← Start</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
 
-<main class="container container--narrow">
+  <header class="hero">
+    <div class="kurs">Rechtliches</div>
+    <h1>Datenschutzerklärung</h1>
+  </header>
 
-  <h2>1. Verantwortlicher</h2>
-  <p>
-    Maximilian Frisch<br>
-    E-Mail: <a href="mailto:maximilian.frisch@gmx.de">maximilian.frisch@gmx.de</a>
-  </p>
+  <main class="recht">
+    <h2>1. Verantwortlicher</h2>
+    <p>Maximilian Frisch<br>E-Mail: <a href="mailto:maximilian.frisch@gmx.de">maximilian.frisch@gmx.de</a></p>
 
-  <h2>2. Hosting – GitHub Pages</h2>
-  <p>Diese Website wird über <strong>GitHub Pages</strong> (GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA) gehostet. Beim Abrufen der Seite werden automatisch Server-Logdaten erfasst, darunter:</p>
-  <ul>
-    <li>IP-Adresse des anfragenden Geräts</li>
-    <li>Datum und Uhrzeit der Anfrage</li>
-    <li>Aufgerufene Seite / Dateiname</li>
-    <li>Browsertyp und -version, Betriebssystem</li>
-  </ul>
-  <p>Diese Daten werden von GitHub verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am sicheren Betrieb). Weitere Informationen: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>.</p>
+    <h2>2. Hosting – GitHub Pages</h2>
+    <p>Diese Website wird über <strong>GitHub Pages</strong> (GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco,
+      CA 94107, USA) gehostet. Beim Abrufen der Seite werden automatisch Server-Logdaten erfasst, darunter:</p>
+    <ul>
+      <li>IP-Adresse des anfragenden Geräts</li>
+      <li>Datum und Uhrzeit der Anfrage</li>
+      <li>aufgerufene Seite bzw. Datei</li>
+      <li>Browsertyp und -version, Betriebssystem</li>
+    </ul>
+    <p>Diese Daten werden von GitHub verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes
+      Interesse am sicheren Betrieb). Weitere Informationen:
+      <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>.</p>
 
-  <h2>3. Schriftarten und Bibliotheken – Lokal gehostet</h2>
-  <p>Diese Website verwendet ausschließlich <strong>lokal gespeicherte Schriftarten</strong> (DM Sans, DM Mono, DM Serif Display). Auch die Formel-Bibliothek <strong>KaTeX</strong> wird lokal von dieser Website ausgeliefert. Es wird keine Verbindung zu Google Fonts, Content-Delivery-Netzwerken oder anderen externen Diensten hergestellt. Es werden dabei keine personenbezogenen Daten an Dritte übertragen.</p>
+    <h2>3. Schriften, Formeln und Videos – lokal ausgeliefert</h2>
+    <p>Schriftarten (DM Sans, JetBrains Mono; auf älteren Seiten DM Mono und DM Serif Display), die Formel-Bibliothek
+      <strong>KaTeX</strong> und die <strong>Erklärvideos</strong> werden direkt von dieser Website ausgeliefert.
+      Es wird keine Verbindung zu Google Fonts, YouTube, Content-Delivery-Netzwerken oder anderen externen Diensten
+      hergestellt.</p>
 
-  <h2>4. Cookies und lokaler Speicher</h2>
-  <p>Diese Website setzt <strong>keine Cookies</strong>. Die Website kann den <em>localStorage</em> des Browsers nutzen, um die gewählte Darstellung (helles/dunkles Farbschema) und auf interaktiven Übungsseiten deinen Lernfortschritt lokal auf deinem Gerät zu speichern. Diese Daten verlassen deinen Browser nicht und werden nicht an den Server übertragen. Du kannst den Speicher jederzeit im Browser löschen.</p>
+    <h2>4. Cookies und lokaler Speicher</h2>
+    <p>Diese Website setzt <strong>keine Cookies</strong>. Im <em>localStorage</em> Ihres Browsers werden nur
+      gespeichert: die gewählte Darstellung (hell/dunkel) und auf einzelnen Übungsseiten Ihr Fortschritt (zum Beispiel
+      gelöste Level). Diese Daten verlassen Ihren Browser nicht und werden nicht an den Server übertragen. Sie können
+      sie jederzeit in den Browsereinstellungen löschen.</p>
 
-  <h2>5. Keine Analyse-Tools</h2>
-  <p>Es werden keine Tracking- oder Analyse-Dienste (z.B. Google Analytics) eingesetzt.</p>
+    <h2>5. Keine Analyse-Tools</h2>
+    <p>Es werden keine Tracking- oder Analyse-Dienste (z. B. Google Analytics) eingesetzt.</p>
 
-  <h2>6. Deine Rechte</h2>
-  <p>Nach der DSGVO stehen dir folgende Rechte zu: Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch (Art. 21). Für Anfragen wende dich an die oben genannte E-Mail-Adresse.</p>
-  <p>Du hast außerdem das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, z.B. beim Bayerischen Landesamt für Datenschutzaufsicht (BayLDA).</p>
+    <h2>6. Ihre Rechte</h2>
+    <p>Nach der DSGVO stehen Ihnen folgende Rechte zu: Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17),
+      Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch (Art. 21). Für
+      Anfragen wenden Sie sich an die oben genannte E-Mail-Adresse.</p>
+    <p>Sie haben außerdem das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, z. B. beim
+      Bayerischen Landesamt für Datenschutzaufsicht (BayLDA).</p>
 
-  <h2>7. Aktualität</h2>
-  <p>Stand: Juli 2026</p>
+    <h2>7. Stand</h2>
+    <p>Oktober 2026</p>
+  </main>
 
-</main>
-
-<footer class="site-footer">
-  <div class="container site-footer-inner">
-    <span>Lernportal · FOS/BOS</span>
-    <nav class="site-footer-links"><a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a></nav>
-  </div>
-</footer>
-
+  <footer class="fuss">
+    <span>Lernportal · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
 </body>
 </html>

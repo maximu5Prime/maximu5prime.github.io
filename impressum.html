@@ -3,77 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Impressum — Lernportal</title>
+  <title>Impressum · Lernportal</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
-  <link rel="stylesheet" href="/static/fonts.css">
-  <link rel="stylesheet" href="/static/theme.css">
-  <script defer src="/static/site.js"></script>
-  <script defer src="/static/reveal.js"></script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <script defer src="/static/v2/aha-lib.js"></script>
   <style>
-    main h2 { font-size: 1.15rem; margin: 2rem 0 .6rem; padding-bottom: .35rem; border-bottom: 1px solid var(--line); }
-    main p  { margin-bottom: .75rem; font-size: .95rem; }
-    main a  { color: var(--accent); text-decoration: none; }
-    main a:hover { text-decoration: underline; }
+    .recht { max-width: 68ch; }
+    .recht h2 { font-size: 1.2rem; margin: 28px 0 8px; }
+    .recht p, .recht li { line-height: 1.6; }
+    .recht a { color: var(--c-accent); }
   </style>
 </head>
 <body>
+<div class="wrap">
 
-<header class="site-header site-header--compact">
-  <div class="container container--narrow">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Lernportal</a>
-      <span>/</span>
-      <span>Impressum</span>
-    </nav>
-    <p class="kicker kicker--muted">Rechtliches</p>
-    <h1 class="site-title">Impressum</h1>
-  </div>
-</header>
+  <nav class="bar">
+    <a class="back" href="/">← Start</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
 
-<main class="container container--narrow">
+  <header class="hero">
+    <div class="kurs">Rechtliches</div>
+    <h1>Impressum</h1>
+  </header>
 
-  <h2>Angaben gemäß § 5 TMG</h2>
-  <p>
-    Maximilian Frisch<br>
-    Saarmühlenweg 18<br>
-    91077 Neunkirchen am Brand
-  </p>
+  <main class="recht">
+    <h2>Angaben gemäß § 5 DDG</h2>
+    <p>Maximilian Frisch<br>Saarmühlenweg 18<br>91077 Neunkirchen am Brand</p>
 
-  <h2>Kontakt</h2>
-  <p>
-    E-Mail:
-    <a href="mailto:maximilian.frisch@gmx.de">maximilian.frisch@gmx.de</a>
-  </p>
+    <h2>Kontakt</h2>
+    <p>E-Mail: <a href="mailto:maximilian.frisch@gmx.de">maximilian.frisch@gmx.de</a></p>
 
-  <h2>Inhaltlich verantwortlich</h2>
-  <p>Maximilian Frisch (Anschrift wie oben)</p>
+    <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+    <p>Maximilian Frisch (Anschrift wie oben)</p>
 
-  <h2>Haftungsausschluss</h2>
-  <p>
-    Die Inhalte dieser Website wurden sorgfältig erstellt. Für die
-    Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird
-    keine Gewähr übernommen. Externe Links wurden zum Zeitpunkt der
-    Verlinkung geprüft; für den Inhalt verlinkter Seiten wird keine
-    Haftung übernommen.
-  </p>
+    <h2>Haftungsausschluss</h2>
+    <p>Die Inhalte dieser Website wurden sorgfältig erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität
+      der Inhalte wird keine Gewähr übernommen. Externe Links wurden zum Zeitpunkt der Verlinkung geprüft; für den
+      Inhalt verlinkter Seiten wird keine Haftung übernommen.</p>
 
-  <h2>Urheberrecht</h2>
-  <p>
-    Die auf dieser Website erstellten Inhalte unterliegen dem
-    deutschen Urheberrecht. Vervielfältigung, Bearbeitung und
-    Verbreitung außerhalb der Grenzen des Urheberrechts bedürfen der
-    schriftlichen Zustimmung des Autors.
-  </p>
+    <h2>Urheberrecht</h2>
+    <p>Die auf dieser Website erstellten Inhalte unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung
+      und Verbreitung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des Autors.</p>
+  </main>
 
-</main>
-
-<footer class="site-footer">
-  <div class="container site-footer-inner">
-    <span>Lernportal · FOS/BOS</span>
-    <nav class="site-footer-links"><a href="/">Startseite</a><a href="/uebungen/">Übungen</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a></nav>
-  </div>
-</footer>
-
+  <footer class="fuss">
+    <span>Lernportal · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
 </body>
 </html>

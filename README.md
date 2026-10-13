@@ -1,13 +1,13 @@
-# Unterrichtsmaterialien FOS Nürnberg
+# Lernportal · FOS Technik
 
-Digitale Unterrichtsmaterialien für Mathematik, Physik und Technologie an der staatlichen Fachoberschule Nürnberg.
+Interaktive Begleitseiten zum Unterricht an der Fachoberschule (Technik): kurze Applets und Videos mit einem
+„Aha“, Trainer mit immer neuen Aufgaben und ein Browser für Prüfungsaufgaben.
 
-## Inhalt
+- **Mathematik** — Jahrgangsstufe 11, 12 und Additum 12
+- **Physik** — Jahrgangsstufe 11
+- **KIT** (Künstliche Intelligenz, Informatik und Technologie) — Jahrgangsstufe 11
 
-- **Mathematik** — Klasse 10–13 (Technik + Wirtschaft/Sozialwesen)
-- **Physik** — Klasse 10–12
-- **KIT (Technologie)** — Klasse 10–12
-- **Übungen** — Fachübergreifende Aufgabensammlungen
+Ältere Seiten stehen im Archiv der Website.
 
 ## Live
 
