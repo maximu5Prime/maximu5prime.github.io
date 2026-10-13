@@ -35,3 +35,6 @@ Konzept_*.md
 # Offline-Werkzeuge (Klicktest, FAP-Zuschnitt) — nur lokal, nicht veröffentlichen
 tools/
 klicktest*.png
+
+# Vom Netz genommen (13.10.2026), lokal aufbewahrt: FAP-Browser bis zum Neubau
+_offline/
