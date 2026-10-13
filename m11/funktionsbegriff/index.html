@@ -13,7 +13,6 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
-  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/v2/aha-lib.js"></script>
 </head>
 <body>
@@ -27,15 +26,16 @@
   <header class="hero">
     <div class="kurs">M11 · Funktionsbegriff</div>
     <h1>Funktion oder <mark>nicht</mark>?</h1>
-    <p>Eine Funktion ordnet jedem $x$ genau ein $y$ zu. Aber wie sieht man das einem Graphen an?</p>
+    <p>Jedem $x$ genau ein $y$ — wie sieht man das am Graphen?</p>
   </header>
 
+  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
   <section class="stage" aria-label="Ausprobieren">
     <div class="mission" id="mission"><span class="icon"></span>
-      <span>Ihr Auftrag: Entscheiden Sie bei allen vier Graphen, ob sie zu einer Funktion gehören.</span></div>
+      <span>Entscheiden Sie für alle vier Graphen: Funktion?</span></div>
     <div class="wahl" id="wahl"></div>
     <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graph mit senkrechter Prüflinie"></canvas></div>
-    <p class="tipp-zeile">Ziehen oder tippen Sie im Diagramm: Die senkrechte Linie zeigt, wie viele Punkte des Graphen zu diesem $x$ gehören.</p>
+    <p class="tipp-zeile">Linie im Diagramm ziehen oder antippen.</p>
     <div class="antwort">
       <button type="button" id="ja">Funktion</button>
       <button type="button" id="nein">keine Funktion</button>
@@ -43,57 +43,28 @@
     </div>
   </section>
 
-  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
   <div class="aha" id="aha" hidden>
     <strong>Aha!</strong>
-    <b>Senkrechtentest:</b> Trifft <b>jede senkrechte Linie</b> den Graphen <b>höchstens einmal</b>, gehört er zu einer Funktion.
-    Denn die senkrechte Linie sammelt alle Punkte mit demselben $x$ — und davon darf es nur einen geben.
+    Trifft <b>jede senkrechte Linie</b> den Graphen <b>höchstens einmal</b>, ist es eine Funktion.
   </div>
 
-  <details class="warum">
-    <summary>Warum? Die Idee dahinter</summary>
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
     <div class="warum-inhalt">
-      <div class="schritt"><span>1</span><div>Eine <b>Funktion</b> ist eine Zuordnung, die jedem $x$ aus der Definitionsmenge $D$ <b>genau ein</b> $y$ zuordnet.</div></div>
-      <div class="schritt"><span>2</span><div>Alle Punkte auf einer senkrechten Linie haben dasselbe $x$. Zwei Treffer heißen: <b>ein</b> $x$ mit <b>zwei</b> $y$-Werten — das ist keine Funktion.</div></div>
-      <div class="schritt"><span>3</span><div>Kein Treffer ist erlaubt: Dieses $x$ gehört dann einfach nicht zur Definitionsmenge.</div></div>
-      <div class="schritt"><span>4</span><div>Waagrecht darf der Graph mehrfach getroffen werden (S-Kurve): Verschiedene $x$ dürfen dasselbe $y$ haben.</div></div>
-      <div class="fehler"><b>Typischer Fehler:</b> mit einer <b>waagrechten</b> Linie prüfen. Die S-Kurve wird dann fälschlich aussortiert.</div>
+      <div class="schritt"><span>•</span><div>Eine <b>Funktion</b> ordnet jedem $x$ aus der Definitionsmenge <b>genau ein</b> $y$ zu.</div></div>
+      <div class="schritt"><span>•</span><div>Alle Punkte auf einer senkrechten Linie haben dasselbe $x$. Zwei Treffer: ein $x$, zwei $y$ — keine Funktion.</div></div>
+      <div class="schritt"><span>•</span><div>Kein Treffer ist erlaubt: Dieses $x$ gehört nicht zur Definitionsmenge.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> waagrecht prüfen. Verschiedene $x$ dürfen dasselbe $y$ haben (S-Kurve).</div>
     </div>
   </details>
 
-  <h2>Selbst üben</h2>
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
 
-  <div class="quiz-task" data-quiz="mcq" data-ans="0">
-    <p class="quiz-q">1 · Jeder Person im Bus wird ihr Geburtsjahr zugeordnet. Ist das eine Funktion?</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">Ja — jede Person hat genau ein Geburtsjahr.</button>
-      <button class="quiz-opt">Nein — mehrere Personen haben dasselbe Geburtsjahr.</button>
-      <button class="quiz-opt">Nein — ein Jahr ist keine Person.</button>
-    </div>
-    <div class="hint" data-quiz-hint>Entscheidend ist: Bekommt jede Person (jedes $x$) genau einen Wert? Dass zwei Personen denselben Wert haben, ist erlaubt.</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="fill">
-    <p class="quiz-q">2 · $f(x) = 2x - 1$. Berechnen Sie den Funktionswert an der Stelle $3$.</p>
-    <p>$f(3) =$ <input class="input quiz-input" data-ans="5" inputmode="decimal"></p>
-    <div class="hint" data-quiz-hint>Setzen Sie für jedes $x$ im Term die $3$ ein.</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
-    <p class="quiz-q">3 · Wahr oder falsch?</p>
-    <table class="ankreuz">
-      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
-      <tbody>
-        <tr><td>Uhrzeit → Temperatur an einem Ort ist eine Funktion.</td><td></td><td></td></tr>
-        <tr><td>Temperatur → Uhrzeit ist eine Funktion.</td><td></td><td></td></tr>
-        <tr><td>Eine senkrechte Linie darf den Graphen einer Funktion auch gar nicht treffen.</td><td></td><td></td></tr>
-      </tbody>
-    </table>
-    <div class="hint" data-quiz-hint>Kann dieselbe Temperatur zu mehreren Uhrzeiten auftreten?</div>
-  </div>
-
-  <div class="blatt"><span class="pfeil">✎</span><span>Zurück zum Arbeitsblatt 1.1: Weiter mit Ihrer Stufe.</span></div>
+  <h2 class="etappe"><span>4</span>Zurück zum Blatt</h2>
+  <div class="blatt"><span>Arbeitsblatt 1.1 — weiter mit Ihrer Stufe.</span></div>
 
   <nav class="pager2" aria-label="Themen">
     <span></span>
@@ -155,6 +126,39 @@ window.addEventListener('load', function () {
   Aha.$('nein').addEventListener('click', function () { urteile(false); });
   P.pointer(function (x) { xs = Math.max(-4.5, Math.min(4.5, Math.round(x * 10) / 10)); zeichne(); });
   Aha.onRedraw(zeichne);
+
+  /* 3 Üben: ein Aufgabentyp („Funktion oder nicht — und warum?“), drei Stufen. Bewusst andere Beispiele als
+     Arbeitsblatt 1.1 (dort: Tag ↔ Temperatur, x², Kreis, y-Achse). */
+  var JA = 'Ja — jedes $x$ hat genau einen Wert.';
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Jeder Person im Bus wird ihr Geburtsjahr zugeordnet. Funktion?',
+        optionen: [JA, 'Nein — mehrere Personen haben dasselbe Geburtsjahr.'], ans: 0,
+        warum: [, 'Gleiche Werte für verschiedene Personen sind erlaubt. Verboten ist nur: eine Person mit zwei Werten.'] },
+      { frage: 'Jeder Schülerin und jedem Schüler wird die Körpergröße in cm zugeordnet. Funktion?',
+        optionen: [JA, 'Nein — zwei Personen können gleich groß sein.'], ans: 0,
+        warum: [, 'Zwei Personen mit derselben Größe sind erlaubt — jede Person hat trotzdem nur eine Größe.'] },
+      { frage: 'Jeder Schülerin und jedem Schüler werden die eigenen Geschwister zugeordnet. Funktion?',
+        optionen: [JA, 'Nein — eine Person kann mehrere Geschwister haben.'], ans: 1,
+        warum: ['Wer zwei Geschwister hat, bekommt zwei Werte zugeordnet. Das ist nicht „genau ein“.'] } ],
+    [ { frage: 'Die Punkte $(1|4)$, $(2|5)$, $(2|6)$, $(3|7)$ bilden eine Zuordnung. Funktion?',
+        optionen: ['Ja — es sind lauter verschiedene Punkte.', 'Nein — zu $x = 2$ gehören zwei $y$-Werte.'], ans: 1,
+        warum: ['Schauen Sie auf die $x$-Werte: Die $2$ kommt zweimal vor, mit $y = 5$ und $y = 6$.'] },
+      { frage: 'Die Punkte $(-1|3)$, $(0|3)$, $(1|3)$, $(2|3)$ bilden eine Zuordnung. Funktion?',
+        optionen: ['Ja — jedes $x$ kommt nur einmal vor.', 'Nein — alle Punkte haben denselben $y$-Wert.'], ans: 0,
+        warum: [, 'Derselbe $y$-Wert für verschiedene $x$ ist erlaubt. Entscheidend sind doppelte $x$-Werte.'] },
+      { frage: 'Die Punkte $(0|0)$, $(1|1)$, $(1|-1)$, $(4|2)$ bilden eine Zuordnung. Funktion?',
+        optionen: ['Ja — jeder $y$-Wert kommt nur einmal vor.', 'Nein — zu $x = 1$ gehören zwei $y$-Werte.'], ans: 1,
+        warum: ['Prüfen Sie die $x$-Werte, nicht die $y$-Werte: Zu $x = 1$ gehören $1$ und $-1$.'] } ],
+    [ { frage: '„Ein Graph, den eine waagrechte Gerade zweimal schneidet, gehört zu keiner Funktion.“',
+        optionen: ['Stimmt — zwei Schnittpunkte heißen zwei Werte.', 'Stimmt nicht — auf einer waagrechten Geraden haben die Punkte verschiedene $x$.'], ans: 1,
+        warum: ['Waagrecht ist der falsche Test: Dort ist $y$ gleich, nicht $x$. Denken Sie an die S-Kurve.'] },
+      { frage: '„Die senkrechte Gerade $x = 2$ ist der Graph einer linearen Funktion.“',
+        optionen: ['Stimmt — jede Gerade ist der Graph einer linearen Funktion.', 'Stimmt nicht — zu $x = 2$ gehören unendlich viele $y$.'], ans: 1,
+        warum: ['Nur nicht-senkrechte Geraden sind Funktionsgraphen. Die senkrechte Prüflinie fällt hier mit dem Graphen zusammen.'] },
+      { frage: '„Fügt man zum Graphen einer Funktion einen einzelnen Punkt hinzu, ist es immer noch eine Funktion.“',
+        optionen: ['Stimmt — ein Punkt mehr ändert nichts.', 'Stimmt nicht — liegt der Punkt über einem $x$, das schon einen Wert hat, gehören zu diesem $x$ zwei $y$.'], ans: 1,
+        warum: ['Prüfen Sie mit der senkrechten Linie durch den neuen Punkt: Trifft sie den alten Graphen auch?'] } ]
+  ] });
 });
 </script>
 </body>

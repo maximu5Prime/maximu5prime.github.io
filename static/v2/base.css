@@ -250,3 +250,43 @@ figure.video { margin: 0 0 26px; }
 figure.video video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); background: #000; }
 figure.video figcaption { margin-top: 8px; font-size: .95rem; color: var(--c-muted); }
 figure.video figcaption b { color: var(--c-text); }
+
+/* ── Pilot „roter Faden“ (13.10.2026, /m11/funktionsbegriff/): vier sichtbare Schritte
+   1 Ausprobieren · 2 Warum? · 3 Üben · 4 Zurück zum Blatt. <h2 class="etappe"><span>1</span>Ausprobieren</h2> */
+.etappe { display: flex; align-items: center; gap: .55em; font-family: var(--font-head); font-weight: 800; font-size: 1.35rem; margin: 34px 0 12px; }
+.etappe > span:first-child {
+  flex: 0 0 1.75em; height: 1.75em; border-radius: 50%; display: grid; place-items: center;
+  background: var(--c-accent); color: var(--c-on-accent); font-size: .8em; line-height: 1;
+}
+.hero + .etappe { margin-top: 4px; }
+/* Schritt 2: Überschrift wie die anderen (am Rand, ohne Karte), nur der aufgeklappte Inhalt liegt auf der Fläche */
+details.warum.flach { background: none; margin: 0; }
+details.warum.flach summary.etappe { padding: 0; margin: 34px 0 12px; font-size: 1.35rem; }
+details.warum.flach summary.etappe::after { margin-left: auto; padding-right: 4px; }
+details.warum.flach .warum-inhalt { background: var(--c-surface); border-radius: var(--radius); padding: 14px 22px 18px; }
+.etappe + .blatt { margin-top: 0; }
+.aha-btn.leise { border: 0; text-decoration: underline; padding: .3em 1em; margin-bottom: 18px; }
+
+/* Üben in drei Stufen (Aha.Stufen) */
+.stufen { background: var(--c-surface); border-radius: var(--radius); padding: 16px 18px 18px; }
+.st-leiste { display: flex; gap: 6px; margin-bottom: 12px; }
+.st-leiste span { font-size: .85rem; font-weight: 700; padding: .2em .7em; border-radius: 999px; color: var(--c-muted); box-shadow: inset 0 0 0 2px var(--c-line); opacity: .55; }
+.st-leiste span.aktiv { opacity: 1; color: var(--c-text); box-shadow: inset 0 0 0 2px var(--c-accent); }
+.st-leiste span.fertig { opacity: 1; color: var(--c-gain); box-shadow: inset 0 0 0 2px var(--c-gain); }
+.st-frage { margin: 0 0 12px; }
+.st-opts { display: grid; gap: 8px; }
+.st-opts button {
+  text-align: left; font: inherit; padding: .6em 1em; border-radius: 12px; cursor: pointer; min-height: 44px;
+  border: 2px solid var(--c-line); background: var(--c-bg); color: var(--c-text);
+}
+.st-opts button:hover:not([disabled]) { border-color: var(--c-accent); }
+.st-opts button.ok { border-color: var(--c-gain); background: var(--c-gain-fill); }
+.st-opts button.err { border-color: var(--c-loss); background: var(--c-loss-fill); }
+.st-opts button[disabled] { cursor: default; }
+.st-opts button[disabled]:not(.ok):not(.err) { opacity: .5; }
+.st-rm { margin: 10px 0 0; min-height: 0; }
+.st-rm.ok { color: var(--c-gain); font-weight: 700; }
+.st-rm.err { color: var(--c-loss); }
+.st-weiter { margin-top: 12px; }
+.st-ende { font-weight: 800; color: var(--c-gain); font-size: 1.15rem; margin: 0 0 6px; }
+.st-nochmal { font: inherit; background: none; border: 0; padding: 4px 0; color: var(--c-muted); text-decoration: underline; cursor: pointer; }

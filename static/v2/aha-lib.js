@@ -394,6 +394,53 @@
     zeigeSerie(); neu();
     return { neu: neu };
   }
+  /* Üben in drei Stufen (Pilot 13.10.2026, /m11/funktionsbegriff/): EIN Aufgabentyp (Auswahl), Stufe 2 erscheint erst,
+     wenn Stufe 1 gelöst ist. Antippen prüft sofort; falsche Wahl → Rückmeldung warum[j], nochmal tippen.
+     Einziger Knopf: „Weiter“ nach richtiger Antwort. Je Stufe eine Liste von Varianten, gezogen wird zufällig.
+     Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'],
+       stufen: [ [ { frage, optionen: [..], ans: 0, warum: [..] }, … ], [ … ], [ … ] ] }) */
+  function Stufen(o) {
+    var box = typeof o.el === 'string' ? $(o.el) : o.el, sterne = ['⭐', '⭐⭐', '⭐⭐⭐'], s, A;
+    box.classList.add('stufen');
+    function q(c) { return box.querySelector(c); }
+    function leiste() {
+      return '<div class="st-leiste">' + sterne.map(function (st, i) {
+        return '<span class="' + (i < s ? 'fertig' : i === s ? 'aktiv' : '') + '">' + (i < s ? '✓ ' : '') + st + '</span>';
+      }).join('') + '</div>';
+    }
+    function zeige() {
+      A = eins(o.stufen[s]);
+      var mix = mischen(A.optionen.map(function (x, j) { return j; }));
+      box.innerHTML = leiste() +
+        '<p class="st-frage">' + (o.operatoren ? '<b>' + o.operatoren[s] + ':</b> ' : '') + A.frage + '</p>' +
+        '<div class="st-opts">' + mix.map(function (j) { return '<button type="button" data-j="' + j + '">' + A.optionen[j] + '</button>'; }).join('') + '</div>' +
+        '<p class="st-rm" aria-live="polite"></p>' +
+        '<button type="button" class="btn st-weiter" hidden>' + (s < 2 ? 'Weiter zu ' + sterne[s + 1] + ' →' : 'Fertig ✓') + '</button>';
+      mathe(box);
+    }
+    function ende() {
+      s = 3;
+      box.innerHTML = leiste() + '<p class="st-ende">Alle drei Stufen geschafft.</p>' +
+        '<button type="button" class="st-nochmal">Noch eine Runde</button>';
+    }
+    box.addEventListener('click', function (ev) {
+      if (ev.target.closest('.st-nochmal')) { s = 0; zeige(); return; }
+      if (ev.target.closest('.st-weiter')) { if (s < 2) { s++; zeige(); } else ende(); return; }
+      var b = ev.target.closest('.st-opts button'); if (!b || b.disabled) return;
+      var j = +b.dataset.j, ok = j === A.ans, rm = q('.st-rm');
+      b.classList.add(ok ? 'ok' : 'err'); b.disabled = true;
+      if (ok) {
+        box.querySelectorAll('.st-opts button').forEach(function (x) { x.disabled = true; });
+        rm.className = 'st-rm ok'; rm.innerHTML = 'Richtig.' + (A.erklaerung ? ' ' + A.erklaerung : '');
+        q('.st-weiter').hidden = false;
+      } else {
+        rm.className = 'st-rm err'; rm.innerHTML = (A.warum && A.warum[j]) || 'Noch nicht — versuchen Sie es noch einmal.';
+      }
+      mathe(rm);
+    });
+    s = 0; zeige();
+  }
+
   /* Zufallshilfen für Trainer: ganze Zahl in [a, b] (ohne die Werte in ohne), Element aus Liste */
   function zufall(a, b, ohne) { var z; do { z = a + Math.floor(Math.random() * (b - a + 1)); } while (ohne && ohne.indexOf(z) >= 0); return z; }
   function eins(liste) { return liste[Math.floor(Math.random() * liste.length)]; }
@@ -407,7 +454,7 @@
 
   window.Aha = {
     $: $, css: css, de: de, dt: dt, tex: tex, colors: colors, Plot: Plot, mission: mission, showAha: showAha,
-    Trainer: Trainer, zufall: zufall, eins: eins, zahl: zahl, term: term, mischen: mischen,
+    Trainer: Trainer, Stufen: Stufen, zufall: zufall, eins: eins, zahl: zahl, term: term, mischen: mischen,
     onRedraw: function (f) { redrawFns.push(f); f(); }
   };
 })();
