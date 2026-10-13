@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="de" data-subject="mathematik">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ableitungsregeln – Mathe 11</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/theme.css">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
+<script defer src="/static/katex/katex.min.js"></script>
+<script defer src="/static/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+<script defer src="/static/plot.js"></script>
+<script defer src="/static/site.js"></script>
+  <script defer src="/static/reveal.js"></script>
+<style>
+  #wGMsrc { width: 100%; height: 220px; position: relative; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; margin-bottom: .7rem; }
+  #wGMsrc canvas { position: absolute; top: 0; left: 0; }
+  .match-card { height: 150px; position: relative; }
+</style>
+</head>
+<body>
+
+<header class="site-header site-header--compact">
+  <div class="container container--narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Lernportal</a>
+      <span>/</span>
+      <a href="/archiv/mathematik/klasse11/">Mathematik · Jgst. 11</a>
+      <span>/</span>
+      <a href="/archiv/mathematik/klasse11/lb2-differenzialrechnung/">Differenzialrechnung</a>
+      <span>/</span>
+      <span>Ableitungsregeln</span>
+    </nav>
+    <p class="kicker">M 11 · LB 2 · Vertiefung</p>
+    <h1 class="site-title">Herleitung &amp; <em>Ableitungsregeln</em></h1>
+    <p class="site-sub">Potenz-, Faktor-, Summen-, Produkt-, Quotienten- und Kettenregel · Quiz · Grafisches Ableiten</p>
+  </div>
+</header>
+
+<nav class="tabs container container--narrow" id="mainNav">
+  <button class="tab-btn active" onclick="showTab('t1',this)">① Ableitungsregeln</button>
+  <button class="tab-btn" onclick="showTab('t2',this)">② Übungen</button>
+  <button class="tab-btn" onclick="showTab('t3',this)">③ Grafisch Ableiten</button>
+</nav>
+
+<main class="container container--narrow">
+
+<!-- ══════════════════════ TAB 1 ══════════════════════ -->
+<div class="tab-panel active" id="t1">
+  <h2><span class="num">01</span>Ableitungsregeln</h2>
+  <p class="subtitle">Schnelles Ableiten ohne Grenzwertberechnung</p>
+
+  <div class="card card--theory">
+    <table class="table">
+      <thead><tr><th>Regel</th><th>$f(x)$</th><th>$f'(x)$</th></tr></thead>
+      <tbody>
+        <tr><td>Potenzregel</td><td>$x^n$</td><td>$n \cdot x^{n-1}$</td></tr>
+        <tr><td>Konstantenregel</td><td>$c$</td><td>$0$</td></tr>
+        <tr><td>Faktorregel</td><td>$c \cdot f(x)$</td><td>$c \cdot f'(x)$</td></tr>
+        <tr><td>Summenregel</td><td>$f(x) + g(x)$</td><td>$f'(x) + g'(x)$</td></tr>
+        <tr><td>Produktregel</td><td>$f(x) \cdot g(x)$</td><td>$f'(x)\cdot g(x) + f(x)\cdot g'(x)$</td></tr>
+        <tr><td>Kettenregel</td><td>$g(f(x))$</td><td>$g'(f(x)) \cdot f'(x)$</td></tr>
+        <tr><td>Quotientenregel</td><td>$\dfrac{f(x)}{g(x)}$</td><td>$\dfrac{f'(x)\cdot g(x) - f(x)\cdot g'(x)}{[g(x)]^2}$</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="task">
+    <h3>Ableitungsquiz</h3>
+    <div id="rqBox"></div>
+    <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-top:1rem;">
+      <button class="btn" onclick="nextRQ()">Nächste Frage →</button>
+      <span id="rqScore" style="font-family:var(--font-mono);font-size:.83rem;color:var(--muted);">0 / 0 richtig</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Schritt-für-Schritt Lösungen</h3>
+    <div style="display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin-bottom:.8rem;">
+      <select class="input" id="funcSel">
+        <option value="p1">f(x) = 3x⁴ − 2x² + 5</option>
+        <option value="p2">f(x) = x³ · (x + 1)</option>
+        <option value="c1">f(x) = (2x + 1)³</option>
+        <option value="c2">f(x) = √(x² + 1)</option>
+        <option value="q1">f(x) = (x² + 1) / (x − 1)</option>
+      </select>
+      <button class="btn" onclick="showDeriv()">Lösung anzeigen</button>
+    </div>
+    <div id="derivOut"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ TAB 2 ══════════════════════ -->
+<div class="tab-panel" id="t2">
+  <h2><span class="num">02</span>Übungen</h2>
+  <p class="subtitle">Ableitungsregeln anwenden</p>
+
+  <div class="scorebar">
+    <span>Punkte:</span>
+    <span class="stars" id="starBar">☆☆☆☆</span>
+    <span id="scoreNum" style="font-family:var(--font-mono);color:var(--muted);">0 / 4</span>
+  </div>
+
+  <div class="task">
+    <span class="tag tag--physik">Potenz- &amp; Summenregel</span>
+    <h3>Aufgabe 1</h3>
+    <p>Leite ab: $f(x) = 4x^3 - 6x + 2$</p>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
+      <input class="input" type="text" id="a1" placeholder="f'(x) = ...">
+      <button class="btn" onclick="checkTask(1,['12x^2-6','12x²-6','12x2-6'])">Prüfen</button>
+      <button class="btn btn--ghost" onclick="toggleHint('ah1')">💡</button>
+    </div>
+    <div class="hint" id="ah1">Potenzregel: $4 \cdot 3x^2 = 12x^2$ &ensp;|&ensp; $-6x \to -6$ &ensp;|&ensp; Konstante $2 \to 0$</div>
+    <div class="feedback" id="fb1"></div>
+  </div>
+
+  <div class="task">
+    <span class="tag tag--physik">Produktregel</span>
+    <h3>Aufgabe 2</h3>
+    <p>Leite ab: $f(x) = x^2 \cdot (x - 3)$</p>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
+      <input class="input" type="text" id="a2" placeholder="f'(x) = ...">
+      <button class="btn" onclick="checkTask(2,['3x^2-6x','3x²-6x'])">Prüfen</button>
+      <button class="btn btn--ghost" onclick="toggleHint('ah2')">💡</button>
+    </div>
+    <div class="hint" id="ah2">Produktregel: $(x^2)' \cdot (x-3) + x^2 \cdot (x-3)'$
+    $= 2x(x-3) + x^2 \cdot 1 = 2x^2 - 6x + x^2 = 3x^2 - 6x$</div>
+    <div class="feedback" id="fb2"></div>
+  </div>
+
+  <div class="task">
+    <span class="tag tag--accent">Kettenregel</span>
+    <h3>Aufgabe 3</h3>
+    <p>Leite ab: $f(x) = (x^2 - 1)^4$</p>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
+      <input class="input" type="text" id="a3" placeholder="f'(x) = ...">
+      <button class="btn" onclick="checkTask(3,['8x(x^2-1)^3','8x(x²-1)³','8x*(x^2-1)^3'])">Prüfen</button>
+      <button class="btn btn--ghost" onclick="toggleHint('ah3')">💡</button>
+    </div>
+    <div class="hint" id="ah3">Äußere Funktion: $u^4 \to 4u^3$ &ensp;|&ensp; Innere: $u = x^2-1 \to u' = 2x$
+    $$f'(x) = 4(x^2-1)^3 \cdot 2x = 8x(x^2-1)^3$$</div>
+    <div class="feedback" id="fb3"></div>
+  </div>
+
+  <div class="task">
+    <span class="tag tag--accent">Kettenregel</span>
+    <h3>Aufgabe 4</h3>
+    <p>Leite ab: $f(x) = (3x + 2)^5$</p>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.9rem;">
+      <input class="input" type="text" id="a4" placeholder="f'(x) = ...">
+      <button class="btn" onclick="checkTask(4,['15(3x+2)^4','15*(3x+2)^4','15(3x+2)4'])">Prüfen</button>
+      <button class="btn btn--ghost" onclick="toggleHint('ah4')">💡</button>
+    </div>
+    <div class="hint" id="ah4">Äußere Funktion: $u^5 \to 5u^4$ &ensp;|&ensp; Innere: $u = 3x+2 \to u' = 3$
+    $$f'(x) = 5(3x+2)^4 \cdot 3 = 15(3x+2)^4$$</div>
+    <div class="feedback" id="fb4"></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════ TAB 3 ══════════════════════ -->
+<div class="tab-panel" id="t3">
+  <h2><span class="num">03</span>Grafisch Ableiten</h2>
+  <p class="subtitle">Ordne dem Graphen von $f$ den Graphen von $f'$ zu</p>
+
+  <div class="card card--theory">
+    <h3>Merkhilfen</h3>
+    <p style="line-height:2;">
+      <span class="tag tag--kit">$f$ steigt</span> $\Rightarrow$ $f' > 0$ (Graph <em>über</em> der $x$-Achse)&ensp;
+      <span class="tag" style="color:var(--err);border-color:currentColor;">$f$ fällt</span> $\Rightarrow$ $f' < 0$ (Graph <em>unter</em> der $x$-Achse)<br>
+      <span class="tag tag--physik">Extremum von $f$</span> $\Rightarrow$ $f'$ hat dort eine <em>Nullstelle</em>&ensp;
+      <span class="tag tag--physik">Wendepunkt von $f$</span> $\Rightarrow$ $f'$ hat dort ein <em>Extremum</em>
+    </p>
+  </div>
+
+  <div id="gmGame"></div>
+
+  <div style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-top:1rem;">
+    <button class="btn" id="btnNext" onclick="nextGP()">Nächste Aufgabe →</button>
+    <button class="btn btn--ghost" id="btnSolve" onclick="solveGP()">Lösung zeigen</button>
+    <span id="gmScore" style="font-family:var(--font-mono);font-size:.83rem;color:var(--muted);"></span>
+  </div>
+</div>
+
+</main>
+
+<script>
+function renderLatex(el) {
+  if (window.renderMathInElement) {
+    renderMathInElement(el, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
+}
+function showTab(id, btn) {
+  document.querySelectorAll('#t1, #t2, #t3').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  setTimeout(() => { if (id === 't3') renderGM(); }, 40);
+}
+function toggleHint(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  if (el.classList.contains('open')) renderLatex(el);
+}
+
+// ── Tab 1: Quiz ──
+const rqData = [
+  { q:'$f(x) = x^5$', correct:'$5x^4$', opts:['$5x^4$','$x^4$','$4x^5$','$5x^6$'] },
+  { q:'$f(x) = 3x^2$', correct:'$6x$', opts:['$3x$','$6x$','$6x^2$','$2x$'] },
+  { q:'$f(x) = x^3 + 4x - 7$', correct:'$3x^2 + 4$', opts:['$3x^2 + 4x$','$3x^2 + 4$','$3x^2 - 7$','$x^2 + 4$'] },
+  { q:'$f(x) = (x+2)^3$', correct:'$3(x+2)^2$', opts:['$3x^2$','$(x+2)^2$','$3(x+2)^2$','$6(x+2)^2$'] },
+  { q:'$f(x) = x^{-2}$', correct:'$-2x^{-3}$', opts:['$-2x^{-3}$','$2x^{-1}$','$-x^{-3}$','$-2x^3$'] },
+  { q:'$f(x) = \\sqrt{x}$', correct:'$\\dfrac{1}{2\\sqrt{x}}$', opts:['$2\\sqrt{x}$','$\\dfrac{1}{2\\sqrt{x}}$','$\\dfrac{\\sqrt{x}}{2}$','$x^{-1/2}$'] },
+  { q:'$f(x) = (3x^2+1)^5$', correct:'$10x \\cdot (3x^2+1)^4$', opts:['$5(3x^2+1)^4$','$15x \\cdot (3x^2+1)^4$','$10x \\cdot (3x^2+1)^4$','$30x \\cdot (3x^2+1)^4$'] },
+  { q:'$f(x) = x \\cdot (x^2+1)$', correct:'$3x^2+1$', opts:['$x^2+1$','$2x^2$','$3x^2+1$','$x^3+x$'] },
+];
+let rqIdx=0, rqC=0, rqT=0;
+
+function renderRQ() {
+  const q = rqData[rqIdx % rqData.length];
+  const box = document.getElementById('rqBox');
+  box.innerHTML =
+    '<p style="font-size:1rem;margin-bottom:.6rem;">Leite ab: <strong>' + q.q + '</strong></p>' +
+    '<div class="quiz-opts">' +
+    q.opts.map((o,i) => '<button class="quiz-opt" id="rqopt'+i+'" onclick="ansRQ('+i+')">' + o + '</button>').join('') +
+    '</div><div class="feedback" id="rqFB"></div>';
+  box._correctOpt = q.correct; box._opts = q.opts;
+  renderLatex(box);
+}
+function ansRQ(chosen) {
+  const box = document.getElementById('rqBox');
+  const correct = box._correctOpt; const opts = box._opts;
+  rqT++;
+  const ok = opts[chosen].replace(/\s/g,'') === correct.replace(/\s/g,'');
+  if (ok) rqC++;
+  opts.forEach((o,i) => {
+    const btn = document.getElementById('rqopt'+i); btn.disabled = true;
+    if (o.replace(/\s/g,'')===correct.replace(/\s/g,'')) btn.classList.add('correct');
+    else if (i===chosen&&!ok) btn.classList.add('wrong');
+  });
+  document.getElementById('rqScore').textContent = rqC + ' / ' + rqT + ' richtig';
+  const fb = document.getElementById('rqFB');
+  fb.textContent = ok ? '✓ Korrekt!' : '✗ Richtig w\xe4re: ' + correct;
+  fb.className = 'feedback show ' + (ok ? 'ok' : 'err');
+  renderLatex(fb);
+}
+function nextRQ() { rqIdx++; renderRQ(); }
+
+// ── Tab 1: Schritt-für-Schritt ──
+const derivSteps = {
+  p1:{ title:'$f(x) = 3x^4 - 2x^2 + 5$',
+       steps:['Summenregel: jeden Term einzeln ableiten','$3x^4 \\;\\to\\; 12x^3$ &ensp;(Potenz- & Faktorregel)','$-2x^2 \\;\\to\\; -4x$','$5 \\;\\to\\; 0$ &ensp;(Konstantenregel)'],
+       res:'$f\'(x) = 12x^3 - 4x$' },
+  p2:{ title:'$f(x) = x^3 \\cdot (x+1)$',
+       steps:['Ausmultiplizieren: $x^4 + x^3$','Potenzregel: $4x^3 + 3x^2$'],
+       res:'$f\'(x) = 4x^3 + 3x^2$' },
+  c1:{ title:'$f(x) = (2x+1)^3$',
+       steps:['Kettenregel: $[g(u)]\'= g\'(u) \\cdot u\'$','Äußere Funktion: $u^3 \\;\\to\\; 3u^2$','Innere Funktion: $(2x+1)\' = 2$','Zusammen: $3(2x+1)^2 \\cdot 2$'],
+       res:'$f\'(x) = 6(2x+1)^2$' },
+  c2:{ title:'$f(x) = \\sqrt{x^2+1} = (x^2+1)^{1/2}$',
+       steps:['Kettenregel','Äußere Funktion: $\\tfrac{1}{2}\\,u^{-1/2}$','Innere Funktion: $(x^2+1)\' = 2x$','Zusammen: $\\tfrac{1}{2}(x^2+1)^{-1/2} \\cdot 2x$'],
+       res:'$f\'(x) = \\dfrac{x}{\\sqrt{x^2+1}}$' },
+  q1:{ title:'$f(x) = \\dfrac{x^2+1}{x-1}$',
+       steps:['Quotientenregel: $\\left(\\dfrac{u}{v}\\right)\' = \\dfrac{u\'v - uv\'}{v^2}$','$u = x^2+1 \\;\\Rightarrow\\; u\' = 2x$','$v = x-1 \\;\\Rightarrow\\; v\' = 1$','Zähler: $2x(x-1)-(x^2+1) = x^2-2x-1$'],
+       res:'$f\'(x) = \\dfrac{x^2-2x-1}{(x-1)^2}$' },
+};
+function showDeriv() {
+  const d = derivSteps[document.getElementById('funcSel').value];
+  const el = document.getElementById('derivOut');
+  el.innerHTML =
+    '<div class="card card--theory" style="margin-top:0;"><h3>' + d.title + '</h3>' +
+    d.steps.map((s,i) =>
+      '<p style="margin:.4rem 0;"><span style="font-family:var(--font-mono);color:var(--accent);margin-right:.4rem;">' + (i+1) + '.</span>' + s + '</p>'
+    ).join('') +
+    '<div class="result-box">✅ ' + d.res + '</div></div>';
+  renderLatex(el);
+}
+
+// ── Tab 2: Aufgaben ──
+let taskDone = new Set(), taskScore = 0;
+const taskSol = ['','12x²−6','3x²−6x','8x(x²−1)³','15(3x+2)⁴'];
+
+function checkTask(n, correct) {
+  if (taskDone.has(n)) return;
+  const raw = document.getElementById('a'+n).value.trim().replace(/\s/g,'').toLowerCase();
+  const ok  = correct.map(c => c.toLowerCase().replace(/\s/g,'')).includes(raw);
+  showFB('fb'+n, ok, 'L\xf6sung: ' + taskSol[n]);
+  if (ok) {
+    taskDone.add(n); taskScore++;
+    document.getElementById('scoreNum').textContent = taskScore + ' / 4';
+    document.getElementById('starBar').textContent  = '★'.repeat(taskScore) + '☆'.repeat(4-taskScore);
+  }
+}
+function showFB(id, ok, hint) {
+  const el = document.getElementById(id);
+  el.textContent = ok ? '✓ Richtig!' : '✗ Nicht ganz. ' + hint;
+  el.className = 'feedback show ' + (ok ? 'ok' : 'err');
+}
+
+// ── Tab 3: Grafisch Ableiten ──
+const gpData = [
+  { name:'Parabel', desc_f:'f(x) = x² − 2',
+    f:x=>x*x-2, df:x=>2*x, desc_df:"f'(x) = 2x",
+    wrong:[{fn:x=>x*x,lbl:'x²'},{fn:x=>-2*x,lbl:'−2x'},{fn:x=>2*x+1,lbl:'2x+1'}] },
+  { name:'Kubisch', desc_f:'f(x) = x³/3 − x',
+    f:x=>x*x*x/3-x, df:x=>x*x-1, desc_df:"f'(x) = x² − 1",
+    wrong:[{fn:x=>2*x,lbl:'2x'},{fn:x=>x*x+1,lbl:'x²+1'},{fn:x=>-x*x+1,lbl:'−x²+1'}] },
+  { name:'Parabel mit Wendepunkt', desc_f:'f(x) = x³ − 3x',
+    f:x=>x*x*x-3*x, df:x=>3*x*x-3, desc_df:"f'(x) = 3x² − 3",
+    wrong:[{fn:x=>3*x*x,lbl:'3x²'},{fn:x=>3*x*x+3,lbl:'3x²+3'},{fn:x=>-3*x*x+3,lbl:'−3x²+3'}] },
+  { name:'Grad 4', desc_f:'f(x) = x⁴/4 − x²',
+    f:x=>x*x*x*x/4-x*x, df:x=>x*x*x-2*x, desc_df:"f'(x) = x³ − 2x",
+    wrong:[{fn:x=>x*x*x,lbl:'x³'},{fn:x=>x*x-2,lbl:'x²−2'},{fn:x=>-x*x*x+2*x,lbl:'−x³+2x'}] },
+];
+let gpIdx=0, gpOk=0, gpDone=0, gpSolved=false, gmSel=null;
+
+function renderGM() {
+  const pair = gpData[gpIdx % gpData.length];
+  const opts = [{fn:pair.df,lbl:pair.desc_df,correct:true},...pair.wrong.map(w=>({fn:w.fn,lbl:w.lbl,correct:false}))];
+  for (let i=opts.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [opts[i],opts[j]]=[opts[j],opts[i]]; }
+  window._gmOpts = opts; gpSolved=false; gmSel=null;
+  document.getElementById('btnSolve').disabled=false;
+  document.getElementById('gmGame').innerHTML =
+    '<div class="task">' +
+    '<h3>Aufgabe: ' + pair.name + ' — ' + pair.desc_f + '</h3>' +
+    '<p style="font-size:.88rem;margin-bottom:.7rem;">Welcher Graph unten ist der Graph von $f\'$? ($f$ ist blau dargestellt)</p>' +
+    '<div id="wGMsrc"><canvas id="gmSource"></canvas></div>' +
+    '<p style="font-family:var(--font-mono);font-size:.75rem;color:var(--muted);margin-bottom:.5rem;">W\xe4hle den Graphen von $f\'$:</p>' +
+    '<div class="match-grid">' +
+    opts.map((o,i) =>
+      '<div><div class="match-card" id="gco'+i+'" onclick="selectGC('+i+')">' +
+      '<canvas id="gmc'+i+'"></canvas></div>' +
+      '<div class="match-label">Option ' + String.fromCharCode(65+i) + '</div></div>'
+    ).join('') +
+    '</div></div>';
+  renderLatex(document.getElementById('gmGame'));
+  requestAnimationFrame(() => {
+    const c = Plot.colors();
+    drawMini('gmSource','wGMsrc',pair.f,c.curve,pair.desc_f);
+    opts.forEach((o,i) => drawMini('gmc'+i,'gco'+i,o.fn,c.curve2,o.lbl));
+  });
+  document.getElementById('gmScore').textContent = gpDone>0 ? (gpOk+' / '+gpDone+' richtig') : '';
+}
+function drawMini(canvasId, wrapperId, fn, color, label) {
+  const canvas=document.getElementById(canvasId); const wrap=document.getElementById(wrapperId);
+  if (!canvas||!wrap) return;
+  const { ctx, w, h } = Plot.setup(canvasId, wrapperId);
+  const view = { xMin:-3.5, xMax:3.5, yMin:-4, yMax:4 };
+  const map = Plot.grid(ctx, w, h, view);
+  Plot.curve(ctx, fn, map, view, { color: color, width: 2.2 });
+  ctx.font='bold 11px "DM Mono", monospace'; ctx.fillStyle=color; ctx.fillText(label,6,16);
+}
+function selectGC(i) {
+  if (gpSolved) return;
+  document.querySelectorAll('.match-card').forEach(w=>w.classList.remove('sel'));
+  document.getElementById('gco'+i).classList.add('sel'); gmSel=i;
+}
+function solveGP() {
+  if (gmSel===null) { alert('Bitte zuerst eine Option ausw\xe4hlen!'); return; }
+  if (gpSolved) return;
+  gpSolved=true; gpDone++;
+  const ok=window._gmOpts[gmSel].correct; if (ok) gpOk++;
+  window._gmOpts.forEach((o,i) => {
+    const el=document.getElementById('gco'+i); el.onclick=null;
+    if (o.correct) el.classList.add('ok'); else if (i===gmSel&&!ok) el.classList.add('bad');
+  });
+  document.getElementById('gmScore').textContent=gpOk+' / '+gpDone+' richtig';
+  document.getElementById('btnSolve').disabled=true;
+}
+function nextGP() { gpIdx++; renderGM(); }
+
+window.addEventListener('load', () => { setTimeout(() => { renderRQ(); renderGM(); }, 200); });
+window.addEventListener('DOMContentLoaded', function () {
+  Plot.onRedraw(function () {
+    if (document.getElementById('t3').classList.contains('active')) renderGM();
+  });
+});
+</script>
+
+<footer class="site-footer">
+  <div class="container container--narrow site-footer-inner">
+    <a href="/archiv/mathematik/klasse11/lb2-differenzialrechnung/ue1-differenzenquotient.html">← Differenzen- &amp; Differenzialquotient</a>
+    <nav class="site-footer-links">
+      <a href="/archiv/mathematik/klasse11/lb2-differenzialrechnung/">LB 2 · Übersicht</a>
+      <a href="/">Startseite</a><a href="/archiv/">Archiv</a><a href="/impressum.html">Impressum</a><a href="/datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
