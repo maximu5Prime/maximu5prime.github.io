@@ -17,7 +17,7 @@ var STAND = {
   "/kit11/ki-fails/": "6fcac5b1eb",
   "/kit11/prompt-baukasten/": "5949b3118f",
   "/m11/funktionsbegriff/": "a28124164b",
-  "/m11/": "baaf0a5c7f",
+  "/m11/": "78dc7afcee",
   "/m11/lineare-funktionen/": "e0fc154d9e",
   "/m11/parabel/MT11_VID_Parabel_verschieben.jpg": "2c6b648936",
   "/m11/parabel/MT11_VID_Parabel_verschieben.vtt": "c2ad82ff91",
