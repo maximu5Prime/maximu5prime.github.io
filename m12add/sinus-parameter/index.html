@@ -13,7 +13,6 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
-  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/v2/aha-lib.js"></script>
   <style>
     .regler.vier { grid-template-columns: 1fr 1fr; }
@@ -53,10 +52,10 @@
   <header class="hero">
     <div class="kurs">M12+ · Allgemeine Sinusfunktion</div>
     <h1>Was machen <mark>a, b, c, d</mark> mit der Sinuskurve?</h1>
-    <p>$f(x) = a\cdot\sin(bx - c) + d$ — vier Regler, eine Kurve. Bewegen Sie erst jeden Regler einzeln
-      und vergleichen Sie mit $\sin(x)$ (grau). Dann treffen Sie die Zielkurven: sechs Level, von einem Regler bis zu allen vier.</p>
+    <p>$f(x) = a\cdot\sin(bx - c) + d$ — vier Regler, sechs Zielkurven.</p>
   </header>
 
+  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
   <section class="stage" aria-label="Ausprobieren">
     <div class="level" id="level" aria-label="Level wählen"></div>
     <div class="mission" id="mission"><span class="icon"></span>
@@ -84,86 +83,53 @@
     </div>
   </section>
 
-  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
   <div class="aha" id="aha" hidden>
     <strong>Aha!</strong>
-    Die Kurve wandert nicht um $c$, sondern um $\dfrac{c}{b}$. Für die Zielkurve (um $\frac{\pi}{4}$ nach rechts, $b = 2$)
-    braucht man deshalb $c = \frac{\pi}{2}$:
+    Die Kurve wandert nicht um $c$, sondern um $\dfrac{c}{b}$:
     $$\sin\bigl(2x - \tfrac{\pi}{2}\bigr) = \sin\bigl(2\,(x - \tfrac{\pi}{4})\bigr)$$
   </div>
 
-  <details class="warum">
-    <summary>Warum? Klammern Sie $b$ aus</summary>
+  <details class="zusatz" id="riesenrad">
+    <summary>Zusatz: Vom Riesenrad zur Sinuskurve</summary>
+    <p>Gondel aus dem Skript: Einstieg unten in $2\,\text{m}$ Höhe, Nabe $27\,\text{m}$ hoch, eine Umdrehung in $10$ Minuten.</p>
+
+    <section class="stage" aria-label="Riesenrad">
+      <div class="mission" id="radMission"><span class="icon"></span>
+        <span>Eine ganze Umdrehung fahren: Welche Größen des Rads stecken in der Kurve?</span></div>
+      <div class="plot" id="radWrap"><canvas id="rad" aria-label="Riesenrad und Höhe der Gondel über der Zeit"></canvas></div>
+      <div class="rad-steuer">
+        <button class="btn" id="radStart" type="button">▶ Fahrt starten</button>
+        <input type="range" id="radT" min="0" max="20" step="0.05" value="0" aria-label="Zeit in Minuten">
+        <output id="radTv">t = 0 min</output>
+        <label class="check"><input type="checkbox" id="radZeichen"> Bedeutung einblenden</label>
+      </div>
+    </section>
+
+    <div class="aha" id="radAha" hidden>
+      <strong>Aha!</strong>
+      <b>Mittellinie</b> = Höhe der Nabe, <b>Amplitude</b> = Radius, <b>Periode</b> = Umlaufzeit.
+      Und die Verschiebung? Wann fährt die Gondel auf Nabenhöhe nach oben?
+    </div>
+  </details>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
     <div class="warum-inhalt">
-      <div class="schritt"><span>1</span><div>Die Sinuskurve „startet“ (Mittellinie, steigend), wo das Argument null ist: $bx - c = 0$.</div></div>
-      <div class="schritt"><span>2</span><div>Auflösen: $x = \dfrac{c}{b}$ — das ist der neue Startpunkt, also die Verschiebung.</div></div>
-      <div class="schritt"><span>3</span><div>Dasselbe sieht man durch Ausklammern: $\;bx - c = b\bigl(x - \tfrac{c}{b}\bigr)$.</div></div>
+      <div class="schritt"><span>•</span><div>Die Sinuskurve „startet“ (Mittellinie, steigend), wo das Argument null ist: $bx - c = 0$.</div></div>
+      <div class="schritt"><span>•</span><div>Auflösen: $x = \dfrac{c}{b}$ — das ist der neue Startpunkt, also die Verschiebung.</div></div>
+      <div class="schritt"><span>•</span><div>Dasselbe sieht man durch Ausklammern: $\;bx - c = b\bigl(x - \tfrac{c}{b}\bigr)$.</div></div>
       <div class="fehler"><b>Typischer Fehler:</b> $\sin(2x - \pi)$ „um $\pi$ nach rechts“. Richtig ist $\frac{\pi}{2}$,
         denn $\sin(2x - \pi) = \sin\bigl(2(x - \tfrac{\pi}{2})\bigr)$.</div>
     </div>
   </details>
 
-  <h2>Vom Riesenrad zur Sinuskurve</h2>
-  <p>Ihre Gondel aus dem Skript: Einstieg unten in $2\,\text{m}$ Höhe, die Nabe liegt $27\,\text{m}$ hoch, eine Umdrehung dauert
-    $10$ Minuten. Starten Sie die Fahrt und beobachten Sie, wie aus der Kreisbewegung eine Kurve wird.</p>
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
 
-  <section class="stage" aria-label="Riesenrad">
-    <div class="mission" id="radMission"><span class="icon"></span>
-      <span>Ihr Auftrag: Lassen Sie das Rad eine ganze Umdrehung fahren. Welche Größen des Rads finden Sie in der Kurve wieder?</span></div>
-    <div class="plot" id="radWrap"><canvas id="rad" aria-label="Riesenrad und Höhe der Gondel über der Zeit"></canvas></div>
-    <div class="rad-steuer">
-      <button class="btn" id="radStart" type="button">▶ Fahrt starten</button>
-      <input type="range" id="radT" min="0" max="20" step="0.05" value="0" aria-label="Zeit in Minuten">
-      <output id="radTv">t = 0 min</output>
-      <label class="check"><input type="checkbox" id="radZeichen"> Bedeutung einblenden</label>
-    </div>
-  </section>
-
-  <div class="aha" id="radAha" hidden>
-    <strong>Aha!</strong>
-    Die Höhe der Gondel ist eine Sinuskurve, und jeder Parameter steckt im Rad:
-    die <b>Mittellinie</b> ist die Höhe der Nabe, die <b>Amplitude</b> ist der Radius, die <b>Periode</b> ist die Umlaufzeit.
-    Und die Verschiebung? Die Sinuskurve „startet“ auf der Mittellinie und steigt. Suchen Sie den Zeitpunkt, an dem die Gondel
-    auf Nabenhöhe nach oben fährt.
-  </div>
-
-  <h2>Selbst üben</h2>
-
-  <div class="quiz-task" data-quiz="mcq" data-ans="1">
-    <p class="quiz-q">1 · ⭐ Geben Sie die Periode von $f(x) = \sin(3x)$ an.</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">$3\pi$</button>
-      <button class="quiz-opt">$\frac{2}{3}\pi$</button>
-      <button class="quiz-opt">$\frac{\pi}{3}$</button>
-      <button class="quiz-opt">$6\pi$</button>
-    </div>
-    <div class="hint" data-quiz-hint>Stellen Sie $b$ im Applet auf $3$ und zählen Sie: Wie viele ganze Wellen passen in $[0;\,2\pi]$?</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="mcq" data-ans="1">
-    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie, wie der Graph von $f(x) = \sin\bigl(2x + \frac{\pi}{2}\bigr)$ gegenüber $\sin(2x)$ verschoben ist.</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">um $\frac{\pi}{2}$ nach links</button>
-      <button class="quiz-opt">um $\frac{\pi}{4}$ nach links</button>
-      <button class="quiz-opt">um $\frac{\pi}{4}$ nach rechts</button>
-      <button class="quiz-opt">um $\frac{\pi}{2}$ nach rechts</button>
-    </div>
-    <div class="hint" data-quiz-hint>Schreiben Sie das Argument als $2x - c$. Wie groß ist $c$? Dann $\frac{c}{b}$ berechnen.</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="mcq" data-ans="2">
-    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie die Aussage: „Die Graphen von $-\sin(x)$ und $\sin(x - \pi)$ sind gleich.“</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">Falsch: Bei $-\sin(x)$ ist $a$ negativ, bei $\sin(x - \pi)$ nicht — also verschiedene Kurven.</button>
-      <button class="quiz-opt">Falsch: Eine Verschiebung ändert auch die Amplitude.</button>
-      <button class="quiz-opt">Richtig: Spiegeln an der $x$-Achse und Verschieben um eine halbe Periode ergeben hier dasselbe Bild.</button>
-    </div>
-    <div class="hint" data-quiz-hint>Probieren Sie es im Applet: einmal $a = -1$, einmal $c = \pi$. Vergleichen Sie auch Werte, z. B. bei $x = \frac{\pi}{2}$.</div>
-  </div>
-
-  <div class="blatt"><span class="pfeil">✎</span>
-    <span>Zurück zum Skript 2.5: In Teil A ergänzen Sie die Sätze zu $a$, $b$, $c$ und $d$. Den Term für das Riesenrad bestimmen Sie in Aufgabe 5, mit Rechnung.</span></div>
+  <h2 class="etappe"><span>4</span>Zurück zum Blatt</h2>
+  <div class="blatt"><span>Skript 2.5 — Teil A: Sätze zu $a$, $b$, $c$, $d$ ergänzen. Den Riesenrad-Term bestimmen Sie in Aufgabe 5 mit Rechnung.</span></div>
 
   <footer class="fuss">
     <span>Mathematik · FOS Technik</span>
@@ -434,6 +400,42 @@ window.addEventListener('load', function () {
   });
   Aha.$('radZeichen').addEventListener('change', radZeichne);
   Aha.onRedraw(radZeichne);
+});
+</script>
+<script>
+/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Was bewirkt der Parameter? Keine Funktion aus Skript 2.5. */
+window.addEventListener('load', function () {
+  /* Riesenrad liegt im aufklappbaren Zusatz: beim Öffnen neu zeichnen (vorher Breite 0) */
+  Aha.$('riesenrad').addEventListener('toggle', function () { window.dispatchEvent(new Event('resize')); });
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Welche Periode hat $f(x) = \\sin(3x)$?',
+        optionen: ['$3\\pi$', '$\\frac{2}{3}\\pi$', '$6\\pi$'], ans: 1,
+        warum: ['Größeres $b$ macht die Wellen enger, nicht breiter: Periode $\\frac{2\\pi}{b}$.', , 'Nicht mal $b$, sondern durch $b$: $\\frac{2\\pi}{3}$.'] },
+      { frage: 'Welche Periode hat $f(x) = \\sin(2x)$?',
+        optionen: ['$\\pi$', '$2\\pi$', '$4\\pi$'], ans: 0,
+        warum: [, '$2\\pi$ ist die Periode von $\\sin(x)$. Mit $b = 2$ passen zwei Wellen hinein.', 'Nicht mal $b$, sondern durch $b$: $\\frac{2\\pi}{2}$.'] },
+      { frage: 'Welche Periode hat $f(x) = \\sin(0{,}5x)$?',
+        optionen: ['$\\pi$', '$4\\pi$', '$0{,}5\\pi$'], ans: 1,
+        warum: ['$b < 1$ macht die Wellen breiter: $\\frac{2\\pi}{0{,}5} = 4\\pi$.', , '$\\frac{2\\pi}{b}$ mit $b = 0{,}5$ — durch $0{,}5$ teilen heißt verdoppeln.'] } ],
+    [ { frage: 'Wie ist $\\sin\\bigl(2x + \\frac{\\pi}{2}\\bigr)$ gegenüber $\\sin(2x)$ verschoben?',
+        optionen: ['um $\\frac{\\pi}{2}$ nach links', 'um $\\frac{\\pi}{4}$ nach links', 'um $\\frac{\\pi}{4}$ nach rechts'], ans: 1,
+        warum: ['Die Verschiebung ist $\\frac{c}{b}$, nicht $c$: $\\frac{\\pi/2}{2} = \\frac{\\pi}{4}$.', , 'Plus im Argument heißt $c < 0$: nach links.'] },
+      { frage: 'Wie ist $\\sin(3x - \\pi)$ gegenüber $\\sin(3x)$ verschoben?',
+        optionen: ['um $\\pi$ nach rechts', 'um $\\frac{\\pi}{3}$ nach rechts', 'um $\\frac{\\pi}{3}$ nach links'], ans: 1,
+        warum: ['Die Verschiebung ist $\\frac{c}{b} = \\frac{\\pi}{3}$, nicht $c$.', , 'Minus im Argument: nach rechts.'] },
+      { frage: 'Wie ist $\\sin\\bigl(2x - \\frac{\\pi}{2}\\bigr)$ gegenüber $\\sin(2x)$ verschoben?',
+        optionen: ['um $\\frac{\\pi}{4}$ nach rechts', 'um $\\frac{\\pi}{2}$ nach rechts', 'um $\\frac{\\pi}{4}$ nach links'], ans: 0,
+        warum: [, 'Die Verschiebung ist $\\frac{c}{b}$: $\\frac{\\pi/2}{2} = \\frac{\\pi}{4}$.', 'Minus im Argument: nach rechts.'] } ],
+    [ { frage: '„Die Graphen von $-\\sin(x)$ und $\\sin(x - \\pi)$ sind gleich.“',
+        optionen: ['Stimmt — Spiegeln und Verschieben um eine halbe Periode ergeben hier dasselbe Bild.', 'Stimmt nicht — bei $-\\sin(x)$ ist $a$ negativ, also eine andere Kurve.'], ans: 0,
+        warum: [, 'Vergleichen Sie Werte: Bei $x = \\frac{\\pi}{2}$ liefern beide $-1$. Verschiedene Parameter können dieselbe Kurve ergeben.'] },
+      { frage: '„$f(x) = 2\\sin(x) + 1$ nimmt nur Werte zwischen $-1$ und $3$ an.“',
+        optionen: ['Stimmt — Mittellinie $1$, Amplitude $2$.', 'Stimmt nicht — Werte zwischen $1$ und $2$.'], ans: 0,
+        warum: [, 'Die Mittellinie liegt bei $d = 1$, die Kurve schwingt $2$ darüber und $2$ darunter.'] },
+      { frage: '„$\\sin(2x)$ hat die doppelte Periode von $\\sin(x)$.“',
+        optionen: ['Stimmt — $b = 2$ verdoppelt.', 'Stimmt nicht — die Periode halbiert sich auf $\\pi$.'], ans: 1,
+        warum: ['$b = 2$ verdoppelt die Zahl der Wellen — jede Welle ist dann halb so lang.'] } ]
+  ] });
 });
 </script>
 </body>

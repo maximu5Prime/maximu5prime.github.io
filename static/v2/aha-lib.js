@@ -441,6 +441,46 @@
     s = 0; zeige();
   }
 
+  /* Videos (13.10.2026): <div class="videos"><figure class="video" id="…" data-titel="Kurzname">…</figure>…</div>
+     Mehrere Videos → EIN Player-Platz mit Kapitel-Chips darüber (Seite bleibt so hoch wie mit einem Video).
+     Sprungmarke (#id, auch aus QR-Codes) öffnet das passende Kapitel. Gesehen (bis zum Ende) → ✓ am Chip;
+     alle gesehen → Aha.mission(true). Läuft automatisch beim Laden für jedes .videos. */
+  function Videos(box) {
+    var figs = Array.prototype.slice.call(box.querySelectorAll('figure.video')), gesehen = figs.map(function () { return false; }), chips;
+    function zeige(i) {
+      figs.forEach(function (f, k) {
+        if (k !== i) { var v = f.querySelector('video'); if (v && !v.paused) v.pause(); }
+        f.hidden = k !== i;
+      });
+      if (chips) Array.prototype.forEach.call(chips.children, function (b, k) { b.classList.toggle('aktiv', k === i); });
+    }
+    if (figs.length > 1) {
+      chips = document.createElement('div'); chips.className = 'wahl kapitel'; chips.setAttribute('role', 'tablist');
+      figs.forEach(function (f, i) {
+        var b = document.createElement('button'); b.type = 'button';
+        b.textContent = (i + 1) + ' ' + (f.dataset.titel || 'Video');
+        b.addEventListener('click', function () { zeige(i); });
+        chips.appendChild(b);
+      });
+      box.insertBefore(chips, box.firstChild);
+    }
+    figs.forEach(function (f, i) {
+      var v = f.querySelector('video'); if (!v) return;
+      v.addEventListener('ended', function () {
+        gesehen[i] = true;
+        if (chips) chips.children[i].classList.add('ok');
+        if (gesehen.every(Boolean)) mission(true);
+      });
+    });
+    function ausHash() {
+      var id = location.hash.slice(1), i = figs.findIndex(function (f) { return f.id === id; });
+      if (i >= 0) { zeige(i); box.scrollIntoView(); return true; }
+      return false;
+    }
+    if (!ausHash()) zeige(0);
+    window.addEventListener('hashchange', ausHash);
+  }
+
   /* Zufallshilfen für Trainer: ganze Zahl in [a, b] (ohne die Werte in ohne), Element aus Liste */
   function zufall(a, b, ohne) { var z; do { z = a + Math.floor(Math.random() * (b - a + 1)); } while (ohne && ohne.indexOf(z) >= 0); return z; }
   function eins(liste) { return liste[Math.floor(Math.random() * liste.length)]; }
@@ -448,6 +488,7 @@
   window.addEventListener('load', function () {
     initTheme();
     var b = $('ahaBtn'); if (b) b.addEventListener('click', function () { showAha(false); });
+    document.querySelectorAll('.videos').forEach(Videos);
     window.addEventListener('resize', redrawAll);
     if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redrawAll);
   });

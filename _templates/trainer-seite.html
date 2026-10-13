@@ -28,24 +28,24 @@
   <header class="hero">
     <div class="kurs">M11 · Trainer</div>
     <h1>Geraden durch zwei Punkte — <mark>sicher</mark>?</h1>
-    <p>Immer neue Aufgaben. Wählen Sie die Stufe — vom Berechnen übers Bestimmen bis zum Beurteilen —, rechnen Sie auf Papier und tippen Sie das Ergebnis ein.
-      Ziel: fünf richtig in Folge.</p>
+    <p>Immer neue Aufgaben. Auf Papier rechnen, nur das Ergebnis eintippen. Ziel: fünf richtig in Folge.</p>
   </header>
 
+  <h2 class="etappe"><span>1</span>Üben</h2>
   <section id="trainer" aria-label="Übungsaufgaben"></section>
 
-  <details class="warum">
-    <summary>So geht's</summary>
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
     <div class="warum-inhalt">
-      <div class="schritt"><span>1</span><div>Differenz der $y$-Werte durch Differenz der $x$-Werte:
+      <div class="schritt"><span>•</span><div>Differenz der $y$-Werte durch Differenz der $x$-Werte:
         $m = \dfrac{y_2 - y_1}{x_2 - x_1}$</div></div>
-      <div class="schritt"><span>2</span><div>Beide Differenzen in <b>derselben</b> Reihenfolge bilden.</div></div>
+      <div class="schritt"><span>•</span><div>Beide Differenzen in <b>derselben</b> Reihenfolge bilden.</div></div>
       <div class="fehler"><b>Typischer Fehler:</b> oben $y_2 - y_1$, unten aber $x_1 - x_2$ → falsches Vorzeichen.</div>
     </div>
   </details>
 
-  <div class="blatt"><span class="pfeil">✎</span>
-    <span>Zurück zum Arbeitsblatt 1.2, Aufgabe 3.</span></div>
+  <h2 class="etappe"><span>3</span>Zurück zum Blatt</h2>
+  <div class="blatt"><span>Arbeitsblatt 1.2 — Aufgabe 3.</span></div>
 
   <footer class="fuss">
     <span>Mathematik · FOS Technik</span>
@@ -64,8 +64,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var x1 = z(-5, 4), dx = z(1, 4), m = z(-3, 3, [0]), y1 = z(-5, 5);
     var x2 = x1 + dx, y2 = y1 + m * dx, t = y1 - m * x1;
     var P = '$P{(' + x1 + '\\,|\\,' + y1 + ')}$', Q = '$Q{(' + x2 + '\\,|\\,' + y2 + ')}$';
-    var schrittM = '<div class="schritt"><span>1</span><div>$m = \\dfrac{' + y2 + ' - ' + kl(y1) + '}{' + x2 + ' - ' + kl(x1) + '} = \\dfrac{' + (y2 - y1) + '}{' + dx + '} = ' + m + '$</div></div>';
-    var schrittT = '<div class="schritt"><span>2</span><div>$P$ einsetzen: $' + y1 + ' = ' + m + '\\cdot' + kl(x1) + ' + t \\;\\Rightarrow\\; t = ' + t + '$</div></div>';
+    var schrittM = '<div class="schritt"><span>•</span><div>$m = \\dfrac{' + y2 + ' - ' + kl(y1) + '}{' + x2 + ' - ' + kl(x1) + '} = \\dfrac{' + (y2 - y1) + '}{' + dx + '} = ' + m + '$</div></div>';
+    var schrittT = '<div class="schritt"><span>•</span><div>$P$ einsetzen: $' + y1 + ' = ' + m + '\\cdot' + kl(x1) + ' + t \\;\\Rightarrow\\; t = ' + t + '$</div></div>';
     if (stufe === 1) return {
       frage: 'Die Gerade geht durch ' + P + ' und ' + Q + '. Berechnen Sie die Steigung $m$.',
       felder: [{ label: '$m =$', ans: m }],
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
       felder: [{ label: 'Die Gerade hat bei $x = ' + xr + '$ den Wert $y =$', ans: m * xr + t },
                { label: 'Die Aussage ist …', optionen: ['richtig', 'falsch'], ans: drauf ? 0 : 1 }],
       tipp: 'Bestimmen Sie zuerst die Geradengleichung. Setzen Sie dann $x = ' + xr + '$ ein und vergleichen Sie mit dem $y$-Wert von $R$.',
-      weg: schrittM + schrittT + '<div class="schritt"><span>3</span><div>$y = ' + m + '\\cdot' + kl(xr) + ' + ' + kl(t) + ' = ' + (m * xr + t) + '$ ' +
+      weg: schrittM + schrittT + '<div class="schritt"><span>•</span><div>$y = ' + m + '\\cdot' + kl(xr) + ' + ' + kl(t) + ' = ' + (m * xr + t) + '$ ' +
            (drauf ? '— stimmt mit $R$ überein: Die Aussage ist <b>richtig</b>.' : '$\\neq ' + yr + '$: Die Aussage ist <b>falsch</b>.') + '</div></div>' };
   } });
 });

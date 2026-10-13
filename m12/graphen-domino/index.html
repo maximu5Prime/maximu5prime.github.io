@@ -13,7 +13,6 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
-  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/v2/aha-lib.js"></script>
   <style>
     .modus { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
@@ -54,10 +53,10 @@
   <header class="hero">
     <div class="kurs">M12 · Graph von f und f′</div>
     <h1>Welche Karte passt <mark>daneben</mark>?</h1>
-    <p>Jede Dominokarte zeigt links einen Graphen $G_{f'}$ und rechts einen Graphen $G_f$. Neben $G_f$ gehört immer der Graph
-      seiner <b>Ableitung</b>. Legen Sie die Kette, bis sie sich schließt. Jede Runde ist eine neue Kette.</p>
+    <p>Neben $G_f$ gehört immer der Graph seiner <b>Ableitung</b>. Jede Runde eine neue Kette.</p>
   </header>
 
+  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
   <section class="stage" aria-label="Domino">
     <div class="modus" id="modus">
       <button type="button" data-m="1" class="aktiv">⭐ Zuordnen: $f \to f'$</button>
@@ -78,64 +77,30 @@
     </div>
   </section>
 
-  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
   <div class="aha" id="aha" hidden>
     <strong>Aha!</strong>
-    Sie brauchen nur die <b>waagrechten Tangenten</b> von $G_f$: Genau dort hat $G_{f'}$ seine Nullstellen.
-    Extrempunkt $\Rightarrow$ $G_{f'}$ schneidet die $x$-Achse, Terrassenpunkt $\Rightarrow$ $G_{f'}$ berührt sie.
-    Dazwischen gilt: $G_f$ steigt $\Leftrightarrow$ $G_{f'}$ liegt oberhalb der $x$-Achse.
+    <b>Waagrechte Tangenten</b> von $G_f$ = Nullstellen von $G_{f'}$. Dazwischen: $G_f$ steigt $\Leftrightarrow$ $G_{f'}$ oberhalb der $x$-Achse.
   </div>
 
-  <details class="warum">
-    <summary>So gehen Sie vor (NEW-Regel)</summary>
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
     <div class="warum-inhalt">
-      <div class="schritt"><span>1</span><div><b>N</b>ullstellen von $f'$ = Stellen mit waagrechter Tangente von $G_f$ (Hoch-, Tief-, Terrassenpunkte).</div></div>
-      <div class="schritt"><span>2</span><div><b>E</b>xtremstellen von $f'$ = Wendestellen von $G_f$ (dort ist $G_f$ am steilsten).</div></div>
-      <div class="schritt"><span>3</span><div><b>W</b>endestellen von $f'$ = Extremstellen von $f''$.</div></div>
-      <div class="schritt"><span>4</span><div>Vorzeichen: Wo $G_f$ steigt, liegt $G_{f'}$ oberhalb der $x$-Achse; wo $G_f$ fällt, darunter.</div></div>
+      <div class="schritt"><span>•</span><div><b>N</b>ullstellen von $f'$ = Stellen mit waagrechter Tangente von $G_f$ (Hoch-, Tief-, Terrassenpunkte).</div></div>
+      <div class="schritt"><span>•</span><div><b>E</b>xtremstellen von $f'$ = Wendestellen von $G_f$ (dort ist $G_f$ am steilsten).</div></div>
+      <div class="schritt"><span>•</span><div><b>W</b>endestellen von $f'$ = Extremstellen von $f''$.</div></div>
+      <div class="schritt"><span>•</span><div>Vorzeichen: Wo $G_f$ steigt, liegt $G_{f'}$ oberhalb der $x$-Achse; wo $G_f$ fällt, darunter.</div></div>
       <div class="fehler"><b>Typischer Fehler:</b> zwei gleich aussehende Graphen aneinanderlegen. Neben $G_f$ gehört nicht
         „dasselbe Bild“, sondern die Steigung von $G_f$ als eigener Graph.</div>
     </div>
   </details>
 
-  <h2>Selbst üben</h2>
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
 
-  <div class="quiz-task" data-quiz="mcq" data-ans="2">
-    <p class="quiz-q">1 · ⭐ Geben Sie an: $G_f$ hat bei $x = 2$ einen Hochpunkt. Was gilt für $G_{f'}$ bei $x = 2$?</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">$G_{f'}$ hat dort ebenfalls einen Hochpunkt.</button>
-      <button class="quiz-opt">$G_{f'}$ berührt dort die $x$-Achse.</button>
-      <button class="quiz-opt">$G_{f'}$ schneidet dort die $x$-Achse von oben nach unten.</button>
-      <button class="quiz-opt">$G_{f'}$ schneidet dort die $x$-Achse von unten nach oben.</button>
-    </div>
-    <div class="hint" data-quiz-hint>Vor dem Hochpunkt steigt $G_f$, danach fällt $G_f$. Wo liegt $G_{f'}$ also links und rechts von $x = 2$?</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="mcq" data-ans="1">
-    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie: $G_{f'}$ liegt für $x < 1$ oberhalb und für $x > 1$ ebenfalls oberhalb der $x$-Achse,
-      bei $x = 1$ gilt $f'(1) = 0$. Welchen besonderen Punkt hat $G_f$ bei $x = 1$?</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">einen Tiefpunkt</button>
-      <button class="quiz-opt">einen Terrassenpunkt</button>
-      <button class="quiz-opt">einen Hochpunkt</button>
-      <button class="quiz-opt">eine Nullstelle</button>
-    </div>
-    <div class="hint" data-quiz-hint>Wechselt das Vorzeichen von $f'$ bei $x = 1$?</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="mcq" data-ans="0">
-    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie: „Liegt $G_{f'}$ ganz oberhalb der $x$-Achse, dann liegt auch $G_f$ ganz oberhalb der $x$-Achse.“</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">Falsch: $G_f$ steigt dann zwar überall, kann aber unterhalb der $x$-Achse beginnen, z.&nbsp;B. $f(x) = x$ mit $f'(x) = 1$.</button>
-      <button class="quiz-opt">Richtig: $f'(x) > 0$ bedeutet $f(x) > 0$.</button>
-      <button class="quiz-opt">Falsch: Dann liegt $G_f$ ganz unterhalb der $x$-Achse.</button>
-    </div>
-    <div class="hint" data-quiz-hint>$G_{f'}$ sagt etwas über die Steigung von $G_f$, nicht über seine Höhe.</div>
-  </div>
-
-  <div class="blatt"><span class="pfeil">✎</span>
-    <span>Zurück zum Domino auf Papier: In Aufgabe 2 erläutern Sie drei Anlegestellen mit je einem Merkmal.</span></div>
+  <h2 class="etappe"><span>4</span>Zurück zum Blatt</h2>
+  <div class="blatt"><span>Domino auf Papier — Aufgabe 2: drei Anlegestellen mit je einem Merkmal erläutern.</span></div>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m12/ableitungsgraph/"><span>← Voriges Thema</span>Graph von f und f′</a>
@@ -299,6 +264,40 @@ window.addEventListener('load', function () {
   Aha.$('neu').addEventListener('click', neueRunde);
   neueRunde();
   Aha.onRedraw(zeige);
+});
+</script>
+<script>
+/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Vorzeichen und Nullstellen von f′. Andere Beispiele als die Seite Ableitungsgraph. */
+window.addEventListener('load', function () {
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: '$G_f$ hat bei $x = 2$ einen Hochpunkt. Was macht $G_{f\'}$ bei $x = 2$?',
+        optionen: ['schneidet die $x$-Achse von oben nach unten', 'schneidet die $x$-Achse von unten nach oben', 'berührt die $x$-Achse nur'], ans: 0,
+        warum: [, 'Vor dem Hochpunkt steigt $G_f$: Dort liegt $G_{f\'}$ <b>oberhalb</b>.', 'Berühren gehört zum Terrassenpunkt — beim Hochpunkt wechselt das Vorzeichen.'] },
+      { frage: '$G_f$ hat bei $x = -1$ einen Tiefpunkt. Was macht $G_{f\'}$ bei $x = -1$?',
+        optionen: ['schneidet die $x$-Achse von oben nach unten', 'schneidet die $x$-Achse von unten nach oben', 'hat einen Tiefpunkt'], ans: 1,
+        warum: ['Vor dem Tiefpunkt fällt $G_f$: Dort liegt $G_{f\'}$ <b>unterhalb</b>.', , 'Nicht abmalen: Am Tiefpunkt ist die Steigung $0$.'] },
+      { frage: '$G_f$ hat bei $x = 0$ einen Terrassenpunkt und steigt sonst. Was macht $G_{f\'}$ bei $x = 0$?',
+        optionen: ['schneidet die $x$-Achse von unten nach oben', 'berührt die $x$-Achse von oben', 'liegt dort oberhalb der $x$-Achse'], ans: 1,
+        warum: ['Links von $0$ steigt $G_f$ auch — $G_{f\'}$ kommt also von oben.', , 'Am Terrassenpunkt ist die Tangente waagrecht: $f\'(0) = 0$.'] } ],
+    [ { frage: '$f\'(1) = 0$, und $G_{f\'}$ liegt links und rechts von $1$ oberhalb der $x$-Achse. Was hat $G_f$ bei $x = 1$?',
+        optionen: ['einen Tiefpunkt', 'einen Terrassenpunkt', 'einen Hochpunkt'], ans: 1,
+        warum: ['Für einen Tiefpunkt müsste $G_f$ vorher fallen ($f\' < 0$).', , 'Für einen Hochpunkt müsste $G_f$ danach fallen ($f\' < 0$).'] },
+      { frage: '$G_{f\'}$ liegt für $x < -2$ unterhalb und für $x > -2$ oberhalb der $x$-Achse. Was hat $G_f$ bei $x = -2$?',
+        optionen: ['einen Hochpunkt', 'einen Tiefpunkt', 'einen Wendepunkt'], ans: 1,
+        warum: ['Erst $f\' < 0$ (fallen), dann $f\' > 0$ (steigen) — das ist ein Tief.', , 'Ein Wendepunkt gehört zu einem Extrempunkt von $G_{f\'}$, nicht zu einer Nullstelle mit Vorzeichenwechsel.'] },
+      { frage: '$G_{f\'}$ liegt für $x < 3$ oberhalb und für $x > 3$ unterhalb der $x$-Achse. Was hat $G_f$ bei $x = 3$?',
+        optionen: ['einen Hochpunkt', 'einen Tiefpunkt', 'einen Terrassenpunkt'], ans: 0,
+        warum: [, 'Erst steigen ($f\' > 0$), dann fallen — das ist ein Hoch.', 'Das Vorzeichen wechselt — also ein Extrempunkt.'] } ],
+    [ { frage: '„Hat $G_{f\'}$ bei $x = 1$ einen Hochpunkt, dann hat auch $G_f$ dort einen Hochpunkt.“',
+        optionen: ['Stimmt — die Graphen gehören zusammen.', 'Stimmt nicht — $G_f$ ist dort am steilsten: Wendepunkt.'], ans: 1,
+        warum: ['Nicht abmalen: Ein Hochpunkt von $f\'$ heißt größte Steigung von $f$.'] },
+      { frage: '„Zwei Karten mit fast gleich aussehenden Graphen gehören beim Domino zusammen.“',
+        optionen: ['Stimmt — gleiche Form, gleiche Funktion.', 'Stimmt nicht — neben $G_f$ gehört seine Steigung, und die sieht meist anders aus.'], ans: 1,
+        warum: ['Beispiel: Neben einer Parabel liegt eine Gerade, nicht wieder eine Parabel.'] },
+      { frage: '„Berührt $G_{f\'}$ die $x$-Achse nur, dann hat $G_f$ dort keinen Extrempunkt.“',
+        optionen: ['Stimmt — ohne Vorzeichenwechsel kein Extrempunkt, sondern ein Terrassenpunkt.', 'Stimmt nicht — $f\' = 0$ reicht für einen Extrempunkt.'], ans: 0,
+        warum: [, '$f\' = 0$ ist nur notwendig. Erst der Vorzeichenwechsel macht ein Hoch oder Tief.'] } ]
+  ] });
 });
 </script>
 </body>

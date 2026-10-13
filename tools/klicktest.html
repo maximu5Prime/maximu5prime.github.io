@@ -1,0 +1,38 @@
+<!-- Klicktest für Aha.Stufen und Videos (13.10.2026). Aufruf über tools/klicktest.py, dann
+     http://127.0.0.1:8125/tools/klicktest.html?s=/m11/funktionsbegriff/,/m12/aenderungsrate/  (Liste mit Komma) -->
+<!doctype html><meta charset="utf-8"><body style="font:13px monospace;margin:6px">
+<pre id="log">läuft…</pre>
+<iframe id="f" style="width:390px;height:200px"></iframe>
+<script>
+var seiten = (new URLSearchParams(location.search).get('s') || '').split(',');
+var log = [], i = 0; function L(s) { log.push(s); document.getElementById('log').textContent = log.join('\n'); }
+var fr = document.getElementById('f');
+function weiter() { if (i >= seiten.length) { L('FERTIG'); document.title = 'fertig'; return; } fr.src = seiten[i++]; }
+fr.onload = function () {
+  var w = fr.contentWindow, d = fr.contentDocument, url = seiten[i - 1], fehler = [];
+  var box = d.getElementById('ueben');
+  var kerr = d.querySelectorAll('.katex-error').length;
+  if (kerr) fehler.push(kerr + ' KaTeX-Fehler: ' + d.querySelector('.katex-error').title);
+  var vids = d.querySelectorAll('.videos figure.video').length, chips = d.querySelectorAll('.kapitel button').length;
+  var sichtbar = Array.prototype.filter.call(d.querySelectorAll('.videos figure.video'), function (f) { return !f.hidden; }).length;
+  if (vids && sichtbar !== 1) fehler.push('sichtbare Videos: ' + sichtbar);
+  if (vids > 1 && chips !== vids) fehler.push('Chips ' + chips + ' ≠ Videos ' + vids);
+  var etappen = Array.prototype.map.call(d.querySelectorAll('.etappe > span:first-child'), function (s) { return s.textContent; }).join('');
+  var gesehen = {};
+  if (box) for (var r = 0; r < 12; r++) {
+    for (var st = 0; st < 3; st++) {
+      var q = box.querySelector('.st-frage'); if (!q) { fehler.push('keine Frage'); break; }
+      gesehen[q.textContent] = 1;
+      var ok = 0, bs = box.querySelectorAll('.st-opts button');
+      bs.forEach(function (b) { if (!b.disabled) { b.click(); if (b.classList.contains('ok')) ok++; else if (!box.querySelector('.st-rm').textContent.trim()) fehler.push('leere Rückmeldung: ' + b.textContent); } });
+      if (ok !== 1) fehler.push('Stufe ' + (st + 1) + ' richtige=' + ok + ': ' + q.textContent.slice(0, 50));
+      if (box.querySelectorAll('.st-rm .katex-error').length) fehler.push('KaTeX in Rückmeldung');
+      box.querySelector('.st-weiter').click();
+    }
+    var n = box.querySelector('.st-nochmal'); if (!n) { fehler.push('kein Ende'); break; } n.click();
+  }
+  L((fehler.length ? '✗ ' : '✓ ') + url + '  Schritte ' + etappen + (vids ? '  Videos ' + vids : '') + (box ? '  Varianten gesehen ' + Object.keys(gesehen).length : '') + (fehler.length ? '\n    ' + fehler.slice(0, 6).join('\n    ') : ''));
+  weiter();
+};
+weiter();
+</script>

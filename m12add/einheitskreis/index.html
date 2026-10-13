@@ -13,7 +13,6 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
-  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/v2/aha-lib.js"></script>
 </head>
 <body>
@@ -27,103 +26,66 @@
   </nav>
 
   <header class="hero">
-    <div class="kurs">M12+ · Einheitskreis, Tangens und Bogenmaß</div>
+    <div class="kurs">M12+ · Einheitskreis</div>
     <h1>Sinus und Kosinus — für <mark>jeden</mark> Winkel</h1>
-    <p>Im Dreieck gibt es nur Winkel bis 90°. Am Einheitskreis liest man Sinus und Kosinus für jeden Winkel als Koordinaten ab.
-      Und ein Winkel lässt sich auch als Länge messen: das Bogenmaß.</p>
+    <p>Am Einheitskreis sind Kosinus und Sinus einfach die Koordinaten.</p>
   </header>
 
-  <figure class="video">
-    <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Einheitskreis.jpg">
-      <source src="MT12Add_LB02_VID_Einheitskreis.mp4" type="video/mp4">
-      <track kind="subtitles" src="MT12Add_LB02_VID_Einheitskreis.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Video 1 · Einheitskreis</b> (140 s) — Die Gondel dreht sich, Kosinus und Sinus laufen mit — durch die Hypotenuse 1 teilen ändert nichts.</figcaption>
-  </figure>
+  <h2 class="etappe"><span>1</span>Anschauen</h2>
+  <div class="videos">
+    <figure class="video" id="einheitskreis" data-titel="Einheitskreis">
+      <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Einheitskreis.jpg">
+        <source src="MT12Add_LB02_VID_Einheitskreis.mp4" type="video/mp4">
+        <track kind="subtitles" src="MT12Add_LB02_VID_Einheitskreis.vtt" srclang="de" label="Deutsch" default>
+      </video>
+      <figcaption><b>Einheitskreis</b> (140 s) — Kosinus und Sinus laufen mit der Gondel mit.</figcaption>
+    </figure>
+    <figure class="video" id="pythagoras" data-titel="Pythagoras">
+      <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Pythagoras.jpg">
+        <source src="MT12Add_LB02_VID_Pythagoras.mp4" type="video/mp4">
+        <track kind="subtitles" src="MT12Add_LB02_VID_Pythagoras.vtt" srclang="de" label="Deutsch" default>
+      </video>
+      <figcaption><b>Pythagoras</b> (78 s) — $\sin^2\alpha + \cos^2\alpha = 1$ bei jedem Winkel.</figcaption>
+    </figure>
+    <figure class="video" id="tangens" data-titel="Tangens">
+      <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Tangens.jpg">
+        <source src="MT12Add_LB02_VID_Tangens.mp4" type="video/mp4">
+        <track kind="subtitles" src="MT12Add_LB02_VID_Tangens.vtt" srclang="de" label="Deutsch" default>
+      </video>
+      <figcaption><b>Tangens</b> (106 s) — Die Strecke auf der Senkrechten — und warum es $\tan 90^\circ$ nicht gibt.</figcaption>
+    </figure>
+    <figure class="video" id="bogenmass" data-titel="Bogenmaß">
+      <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Bogenmass.jpg">
+        <source src="MT12Add_LB02_VID_Bogenmass.mp4" type="video/mp4">
+        <track kind="subtitles" src="MT12Add_LB02_VID_Bogenmass.vtt" srclang="de" label="Deutsch" default>
+      </video>
+      <figcaption><b>Bogenmaß</b> (83 s) — Ein Radius wird auf den Kreis gebogen.</figcaption>
+    </figure>
+  </div>
 
-  <figure class="video" id="pythagoras">
-    <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Pythagoras.jpg">
-      <source src="MT12Add_LB02_VID_Pythagoras.mp4" type="video/mp4">
-      <track kind="subtitles" src="MT12Add_LB02_VID_Pythagoras.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Video 2 · Pythagoras</b> (78 s) — $\sin^2\alpha + \cos^2\alpha = 1$, bei jedem Winkel.</figcaption>
-  </figure>
-
-  <figure class="video" id="tangens">
-    <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Tangens.jpg">
-      <source src="MT12Add_LB02_VID_Tangens.mp4" type="video/mp4">
-      <track kind="subtitles" src="MT12Add_LB02_VID_Tangens.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Video 3 · Tangens</b> (106 s) — Die Strecke auf der Senkrechten, und warum es $\tan 90^\circ$ nicht gibt. Mit Strahlensatz für Profis ⭐⭐⭐.</figcaption>
-  </figure>
-
-  <figure class="video" id="bogenmass">
-    <video controls playsinline preload="metadata" poster="MT12Add_LB02_VID_Bogenmass.jpg">
-      <source src="MT12Add_LB02_VID_Bogenmass.mp4" type="video/mp4">
-      <track kind="subtitles" src="MT12Add_LB02_VID_Bogenmass.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Video 4 · Bogenmaß</b> (83 s) — Ein Radius wird auf den Kreis gebogen.</figcaption>
-  </figure>
-
-  <button class="aha-btn" id="ahaBtn" type="button">Video gesehen? Aha zeigen</button>
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
   <div class="aha" id="aha" hidden>
     <strong>Aha!</strong>
-    Der Punkt auf dem Einheitskreis ist $P(\cos\alpha \,|\, \sin\alpha)$: <b>Kosinus = $x$</b>, <b>Sinus = $y$</b> — für jeden Winkel.
-    Auf den halben Kreis passt der Radius gut dreimal: <b>$180^\circ \;\widehat{=}\; \pi$</b>.
+    $P(\cos\alpha \,|\, \sin\alpha)$: <b>Kosinus = $x$</b>, <b>Sinus = $y$</b> — für jeden Winkel. Und <b>$180^\circ \;\widehat{=}\; \pi$</b>.
   </div>
 
-  <details class="warum">
-    <summary>Die Regeln auf einen Blick</summary>
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
     <div class="warum-inhalt">
-      <div class="schritt"><span>1</span><div>Zum Winkel $\alpha$ gehört auf dem Einheitskreis der Punkt $P(\cos\alpha \,|\, \sin\alpha)$.</div></div>
-      <div class="schritt"><span>2</span><div>Sinus oben positiv, unten negativ. Kosinus rechts positiv, links negativ.</div></div>
-      <div class="schritt"><span>3</span><div>$-1 \le \sin\alpha \le 1$, $-1 \le \cos\alpha \le 1$ und $\sin^2\alpha + \cos^2\alpha = 1$.</div></div>
-      <div class="schritt"><span>T</span><div>$\tan\alpha = \frac{\sin\alpha}{\cos\alpha}$ für $\cos\alpha \neq 0$ — am Einheitskreis die Strecke $\overline{RS}$ auf der Senkrechten $x = 1$. $\tan 90^\circ$ gibt es nicht.</div></div>
-      <div class="schritt"><span>4</span><div>Bogenmaß $x$ = Länge des Bogens am Einheitskreis: $180^\circ \;\widehat{=}\; \pi$, $360^\circ \;\widehat{=}\; 2\pi$,
-        $x = \frac{\alpha}{360^\circ}\cdot 2\pi$. Beim Kreis mit Radius $r$: $b = r\cdot x$.</div></div>
-      <div class="fehler"><b>Typischer Fehler:</b> Der Taschenrechner steht im falschen Modus. Gradmaß → <b>DEG</b>, Bogenmaß → <b>RAD</b>.
-        Test: $\sin(30) = 0{,}5$ nur im DEG-Modus.</div>
+      <div class="schritt"><span>•</span><div>Zum Winkel $\alpha$ gehört auf dem Einheitskreis der Punkt $P(\cos\alpha \,|\, \sin\alpha)$. Sinus oben positiv, Kosinus rechts positiv.</div></div>
+      <div class="schritt"><span>•</span><div>$-1 \le \sin\alpha,\ \cos\alpha \le 1$ und $\sin^2\alpha + \cos^2\alpha = 1$.</div></div>
+      <div class="schritt"><span>•</span><div>$\tan\alpha = \frac{\sin\alpha}{\cos\alpha}$ für $\cos\alpha \neq 0$; $\tan 90^\circ$ gibt es nicht.</div></div>
+      <div class="schritt"><span>•</span><div>Bogenmaß $x = \frac{\alpha}{360^\circ}\cdot 2\pi$, also $180^\circ \;\widehat{=}\; \pi$. Beim Radius $r$: Bogen $b = r\cdot x$.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Taschenrechner im falschen Modus. Grad → <b>DEG</b>, Bogenmaß → <b>RAD</b>.</div>
     </div>
   </details>
 
-  <h2>Selbst üben</h2>
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
 
-  <div class="quiz-task" data-quiz="mcq" data-ans="1">
-    <p class="quiz-q">1 · ⭐ Geben Sie an: Welche Vorzeichen haben $\sin(200^\circ)$ und $\cos(200^\circ)$?</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">$\sin$ positiv, $\cos$ negativ</button>
-      <button class="quiz-opt">beide negativ</button>
-      <button class="quiz-opt">$\sin$ negativ, $\cos$ positiv</button>
-    </div>
-    <div class="hint" data-quiz-hint>200° liegt zwischen 180° und 270°. In welchem Quadranten liegt der Punkt — links oder rechts, oben oder unten?</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
-    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie, ob die Aussage stimmt.</p>
-    <table class="ankreuz">
-      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
-      <tbody>
-        <tr><td>$\sin(150^\circ) = \sin(30^\circ)$</td><td></td><td></td></tr>
-        <tr><td>$\cos(250^\circ) > 0$</td><td></td><td></td></tr>
-        <tr><td>$90^\circ \;\widehat{=}\; \frac{\pi}{2}$</td><td></td><td></td></tr>
-      </tbody>
-    </table>
-    <div class="hint" data-quiz-hint>Skizzieren Sie den Einheitskreis: 30° und 150° liegen gleich hoch. 90° ist ein Viertel des Kreises.</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="mcq" data-ans="1">
-    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie die Aussage: „Ein Winkel mit dem Bogenmaß 1 ist fast ein rechter Winkel.“</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">Stimmt, 1 ist fast $\frac{\pi}{2}$.</button>
-      <button class="quiz-opt">Falsch, das Bogenmaß 1 entspricht etwa 57°.</button>
-      <button class="quiz-opt">Falsch, das Bogenmaß 1 entspricht genau 1°.</button>
-    </div>
-    <div class="hint" data-quiz-hint>Rechnen Sie um: $\alpha = \frac{x}{2\pi}\cdot 360^\circ$. Und: $\frac{\pi}{2} \approx 1{,}57$.</div>
-  </div>
-
-  <div class="blatt"><span class="pfeil">✎</span>
-    <span>Zurück zum Skript 2.2: Wie hoch über der Nabe ist die Gondel bei 150° und 250°? (Leitfrage)</span></div>
+  <h2 class="etappe"><span>4</span>Zurück zum Blatt</h2>
+  <div class="blatt"><span>Skript 2.2 — wie hoch über der Nabe ist die Gondel bei 150° und 250°?</span></div>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m12add/sinus-parameter/"><span>Nächstes Thema →</span>Parameter a, b, c, d</a>
@@ -135,11 +97,37 @@
   </footer>
 </div>
 <script>
-// Aha erscheint, sobald ein Video bis zum Ende angesehen wurde (oder per Knopf)
+/* 3 Üben: ein Aufgabentyp („Was gilt am Einheitskreis?“), drei Stufen. Nicht 150°/250° (Leitfrage Skript 2.2). */
 window.addEventListener('load', function () {
-  document.querySelectorAll('video').forEach(function (v) {
-    v.addEventListener('ended', function () { Aha.mission(true); });
-  });
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Welche Vorzeichen haben $\\sin(200^\\circ)$ und $\\cos(200^\\circ)$?',
+        optionen: ['$\\sin$ positiv, $\\cos$ negativ', 'beide negativ', '$\\sin$ negativ, $\\cos$ positiv'], ans: 1,
+        warum: ['200° liegt unter der $x$-Achse: Der Sinus ($y$) ist dort negativ.', , '200° liegt links der $y$-Achse: Der Kosinus ($x$) ist dort negativ.'] },
+      { frage: 'Welche Vorzeichen haben $\\sin(120^\\circ)$ und $\\cos(120^\\circ)$?',
+        optionen: ['$\\sin$ positiv, $\\cos$ negativ', 'beide positiv', '$\\sin$ negativ, $\\cos$ positiv'], ans: 0,
+        warum: [, '120° liegt links der $y$-Achse: Der Kosinus ($x$) ist dort negativ.', '120° liegt über der $x$-Achse: Der Sinus ($y$) ist positiv.'] },
+      { frage: 'Welche Vorzeichen haben $\\sin(300^\\circ)$ und $\\cos(300^\\circ)$?',
+        optionen: ['beide negativ', '$\\sin$ negativ, $\\cos$ positiv', '$\\sin$ positiv, $\\cos$ negativ'], ans: 1,
+        warum: ['300° liegt rechts der $y$-Achse: Der Kosinus ($x$) ist positiv.', , 'Unten rechts: $y$ negativ, $x$ positiv.'] } ],
+    [ { frage: 'Welcher Winkel hat denselben Sinuswert wie $40^\\circ$?',
+        optionen: ['$140^\\circ$', '$220^\\circ$', '$320^\\circ$'], ans: 0,
+        warum: [, 'Bei 220° liegt der Punkt unten: Der Sinus ist negativ.', 'Bei 320° liegt der Punkt unten: Gleich ist hier der Kosinus, nicht der Sinus.'] },
+      { frage: 'Welcher Winkel hat denselben Kosinuswert wie $60^\\circ$?',
+        optionen: ['$120^\\circ$', '$240^\\circ$', '$300^\\circ$'], ans: 2,
+        warum: ['Bei 120° liegt der Punkt links: Der Kosinus ist negativ. Gleich ist hier der Sinus.', 'Bei 240° liegt der Punkt links unten: Der Kosinus ist negativ.'] },
+      { frage: 'Welcher Winkel hat denselben Sinuswert wie $70^\\circ$?',
+        optionen: ['$110^\\circ$', '$250^\\circ$', '$290^\\circ$'], ans: 0,
+        warum: [, 'Bei 250° liegt der Punkt unten: Der Sinus ist negativ.', 'Bei 290° ist der Kosinus gleich — der Sinus hat das andere Vorzeichen.'] } ],
+    [ { frage: '„Ein Winkel mit dem Bogenmaß 1 ist fast ein rechter Winkel.“',
+        optionen: ['Stimmt — 1 ist fast $\\frac{\\pi}{2}$.', 'Stimmt nicht — Bogenmaß 1 sind etwa 57°.', 'Stimmt nicht — Bogenmaß 1 ist genau 1°.'], ans: 1,
+        warum: ['$\\frac{\\pi}{2} \\approx 1{,}57$ — das ist ein gutes Stück mehr als 1.', , 'Bogenmaß und Grad sind verschiedene Einheiten: $1 \\cdot \\frac{180^\\circ}{\\pi} \\approx 57^\\circ$.'] },
+      { frage: '„Aus $\\cos\\alpha = 0{,}6$ folgt $\\sin\\alpha = 0{,}4$.“',
+        optionen: ['Stimmt — Sinus und Kosinus ergeben zusammen 1.', 'Stimmt nicht — $\\sin\\alpha = 0{,}8$ oder $-0{,}8$.'], ans: 1,
+        warum: ['1 ergeben die <b>Quadrate</b>: $\\sin^2\\alpha = 1 - 0{,}36 = 0{,}64$.'] },
+      { frage: '„Es gibt einen Winkel mit $\\sin\\alpha = 1{,}2$.“',
+        optionen: ['Stimmt — bei einem großen Winkel.', 'Stimmt nicht — der Sinus ist eine $y$-Koordinate am Kreis mit Radius 1.'], ans: 1,
+        warum: ['Auf dem Einheitskreis ist $y$ höchstens 1, egal wie groß der Winkel ist.'] } ]
+  ] });
 });
 </script>
 </body>

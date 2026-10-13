@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VORLAGE Aha-Seite — Kopie nach /<kurs>/<thema>/index.html, dann Inhalt ersetzen</title>
+  <title>VORLAGE Aha-Seite — Kopie nach /<kurs>/<thema>/index.html, Titel „Thema · Kurs“</title>
   <meta name="description" content="Gewinnschwelle einer Bar: Wo ist e(x) > k(x)? Ungleichungen zum Ausprobieren.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
@@ -13,10 +13,19 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
-  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/v2/aha-lib.js"></script>
 </head>
 <body>
+<!-- VORLAGE Aha-Seite (roter Faden, 13.10.2026). Immer dieselben vier Schritte, Nummer direkt am Text:
+     1 Ausprobieren  .stage (Applet) — bei Videos „Anschauen“: <div class="videos"><figure class="video" id="…" data-titel="Kurzname">…</figure></div>
+                     (mehrere Videos → ein Player mit Kapitel-Chips, Sprungmarke #id öffnet das Kapitel, Aha nach allen Kapiteln)
+                     danach leiser Link „Aha zeigen“ + .aha (ein bis zwei Sätze). Optional: details.zusatz für eine zweite Bühne.
+     2 Warum?        details.warum.flach, Punkte mit • (keine Ziffern — die Zahlen gehören den Schritten)
+     3 Üben          <div id="ueben"> + Aha.Stufen: EIN Aufgabentyp, ⭐ → ⭐⭐ → ⭐⭐⭐ (Stufe 2 erst nach Stufe 1), je Stufe 2–3 Varianten,
+                     falsche Optionen = typische Fehlvorstellungen mit warum[j]. Keine Aufgabe des Arbeitsblatts lösen!
+     4 Zurück zum Blatt  .blatt mit konkreter Aufgabe, ein Satz.
+     Texte kurz: Hero ein Satz, Mission ein Satz ohne „Ihr Auftrag:“, Tipp-Zeile wenige Wörter. -->
+<!-- Video (05.10.2026): Quelle 04_Kurse/01_Mathematik/FT11/LB01_…/03_Schnittpunkt_Ungleichungen_Bar/video/ — nach Neubau hierher kopieren (mp4, vtt, jpg). QR auf Info 1.3 C. -->
 <div class="wrap">
 
   <nav class="bar">
@@ -27,14 +36,15 @@
   <header class="hero">
     <div class="kurs">M11 · Ungleichungen</div>
     <h1>Ab wie vielen Getränken macht die Bar <mark>Gewinn</mark>?</h1>
-    <p>Bar 3.0: Kosten $k(x) = 2x + 2000$, Erlös $e(x) = 6x$. Gesucht sind alle $x$ mit $e(x) > k(x)$.</p>
+    <p>Kosten $k(x) = 2x + 2000$, Erlös $e(x) = 6x$. Gesucht: alle $x$ mit $e(x) > k(x)$.</p>
   </header>
 
+  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
   <section class="stage" aria-label="Ausprobieren">
     <div class="mission" id="mission"><span class="icon"></span>
-      <span>Ihr Auftrag: Bringen Sie die Gewinnschwelle unter 400 Getränke.</span></div>
+      <span>Gewinnschwelle unter 400 Getränke bringen.</span></div>
     <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graphen von Kosten und Erlös"></canvas></div>
-    <p class="tipp-zeile">Tippen oder fahren Sie über den Graphen: Die Lupe zeigt Gewinn oder Verlust an dieser Stelle.</p>
+    <p class="tipp-zeile">Über den Graphen fahren: Die Lupe zeigt Gewinn oder Verlust.</p>
     <div class="regler">
       <div><label for="p">Preis je Getränk <output id="pVal"></output></label>
         <input type="range" id="p" min="3" max="10" step="0.5" value="6"></div>
@@ -47,65 +57,37 @@
     </div>
   </section>
 
-  <button class="aha-btn" id="ahaBtn" type="button">Keine Idee? Aha direkt zeigen</button>
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
   <div class="aha" id="aha" hidden>
     <strong>Aha!</strong>
-    Der <b>Schnittpunkt</b> ist die Grenze: links davon Verlust, rechts davon Gewinn.
-    Die Lösung einer Ungleichung ist deshalb keine einzelne Zahl, sondern ein <b>ganzer Bereich</b>:<br>
+    Der <b>Schnittpunkt</b> ist die Grenze. Die Lösung ist keine Zahl, sondern ein <b>ganzer Bereich</b>:<br>
     <span class="lmenge" id="lMenge"></span>
   </div>
 
-  <details class="warum">
-    <summary>Warum? So rechnen Sie es</summary>
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
     <div class="warum-inhalt">
-      <p>Eine Ungleichung formen Sie um wie eine Gleichung — mit einer Ausnahme (unten).</p>
-      <div class="schritt"><span>1</span><div>Ansetzen: $6x > 2x + 2000$</div></div>
-      <div class="schritt"><span>2</span><div>$x$ auf eine Seite: $\;| -2x \quad\Rightarrow\quad 4x > 2000$</div></div>
-      <div class="schritt"><span>3</span><div>Auflösen: $\;| :4 \quad\Rightarrow\quad x > 500$, also $\mathbb{L} = \;]\,500;\ \infty\,[$</div></div>
-      <div class="schritt"><span>4</span><div>Im Sachkontext: Getränke gibt es nur ganz → Gewinn ab <b>501</b> Getränken.
+      <div class="schritt"><span>•</span><div>Ansetzen: $6x > 2x + 2000$</div></div>
+      <div class="schritt"><span>•</span><div>$x$ auf eine Seite: $\;| -2x \quad\Rightarrow\quad 4x > 2000$</div></div>
+      <div class="schritt"><span>•</span><div>Auflösen: $\;| :4 \quad\Rightarrow\quad x > 500$, also $\mathbb{L} = \;]\,500;\ \infty\,[$</div></div>
+      <div class="schritt"><span>•</span><div>Im Sachkontext: Getränke gibt es nur ganz → Gewinn ab <b>501</b> Getränken.
         Probe mit einer Testzahl: $x = 600$: $e = 3600 > k = 3200$ ✓</div></div>
       <div class="fehler"><b>Typischer Fehler:</b> Beim Multiplizieren oder Dividieren mit einer
         <b>negativen</b> Zahl dreht sich das Zeichen um: $-2x > 8 \;\Rightarrow\; x < -4$.</div>
     </div>
   </details>
 
-  <h2>Selbst üben</h2>
 
-  <div class="quiz-task" data-quiz="fill">
-    <p class="quiz-q">1 · Lösen Sie $3x + 4 > x + 10$. Die Lösung lautet $x > \dots$</p>
-    <p>$x >$ <input class="input quiz-input" data-ans="3" inputmode="decimal"></p>
-    <div class="hint" data-quiz-hint>Erst $-x$, dann $-4$, dann durch $2$ teilen.</div>
-  </div>
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
 
-  <div class="quiz-task" data-quiz="mcq" data-ans="1">
-    <p class="quiz-q">2 · Welche Lösung hat $-2x > 8$?</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">$x > -4$</button>
-      <button class="quiz-opt">$x < -4$</button>
-      <button class="quiz-opt">$x > 4$</button>
-    </div>
-    <div class="hint" data-quiz-hint>Sie teilen durch eine negative Zahl. Was passiert dann mit dem Zeichen?</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="ankreuz" data-ans="W,F,W">
-    <p class="quiz-q">3 · Eine andere Bar: Erlös $e(x) = 5x$, Kosten $k(x) = x + 1200$. Wahr oder falsch?</p>
-    <table class="ankreuz">
-      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
-      <tbody>
-        <tr><td>Bei 300 Getränken ist der Gewinn genau 0 €.</td><td></td><td></td></tr>
-        <tr><td>Bei 250 Getränken macht die Bar Gewinn.</td><td></td><td></td></tr>
-        <tr><td>$\mathbb{L} = \;]\,300;\ \infty\,[$ löst $e(x) > k(x)$.</td><td></td><td></td></tr>
-      </tbody>
-    </table>
-    <div class="hint" data-quiz-hint>Setzen Sie $e(x) = k(x)$ und lösen Sie nach $x$ auf.</div>
-  </div>
-
-  <div class="blatt"><span class="pfeil">✎</span>
-    <span>Zurück zum Arbeitsblatt 1.3: Stimmt die Werbung der Moonshine Bar? (Aufgabe 2)</span></div>
+  <h2 class="etappe"><span>4</span>Zurück zum Blatt</h2>
+  <div class="blatt"><span>Arbeitsblatt 1.3 — stimmt die Werbung der Moonshine Bar? (Aufgabe 2)</span></div>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m11/schnittpunkte/"><span>← Voriges Thema</span>Schnittpunkte</a>
+    <a class="next" href="/m11/parabel/"><span>Nächstes Thema →</span>Parabel verschieben</a>
   </nav>
 
   <footer class="fuss">
@@ -155,6 +137,40 @@ window.addEventListener('load', function () {
   P.pointer(function (x) { S.probe = (x >= 0 && x <= 1000) ? x : null; zeichne(); },
             function () { S.probe = null; zeichne(); });
   Aha.onRedraw(aktualisiere);
+});
+</script>
+<script>
+/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Ungleichung lösen. Andere Terme als AB 1.3. */
+window.addEventListener('load', function () {
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Lösen Sie $3x + 4 > x + 10$.',
+        optionen: ['$x > 3$', '$x > 7$', '$x < 3$'], ans: 0,
+        warum: [, 'Erst $-x$: $2x + 4 > 10$, dann $-4$: $2x > 6$.', 'Sie teilen durch $+2$ — das Zeichen bleibt.'] },
+      { frage: 'Lösen Sie $5x - 2 < 2x + 7$.',
+        optionen: ['$x > 3$', '$x < 3$', '$x < 9$'], ans: 1,
+        warum: ['Sie teilen durch $+3$ — das Zeichen bleibt.', , '$3x < 9$ — noch durch $3$ teilen.'] },
+      { frage: 'Lösen Sie $4x + 1 \\ge 2x + 9$.',
+        optionen: ['$x \\ge 4$', '$x \\ge 5$', '$x \\le 4$'], ans: 0,
+        warum: [, '$2x \\ge 8$, also $x \\ge 4$.', 'Sie teilen durch $+2$ — das Zeichen bleibt.'] } ],
+    [ { frage: 'Lösen Sie $-2x > 8$.',
+        optionen: ['$x > -4$', '$x < -4$', '$x > 4$'], ans: 1,
+        warum: ['Durch eine negative Zahl geteilt — das Zeichen kippt.', , 'Vorzeichen: $8 : (-2) = -4$. Und das Zeichen kippt.'] },
+      { frage: 'Lösen Sie $7 - 3x \\le 1$.',
+        optionen: ['$x \\le 2$', '$x \\ge 2$', '$x \\ge -2$'], ans: 1,
+        warum: ['$-3x \\le -6$: Beim Teilen durch $-3$ kippt das Zeichen.', , '$-6 : (-3) = +2$.'] },
+      { frage: 'Lösen Sie $-x + 5 < 2x - 4$.',
+        optionen: ['$x > 3$', '$x < 3$', '$x > -3$'], ans: 0,
+        warum: [, '$-3x < -9$: Beim Teilen durch $-3$ kippt das Zeichen.', '$-9 : (-3) = +3$.'] } ],
+    [ { frage: 'Bar: $e(x) = 5x$, $k(x) = x + 1200$. „Bei 250 Getränken macht die Bar Gewinn.“',
+        optionen: ['Stimmt — 250 Getränke sind viel.', 'Stimmt nicht — Gewinn erst ab mehr als 300 Getränken.'], ans: 1,
+        warum: ['$5x > x + 1200 \\Rightarrow x > 300$. Probe: $e(250) = 1250 < k(250) = 1450$.'] },
+      { frage: 'Bar: $e(x) = 4x$, $k(x) = x + 900$. „Ab 300 Getränken macht die Bar Gewinn.“',
+        optionen: ['Stimmt — bei 300 ist die Schwelle.', 'Stimmt nicht — bei 300 ist der Gewinn genau 0, Gewinn erst ab 301.'], ans: 1,
+        warum: ['$e(300) = 1200 = k(300)$: Bei der Schwelle selbst ist der Gewinn $0$.'] },
+      { frage: '„Die Lösung von $e(x) > k(x)$ ist die Gewinnschwelle, also eine einzige Zahl.“',
+        optionen: ['Stimmt — die Gewinnschwelle ist die Lösung.', 'Stimmt nicht — die Lösung ist ein ganzer Bereich, z. B. $]\\,500;\\ \\infty\\,[$.'], ans: 1,
+        warum: ['Die Schwelle löst die <b>Gleichung</b> $e(x) = k(x)$. Die Ungleichung gilt für alle $x$ danach.'] } ]
+  ] });
 });
 </script>
 </body>

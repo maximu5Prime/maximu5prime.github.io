@@ -13,7 +13,6 @@
   <script defer src="/static/katex/katex.min.js"></script>
   <script defer src="/static/katex/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
-  <script defer src="/static/quiz.js"></script>
   <script defer src="/static/v2/aha-lib.js"></script>
 </head>
 <body>
@@ -29,71 +28,44 @@
   <header class="hero">
     <div class="kurs">M12 · Änderungsrate</div>
     <h1>Am höchsten heißt nicht am <mark>schnellsten</mark></h1>
-    <p>Wie hoch das Wasser steht, sagt $h(t)$. Wie schnell es steigt, sagt $h'(t)$ — und am schnellsten steigt es an der
-      Wendestelle, nicht am höchsten Pegel.</p>
+    <p>Wie hoch das Wasser steht, sagt $h(t)$. Wie schnell es steigt, sagt $h'(t)$.</p>
   </header>
 
-  <figure class="video">
+  <h2 class="etappe"><span>1</span>Anschauen</h2>
+  <div class="videos">
+  <figure class="video" data-titel="Schnellster Anstieg">
     <video controls playsinline preload="metadata" poster="MT12_VID_Schnellster_Anstieg.jpg">
       <source src="MT12_VID_Schnellster_Anstieg.mp4" type="video/mp4">
       <track kind="subtitles" src="MT12_VID_Schnellster_Anstieg.vtt" srclang="de" label="Deutsch" default>
     </video>
-    <figcaption><b>Video · Wann steigt das Wasser am schnellsten?</b> (82 s) — Pegel und Anstieg nebeneinander. Bei der Frage kurz
-      anhalten und selbst schätzen.</figcaption>
+    <figcaption><b>Wann steigt das Wasser am schnellsten?</b> (82 s) — Bei der Frage anhalten und selbst schätzen.</figcaption>
   </figure>
+  </div>
 
-  <button class="aha-btn" id="ahaBtn" type="button">Video gesehen? Aha zeigen</button>
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
   <div class="aha" id="aha" hidden>
     <strong>Aha!</strong>
-    Die Stelle <b>stärkster Zunahme</b> ist ein <b>Maximum von $f'$</b> — also eine <b>Wendestelle</b> von $f$.
-    Am Hochpunkt von $f$ ist die Änderungsrate dagegen $0$.
+    <b>Stärkste Zunahme</b> = Maximum von $f'$ = <b>Wendestelle</b> von $f$. Am Hochpunkt ist $f' = 0$.
   </div>
 
-  <details class="warum">
-    <summary>So rechnen Sie es</summary>
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
     <div class="warum-inhalt">
-      <div class="schritt"><span>1</span><div>$f'(x)$ und $f''(x)$ bilden; Einheit der Änderungsrate: Einheit von $y$ pro Einheit von $x$.</div></div>
-      <div class="schritt"><span>2</span><div>Kandidaten: $f''(x) = 0$ lösen.</div></div>
-      <div class="schritt"><span>3</span><div>Auf einem Intervall $[a;\,b]$ zusätzlich $f'(a)$ und $f'(b)$ berechnen.</div></div>
-      <div class="schritt"><span>4</span><div>Alle $f'$-Werte vergleichen: größter positiver Wert = stärkste Zunahme, kleinster negativer = stärkste Abnahme.</div></div>
+      <div class="schritt"><span>•</span><div>$f'(x)$ und $f''(x)$ bilden; Einheit der Änderungsrate: Einheit von $y$ pro Einheit von $x$.</div></div>
+      <div class="schritt"><span>•</span><div>Kandidaten: $f''(x) = 0$ lösen.</div></div>
+      <div class="schritt"><span>•</span><div>Auf einem Intervall $[a;\,b]$ zusätzlich $f'(a)$ und $f'(b)$ berechnen.</div></div>
+      <div class="schritt"><span>•</span><div>Alle $f'$-Werte vergleichen: größter positiver Wert = stärkste Zunahme, kleinster negativer = stärkste Abnahme.</div></div>
       <div class="fehler"><b>Typischer Fehler:</b> nur die Wendestelle ausrechnen und die <b>Ränder</b> vergessen —
         dort kann die Änderungsrate noch größer sein.</div>
     </div>
   </details>
 
-  <h2>Selbst üben</h2>
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
 
-  <div class="quiz-task" data-quiz="fill">
-    <p class="quiz-q">1 · ⭐ Berechnen Sie für $f(x) = -x^3 + 6x^2$ die Stelle, an der $f'$ maximal ist: $x = \dots$</p>
-    <p>$x =$ <input class="input quiz-input" data-ans="2" inputmode="decimal"></p>
-    <div class="hint" data-quiz-hint>$f''(x) = -6x + 12$ gleich null setzen.</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="mcq" data-ans="2">
-    <p class="quiz-q">2 · ⭐⭐ Bestimmen Sie: $s(t)$ ist ein Weg in m, $t$ in s. In welcher Einheit wird $s'(t)$ angegeben?</p>
-    <div class="quiz-opts">
-      <button class="quiz-opt">m</button>
-      <button class="quiz-opt">s pro m</button>
-      <button class="quiz-opt">m pro s</button>
-    </div>
-    <div class="hint" data-quiz-hint>Einheit von $y$ <em>pro</em> Einheit von $x$.</div>
-  </div>
-
-  <div class="quiz-task" data-quiz="ankreuz" data-ans="F,W">
-    <p class="quiz-q">3 · ⭐⭐⭐ Beurteilen Sie für $g(x) = x^3 - 3x^2$ auf $[-1;\,4]$ (es gilt $g'(-1) = 9$, $g'(1) = -3$, $g'(4) = 24$):</p>
-    <table class="ankreuz">
-      <thead><tr><th>Aussage</th><th>wahr</th><th>falsch</th></tr></thead>
-      <tbody>
-        <tr><td>Die stärkste Zunahme liegt an der Wendestelle $x = 1$.</td><td></td><td></td></tr>
-        <tr><td>Die stärkste Zunahme liegt am Rand $x = 4$.</td><td></td><td></td></tr>
-      </tbody>
-    </table>
-    <div class="hint" data-quiz-hint>Vergleichen Sie alle drei $g'$-Werte. Bei $x = 1$ ist $g'$ sogar negativ.</div>
-  </div>
-
-  <div class="blatt"><span class="pfeil">✎</span>
-    <span>Zurück zum Arbeitsblatt 1.2: Wann steigt das Hochwasser am schnellsten? (Aufgabe 2)</span></div>
+  <h2 class="etappe"><span>4</span>Zurück zum Blatt</h2>
+  <div class="blatt"><span>Arbeitsblatt 1.2 — wann steigt das Hochwasser am schnellsten? (Aufgabe 2)</span></div>
 
   <nav class="pager2" aria-label="Themen">
     <a class="next" href="/m12/ableitungsgraph/"><span>Nächstes Thema →</span>Graph von f und f′</a>
@@ -105,11 +77,37 @@
   </footer>
 </div>
 <script>
-// Aha erscheint, sobald ein Video bis zum Ende angesehen wurde (oder per Knopf)
+/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: stärkste Zunahme. Andere Funktionen als AB 1.2. */
 window.addEventListener('load', function () {
-  document.querySelectorAll('video').forEach(function (v) {
-    v.addEventListener('ended', function () { Aha.mission(true); });
-  });
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: '$s(t)$ ist ein Weg in m, $t$ in s. In welcher Einheit wird $s\'(t)$ angegeben?',
+        optionen: ['m', 's pro m', 'm pro s'], ans: 2,
+        warum: ['m ist die Einheit von $s$ selbst, nicht die der Änderungsrate.', 'Umgekehrt: Einheit von $y$ <b>pro</b> Einheit von $x$.'] },
+      { frage: '$T(t)$ ist eine Temperatur in °C, $t$ in min. In welcher Einheit wird $T\'(t)$ angegeben?',
+        optionen: ['°C pro min', 'min pro °C', '°C'], ans: 0,
+        warum: [, 'Umgekehrt: Einheit von $y$ <b>pro</b> Einheit von $x$.', '°C ist die Einheit von $T$ selbst.'] },
+      { frage: '$K(x)$ sind Kosten in €, $x$ die Stückzahl. In welcher Einheit wird $K\'(x)$ angegeben?',
+        optionen: ['Stück', '€ pro Stück', '€'], ans: 1,
+        warum: ['Einheit von $y$ <b>pro</b> Einheit von $x$.', , '€ ist die Einheit von $K$ selbst.'] } ],
+    [ { frage: 'An welcher Stelle nimmt $f(x) = -x^3 + 6x^2$ am stärksten zu?',
+        optionen: ['$x = 2$', '$x = 4$', '$x = 0$'], ans: 0,
+        warum: [, 'Bei $x = 4$ ist der Hochpunkt: $f\'(4) = 0$.', 'Bei $x = 0$ ist $f\'(0) = 0$. Setzen Sie $f\'\'(x) = -6x + 12 = 0$.'] },
+      { frage: 'An welcher Stelle nimmt $f(x) = -x^3 + 9x^2$ am stärksten zu?',
+        optionen: ['$x = 6$', '$x = 3$', '$x = 0$'], ans: 1,
+        warum: ['Bei $x = 6$ ist der Hochpunkt: $f\'(6) = 0$.', , 'Bei $x = 0$ ist $f\'(0) = 0$. Setzen Sie $f\'\'(x) = -6x + 18 = 0$.'] },
+      { frage: 'An welcher Stelle nimmt $f(x) = -2x^3 + 6x^2$ am stärksten zu?',
+        optionen: ['$x = 0$', '$x = 2$', '$x = 1$'], ans: 2,
+        warum: ['Bei $x = 0$ ist $f\'(0) = 0$.', 'Bei $x = 2$ ist der Hochpunkt: $f\'(2) = 0$. Setzen Sie $f\'\'(x) = -12x + 12 = 0$.'] } ],
+    [ { frage: '$g(x) = x^3 - 3x^2$ auf $[-1;\\,4]$ mit $g\'(-1) = 9$, $g\'(1) = -3$, $g\'(4) = 24$. „Die stärkste Zunahme liegt an der Wendestelle $x = 1$.“',
+        optionen: ['Stimmt — Wendestelle heißt stärkste Steigung.', 'Stimmt nicht — am Rand $x = 4$ ist $g\' = 24$ am größten.'], ans: 1,
+        warum: ['Bei $x = 1$ ist $g\'$ sogar negativ. Auf einem Intervall immer auch die Ränder prüfen.'] },
+      { frage: '$k(x) = -x^3 + 3x$ auf $[-2;\\,2]$ mit $k\'(-2) = -9$, $k\'(0) = 3$, $k\'(2) = -9$. „Die stärkste Abnahme liegt an der Wendestelle $x = 0$.“',
+        optionen: ['Stimmt — an der Wendestelle ist $k\'$ extrem.', 'Stimmt nicht — bei $x = 0$ ist die stärkste <b>Zunahme</b>; die stärkste Abnahme liegt an den Rändern.'], ans: 1,
+        warum: ['$k\'(0) = 3$ ist positiv — dort steigt der Graph. Abnahme heißt: $k\'$ möglichst negativ.'] },
+      { frage: '„Wenn der Pegel am höchsten steht, steigt er am schnellsten.“',
+        optionen: ['Stimmt — höher geht es nicht.', 'Stimmt nicht — am Hochpunkt ist die Änderungsrate $0$.'], ans: 1,
+        warum: ['Am Hochpunkt ist die Tangente waagrecht: Der Pegel steigt in diesem Moment gar nicht.'] } ]
+  ] });
 });
 </script>
 </body>

@@ -290,3 +290,16 @@ details.warum.flach .warum-inhalt { background: var(--c-surface); border-radius:
 .st-weiter { margin-top: 12px; }
 .st-ende { font-weight: 800; color: var(--c-gain); font-size: 1.15rem; margin: 0 0 6px; }
 .st-nochmal { font: inherit; background: none; border: 0; padding: 4px 0; color: var(--c-muted); text-decoration: underline; cursor: pointer; }
+
+/* Videos mit Kapitel-Chips (Aha.Videos, 13.10.2026) */
+.videos .kapitel { margin: 0 0 12px; }
+figure.video[hidden] { display: none; }
+.videos figure.video { margin-bottom: 18px; }
+
+/* Aufklappbarer Zusatz innerhalb eines Schritts (z. B. Riesenrad auf /m12add/sinus-parameter/) */
+details.zusatz { margin: 0 0 8px; border-radius: var(--radius); box-shadow: inset 0 0 0 2px var(--c-line); padding: 0 16px; }
+details.zusatz > summary { cursor: pointer; list-style: none; padding: 14px 0; font-weight: 800; display: flex; align-items: center; }
+details.zusatz > summary::-webkit-details-marker { display: none; }
+details.zusatz > summary::after { content: '+'; margin-left: auto; color: var(--c-accent); font-size: 1.3rem; }
+details.zusatz[open] > summary::after { content: '–'; }
+details.zusatz[open] { padding-bottom: 6px; }

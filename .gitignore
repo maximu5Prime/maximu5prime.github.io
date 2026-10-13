@@ -31,3 +31,6 @@ __pycache__/
 # Arbeitsdateien für Claude/Lehrkraft — nicht veröffentlichen
 CLAUDE.md
 Konzept_*.md
+
+# Ergebnis von tools/klicktest.py
+klicktest.png
