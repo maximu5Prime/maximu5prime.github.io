@@ -1,0 +1,17 @@
+{
+  "name": "Lernportal · FOS Technik",
+  "short_name": "Lernportal",
+  "description": "Interaktive Übungen, Applets und Erklärvideos zu Mathematik, Physik und KIT an der FOS Technik.",
+  "lang": "de",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "/static/v2/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/static/v2/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/static/v2/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

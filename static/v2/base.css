@@ -294,6 +294,10 @@ details.warum.flach .warum-inhalt { background: var(--c-surface); border-radius:
 /* Videos mit Kapitel-Chips (Aha.Videos, 13.10.2026) */
 .videos .kapitel { margin: 0 0 12px; }
 figure.video[hidden] { display: none; }
+/* „Videos offline speichern“ unter jeder Video-Gruppe (Aha-Bibliothek, nur mit Service Worker) */
+.offline-videos { margin: -8px 0 18px; font-size: .92rem; color: var(--c-muted); }
+.offline-videos button { font: inherit; background: none; border: 0; padding: 4px 0; color: var(--c-muted); text-decoration: underline; cursor: pointer; }
+.offline-videos button[disabled] { text-decoration: none; cursor: default; }
 .videos figure.video { margin-bottom: 18px; }
 
 /* Aufklappbarer Zusatz innerhalb eines Schritts (z. B. Riesenrad auf /m12add/sinus-parameter/) */

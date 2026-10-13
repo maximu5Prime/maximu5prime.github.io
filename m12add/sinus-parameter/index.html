@@ -6,6 +6,10 @@
   <title>Sinus-Parameter a, b, c, d · M12+</title>
   <meta name="description" content="Die allgemeine Sinusfunktion a·sin(bx − c) + d: Regler bewegen und eine Zielkurve treffen.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/static/v2/base.css">
   <link rel="stylesheet" href="/static/v2/farben.css">
@@ -59,7 +63,7 @@
   <section class="stage" aria-label="Ausprobieren">
     <div class="level" id="level" aria-label="Level wählen"></div>
     <div class="mission" id="mission"><span class="icon"></span>
-      <span id="auftrag">Ihr Auftrag: Legen Sie Ihre Kurve genau auf die gestrichelte Zielkurve.</span></div>
+      <span id="auftrag">Legen Sie Ihre Kurve genau auf die gestrichelte Zielkurve.</span></div>
     <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graph der Sinusfunktion mit Zielkurve"></canvas></div>
     <div class="regler vier">
       <div><label for="ra">$a$ <output id="va"></output></label>

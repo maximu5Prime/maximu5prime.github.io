@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Datenschutz · Lernportal</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/static/v2/base.css">
   <link rel="stylesheet" href="/static/v2/farben.css">
@@ -57,6 +61,11 @@
       gespeichert: die gewählte Darstellung (hell/dunkel) und auf einzelnen Übungsseiten Ihr Fortschritt (zum Beispiel
       gelöste Level). Diese Daten verlassen Ihren Browser nicht und werden nicht an den Server übertragen. Sie können
       sie jederzeit in den Browsereinstellungen löschen.</p>
+    <p>Damit die Übungsseiten auch ohne Internet funktionieren, legt Ihr Browser beim ersten Besuch eine Kopie der
+      Seiten, Schriften und Formeln im Speicher des Geräts ab (<em>Service Worker</em> und <em>Cache</em>, etwa 2 MB).
+      Erklärvideos werden nur gespeichert, wenn Sie unter dem Video auf „offline speichern“ tippen; mit „Entfernen“
+      löschen Sie sie wieder. Auch diese Kopien bleiben auf Ihrem Gerät, es werden dabei keine Daten über Sie an den
+      Server übertragen. Sie lassen sich in den Browsereinstellungen unter „Websitedaten löschen“ vollständig entfernen.</p>
 
     <h2>5. Keine Analyse-Tools</h2>
     <p>Es werden keine Tracking- oder Analyse-Dienste (z. B. Google Analytics) eingesetzt.</p>

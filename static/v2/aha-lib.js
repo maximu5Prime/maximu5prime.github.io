@@ -504,8 +504,89 @@
   function zufall(a, b, ohne) { var z; do { z = a + Math.floor(Math.random() * (b - a + 1)); } while (ohne && ohne.indexOf(z) >= 0); return z; }
   function eins(liste) { return liste[Math.floor(Math.random() * liste.length)]; }
 
+  /* PWA (13.10.2026): Service Worker /sw.js anmelden — nicht bei lokaler Vorschau (sonst zeigt http.server alte
+     Fassungen), außer localStorage 'pwa-test' = '1'. Videos speichert nur der Knopf „offline speichern“ unter jeder
+     Video-Gruppe (.videos bzw. einzelnes figure.video) im Cache „videos“; sw.js spielt sie von dort ab. */
+  function initPWA() {
+    if (!('serviceWorker' in navigator) || !window.caches) return;
+    var lokal = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    try { if (localStorage.getItem('pwa-test') === '1') lokal = false; } catch (e) {}
+    if (lokal) return;
+    navigator.serviceWorker.register('/sw.js');
+    var gruppen = Array.prototype.slice.call(document.querySelectorAll('.videos'));
+    document.querySelectorAll('figure.video').forEach(function (f) { if (!f.closest('.videos')) gruppen.push(f); });
+    gruppen.forEach(OfflineVideos);
+  }
+  function mb(n) { return de(n / 1048576, n < 10485760 ? 1 : 0) + ' MB'; }
+  function OfflineVideos(gruppe) {
+    var urls = [];
+    gruppe.querySelectorAll('video source[src], video[src]').forEach(function (el) {
+      var u = new URL(el.getAttribute('src'), location.href).href;
+      if (/\.mp4$/.test(u) && urls.indexOf(u) < 0) urls.push(u);
+    });
+    if (!urls.length) return;
+    var p = document.createElement('p'); p.className = 'offline-videos';
+    var b = document.createElement('button'); b.type = 'button';
+    var info = document.createElement('span');
+    p.appendChild(b); p.appendChild(info);
+    gruppe.parentNode.insertBefore(p, gruppe.nextSibling);
+    var name = urls.length > 1 ? 'Videos' : 'Video', groessen = {}, laeuft = false;
+    function cache() { return caches.open('videos'); }
+    function zustand() {   // gespeichert? Fassung im Netz anders groß → neu speichern anbieten
+      return cache().then(function (c) { return Promise.all(urls.map(function (u) { return c.match(u); })); }).then(function (rs) {
+        var alle = rs.every(Boolean), summe = 0, alt = false;
+        urls.forEach(function (u, i) {
+          summe += groessen[u] || 0;
+          if (rs[i] && groessen[u] && +rs[i].headers.get('Content-Length') !== groessen[u]) alt = true;
+        });
+        var gr = summe ? ' (' + mb(summe) + ')' : '';
+        if (alle && !alt) { b.textContent = 'Entfernen'; info.textContent = '✓ ' + name + ' offline gespeichert · '; p.insertBefore(info, b); b.onclick = entfernen; }
+        else { b.textContent = (alt ? 'Neue Fassung offline speichern' : name + ' offline speichern') + gr; info.textContent = ''; b.onclick = speichern; }
+      });
+    }
+    function speichern() {
+      if (laeuft) return; laeuft = true; b.disabled = true;
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
+      var gesamt = urls.reduce(function (s, u) { return s + (groessen[u] || 0); }, 0), geladen = 0;
+      function zeige() { b.textContent = 'Wird gespeichert … ' + (gesamt ? mb(geladen) + ' von ' + mb(gesamt) : mb(geladen)); }
+      zeige();
+      urls.reduce(function (kette, u) {
+        return kette.then(function () {
+          return fetch(u + '?neu=' + Date.now(), { cache: 'no-store' }).then(function (r) {   // ?neu → sw.js reicht durch
+            if (!r.ok || !r.body) throw new Error(r.status);
+            var teile = [], leser = r.body.getReader();
+            function lies() {
+              return leser.read().then(function (x) {
+                if (x.done) return;
+                teile.push(x.value); geladen += x.value.length; zeige(); return lies();
+              });
+            }
+            return lies().then(function () {
+              var blob = new Blob(teile, { type: 'video/mp4' });
+              return cache().then(function (c) {
+                return c.put(u, new Response(blob, { headers: { 'Content-Type': 'video/mp4', 'Content-Length': String(blob.size) } }));
+              });
+            });
+          });
+        });
+      }, Promise.resolve()).then(function () { laeuft = false; b.disabled = false; return zustand(); }, function () {
+        laeuft = false; b.disabled = false; b.textContent = name + ' offline speichern';
+        info.textContent = ' — hat nicht geklappt (Verbindung oder Speicherplatz prüfen)';
+      });
+    }
+    function entfernen() {
+      cache().then(function (c) { return Promise.all(urls.map(function (u) { return c.delete(u); })); }).then(zustand);
+    }
+    Promise.all(urls.map(function (u) {
+      return fetch(u, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+        var n = +r.headers.get('Content-Length'); if (r.ok && n) groessen[u] = n;
+      }).catch(function () {});
+    })).then(zustand);
+  }
+
   window.addEventListener('load', function () {
     initTheme();
+    initPWA();
     var b = $('ahaBtn'); if (b) b.addEventListener('click', function () { showAha(false); });
     document.querySelectorAll('.videos').forEach(Videos);
     window.addEventListener('resize', redrawAll);

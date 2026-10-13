@@ -6,6 +6,10 @@
   <title>Lineare Funktionen: m und t · M11</title>
   <meta name="description" content="Taxi-Tarif als Gerade: Steigung und y-Achsenabschnitt zum Ausprobieren.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/static/v2/base.css">
   <link rel="stylesheet" href="/static/v2/farben.css">
@@ -106,7 +110,8 @@ window.addEventListener('load', function () {
     Aha.$('tVal').textContent = Aha.de(S.t, 1) + ' €';
     var ms = Aha.dt(S.m, 1), ts = Aha.dt(S.t, 1);
     Aha.tex('term', 'f(x) = ' + (S.m === 0 ? '' : (ms === '1' ? '' : ms) + 'x') + (S.t === 0 && S.m !== 0 ? '' : (S.m === 0 ? ts : ' + ' + ts)));
-    Aha.tex('zehn', '10\\text{ km: } f(10) = ' + Aha.dt(f(10), 2) + '\\text{ €}');
+    Aha.tex('zehn', '10\\text{ km: } f(10) = ' + Aha.dt(f(10), 2));
+    Aha.$('zehn').insertAdjacentText('beforeend', '\u00a0€');   // € außerhalb von KaTeX (keine Schriftmetrik)
     zeichne();
     Aha.mission(Math.abs(S.m - 2) < 1e-6 && Math.abs(S.t - 4) < 1e-6);
   }

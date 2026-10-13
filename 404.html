@@ -8,6 +8,10 @@
   <!-- Umgezogener Altbestand (13.10.2026): /mathematik/… liegt jetzt unter /archiv/mathematik/… -->
   <script>if(/^\/mathematik\//.test(location.pathname))location.replace('/archiv'+location.pathname+location.search+location.hash)</script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
   <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/static/v2/base.css">
   <link rel="stylesheet" href="/static/v2/farben.css">
@@ -29,7 +33,7 @@
 
   <div class="kacheln">
     <a class="kachel" href="/"><div class="kuerzel">→</div><h3>Zur Startseite</h3>
-      <p>Mathematik 11, 12 und Additum, Physik, KIT, Prüfungsaufgaben</p></a>
+      <p>Mathematik 11, 12 und Additum, Physik, KIT</p></a>
     <a class="kachel" href="/archiv/"><div class="kuerzel">A</div><h3>Archiv</h3>
       <p>Ältere Seiten, deren Thema noch nicht neu aufgebaut ist</p></a>
   </div>
