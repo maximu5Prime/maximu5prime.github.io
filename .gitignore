@@ -32,5 +32,6 @@ __pycache__/
 CLAUDE.md
 Konzept_*.md
 
-# Ergebnis von tools/klicktest.py
-klicktest.png
+# Offline-Werkzeuge (Klicktest, FAP-Zuschnitt) — nur lokal, nicht veröffentlichen
+tools/
+klicktest*.png
