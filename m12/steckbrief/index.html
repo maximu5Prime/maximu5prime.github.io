@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steckbriefaufgaben · M12</title>
+  <meta name="description" content="Wie viele Angaben braucht eine Kurve 3. Grades? Angaben antippen und zusehen, wie das Kurvenbündel zu einer einzigen Kurve zusammenfällt.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    .sb-karten { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 14px 0 0; }
+    .sb-karten button { font: inherit; text-align: left; min-height: 52px; padding: .45em .8em; line-height: 1.3; border-radius: 12px; cursor: pointer;
+      border: 2px solid var(--c-line); background: var(--c-bg); color: var(--c-text); }
+    .sb-karten button:hover { border-color: var(--c-accent); }
+    .sb-karten button.aktiv { border-color: var(--c-accent); background: var(--c-mission); }
+    .sb-karten .gl { display: none; font-size: .95rem; color: var(--c-accent); font-weight: 700; margin-top: 2px; }
+    .sb-karten button.aktiv .gl { display: block; }
+    .sb-karten button.leer { border-style: dashed; border-color: var(--c-muted); background: var(--c-bg); }
+    .sb-karten button.leer .gl { color: var(--c-muted); }
+    .sb-karten button.leer .gl::after { content: ' → schon bekannt'; font-weight: 400; }
+    .sb-karten button.wackeln { animation: sb-wackeln .4s; }
+    @keyframes sb-wackeln { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    @media (prefers-reduced-motion: reduce) { .sb-karten button.wackeln { animation: none; } }
+    @media (max-width: 520px) { .sb-karten button { font-size: .9rem; } }
+    .sb-frei { display: inline-flex; gap: 6px; vertical-align: middle; margin-left: 4px; }
+    .sb-frei i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--c-accent); background: var(--c-accent); transition: background .3s; }
+    .sb-frei i.weg { background: transparent; border-color: var(--c-line); }
+  </style>
+</head>
+<body>
+<!-- Aha-Seite (15.10.2026, neu gebaut nach Vikunja #174), FT12 LB1 UE 5 Steckbriefaufgaben.
+     EIN Aha: Jede neue Angabe = eine Gleichung, das Kurvenbündel fällt zusammen; vier Angaben → genau eine Kurve 3. Grades.
+     Fallen-Karte „schneidet die y-Achse bei 1“ = dieselbe Information wie P(0|1) → nichts passiert (vgl. AB 7a).
+     Beispiel f(x) = x³ − 6x² + 9x + 1 (nicht auf AB/INFO). Bewusst ohne Halfpipe (Leitfrage AB Aufg. 4).
+     Ersetzt „Steckbrief Schritt für Schritt“ (Lehrkraft: zu mächtig, unruhig). Übungen mit anderen Zahlen als AB 1.5. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m12/">← M12</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M12 · Steckbriefaufgaben</div>
+    <h1>Wie viele <mark>Angaben</mark> braucht eine Kurve 3. Grades?</h1>
+    <p>Ansatz $f(x) = ax^3 + bx^2 + cx + d$: vier Unbekannte. Jede Angabe über $G_f$ wird zu einer Gleichung.</p>
+  </header>
+
+  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
+  <section class="stage" aria-label="Ausprobieren">
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span>Machen Sie aus dem Bündel genau eine Kurve.</span></div>
+    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Bündel von Graphen, die zu den gewählten Angaben passen"></canvas></div>
+    <div class="ergebnis">
+      <div class="gross" id="stand"></div>
+      <div class="rechnung" id="rechnung"></div>
+    </div>
+    <div class="sb-karten" id="karten">
+      <button type="button" data-k="0">$P(0\,|\,1)$ liegt auf $G_f$<span class="gl">$f(0) = 1$</span></button>
+      <button type="button" data-k="1">waagrechte Tangente bei $x = 3$<span class="gl">$f'(3) = 0$</span></button>
+      <button type="button" data-k="2">$G_f$ schneidet die $y$-Achse bei&nbsp;$1$<span class="gl">$f(0) = 1$</span></button>
+      <button type="button" data-k="3">Wendepunkt bei $x = 2$<span class="gl">$f''(2) = 0$</span></button>
+      <button type="button" data-k="4">$Q(4\,|\,5)$ liegt auf $G_f$<span class="gl">$f(4) = 5$</span></button>
+    </div>
+  </section>
+
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Vier Unbekannte brauchen vier <b>verschiedene</b> Angaben. Jede neue Gleichung streicht eine Möglichkeit.
+    Eine Angabe, die man schon kennt, ändert nichts, auch wenn sie anders klingt.
+  </div>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>•</span><div>Ganzrationale Funktion $n$-ten Grades: $n + 1$ Koeffizienten, also $n + 1$ verschiedene Bedingungen.</div></div>
+      <div class="schritt"><span>•</span><div>$P(x_0\,|\,y_0)$ liegt auf $G_f$ $\Rightarrow$ $f(x_0) = y_0$. Die Tangente an der Stelle $x_0$ hat die Steigung $m$ $\Rightarrow$ $f'(x_0) = m$. $x_0$ ist Wendestelle von $f$ $\Rightarrow$ $f''(x_0) = 0$.</div></div>
+      <div class="schritt"><span>•</span><div>Hier: $d = 1$, $\;27a + 6b + c = 0$, $\;12a + 2b = 0$, $\;64a + 16b + 4c + 1 = 5$. Lösung: $f(x) = x^3 - 6x^2 + 9x + 1$.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Eine Angabe mitzählen, die schon aus den anderen folgt, zum Beispiel $f'(0) = 0$,
+        wenn $G_f$ achsensymmetrisch ist. Zu wenige Bedingungen: unendlich viele Funktionen.</div>
+    </div>
+  </details>
+
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m12/ableitungsgraph/"><span>← Voriges Thema</span>Graph von f und f′</a>
+    <a class="next" href="/m12/graphen-domino/"><span>Nächstes Thema →</span>Graphen-Domino</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  /* Koeffizienten p = [a, b, c, d]. Jede Karte ist eine lineare Gleichung zeile · p = rechts. */
+  var KARTEN = [
+    { zeile: [0, 0, 0, 1],    rechts: 1, art: 'punkt', x: 0, y: 1, name: 'P' },
+    { zeile: [27, 6, 1, 0],   rechts: 0, art: 'tangente', x: 3 },
+    { zeile: [0, 0, 0, 1],    rechts: 1, art: 'punkt', x: 0, y: 1, name: '' },      // Falle: dasselbe wie P
+    { zeile: [12, 2, 0, 0],   rechts: 0, art: 'wende', x: 2 },
+    { zeile: [64, 16, 4, 1],  rechts: 5, art: 'punkt', x: 4, y: 5, name: 'Q' }
+  ];
+  var X0 = -0.5, X1 = 4.5, N = 28;
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: X0, xMax: X1, yMin: -2, yMax: 8 },
+    step: { x: 1, y: 1 }, label: { x: 1, y: 2 }, xLabel: 'x', yLabel: 'y', ratio: 0.62 });
+  var aktiv = [];                       // Kartennummern in der Reihenfolge des Antippens
+  var basis = [], jetzt = [], ziel = [], anim = null;
+
+  var wert = function (p, x) { return ((p[0] * x + p[1]) * x + p[2]) * x + p[3]; };
+  var steig = function (p, x) { return (3 * p[0] * x + 2 * p[1]) * x + p[2]; };
+
+  function loese(A, b) {                // Gauß mit Pivotsuche, A n×n
+    var n = b.length, M = A.map(function (r, i) { return r.concat([b[i]]); });
+    for (var c = 0; c < n; c++) {
+      var m = c; for (var r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[m][c])) m = r;
+      var t = M[c]; M[c] = M[m]; M[m] = t;
+      for (r = 0; r < n; r++) if (r !== c) {
+        var q = M[r][c] / M[c][c];
+        for (var k = c; k <= n; k++) M[r][k] -= q * M[c][k];
+      }
+    }
+    return M.map(function (r, i) { return r[n] / r[i]; });
+  }
+  /* Gram-Matrix: Abstand zweier Kurven = ∫ (f − g)² dx über das Bild → jede Kurve rückt zur nächstgelegenen passenden */
+  var POT = [3, 2, 1, 0], G = POT.map(function (i) { return POT.map(function (j) {
+    var e = i + j + 1; return (Math.pow(X1, e) - Math.pow(X0, e)) / e; }); });
+  var Ginv = [0, 1, 2, 3].map(function (j) { return loese(G, [0, 1, 2, 3].map(function (i) { return i === j ? 1 : 0; })); });
+
+  function unabhaengig(liste) {         // Karten, die wirklich neue Information bringen (Rang-Test)
+    var Q = [], neu = [];
+    liste.forEach(function (k) {
+      var z = KARTEN[k].zeile, v = z.slice();
+      Q.forEach(function (q) { var s = 0, i; for (i = 0; i < 4; i++) s += v[i] * q[i]; for (i = 0; i < 4; i++) v[i] -= s * q[i]; });
+      var n = Math.hypot.apply(null, v);
+      if (n > 1e-6 * Math.hypot.apply(null, z)) { Q.push(v.map(function (x) { return x / n; })); neu.push(k); }
+    });
+    return neu;
+  }
+  function projiziere(p, liste) {       // p − G⁻¹Cᵀ (C G⁻¹ Cᵀ)⁻¹ (C p − r)
+    if (!liste.length) return p.slice();
+    var C = liste.map(function (k) { return KARTEN[k].zeile; });
+    var GC = C.map(function (z) { return [0, 1, 2, 3].map(function (i) { return z.reduce(function (s, x, j) { return s + Ginv[j][i] * x; }, 0); }); });
+    var S = C.map(function (z) { return GC.map(function (g) { return z.reduce(function (s, x, i) { return s + x * g[i]; }, 0); }); });
+    var res = liste.map(function (k, r) { return C[r].reduce(function (s, x, i) { return s + x * p[i]; }, 0) - KARTEN[k].rechts; });
+    var l = loese(S, res);
+    return p.map(function (x, i) { return x - l.reduce(function (s, li, r) { return s + li * GC[r][i]; }, 0); });
+  }
+  function interpol(xs, ys) {           // kubische Kurve durch vier Punkte → [a, b, c, d]
+    return loese(xs.map(function (x) { return [x * x * x, x * x, x, 1]; }), ys);
+  }
+  for (var i = 0; i < N; i++) {         // Zufallsbündel: vier Höhen an festen Stellen
+    basis.push(interpol([0, 4 / 3, 8 / 3, 4], [0, 1, 2, 3].map(function () { return -1.5 + Math.random() * 9; })));
+  }
+  jetzt = basis.map(function (p) { return p.slice(); });
+
+  function zeichne() {
+    P.setup();
+    var C = P.C, c = P.ctx, v = P.o.view, neu = unabhaengig(aktiv), eine = neu.length === 4 && !anim;
+    var hat = function (art) { return neu.some(function (k) { return KARTEN[k].art === art; }); };
+    var kurven = eine ? jetzt.slice(0, 1) : jetzt;
+    P.grid();
+    if (hat('wende')) P.segment(2, v.yMin, 2, v.yMax, C.gain, 1.5, [6, 6]);
+    c.globalAlpha = eine ? 1 : 0.38;
+    kurven.forEach(function (p) { P.curve(function (x) { return wert(p, x); }, C.e, eine ? 4 : 2); });
+    c.globalAlpha = 1;
+    c.globalAlpha = eine ? 1 : 0.7;
+    kurven.forEach(function (p) {
+      if (hat('wende')) { var yw = wert(p, 2); if (yw > v.yMin && yw < v.yMax) P.dot(2, yw, C.gain, eine ? 5 : 3); }
+      if (hat('tangente')) {
+        var y3 = wert(p, 3), m = steig(p, 3);
+        if (y3 > v.yMin && y3 < v.yMax) P.segment(2.6, y3 - 0.4 * m, 3.4, y3 + 0.4 * m, C.gain, eine ? 3 : 2);
+      }
+    });
+    c.globalAlpha = 1;
+    neu.forEach(function (k) {
+      var K = KARTEN[k];
+      if (K.art !== 'punkt') return;
+      P.dot(K.x, K.y, C.loss, 7);
+      if (K.name) P.text(K.name, K.x, K.y, C.loss, 'left', 10, -10);
+    });
+    if (eine) {                         // Graphname G_f über dem Hochpunkt H(1|5)
+      P.text('G', 1, 5, C.e, 'right', 0, -14);
+      c.font = '700 11px ' + C.body; c.textAlign = 'left'; c.fillText('f', P.X(1) + 1, P.Y(5) - 10);
+    }
+  }
+
+  function stand() {
+    var neu = unabhaengig(aktiv), frei = 4 - neu.length;
+    var punkte = '<span class="sb-frei" aria-hidden="true">' + [0, 1, 2, 3].map(function (i) {
+      return '<i class="' + (i < frei ? '' : 'weg') + '"></i>'; }).join('') + '</span>';
+    Aha.$('stand').innerHTML = frei ? 'Noch <b>' + frei + '</b> frei ' + punkte : 'Genau <b>eine</b> Kurve ' + punkte;
+    Aha.tex('rechnung', frei ? 'f(x) = ax^3 + bx^2 + cx + d' : 'f(x) = x^3 - 6x^2 + 9x + 1');
+    document.querySelectorAll('#karten button').forEach(function (b) {
+      var k = +b.dataset.k, an = aktiv.indexOf(k) >= 0;
+      b.classList.toggle('aktiv', an);
+      b.classList.toggle('leer', an && neu.indexOf(k) < 0);
+      b.setAttribute('aria-pressed', an);
+    });
+    Aha.mission(!frei);
+  }
+
+  function bewege() {                   // Bündel gleitet in die neue Lage
+    var neu = unabhaengig(aktiv), von = jetzt.map(function (p) { return p.slice(); }), t0 = null;
+    ziel = basis.map(function (p) { return projiziere(p, neu); });
+    var dauer = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 750;
+    if (anim) cancelAnimationFrame(anim);
+    function schritt(ts) {
+      if (t0 === null) t0 = ts;
+      var s = dauer ? Math.min(1, (ts - t0) / dauer) : 1, e = 1 - Math.pow(1 - s, 3);
+      jetzt = von.map(function (p, j) { return p.map(function (x, i) { return x + (ziel[j][i] - x) * e; }); });
+      anim = s < 1 ? requestAnimationFrame(schritt) : null;
+      zeichne();
+    }
+    anim = requestAnimationFrame(schritt);
+  }
+
+  document.querySelectorAll('#karten button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var k = +b.dataset.k, pos = aktiv.indexOf(k);
+      if (pos >= 0) aktiv.splice(pos, 1);
+      else {
+        var vorher = unabhaengig(aktiv).length;
+        aktiv.push(k);
+        if (unabhaengig(aktiv).length === vorher) {
+          b.classList.remove('wackeln'); void b.offsetWidth; b.classList.add('wackeln');
+        }
+      }
+      stand(); bewege();
+    });
+  });
+  stand();
+  Aha.onRedraw(zeichne);
+});
+</script>
+<script>
+/* 3 Üben: drei Stufen (Aha.Stufen). Familie: Angabe → Bedingung → wie viele Funktionen passen. Andere Zahlen als AB 1.5. */
+window.addEventListener('load', function () {
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: '$G_f$ verläuft durch $P(2\\,|\\,5)$. Welche Bedingung gehört dazu?',
+        optionen: ['$f(5) = 2$', '$f(2) = 5$', '$f\'(2) = 5$'], ans: 1,
+        warum: ['Die $x$-Koordinate kommt in die Klammer, die $y$-Koordinate auf die rechte Seite.', , 'Ein Punkt sagt nichts über die Steigung: Gleichung mit $f$.'] },
+      { frage: '$G_f$ hat an der Stelle $x = 3$ eine waagrechte Tangente. Welche Bedingung gehört dazu?',
+        optionen: ['$f(3) = 0$', '$f\'\'(3) = 0$', '$f\'(3) = 0$'], ans: 2,
+        warum: ['$f(3) = 0$ hieße: $G_f$ schneidet dort die $x$-Achse.', 'Mit $f\'\'$ beschreibt man Wendestellen.'] },
+      { frage: '$G_f$ hat an der Stelle $x = 1$ einen Wendepunkt. Welche Bedingung gehört dazu?',
+        optionen: ['$f\'\'(1) = 0$', '$f\'(1) = 0$', '$f(1) = 0$'], ans: 0,
+        warum: [, '$f\'(1) = 0$ gehört zu einer waagrechten Tangente.', 'Ob $G_f$ dort die $x$-Achse trifft, ist nicht gesagt.'] } ],
+    [ { frage: '$f$ ist eine ganzrationale Funktion 4. Grades, $G_f$ ist achsensymmetrisch zur $y$-Achse. Wie viele Koeffizienten hat der Ansatz?',
+        optionen: ['$5$', '$3$', '$2$'], ans: 1,
+        warum: ['Bei Achsensymmetrie fallen $bx^3$ und $dx$ weg: $f(x) = ax^4 + cx^2 + e$.', , '$a$, $c$ und $e$ bleiben.'] },
+      { frage: '$G_f$ hat den Tiefpunkt $T(2\\,|\\,{-4})$. Welche Bedingungen gehören dazu?',
+        optionen: ['nur $f\'(2) = 0$', '$f(2) = -4$ und $f\'(2) = 0$', '$f(2) = -4$ und $f\'\'(2) = 0$'], ans: 1,
+        warum: ['$T$ liegt auch auf $G_f$: Es fehlt $f(2) = -4$.', , '$f\'\'(2) = 0$ gehört zu einem Wendepunkt.'] },
+      { frage: 'Für eine quadratische Funktion gilt $c = 1$ und $b = -2a$. Außerdem verläuft $G_f$ durch $Q(2\\,|\\,1)$. Was folgt daraus für $a$?',
+        optionen: ['$a = 1$', '$a = 0$', 'Nichts — die Angabe ist keine neue Bedingung.'], ans: 2,
+        warum: ['Einsetzen: $4a - 4a + 1 = 1$, also $1 = 1$. Das gilt für jedes $a$.', 'Einsetzen: $4a - 4a + 1 = 1$ — das gilt für jedes $a$, nicht nur für $0$.'] } ],
+    [ { frage: '„$f$ ist eine quadratische Funktion. $G_f$ hat den Hochpunkt $H(1\\,|\\,3)$ und den Tiefpunkt $T(4\\,|\\,0)$. Dazu passt genau eine Funktion.“',
+        optionen: ['Stimmt — vier Bedingungen reichen für drei Koeffizienten.', 'Stimmt nicht — der Graph einer quadratischen Funktion hat nur einen Extrempunkt.'], ans: 1,
+        warum: ['Die Angaben widersprechen sich. Es passt <b>keine</b> Funktion.'] },
+      { frage: '„$G_f$ ist achsensymmetrisch zur $y$-Achse, Ansatz $f(x) = ax^4 + cx^2 + e$. Die Bedingung $f\'(0) = 0$ hilft, einen Koeffizienten zu bestimmen.“',
+        optionen: ['Stimmt — waagrechte Tangente bei $0$.', 'Stimmt nicht — $f\'(x) = 4ax^3 + 2cx$ ist bei $0$ immer null.'], ans: 1,
+        warum: ['Die Gleichung lautet $0 = 0$. Sie gilt immer und ist keine zusätzliche Bedingung.'] },
+      { frage: '„$f$ ist ganzrational 3. Grades, $G_f$ ist punktsymmetrisch zum Ursprung und verläuft durch $P(2\\,|\\,4)$. Dazu passt genau eine Funktion.“',
+        optionen: ['Stimmt — Symmetrie und ein Punkt reichen.', 'Stimmt nicht — es passen unendlich viele Funktionen.'], ans: 1,
+        warum: ['Ansatz $ax^3 + cx$: zwei Koeffizienten, aber nur eine Gleichung $8a + 2c = 4$. Zum Beispiel $x^3 - 2x$ oder $\\tfrac12 x^3$.'] } ]
+  ] });
+});
+</script>
+</body>
+</html>
