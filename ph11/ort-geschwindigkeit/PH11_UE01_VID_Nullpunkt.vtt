@@ -1,0 +1,37 @@
+WEBVTT
+
+00:00.800 --> 00:09.547
+Wo ist das Fahrrad? Die Antwort hängt davon ab, wo du den Nullpunkt hinlegst.
+
+00:10.866 --> 00:21.462
+Leg eine Achse entlang der Straße. Du brauchst einen Nullpunkt und eine Richtung. Die Pfeilspitze zeigt, wo es nach plus geht.
+
+00:21.800 --> 00:27.306
+Das Fahrrad steht am Kiosk. Sein Ort ist x₁ gleich hundert Meter.
+
+00:27.633 --> 00:34.775
+Jetzt fährt es zur Brücke, an den Ort x₂ gleich vierhundert Meter. Dafür braucht es sechzig Sekunden.
+
+00:35.100 --> 00:50.209
+Die Ortsänderung Δx ist Ende minus Anfang: vierhundert minus hundert. Das sind dreihundert Meter.
+
+00:50.533 --> 00:55.282
+Was passiert, wenn du den Nullpunkt an den Kiosk legst? Halte kurz an und überleg: Was ändert sich, und was bleibt gleich?
+
+00:57.600 --> 01:05.815
+Die Orte ändern sich: Der Kiosk liegt jetzt bei null, die Brücke bei dreihundert Meter. Aber die Ortsänderung bleibt dreihundert Meter.
+
+01:06.133 --> 01:12.331
+Und jetzt dreh den Pfeil um. Er zeigt nach links. Rechts vom Nullpunkt wird alles negativ.
+
+01:12.666 --> 01:19.225
+Die Brücke liegt jetzt bei minus dreihundert Meter. Also ist Δx gleich minus dreihundert Meter. Das Minus heißt: Das Fahrrad fährt gegen die Pfeilrichtung.
+
+01:20.366 --> 01:35.159
+Für die dreihundert Meter braucht das Fahrrad sechzig Sekunden. Geschwindigkeit ist Ortsänderung durch Zeit: fünf m/s.
+
+01:35.500 --> 01:42.762
+Mit dem umgedrehten Pfeil sind es minus fünf m/s. Das Fahrrad ist genauso schnell. Nur die Richtung ist anders herum.
+
+01:44.100 --> 01:54.314
+Merk dir: Nullpunkt und Richtung legst du selbst fest. Die Ortsänderung ist Ende minus Anfang. Und das Vorzeichen zeigt dir die Richtung.
