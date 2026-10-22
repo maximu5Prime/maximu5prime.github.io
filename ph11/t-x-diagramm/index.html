@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="physik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Das t-x-Diagramm · Ph11</title>
+  <meta name="description" content="Pendellauf: Geschwindigkeiten einstellen, bis der t-x-Graph das Ziel trifft. Steigung = Geschwindigkeit, dazu das t-v-Diagramm.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    .level { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .level button { font: inherit; font-weight: 700; font-size: .92rem; border: 0; border-radius: 999px; padding: .35em .85em; min-height: 40px;
+      cursor: pointer; background: var(--c-surface-2); color: var(--c-text); }
+    .level button.aktiv { background: var(--c-accent); color: var(--c-on-accent); }
+    .level button.geschafft::after { content: ' ✓'; }
+    .bahn { margin: 4px 0 10px; }
+    .regler.vier { grid-template-columns: 1fr 1fr; }
+    .lauf-zeile { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin: 4px 0 12px; }
+    .abschnitte { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+    .abschnitte span { font-family: var(--font-mono); font-weight: 700; font-size: .9rem; padding: .25em .7em; border-radius: 999px;
+      background: var(--c-surface-2); }
+    .abschnitte span.ok { background: var(--c-gain-fill); }
+    .abschnitte span.ok::after { content: ' ✓'; color: var(--c-gain); }
+    .tv-titel { font-weight: 700; font-size: .95rem; margin: 14px 0 2px; }
+    .weiter-zeile { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-top: 10px; }
+    .weiter-zeile[hidden], .weiter-zeile .btn[hidden] { display: none; }
+    .tr-diagramm { display: block; width: 100%; max-width: 420px; margin: .6rem 0 .2rem; }
+    .tr-diagramm text { font: 11px var(--font-body); fill: var(--c-muted); }
+    .st-opts .tr-diagramm { width: 200px; max-width: 100%; margin: 0; }
+  </style>
+</head>
+<body>
+<!-- Aha-Seite (22.10.2026), FT11 Physik LB1 UE 2: t-x-Diagramm, Steigung = v, t-v-Diagramm. QR auf AB UE 2 Aufgabe 1 (Basisaufgabe)
+     und Info 1.2 A. Kontext Pendellauf (Sportunterricht), drei Abschnitte zu je 10 s; Level 5 mit Startort x₀ ≠ 0.
+     Üben ohne Beispiele von AB/INFO/INTRO (Bus, Cem, Aufzug, Mähroboter, Skater, Paketauto, Zug): Modellauto, Straßenbahn, Laufkatze, Hund.
+     Schreibweise wie im Unterricht: Ort x, Ortsänderung Δx, Weg s (Lehrkraft 22.10.2026). Vektor nur als „Vorzeichen = Richtung“. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/ph11/">← Ph11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">Ph11 · Bewegung</div>
+    <h1>Was erzählt das <mark>t-x-Diagramm</mark>?</h1>
+    <p>Pendellauf im Sportunterricht: Stellen Sie die Geschwindigkeit in jedem Abschnitt so ein, dass Ihr Graph das Ziel trifft.</p>
+  </header>
+
+  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
+  <section class="stage" aria-label="Ausprobieren">
+    <div class="level" id="level" aria-label="Level wählen"></div>
+    <div class="mission" id="mission"><span class="icon"></span>
+      <span id="auftrag">Legen Sie Ihren Graphen auf den gestrichelten Zielgraphen.</span></div>
+    <div class="plot bahn" id="bahnWrap"><canvas id="bahn" aria-label="Laufbahn mit der Läuferin"></canvas></div>
+    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="t-x-Diagramm mit Zielgraph"></canvas></div>
+    <div class="lauf-zeile">
+      <button class="btn" id="los" type="button">▶ Laufen lassen</button>
+      <div class="abschnitte" id="abschnitte"></div>
+    </div>
+    <div class="regler vier">
+      <div><label for="r1">$v$ von 0 bis 10 s <output id="o1"></output></label>
+        <input type="range" id="r1" min="-4" max="4" step="0.5" value="0"></div>
+      <div><label for="r2">$v$ von 10 bis 20 s <output id="o2"></output></label>
+        <input type="range" id="r2" min="-4" max="4" step="0.5" value="0"></div>
+      <div><label for="r3">$v$ von 20 bis 30 s <output id="o3"></output></label>
+        <input type="range" id="r3" min="-4" max="4" step="0.5" value="0"></div>
+      <div id="startRegler"><label for="r0">Startort $x_0$ <output id="o0"></output></label>
+        <input type="range" id="r0" min="0" max="60" step="10" value="0"></div>
+    </div>
+    <p class="tv-titel">Dazu das t-v-Diagramm</p>
+    <div class="plot" id="tvWrap"><canvas id="tv" aria-label="t-v-Diagramm zu Ihrem Graphen"></canvas></div>
+    <div class="weiter-zeile" id="weiterZeile" hidden>
+      <button class="btn" id="weiter" type="button">Nächstes Level →</button>
+    </div>
+  </section>
+
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Die <b>Steigung</b> des t-x-Graphen ist die Geschwindigkeit: steil = schnell, waagrecht = Stillstand, fallend = zurück ($v < 0$).
+    Im t-v-Diagramm wird jedes gerade Stück zu einer <b>waagrechten Stufe</b>.
+  </div>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>•</span><div>Steigungsdreieck: $\dfrac{\Delta x}{\Delta t}$ ist genau die Geschwindigkeit $v$.
+        Beispiel: $30\,\text{m}$ in $10\,\text{s}$ → $v = 3\,\frac{\text{m}}{\text{s}}$.</div></div>
+      <div class="schritt"><span>•</span><div>Gleichförmige Bewegung = Gerade. Ihre Gleichung heißt $x(t) = x_0 + v\cdot t$:
+        $x_0$ ist der Ort bei $t = 0$ (Achsenabschnitt), $v$ die Steigung — wie $y = mx + t$ in Mathe.</div></div>
+      <div class="schritt"><span>•</span><div>Das Vorzeichen von $v$ zeigt die Richtung: $v > 0$ in Pfeilrichtung, $v < 0$ zurück.</div></div>
+      <div class="schritt"><span>•</span><div>t-v-Diagramm: In jedem Abschnitt ist $v$ konstant → waagrechte Linie auf Höhe $v$. Stillstand liegt auf der $t$-Achse.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Das t-v-Diagramm „abmalen“: Ein steigender t-x-Graph wird <b>nicht</b> zu einer steigenden Linie,
+        sondern zu einer Stufe oberhalb der $t$-Achse.</div>
+    </div>
+  </details>
+
+  <h2 class="etappe"><span>3</span>Üben</h2>
+  <div id="ueben"></div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/ph11/ort-geschwindigkeit/"><span>← Voriges Thema</span>Wo ist der Nullpunkt?</a>
+    <a class="next" href="/ph11/einheiten/"><span>Nächstes Thema →</span>Einheiten und Formeln</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Physik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+/* 1 Ausprobieren: drei Abschnitte zu je 10 s, Ziel = [x0, v1, v2, v3]. Level 3 (Rücklauf) schaltet das Aha frei. */
+window.addEventListener('load', function () {
+  var LEVEL = [
+    { st: 1, z: [0, 2, 2, 2], auftrag: 'Die Läuferin läuft gleichmäßig. Treffen Sie den Zielgraphen.' },
+    { st: 1, z: [0, 3, 0, 2], auftrag: 'Mit Pause: Was bedeutet das waagrechte Stück?' },
+    { st: 1, z: [0, 4, 0, -3], auftrag: 'Pendellauf: Sie läuft zur Wende und wieder zurück.', aha: true },
+    { st: 2, z: [0, 1.5, 4, -2.5], auftrag: 'Bestimmen Sie die drei Geschwindigkeiten aus den Steigungen.' },
+    { st: 2, z: [50, -2, 0, 1], auftrag: 'Sie startet nicht bei null. Bestimmen Sie auch den Startort $x_0$.' }
+  ];
+  var SPEICHER = 'ph11-tx-level';
+  var lv = 0, geschafft = [], S = { v: [0, 0, 0], x0: 0 }, tAnim = 30, laeuft = false;
+  try { geschafft = JSON.parse(localStorage.getItem(SPEICHER) || '[]'); } catch (e) { geschafft = []; }
+  for (var i = 0; i < LEVEL.length; i++) if (!geschafft[i]) { lv = i; break; }
+
+  function ecken(x0, v) { var p = [[0, x0]]; for (var k = 0; k < 3; k++) p.push([10 * (k + 1), p[k][1] + 10 * v[k]]); return p; }
+  function ort(p, t) {
+    for (var k = 1; k < p.length; k++) if (t <= p[k][0]) return p[k - 1][1] + (p[k][1] - p[k - 1][1]) * (t - p[k - 1][0]) / 10;
+    return p[p.length - 1][1];
+  }
+  function ziel() { var Z = LEVEL[lv].z; return ecken(Z[0], Z.slice(1)); }
+  function eigen() { return ecken(S.x0, S.v); }
+  function mathe(el) {
+    if (window.renderMathInElement) renderMathInElement(el, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+  }
+  function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify(geschafft)); } catch (e) {} }
+
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 30, yMin: -10, yMax: 70 },
+    step: { x: 2, y: 10 }, label: { x: 5, y: 10 }, xLabel: 't in s', yLabel: 'x in m', ratio: 0.55, minH: 280,
+    fmtX: function (n) { return n === 0 ? '' : String(Math.round(n)); }, fmtY: function (n) { return String(Math.round(n)); } });
+  var V = new Aha.Plot({ canvas: 'tv', wrap: 'tvWrap', view: { xMin: 0, xMax: 30, yMin: -5, yMax: 5 },
+    step: { x: 2, y: 1 }, label: { x: 5, y: 2 }, xLabel: 't in s', yLabel: 'v in m/s', ratio: 0.3, minH: 170, maxH: 240,
+    fmtX: function (n) { return n === 0 ? '' : String(Math.round(n)); }, fmtY: function (n) { return String(Math.round(n)); } });
+
+  /* Laufbahn: Achse −5 … 65 m, Hütchen bei 0 und 60 m, Läuferin als Punkt am Ort x(tAnim) */
+  function bahn() {
+    var cv = Aha.$('bahn'), wrap = Aha.$('bahnWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 74;
+    cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+    var C = P.C, l = P.pad.l, r = P.pad.r, X = function (x) { return l + (x + 10) / 80 * (W - l - r); }, y = 44;
+    c.fillStyle = C.grid; c.fillRect(X(-10), y - 9, X(70) - X(-10), 18);
+    c.strokeStyle = C.axis; c.lineWidth = 1.5; c.beginPath(); c.moveTo(X(-10), y); c.lineTo(X(70), y); c.stroke();
+    c.beginPath(); c.moveTo(X(70), y); c.lineTo(X(70) - 8, y - 5); c.lineTo(X(70) - 8, y + 5); c.closePath(); c.fillStyle = C.axis; c.fill();
+    c.font = '500 12px ' + C.mono; c.fillStyle = C.text; c.textAlign = 'center';
+    for (var x = 0; x <= 60; x += 10) {
+      c.beginPath(); c.moveTo(X(x), y - 4); c.lineTo(X(x), y + 4); c.stroke();
+      c.fillText(String(x), X(x), y + 22);
+    }
+    c.textAlign = 'left'; c.fillText('x in m', X(-10), y - 14);
+    [0, 60].forEach(function (x) {                                       // Hütchen
+      c.fillStyle = C.k; c.beginPath(); c.moveTo(X(x) - 6, y - 10); c.lineTo(X(x) + 6, y - 10); c.lineTo(X(x), y - 24); c.closePath(); c.fill();
+    });
+    var xl = Math.max(-10, Math.min(70, ort(eigen(), tAnim)));
+    c.fillStyle = C.e; c.beginPath(); c.arc(X(xl), y, 9, 0, 2 * Math.PI); c.fill();
+    c.font = '700 13px ' + C.body; c.textAlign = 'center'; c.fillStyle = C.e;
+    c.fillText('t = ' + Aha.de(tAnim, 1) + ' s', X(xl), 14);
+  }
+
+  function zeichne() {
+    P.setup(); var C = P.C; P.grid();
+    var z = ziel(), e = eigen(), tz = function (t) { return ort(z, t); }, te = function (t) { return ort(e, t); };
+    P.ctx.setLineDash([9, 7]); P.curve(tz, C.k, 3); P.ctx.setLineDash([]);
+    P.curve(te, C.e, 4, 0, Math.max(0.01, tAnim));
+    P.dot(tAnim, te(tAnim), C.e, 6);
+    P.text('Ziel', 30, z[3][1], C.k, 'right', -6, z[3][1] > 55 ? 18 : -8);
+
+    V.setup(); V.grid();
+    for (var k = 0; k < 3; k++) {
+      var a = 10 * k, b = Math.min(10 * (k + 1), tAnim);
+      if (b > a) V.segment(a, S.v[k], b, S.v[k], C.e, 4);
+      if (k > 0 && tAnim >= a && S.v[k] !== S.v[k - 1]) V.segment(a, S.v[k - 1], a, S.v[k], C.e, 1.5, [4, 4]);
+    }
+    bahn();
+  }
+
+  function leiste() {
+    Aha.$('level').innerHTML = LEVEL.map(function (L, j) {
+      return '<button type="button" data-l="' + j + '" class="' + (j === lv ? 'aktiv' : '') + (geschafft[j] ? ' geschafft' : '') +
+        '" aria-label="Level ' + (j + 1) + '">' + (j + 1) + ' ' + '⭐'.repeat(L.st) + '</button>';
+    }).join('');
+  }
+  function waehle(j) {
+    lv = j; S = { v: [0, 0, 0], x0: 0 };
+    ['r1', 'r2', 'r3'].forEach(function (id) { Aha.$(id).value = 0; }); Aha.$('r0').value = 0;
+    Aha.$('startRegler').style.display = LEVEL[lv].z[0] !== 0 ? '' : 'none';
+    var t = Aha.$('auftrag'); t.innerHTML = 'Level ' + (lv + 1) + ' · ' + LEVEL[lv].auftrag; mathe(t);
+    Aha.$('weiterZeile').hidden = !geschafft[lv];
+    Aha.$('weiter').hidden = lv === LEVEL.length - 1;
+    tAnim = 30; leiste(); aktualisiere();
+  }
+  function aktualisiere() {
+    var Z = LEVEL[lv].z;
+    for (var k = 0; k < 3; k++) Aha.$('o' + (k + 1)).textContent = Aha.de(S.v[k], 1) + ' m/s';
+    Aha.$('o0').textContent = S.x0 + ' m';
+    var passt = S.v.map(function (v, k) { return v === Z[k + 1] && S.x0 === Z[0]; });
+    Aha.$('abschnitte').innerHTML = passt.map(function (ok, k) {
+      return '<span class="' + (ok ? 'ok' : '') + '">' + (10 * k) + '–' + (10 * (k + 1)) + ' s</span>';
+    }).join('');
+    zeichne();
+    var ok = passt.every(Boolean);
+    Aha.$('mission').classList.toggle('done', ok);
+    if (ok) {
+      if (!geschafft[lv]) { geschafft[lv] = true; speichern(); leiste(); }
+      Aha.$('weiterZeile').hidden = false;
+      if (LEVEL[lv].aha) Aha.mission(true);
+    }
+  }
+  [1, 2, 3].forEach(function (k) {
+    Aha.$('r' + k).addEventListener('input', function () { S.v[k - 1] = +this.value; if (!laeuft) tAnim = 30; aktualisiere(); });
+  });
+  Aha.$('r0').addEventListener('input', function () { S.x0 = +this.value; if (!laeuft) tAnim = 30; aktualisiere(); });
+  Aha.$('level').addEventListener('click', function (ev) { var b = ev.target.closest('button'); if (b) waehle(+b.dataset.l); });
+  Aha.$('weiter').addEventListener('click', function () { if (lv < LEVEL.length - 1) waehle(lv + 1); });
+  Aha.$('los').addEventListener('click', function () {
+    if (laeuft) return;
+    laeuft = true; var t0 = null;
+    function schritt(ts) {
+      if (t0 === null) t0 = ts;
+      tAnim = Math.min(30, (ts - t0) / 1000 * 5);                        // 30 s Lauf in 6 s
+      zeichne();
+      if (tAnim < 30) requestAnimationFrame(schritt); else laeuft = false;
+    }
+    requestAnimationFrame(schritt);
+  });
+  Aha.onRedraw(zeichne);
+  window.addEventListener('resize', zeichne);
+  waehle(lv);
+});
+</script>
+<script>
+/* 3 Üben: ein Aufgabentyp „Was verrät das t-x-Diagramm?“, ⭐ angeben → ⭐⭐ bestimmen → ⭐⭐⭐ beurteilen.
+   Kontexte nicht vom AB/INFO: Modellauto, Straßenbahn, Laufkatze eines Krans, Hund. */
+window.addEventListener('load', function () {
+  function de(x) { return String(+(+x).toPrecision(10)).replace('.', ','); }
+  /* Mini-Diagramm als SVG: o = {tmax, dt, xmin, xmax, dx, tL, xL, pts} */
+  function dia(o) {
+    var W = 320, H = 190, l = 40, r = 40, t = 14, b = 28;
+    function X(tt) { return l + tt / o.tmax * (W - l - r); }
+    function Y(x) { return t + (o.xmax - x) / (o.xmax - o.xmin) * (H - t - b); }
+    var s = '<svg class="tr-diagramm" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + o.xL + ' über ' + o.tL + '">', i, k;
+    for (i = 0; i <= o.tmax / o.dt; i++) {
+      var tt = i * o.dt;
+      s += '<line x1="' + X(tt) + '" y1="' + Y(o.xmax) + '" x2="' + X(tt) + '" y2="' + Y(o.xmin) + '" stroke="var(--c-grid)"/>';
+      if (i > 0) s += '<text x="' + X(tt) + '" y="' + (Y(Math.max(0, o.xmin)) + 13) + '" text-anchor="middle">' + de(tt) + '</text>';
+    }
+    for (k = 0; k <= (o.xmax - o.xmin) / o.dx; k++) {
+      var x = o.xmin + k * o.dx;
+      s += '<line x1="' + X(0) + '" y1="' + Y(x) + '" x2="' + X(o.tmax) + '" y2="' + Y(x) + '" stroke="var(--c-grid)"/>';
+      if (Math.abs(x) > 1e-9) s += '<text x="' + (X(0) - 5) + '" y="' + (Y(x) + 4) + '" text-anchor="end">' + de(x) + '</text>';
+    }
+    var y0 = Math.max(0, o.xmin);
+    s += '<line x1="' + X(0) + '" y1="' + Y(y0) + '" x2="' + (X(o.tmax) + 14) + '" y2="' + Y(y0) + '" stroke="var(--c-axis)" stroke-width="1.5"/>' +
+         '<line x1="' + X(0) + '" y1="' + Y(o.xmin) + '" x2="' + X(0) + '" y2="' + (Y(o.xmax) - 8) + '" stroke="var(--c-axis)" stroke-width="1.5"/>' +
+         '<text x="' + (X(o.tmax) + 14) + '" y="' + (Y(y0) - 5) + '" text-anchor="end">' + o.tL + '</text>' +
+         '<text x="' + (X(0) + 5) + '" y="' + (Y(o.xmax) - 2) + '">' + o.xL + '</text>';
+    s += '<polyline fill="none" stroke="var(--ph)" stroke-width="3" stroke-linejoin="round" points="' +
+         o.pts.map(function (p) { return X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }).join(' ') + '"/>';
+    return s + '</svg>';
+  }
+  function tx(pts, tmax, xmax, extra) {
+    var o = { tmax: tmax, dt: tmax > 30 ? 10 : 5, xmin: 0, xmax: xmax, dx: xmax > 60 ? 20 : 10, tL: 't in s', xL: 'x in m', pts: pts };
+    for (var k in extra) o[k] = extra[k];
+    return dia(o);
+  }
+  function tv(pts, vmax, tmax) {
+    return dia({ tmax: tmax, dt: 10, xmin: -vmax, xmax: vmax, dx: vmax / 2, tL: 't in s', xL: 'v in m/s', pts: pts });
+  }
+  var auto = tx([[0, 0], [10, 30], [20, 30], [30, 50]], 30, 60);              // Modellauto: 3 m/s, Halt, 2 m/s
+  var bahn = tx([[0, 0], [20, 80], [40, 80], [60, 0]], 60, 100);             // Straßenbahn: 4 m/s, Halt, −4 m/s
+
+  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Ein Modellauto fährt geradeaus. In welchem Abschnitt <b>steht</b> es?' + auto,
+        optionen: ['von 0 bis 10 s', 'von 10 bis 20 s', 'von 20 bis 30 s'], ans: 1,
+        warum: ['Hier steigt der Graph: Der Ort ändert sich, das Auto fährt.', , 'Hier steigt der Graph: Das Auto fährt weiter.'] },
+      { frage: 'Dasselbe Modellauto: In welchem Abschnitt fährt es am <b>schnellsten</b>?' + auto,
+        optionen: ['von 0 bis 10 s', 'von 10 bis 20 s', 'von 20 bis 30 s'], ans: 0,
+        warum: [, 'Waagrecht heißt: Der Ort bleibt gleich, das Auto steht.', 'Hier ist das Auto am weitesten weg, aber der Graph ist flacher: $20\\,\\text{m}$ in $10\\,\\text{s}$ statt $30\\,\\text{m}$.'] },
+      { frage: 'Eine Straßenbahn fährt auf gerader Strecke. Was macht sie zwischen $40\\,\\text{s}$ und $60\\,\\text{s}$?' + bahn,
+        optionen: ['Sie fährt zurück zum Start.', 'Sie bremst bis zum Stillstand.', 'Sie fährt bergab.'], ans: 0,
+        warum: [, 'Beim Bremsen wird der Graph flacher, aber er fällt nicht. Hier fällt er gleichmäßig: Der Ort wird kleiner.', 'Das t-x-Diagramm ist kein Bild der Strecke. Fallend heißt: Der Ort $x$ wird kleiner.'] } ],
+    [ { frage: 'Bestimmen Sie die Geschwindigkeit der Straßenbahn zwischen $40\\,\\text{s}$ und $60\\,\\text{s}$.' + bahn,
+        optionen: ['$v = -4\\,\\frac{\\text{m}}{\\text{s}}$', '$v = 4\\,\\frac{\\text{m}}{\\text{s}}$', '$v = -1{,}3\\,\\frac{\\text{m}}{\\text{s}}$'], ans: 0,
+        warum: [, 'Der Ort wird kleiner: $\\Delta x = 0\\,\\text{m} - 80\\,\\text{m} = -80\\,\\text{m}$. Das Vorzeichen zeigt die Richtung.', 'Sie haben durch $60\\,\\text{s}$ geteilt. Es zählt nur der Abschnitt: $\\Delta t = 20\\,\\text{s}$.'] },
+      { frage: 'Die Laufkatze eines Krans fährt am Ausleger entlang. Bestimmen Sie die Bewegungsgleichung.' +
+               tx([[0, 40], [20, 0]], 20, 50),
+        optionen: ['$x(t) = 40\\,\\text{m} - 2\\,\\frac{\\text{m}}{\\text{s}}\\cdot t$', '$x(t) = 40\\,\\text{m} + 2\\,\\frac{\\text{m}}{\\text{s}}\\cdot t$', '$x(t) = 20\\,\\text{m} - 2\\,\\frac{\\text{m}}{\\text{s}}\\cdot t$'], ans: 0,
+        warum: [, 'Der Graph fällt: $v$ ist negativ.', '$x_0$ ist der Ort bei $t = 0$: Dort ist der Graph bei $40\\,\\text{m}$.'] },
+      { frage: 'Welches t-v-Diagramm gehört zum Modellauto?' + auto,
+        optionen: [tv([[0, 3], [10, 3], [10, 0], [20, 0], [20, 2], [30, 2]], 4, 30),
+                   tv([[0, 0], [10, 3], [20, 3], [30, 2]], 4, 30),
+                   tv([[0, 3], [10, 3], [10, 0], [20, 0], [20, -2], [30, -2]], 4, 30)], ans: 0,
+        warum: [, 'Das ist der t-x-Graph „abgemalt“. Im t-v-Diagramm wird jedes gerade Stück zu einer waagrechten Stufe.', 'Im letzten Abschnitt steigt der t-x-Graph: $v$ ist positiv.'] } ],
+    [ { frage: 'Kann ein t-x-Diagramm so aussehen? (Hund an der Leine)' + tx([[0, 0], [10, 20], [10, 40], [20, 50]], 20, 60),
+        optionen: ['Nein: Bei $t = 10\\,\\text{s}$ wäre der Hund gleichzeitig an allen Orten von $20$ bis $40\\,\\text{m}$.', 'Ja: Der Hund springt einfach sehr schnell nach vorne.'], ans: 0,
+        warum: [, 'Auch ein schneller Sprung braucht Zeit. Ein senkrechtes Stück hieße: unendlich schnell.'] },
+      { frage: '„Der Graph der Straßenbahn ist am Ende wieder auf der $t$-Achse, also ist sie insgesamt keinen Meter gefahren.“' + bahn,
+        optionen: ['Stimmt nicht: Die Ortsänderung ist $\\Delta x = 0$, der Weg ist $s = 160\\,\\text{m}$.', 'Stimmt: Sie steht wieder am Start, also $s = 0$.'], ans: 0,
+        warum: [, 'Am Start ist sie wieder, also $\\Delta x = 0$. Gefahren ist sie trotzdem: $80\\,\\text{m}$ hin und $80\\,\\text{m}$ zurück.'] },
+      { frage: '„Im Abschnitt mit dem höchsten Punkt des t-x-Graphen fährt das Modellauto am schnellsten.“' + auto,
+        optionen: ['Stimmt nicht: Die Höhe zeigt den Ort, die Steigung die Geschwindigkeit.', 'Stimmt: Am höchsten Punkt ist es am weitesten gekommen.'], ans: 0,
+        warum: [, 'Am weitesten heißt nicht am schnellsten. Am schnellsten ist das Auto, wo der Graph am steilsten ist (0 bis 10 s).'] } ]
+  ] });
+});
+</script>
+</body>
+</html>
