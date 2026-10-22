@@ -25,9 +25,11 @@
     .level button.aktiv { background: var(--c-accent); color: var(--c-on-accent); }
     .level button.geschafft::after { content: ' ✓'; }
     .stage .mission { margin-bottom: 0; padding-top: .45em; padding-bottom: .45em; }
-    .stage .plot { margin: 6px 0 0; }
+    .stage .plot { margin: 6px auto 0; }
+    /* Diagramme und Schieber höchstens 660 px breit: quadratische Kästchen bleiben am PC flach genug (alles ohne Scrollen) */
+    .stage .plot, .ab-regler, .lauf-zeile, .start { max-width: 660px; margin-left: auto; margin-right: auto; }
     /* Schieber genau unter ihrem Zeitabschnitt, Farbe = Farbe des Abschnitts im Graphen */
-    .ab-regler { display: grid; grid-template-columns: repeat(3, 1fr); margin: -10px 0 0; }
+    .ab-regler { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 2px; }
     .ab-regler .ab { --seg: var(--viz-1); padding: 4px 6px 0; border-top: 4px solid var(--seg); }
     .ab-regler .ab.a2 { --seg: var(--viz-2); }
     .ab-regler .ab.a3 { --seg: var(--viz-3); }
@@ -47,7 +49,7 @@
       box-shadow: 0 0 0 1px var(--seg); }
     .ab-regler input[type=range]:focus-visible { outline: 2px solid var(--seg); outline-offset: 2px; border-radius: 8px; }
     .ab-regler input[type=range][disabled] { opacity: .75; cursor: default; }
-    .lauf-zeile { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin-top: 8px; }
+    .lauf-zeile { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin-top: 4px; }
     .lauf-zeile .btn[disabled] { opacity: .6; cursor: default; }
     .rueckmeldung { flex: 1 1 260px; font-weight: 600; }
     .rueckmeldung.ok { color: var(--c-gain); }
@@ -171,11 +173,11 @@ window.addEventListener('load', function () {
   }
   function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify(geschafft)); } catch (e) {} }
 
-  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 30, yMin: -6, yMax: 70 },
-    step: { x: 2, y: 10 }, label: { x: 5, y: 10 }, xLabel: 't in s', yLabel: 'x in m', ratio: 0.3, minH: 200, maxH: 230,
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 30, yMin: 0, yMax: 70 },
+    step: { x: 1, y: 10 }, label: { x: 5, y: 10 }, xLabel: 't in s', yLabel: 'x in m', minH: 1, maxH: 9999,
     fmtX: function (n) { return n === 0 ? '' : String(Math.round(n)); }, fmtY: function (n) { return String(Math.round(n)); } });
-  var V = new Aha.Plot({ canvas: 'tv', wrap: 'tvWrap', view: { xMin: 0, xMax: 30, yMin: -4.5, yMax: 4.5 },
-    step: { x: 2, y: 1 }, label: { x: 5, y: 4 }, xLabel: 't in s', yLabel: 'v in m/s', ratio: 0.18, minH: 150, maxH: 155,
+  var V = new Aha.Plot({ canvas: 'tv', wrap: 'tvWrap', view: { xMin: 0, xMax: 30, yMin: -4, yMax: 4 },
+    step: { x: 1, y: 2 }, label: { x: 5, y: 4 }, xLabel: 't in s', yLabel: 'v in m/s', minH: 1, maxH: 9999,
     fmtX: function (n) { return n === 0 ? '' : String(Math.round(n)); }, fmtY: function (n) { return String(Math.round(n)); } });
 
   /* Jana als Strichfigur: Füße bei (px|py), dir = Blickrichtung (±1), schwung = Beinphase (0 = steht) */
@@ -199,12 +201,41 @@ window.addEventListener('load', function () {
   }
 
   /* Laufbahn: Achse −10 … 70 m wie die x-Achse, Hütchen bei 0 und 60 m */
+  /* Kästchen quadratisch: Höhe der Zeichenfläche aus ihrer Breite (spalten × zeilen Kästchen; am Handy 2 s × 10 m bzw. 2 s × 2 m/s) */
+  function quadrat(D, spalten, zeilen) {
+    var W = Aha.$(D.o.wrap).clientWidth, b = W - D.pad.l - D.pad.r, grob = W < 560;   // Handy: 2-s-Kästchen, sonst zu klein
+    D.o.step.x = grob ? 2 : 1; if (grob) spalten /= 2;
+    D.o.ratio = (b / spalten * zeilen + D.pad.t + D.pad.b) / W;
+  }
+  /* Hilfslinien kräftiger als im Standard (hell und dunkel gut sichtbar): Grauton mit Deckkraft */
+  function gitter() { return css('--c-muted') + '4d'; }
+  /* Abschnittsgrenzen bei 10 s und 20 s gestrichelt */
+  function grenzen(D, y0, y1) { [10, 20].forEach(function (t) { D.segment(t, y0, t, y1, css('--c-muted'), 1.5, [6, 5]); }); }
+  /* Kulisse: Häuser weit hinten (ziehen langsamer vorbei), Bäume und Büsche fest an der Bahn — nur Deko, blass */
+  function kulisse(c, X, xl, y, W) {
+    var m = css('--c-muted'), g = css('--kit'), pm = (X(10) - X(0)) / 10, ver = -xl * pm * 0.35;
+    for (var h = -20; h <= 110; h += 22) {
+      var hx = X(h) + ver, bw = 26 + (h * 7 % 9), bh = 18 + (h * 5 % 11);
+      if (hx < X(-10) - 30 || hx > X(70) + 10) continue;
+      c.fillStyle = m + '26'; c.fillRect(hx, y - 4 - bh, bw, bh);
+      c.fillStyle = m + '40'; c.beginPath(); c.moveTo(hx - 3, y - 4 - bh); c.lineTo(hx + bw / 2, y - 16 - bh); c.lineTo(hx + bw + 3, y - 4 - bh); c.closePath(); c.fill();
+    }
+    [-6, 15, 33, 48, 67].forEach(function (b) {                                                  // Bäume
+      c.fillStyle = m + '66'; c.fillRect(X(b) - 1.5, y - 16, 3, 13);
+      c.fillStyle = g + '73'; c.beginPath(); c.arc(X(b), y - 24, 10, 0, 2 * Math.PI); c.fill();
+    });
+    [6, 24, 40, 56].forEach(function (b) {                                                       // Büsche
+      c.fillStyle = g + '59'; c.beginPath(); c.arc(X(b) - 5, y - 6, 6, 0, 2 * Math.PI); c.arc(X(b) + 4, y - 7, 7, 0, 2 * Math.PI); c.fill();
+    });
+  }
   function bahn(schwung) {
-    var cv = Aha.$('bahn'), wrap = Aha.$('bahnWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 78;
+    var cv = Aha.$('bahn'), wrap = Aha.$('bahnWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 94;
     cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
     var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
-    var C = P.C, l = P.pad.l, r = P.pad.r, X = function (x) { return l + (x + 10) / 80 * (W - l - r); }, y = 55;
-    c.fillStyle = C.grid; c.fillRect(X(-10), y - 3, X(70) - X(-10), 9);
+    var C = P.C, l = P.pad.l, r = P.pad.r, X = function (x) { return l + (x + 10) / 80 * (W - l - r); }, y = 70;
+    var xl = Math.max(-10, Math.min(70, ort(eigen(), tAnim)));
+    kulisse(c, X, xl, y, W);
+    c.fillStyle = gitter(); c.fillRect(X(-10), y - 3, X(70) - X(-10), 9);
     c.strokeStyle = C.axis; c.lineWidth = 1.5; c.beginPath(); c.moveTo(X(-10), y + 6); c.lineTo(X(70), y + 6); c.stroke();
     c.beginPath(); c.moveTo(X(70) + 4, y + 6); c.lineTo(X(70) - 4, y + 1); c.lineTo(X(70) - 4, y + 11); c.closePath(); c.fillStyle = C.axis; c.fill();
     c.font = '500 12px ' + C.mono; c.fillStyle = C.text; c.textAlign = 'center';
@@ -215,7 +246,6 @@ window.addEventListener('load', function () {
     });
     var k = abschnitt(Math.min(tAnim, 29.99)), v = S.v[k];
     if (laeuft && v !== 0) dirAlt = v > 0 ? 1 : -1;
-    var xl = Math.max(-10, Math.min(70, ort(eigen(), tAnim)));
     jana(c, X(xl), y + 2, dirAlt, laeuft && v !== 0 ? (schwung || 0.01) : 0, (laeuft || gelaufen) ? farben()[k] : C.text);
     c.font = '700 13px ' + C.body; c.textAlign = 'right'; c.fillStyle = C.text;
     c.fillText('t = ' + Aha.de(tAnim, 1) + ' s', X(70), 14);
@@ -223,11 +253,12 @@ window.addEventListener('load', function () {
 
   function zeichne(schwung) {
     var F = farben(), zeigen = laeuft || gelaufen, e = eigen(), k;
-    P.setup(); var C = P.C; P.grid();
+    quadrat(P, 30, 7); quadrat(V, 30, 4);
+    P.setup(); var C = P.C; C.grid = gitter(); P.grid(); grenzen(P, 0, 70);
     var z = ziel();
     P.ctx.setLineDash([9, 7]); P.curve(function (t) { return ort(z, t); }, C.text, 2.5); P.ctx.setLineDash([]);
     P.text('Ziel', 30, z[3][1], C.text, 'right', -6, z[3][1] > 55 ? 18 : -8, 600);
-    V.setup(); V.grid();
+    V.setup(); V.C.grid = gitter(); V.grid(); grenzen(V, -4, 4);
     if (zeigen) {
       for (k = 0; k < 3; k++) {
         var a = 10 * k, b = Math.min(10 * (k + 1), tAnim);
@@ -311,8 +342,8 @@ window.addEventListener('load', function () {
     var t0 = null;
     function schritt(ts) {
       if (t0 === null) t0 = ts;
-      tAnim = Math.min(30, (ts - t0) / 1000 * 5);                        // 30 s Lauf in 6 s
-      zeichne((ts - t0) / 1000 * 2 * Math.PI * 2.2 + 0.01);
+      tAnim = Math.min(30, (ts - t0) / 1000 * 10 / 3);                   // 30 s Lauf in 9 s
+      zeichne((ts - t0) / 1000 * 2 * Math.PI * 1.6 + 0.01);
       if (tAnim < 30) { requestAnimationFrame(schritt); return; }
       laeuft = false; gelaufen = true; sperren(false); zeichne(); auswerten();
     }
