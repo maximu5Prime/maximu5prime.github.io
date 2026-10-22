@@ -60,7 +60,7 @@ var STAND = {
   "/ph11/ort-geschwindigkeit/PH11_UE01_VID_Nullpunkt.jpg": "7551d49ce7",
   "/ph11/ort-geschwindigkeit/PH11_UE01_VID_Nullpunkt.vtt": "b8007f45f8",
   "/ph11/ort-geschwindigkeit/": "d32574b567",
-  "/ph11/t-x-diagramm/": "c7f3abf16f",
+  "/ph11/t-x-diagramm/": "a759f2ade5",
   "/static/katex/contrib/auto-render.min.js": "82dca94048",
   "/static/katex/fonts/KaTeX_AMS-Regular.woff2": "3449474373",
   "/static/katex/fonts/KaTeX_Caligraphic-Bold.woff2": "5bfa49cac4",
