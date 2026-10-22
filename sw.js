@@ -60,7 +60,7 @@ var STAND = {
   "/ph11/ort-geschwindigkeit/PH11_UE01_VID_Nullpunkt.jpg": "7551d49ce7",
   "/ph11/ort-geschwindigkeit/PH11_UE01_VID_Nullpunkt.vtt": "b8007f45f8",
   "/ph11/ort-geschwindigkeit/": "d32574b567",
-  "/ph11/t-x-diagramm/": "a759f2ade5",
+  "/ph11/t-x-diagramm/": "fefa7550b4",
   "/static/katex/contrib/auto-render.min.js": "82dca94048",
   "/static/katex/fonts/KaTeX_AMS-Regular.woff2": "3449474373",
   "/static/katex/fonts/KaTeX_Caligraphic-Bold.woff2": "5bfa49cac4",
@@ -88,7 +88,7 @@ var STAND = {
   "/static/v2/JetBrainsMono-var.woff2": "e7277e7145",
   "/static/v2/aha-lib.js": "cbf5e6f006",
   "/static/v2/base.css": "71001ac0a7",
-  "/static/v2/farben.css": "f82ee11f33",
+  "/static/v2/farben.css": "24d3b5c3ef",
   "/static/v2/icons/icon-192.png": "1eb1ed140b",
   "/static/v2/icons/icon-512.png": "ad691cd9c3",
   "/static/v2/icons/maskable-512.png": "f3c0c05929"

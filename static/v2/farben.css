@@ -23,6 +23,8 @@
   --c-gain: #12a150; --c-gain-fill: rgba(18,161,80,.16);
   --c-loss: #e5484d; --c-loss-fill: rgba(229,72,77,.12);
   --c-grid: #e6eaf3; --c-axis: #0b1220;
+  /* Datenreihen in Diagrammen (Abschnitte, Kurven): feste Reihenfolge, geprüft mit dem dataviz-Validator (22.10.2026) */
+  --viz-1: #2a78d6; --viz-2: #eb6834; --viz-3: #1baf7a;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   color-scheme: dark;
@@ -43,6 +45,7 @@
   --c-gain: #2fd07a; --c-gain-fill: rgba(47,208,122,.18);
   --c-loss: #ff6b70; --c-loss-fill: rgba(255,107,112,.14);
   --c-grid: #1f2945; --c-axis: #cfd8f2;
+  --viz-1: #3987e5; --viz-2: #d95926; --viz-3: #199e70;
 }}
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -63,6 +66,7 @@
   --c-gain: #2fd07a; --c-gain-fill: rgba(47,208,122,.18);
   --c-loss: #ff6b70; --c-loss-fill: rgba(255,107,112,.14);
   --c-grid: #1f2945; --c-axis: #cfd8f2;
+  --viz-1: #3987e5; --viz-2: #d95926; --viz-3: #199e70;
 }
 
 /* Fachfarbe: data-fach auf <html> (ganze Seite) oder auf einer Kachel.
