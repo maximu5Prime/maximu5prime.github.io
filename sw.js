@@ -16,7 +16,6 @@ var STAND = {
   "/kit11/": "2dee13b2f6",
   "/kit11/ki-fails/": "6fcac5b1eb",
   "/kit11/prompt-baukasten/": "5949b3118f",
-  "/loesung/ph11-ue02/": "7da8d0ce17",
   "/m11/funktionsbegriff/": "a28124164b",
   "/m11/": "c406b81f3a",
   "/m11/lineare-funktionen/": "e0fc154d9e",
