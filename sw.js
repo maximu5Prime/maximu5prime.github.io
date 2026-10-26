@@ -13,7 +13,7 @@ var STAND = {
   "/": "2a482bb5c2",
   "/kit11/beanspruchung/KIT11_UE01_VID_Beanspruchung.jpg": "d80be1690f",
   "/kit11/beanspruchung/KIT11_UE01_VID_Beanspruchung.vtt": "eeacca77e8",
-  "/kit11/beanspruchung/": "6e42c11e4b",
+  "/kit11/beanspruchung/": "98fa69a7b6",
   "/kit11/": "d774dbf894",
   "/kit11/ki-fails/": "7342d83141",
   "/kit11/prompt-baukasten/": "3e5b7b11a5",
@@ -24,23 +24,23 @@ var STAND = {
   "/m11/lineare-funktionen/": "658a633257",
   "/m11/nullstellen/MT11_VID_Schneiden_Beruehren.jpg": "00a04c0e9a",
   "/m11/nullstellen/MT11_VID_Schneiden_Beruehren.vtt": "e5d8edc56e",
-  "/m11/nullstellen/": "97b3520e72",
+  "/m11/nullstellen/": "8eb80066aa",
   "/m11/parabel/MT11_VID_Parabel_verschieben.jpg": "2c6b648936",
   "/m11/parabel/MT11_VID_Parabel_verschieben.vtt": "c2ad82ff91",
-  "/m11/parabel/": "7577891f93",
+  "/m11/parabel/": "0a1a296111",
   "/m11/schnittpunkte/": "ff8f0aae79",
   "/m11/ueben-funktionen/": "64dc8597c2",
   "/m11/ungleichungen/MT11_VID_Zeichen_kippt.jpg": "0e18af6fe4",
   "/m11/ungleichungen/MT11_VID_Zeichen_kippt.vtt": "bcf27c5970",
-  "/m11/ungleichungen/": "51b97dc4ba",
+  "/m11/ungleichungen/": "7afcc853ed",
   "/m12/ableitungsgraph/MT12_VID_Ableitungsgraph.jpg": "20eabff89f",
   "/m12/ableitungsgraph/MT12_VID_Ableitungsgraph.vtt": "cc769b2291",
   "/m12/ableitungsgraph/MT12_VID_Graph_f_aus_Ableitung.jpg": "2f3b121fb8",
   "/m12/ableitungsgraph/MT12_VID_Graph_f_aus_Ableitung.vtt": "1e8c7d6f5f",
-  "/m12/ableitungsgraph/": "bd35e3c82c",
+  "/m12/ableitungsgraph/": "19d3437d5c",
   "/m12/aenderungsrate/MT12_VID_Schnellster_Anstieg.jpg": "f6616878b2",
   "/m12/aenderungsrate/MT12_VID_Schnellster_Anstieg.vtt": "ef0dd78521",
-  "/m12/aenderungsrate/": "108e6f9e1b",
+  "/m12/aenderungsrate/": "a51e1c21b8",
   "/m12/graphen-domino/": "401ccd3c07",
   "/m12/": "a6c85c5ea0",
   "/m12/kurvendiskussion/": "2060875f64",
@@ -54,7 +54,7 @@ var STAND = {
   "/m12add/einheitskreis/MT12Add_LB02_VID_Pythagoras.vtt": "62eafbe15d",
   "/m12add/einheitskreis/MT12Add_LB02_VID_Tangens.jpg": "22d99b96f3",
   "/m12add/einheitskreis/MT12Add_LB02_VID_Tangens.vtt": "53967662bd",
-  "/m12add/einheitskreis/": "064a082386",
+  "/m12add/einheitskreis/": "e0d05d1371",
   "/m12add/": "8a8ae537c4",
   "/m12add/sinus-parameter/": "f644ed3c11",
   "/m12add/ueben-trigonometrie/": "d0f25f0b79",
@@ -65,7 +65,7 @@ var STAND = {
   "/ph11/": "48ede09fc6",
   "/ph11/ort-geschwindigkeit/PH11_UE01_VID_Nullpunkt.jpg": "7551d49ce7",
   "/ph11/ort-geschwindigkeit/PH11_UE01_VID_Nullpunkt.vtt": "b8007f45f8",
-  "/ph11/ort-geschwindigkeit/": "affdf64a13",
+  "/ph11/ort-geschwindigkeit/": "8edd6311f0",
   "/ph11/t-x-diagramm/": "931ece4ebb",
   "/ph11/ueben-bewegungen/": "f7a986408e",
   "/static/katex/contrib/auto-render.min.js": "82dca94048",
@@ -170,9 +170,14 @@ function netzZuerst(req, seite) {
     var key = seite ? schluessel(req.url) : req;
     var gespeichert = c.match(key);
     var netz = fetch(req).then(function (r) {
-      if (r.ok && r.type === 'basic') sauber(r.clone()).then(function (s) { c.put(key, s); });
       if (!r.ok && r.status !== 404) return gespeichert.then(function (g) { return g || r; });  // 5xx, WLAN-Anmeldeseite …
-      return r;
+      // ganz lesen, bevor geantwortet wird: Reißt die Übertragung mittendrin ab, gilt das als Netzfehler (→ gespeicherte
+      // Fassung) statt einer halb geladenen, hängenden Seite; zählt auch gegen WARTEN (Langsam-Netz-Test 26.10.2026)
+      return r.blob().then(function (b) {
+        var s = new Response(b, { status: r.status, statusText: r.statusText, headers: r.headers });
+        if (r.ok && r.type === 'basic') c.put(key, s.clone());
+        return s;
+      });
     });
     var notfall = new Promise(function (ok) { setTimeout(ok, WARTEN); }).then(function () {
       return gespeichert.then(function (g) { return g || netz; });
