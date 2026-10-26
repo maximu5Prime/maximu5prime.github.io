@@ -30,18 +30,31 @@
   }
   function redrawAll() { redrawFns.forEach(function (f) { f(); }); }
 
-  /* Theme-Umschalter: data-theme auf <html>, Schlüssel 'theme' wie auf der alten Seite */
+  /* Theme-Umschalter: data-theme auf <html>, Schlüssel 'theme' wie auf der alten Seite. Symbol (26.10.2026) als SVG,
+     geometrisch auf die Kreismitte gesetzt: im hellen Modus Mond (→ dunkel), im dunklen Sonne (→ hell). */
+  var MOND = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.5 8.5 0 1 1 9.4 4a6.6 6.6 0 0 0 10.6 10.6z" fill="currentColor"/></svg>';
+  var SONNE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
+    [0, 45, 90, 135, 180, 225, 270, 315].map(function (w) { return '<line x1="12" y1="2.6" x2="12" y2="4.6" transform="rotate(' + w + ' 12 12)"/>'; }).join('') + '</g></svg>';
+  function dunkel() {
+    var t = document.documentElement.dataset.theme;
+    return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  }
   function initTheme() {
     var b = $('themeBtn');
     if (!b) return;
+    function symbol() {
+      b.innerHTML = dunkel() ? SONNE : MOND;
+      b.setAttribute('aria-label', dunkel() ? 'Hell schalten' : 'Dunkel schalten');
+    }
+    symbol();
     b.addEventListener('click', function () {
       var root = document.documentElement;
-      var dark = root.dataset.theme ? root.dataset.theme === 'dark'
-        : matchMedia('(prefers-color-scheme: dark)').matches;
-      root.dataset.theme = dark ? 'light' : 'dark';
+      root.dataset.theme = dunkel() ? 'light' : 'dark';
       try { localStorage.setItem('theme', root.dataset.theme); } catch (err) {}
+      symbol();
       redrawAll();
     });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', symbol);
   }
 
   /* Koordinatensystem auf einem Canvas.
@@ -500,6 +513,23 @@
     window.addEventListener('hashchange', ausHash);
   }
 
+  /* Kacheln (Kanban #19, 26.10.2026): <div class="duo"> mit .stage (Applet) und .kachel-video. Damit beide in der
+     Vorschau gleich groß sind, startet das Applet eingeklappt: nur Graph (16:9, wie das Video) und Auftrag, darüber
+     „▶ Ausprobieren“. Antippen klappt es auf; offen nimmt es die ganze Breite, das Video rutscht darunter. */
+  function Duo(duo) {
+    var st = duo.querySelector(':scope > .stage'), plot = st && st.querySelector('.plot');
+    if (!plot || !duo.querySelector(':scope > .kachel-video')) return;
+    st.classList.add('zu');
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'vorschau-knopf'; b.innerHTML = '<span>▶ Ausprobieren</span>';
+    plot.appendChild(b);
+    b.addEventListener('click', function () {
+      st.classList.remove('zu'); st.classList.add('offen'); b.remove();
+      redrawAll();
+      st.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+  }
+
   /* Zufallshilfen für Trainer: ganze Zahl in [a, b] (ohne die Werte in ohne), Element aus Liste */
   function zufall(a, b, ohne) { var z; do { z = a + Math.floor(Math.random() * (b - a + 1)); } while (ohne && ohne.indexOf(z) >= 0); return z; }
   function eins(liste) { return liste[Math.floor(Math.random() * liste.length)]; }
@@ -588,7 +618,11 @@
     initTheme();
     initPWA();
     var b = $('ahaBtn'); if (b) b.addEventListener('click', function () { showAha(false); });
+    document.querySelectorAll('.duo').forEach(Duo);
     document.querySelectorAll('.videos').forEach(Videos);
+    // Sprungmarke auf ein <details id> (Übungsseite #thema) klappt es auf
+    var ziel = location.hash && document.getElementById(location.hash.slice(1));
+    if (ziel && ziel.tagName === 'DETAILS') { ziel.open = true; ziel.scrollIntoView(); }
     window.addEventListener('resize', redrawAll);
     if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redrawAll);
   });

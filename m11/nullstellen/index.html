@@ -36,25 +36,40 @@
     <p>Wie oft trifft eine Parabel die $x$-Achse? Schieben Sie sie hin und her.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
-  <section class="stage" aria-label="Ausprobieren">
-    <div class="mission" id="mission"><span class="icon"></span>
-      <span>Die Parabel soll die $x$-Achse nur berühren, nicht schneiden.</span></div>
-    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Parabel mit Vorzeichenstreifen auf der x-Achse"></canvas></div>
-    <p class="tipp-zeile">Grün: $f(x) &gt; 0$ · Rot: $f(x) &lt; 0$</p>
-    <div class="regler">
-      <div><label for="a">Streckfaktor $a$ <output id="aVal"></output></label>
-        <input type="range" id="a" min="-2" max="2" step="0.5" value="1"></div>
-      <div><label for="xs">$x_S$ <output id="xsVal"></output></label>
-        <input type="range" id="xs" min="-3" max="3" step="0.5" value="1"></div>
-      <div><label for="ys">$y_S$ <output id="ysVal"></output></label>
-        <input type="range" id="ys" min="-4" max="4" step="0.5" value="-2"></div>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Ausprobieren">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span>Die Parabel soll die $x$-Achse nur berühren, nicht schneiden.</span></div>
+      <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Parabel mit Vorzeichenstreifen auf der x-Achse"></canvas></div>
+      <p class="tipp-zeile">Grün: $f(x) &gt; 0$ · Rot: $f(x) &lt; 0$</p>
+      <div class="regler">
+        <div><label for="a">Streckfaktor $a$ <output id="aVal"></output></label>
+          <input type="range" id="a" min="-2" max="2" step="0.5" value="1"></div>
+        <div><label for="xs">$x_S$ <output id="xsVal"></output></label>
+          <input type="range" id="xs" min="-3" max="3" step="0.5" value="1"></div>
+        <div><label for="ys">$y_S$ <output id="ysVal"></output></label>
+          <input type="range" id="ys" min="-4" max="4" step="0.5" value="-2"></div>
+      </div>
+      <div class="ergebnis">
+        <div class="gross" id="anzahl"></div>
+        <div class="rechnung" id="rechnung"></div>
+      </div>
+    </section>
+    <div class="kachel-video">
+      <div class="kachel-kopf">Anschauen</div>
+      <div class="videos">
+      <figure class="video" id="video">
+    <video controls playsinline preload="metadata" poster="MT11_VID_Schneiden_Beruehren.jpg">
+      <source src="MT11_VID_Schneiden_Beruehren.mp4" type="video/mp4">
+      <track kind="subtitles" src="MT11_VID_Schneiden_Beruehren.vtt" srclang="de" label="Deutsch" default>
+    </video>
+    <figcaption><b>Schneiden oder Berühren?</b> (<span id="vidDauer">ca. 90</span> s) — die Parabel wandert nach unten: keine, eine doppelte, zwei Nullstellen.</figcaption>
+  </figure>
+      </div>
     </div>
-    <div class="ergebnis">
-      <div class="gross" id="anzahl"></div>
-      <div class="rechnung" id="rechnung"></div>
-    </div>
-  </section>
+  </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
@@ -75,19 +90,11 @@
     </div>
   </details>
 
-  <figure class="video" id="video">
-    <video controls playsinline preload="metadata" poster="MT11_VID_Schneiden_Beruehren.jpg">
-      <source src="MT11_VID_Schneiden_Beruehren.mp4" type="video/mp4">
-      <track kind="subtitles" src="MT11_VID_Schneiden_Beruehren.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Schneiden oder Berühren?</b> (<span id="vidDauer">ca. 90</span> s) — die Parabel wandert nach unten: keine, eine doppelte, zwei Nullstellen.</figcaption>
-  </figure>
-
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/m11/ueben-funktionen/#nullstellen"><span>Üben<small>Funktionen · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m11/parabel/"><span>← Voriges Thema</span>Parabel verschieben</a>
+    <a class="next" href="/m11/ueben-funktionen/"><span>Nächstes Thema →</span>Üben: Funktionen</a>
   </nav>
 
   <footer class="fuss">
@@ -144,40 +151,6 @@ window.addEventListener('load', function () {
   Aha.onRedraw(aktualisiere);
   var vid = document.querySelector('#video video');
   vid.addEventListener('loadedmetadata', function () { if (vid.duration) Aha.$('vidDauer').textContent = Math.round(vid.duration); });
-});
-</script>
-<script>
-/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Nullstellen und Vorzeichen. Andere Terme als AB 1.6 und INTRO. */
-window.addEventListener('load', function () {
-  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: 'Wie viele Nullstellen hat $f(x) = (x + 2)^2 - 1$?',
-        optionen: ['keine', 'eine', 'zwei'], ans: 2,
-        warum: ['Der Scheitel $S(-2|-1)$ liegt <b>unter</b> der Achse, die Parabel ist nach oben offen.', 'Eine gäbe es nur, wenn der Scheitel auf der Achse läge.'] },
-      { frage: 'Wie viele Nullstellen hat $f(x) = -(x - 3)^2 - 2$?',
-        optionen: ['keine', 'eine', 'zwei'], ans: 0,
-        warum: [, 'Der Scheitel $S(3|-2)$ liegt nicht auf der Achse.', 'Nach unten offen und Scheitel schon unter der Achse: Sie kommt nie hoch.'] },
-      { frage: 'Wie viele Nullstellen hat $f(x) = 0{,}5\\,(x + 1)^2$?',
-        optionen: ['keine', 'eine (doppelt)', 'zwei'], ans: 1,
-        warum: ['Setzen Sie $x = -1$ ein: $f(-1) = 0$.', , 'Der Scheitel $S(-1|0)$ liegt <b>auf</b> der Achse: Die Parabel berührt nur.'] } ],
-    [ { frage: 'Für welche $x$ ist $(x - 1)(x - 5) < 0$?',
-        optionen: ['$1 < x < 5$', '$x < 1$ oder $x > 5$', '$x < 5$'], ans: 0,
-        warum: [, 'Das ist der Bereich <b>über</b> der Achse. Nach oben offen: unter der Achse liegt sie zwischen den Nullstellen.', 'Links von $1$ liegt die Parabel wieder über der Achse, z. B. $x = 0$: $(-1)(-5) = 5 > 0$.'] },
-      { frage: 'Für welche $x$ ist $-(x + 2)(x - 4) > 0$?',
-        optionen: ['$x < -2$ oder $x > 4$', '$-2 < x < 4$', '$x > 4$'], ans: 1,
-        warum: ['Nach unten offen: Über der Achse liegt sie zwischen den Nullstellen.', , 'Probe $x = 5$: $-(7)(1) = -7 < 0$.'] },
-      { frage: 'Für welche $x$ ist $(x - 3)^2 > 0$?',
-        optionen: ['für alle $x$', 'für alle $x$ außer $3$', 'für kein $x$'], ans: 1,
-        warum: ['Bei $x = 3$ ist der Wert genau $0$, nicht größer.', , 'Nur bei $x = 3$ ist der Wert $0$, sonst immer positiv.'] } ],
-    [ { frage: '„$x^2 > 25$ hat die Lösung $x > 5$.“',
-        optionen: ['Stimmt — Wurzel ziehen.', 'Stimmt nicht — auch $x < -5$ gehört dazu.'], ans: 1,
-        warum: ['Probe $x = -6$: $36 > 25$. Die Skizze von $x^2 - 25$ zeigt zwei Bereiche.'] },
-      { frage: '„Ist $D = 0$, berührt die Parabel die $x$-Achse.“',
-        optionen: ['Stimmt — eine doppelte Nullstelle, der Scheitel liegt auf der Achse.', 'Stimmt nicht — dann gibt es keine Nullstelle.'], ans: 0,
-        warum: [, 'Keine Nullstelle gibt es bei $D < 0$.'] },
-      { frage: '„Eine nach oben offene Parabel mit $c > 0$ hat keine Nullstelle.“',
-        optionen: ['Stimmt — sie startet ja oberhalb der Achse.', 'Stimmt nicht — Gegenbeispiel $x^2 - 4x + 1$.'], ans: 1,
-        warum: ['$c$ ist nur der $y$-Achsenabschnitt. $x^2 - 4x + 1$ hat $S(2|-3)$ unter der Achse, also zwei Nullstellen.'] } ]
-  ] });
 });
 </script>
 </body>

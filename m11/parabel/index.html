@@ -35,8 +35,11 @@
     <p>In $f(x) = a\,(x - x_S)^2 + y_S$ steht der Scheitel schon drin. Wandert $(x - 3)^2$ nach links oder rechts?</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Anschauen</h2>
-  <div class="videos">
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <div class="kachel-video">
+      <div class="kachel-kopf">Anschauen</div>
+      <div class="videos">
   <figure class="video" data-titel="Parabel verschieben">
     <video controls playsinline preload="metadata" poster="MT11_VID_Parabel_verschieben.jpg">
       <source src="MT11_VID_Parabel_verschieben.mp4" type="video/mp4">
@@ -44,6 +47,8 @@
     </video>
     <figcaption><b>Parabel verschieben</b> (107 s) — nach oben, unten, rechts und links.</figcaption>
   </figure>
+  </div>
+    </div>
   </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
@@ -63,8 +68,7 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/m11/ueben-funktionen/#parabel"><span>Üben<small>Funktionen · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m11/ungleichungen/"><span>← Voriges Thema</span>Ungleichungen</a>
@@ -76,39 +80,5 @@
     <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
   </footer>
 </div>
-<script>
-/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Scheitelpunktform. Andere Terme als AB 1.5. */
-window.addEventListener('load', function () {
-  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: 'Welchen Scheitelpunkt hat $f(x) = (x + 4)^2 - 2$?',
-        optionen: ['$S(4|-2)$', '$S(-4|-2)$', '$S(-4|2)$'], ans: 1,
-        warum: ['$(x + 4)$ wird bei $x = -4$ null, nicht bei $4$.', , 'Das $-2$ hinter der Klammer gilt mit Vorzeichen.'] },
-      { frage: 'Welchen Scheitelpunkt hat $f(x) = (x - 1)^2 + 5$?',
-        optionen: ['$S(-1|5)$', '$S(1|-5)$', '$S(1|5)$'], ans: 2,
-        warum: ['$(x - 1)$ wird bei $x = +1$ null.', 'Das $+5$ hinter der Klammer gilt mit Vorzeichen.'] },
-      { frage: 'Welchen Scheitelpunkt hat $f(x) = (x + 3)^2$?',
-        optionen: ['$S(3|0)$', '$S(0|3)$', '$S(-3|0)$'], ans: 2,
-        warum: ['$(x + 3)$ wird bei $x = -3$ null.', 'Die Verschiebung steckt in der Klammer — also in $x$-Richtung.'] } ],
-    [ { frage: 'Die Normalparabel wird um 2 nach rechts und um 3 nach oben verschoben. Welcher Term gehört dazu?',
-        optionen: ['$f(x) = (x + 2)^2 + 3$', '$f(x) = (x - 2)^2 + 3$', '$f(x) = (x - 3)^2 + 2$'], ans: 1,
-        warum: ['$(x + 2)$ wird bei $-2$ null — das wäre nach links.', , 'Die Zahl in der Klammer verschiebt nach rechts/links, die dahinter nach oben/unten.'] },
-      { frage: 'Die Normalparabel wird um 1 nach links und um 4 nach unten verschoben. Welcher Term gehört dazu?',
-        optionen: ['$f(x) = (x + 1)^2 - 4$', '$f(x) = (x - 1)^2 - 4$', '$f(x) = (x + 4)^2 - 1$'], ans: 0,
-        warum: [, '$(x - 1)$ wird bei $+1$ null — das wäre nach rechts.', 'Die Zahl in der Klammer verschiebt nach rechts/links, die dahinter nach oben/unten.'] },
-      { frage: 'Die Normalparabel wird um 5 nach rechts verschoben. Welcher Term gehört dazu?',
-        optionen: ['$f(x) = x^2 + 5$', '$f(x) = (x + 5)^2$', '$f(x) = (x - 5)^2$'], ans: 2,
-        warum: ['$+5$ hinter $x^2$ verschiebt nach oben.', '$(x + 5)$ wird bei $-5$ null — das wäre nach links.'] } ],
-    [ { frage: '„Bei $h(x) = 2(x + 3)^2$ liegt der Scheitel bei $x = 3$.“',
-        optionen: ['Stimmt — in der Klammer steht 3.', 'Stimmt nicht — die Klammer wird bei $x = -3$ null.'], ans: 1,
-        warum: ['Lesen Sie $x_S$ mit Vorzeichen: $(x + 3) = (x - (-3))$.'] },
-      { frage: '„Ändert man in $f(x) = a(x - 2)^2 + 1$ den Faktor $a$, wandert der Scheitel mit.“',
-        optionen: ['Stimmt — die Parabel wird ja breiter.', 'Stimmt nicht — $a$ streckt nur, der Scheitel bleibt bei $S(2|1)$.'], ans: 1,
-        warum: ['Setzen Sie $x = 2$ ein: $a \\cdot 0 + 1 = 1$ — egal, welches $a$.'] },
-      { frage: '„$g(x) = -(x - 1)^2 + 4$ hat den Scheitel $S(1|4)$.“',
-        optionen: ['Stimmt — das Minus vorne öffnet die Parabel nur nach unten.', 'Stimmt nicht — das Minus vorne verschiebt nach links.'], ans: 0,
-        warum: [, 'Das Minus vor der Klammer ist $a = -1$: Es spiegelt, verschiebt aber nicht.'] } ]
-  ] });
-});
-</script>
 </body>
 </html>

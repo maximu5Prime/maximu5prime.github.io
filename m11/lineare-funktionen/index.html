@@ -33,23 +33,26 @@
     <p>Ein Taxi-Tarif als Gerade: $f(x) = mx + t$, $x$ in km, $f(x)$ in €.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
-  <section class="stage" aria-label="Ausprobieren">
-    <div class="mission" id="mission"><span class="icon"></span>
-      <span>Gerade durch beide roten Kreise: 4&nbsp;€ beim Einsteigen, 24&nbsp;€ nach 10&nbsp;km.</span></div>
-    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Gerade mit Steigungsdreieck"></canvas></div>
-    <p class="tipp-zeile">Über den Graphen fahren: Die Lupe zeigt den Fahrpreis.</p>
-    <div class="regler">
-      <div><label for="m">Preis je km: m <output id="mVal"></output></label>
-        <input type="range" id="m" min="0" max="3" step="0.1" value="1.2"></div>
-      <div><label for="t">Grundgebühr: t <output id="tVal"></output></label>
-        <input type="range" id="t" min="0" max="10" step="0.5" value="2"></div>
-    </div>
-    <div class="ergebnis">
-      <div class="gross" id="term"></div>
-      <div class="rechnung" id="zehn"></div>
-    </div>
-  </section>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Ausprobieren">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span>Gerade durch beide roten Kreise: 4&nbsp;€ beim Einsteigen, 24&nbsp;€ nach 10&nbsp;km.</span></div>
+      <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Gerade mit Steigungsdreieck"></canvas></div>
+      <p class="tipp-zeile">Über den Graphen fahren: Die Lupe zeigt den Fahrpreis.</p>
+      <div class="regler">
+        <div><label for="m">Preis je km: m <output id="mVal"></output></label>
+          <input type="range" id="m" min="0" max="3" step="0.1" value="1.2"></div>
+        <div><label for="t">Grundgebühr: t <output id="tVal"></output></label>
+          <input type="range" id="t" min="0" max="10" step="0.5" value="2"></div>
+      </div>
+      <div class="ergebnis">
+        <div class="gross" id="term"></div>
+        <div class="rechnung" id="zehn"></div>
+      </div>
+    </section>
+  </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
@@ -69,8 +72,7 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/m11/ueben-funktionen/#lineare-funktionen"><span>Üben<small>Funktionen · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m11/funktionsbegriff/"><span>← Voriges Thema</span>Funktion oder nicht?</a>
@@ -120,40 +122,6 @@ window.addEventListener('load', function () {
   P.pointer(function (x) { S.probe = (x >= 0 && x <= 10) ? Math.round(x * 2) / 2 : null; zeichne(); },
             function () { S.probe = null; zeichne(); });
   Aha.onRedraw(aktualisiere);
-});
-</script>
-<script>
-/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Steigung m. Andere Terme als AB 1.2. */
-window.addEventListener('load', function () {
-  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: 'Taxi: $f(x) = 1{,}8x + 3{,}5$ ($x$ in km, $f(x)$ in €). Was bedeutet $1{,}8$?',
-        optionen: ['1,80 € je gefahrenem km', 'Die Grundgebühr', 'Der Fahrpreis nach 1 km'], ans: 0,
-        warum: [, 'Die Grundgebühr ist der Wert bei $x = 0$, also $t = 3{,}5$.', 'Nach 1 km kostet die Fahrt $1{,}8 + 3{,}5 = 5{,}30$ €.'] },
-      { frage: 'Handytarif: $f(x) = 0{,}09x + 4$ ($x$ in Minuten, $f(x)$ in €). Was bedeutet $0{,}09$?',
-        optionen: ['Die monatliche Grundgebühr', '9 Cent je Minute', 'Nach 9 Minuten kostet es 4 €'], ans: 1,
-        warum: ['Die Grundgebühr ist $t = 4$ — sie fällt auch bei 0 Minuten an.'] },
-      { frage: 'Kerze: $h(x) = -0{,}5x + 12$ ($x$ in h, $h(x)$ in cm). Was bedeutet $-0{,}5$?',
-        optionen: ['Die Kerze ist am Anfang 0,5 cm hoch.', 'Die Kerze wird je Stunde 0,5 cm kürzer.', 'Nach 0,5 Stunden ist die Kerze abgebrannt.'], ans: 1,
-        warum: ['Die Anfangshöhe ist der Wert bei $x = 0$, also 12 cm.', , 'Bei $-0{,}5$ je Stunde dauert das 24 Stunden.'] } ],
-    [ { frage: 'Eine Gerade geht durch $A(1|3)$ und $B(3|7)$. Wie groß ist die Steigung?',
-        optionen: ['$m = 2$', '$m = 0{,}5$', '$m = 4$'], ans: 0,
-        warum: [, 'Vertauscht: $\\Delta y$ gehört nach oben, $m = \\frac{7-3}{3-1}$.', '$4$ ist nur $\\Delta y$ — noch durch $\\Delta x = 2$ teilen.'] },
-      { frage: 'Eine Gerade geht durch $A(2|1)$ und $B(6|3)$. Wie groß ist die Steigung?',
-        optionen: ['$m = 2$', '$m = 0{,}5$', '$m = -0{,}5$'], ans: 1,
-        warum: ['Vertauscht: $m = \\frac{\\Delta y}{\\Delta x} = \\frac{3-1}{6-2}$.', , 'Von $A$ nach $B$ geht es nach oben — die Steigung ist positiv.'] },
-      { frage: 'Eine Gerade geht durch $A(-1|5)$ und $B(2|-1)$. Wie groß ist die Steigung?',
-        optionen: ['$m = 2$', '$m = -2$', '$m = -0{,}5$'], ans: 1,
-        warum: ['Von $A$ nach $B$ geht es nach unten: $\\Delta y = -1 - 5 = -6$.', , 'Vertauscht: $m = \\frac{-6}{3}$, nicht $\\frac{3}{-6}$.'] } ],
-    [ { frage: '„Die Gerade $f(x) = -2x + 6$ steigt, weil $6$ positiv ist.“',
-        optionen: ['Stimmt — der Graph liegt anfangs oben.', 'Stimmt nicht — ob sie steigt, entscheidet allein $m = -2$.'], ans: 1,
-        warum: ['$t = 6$ sagt nur, wo die Gerade die $y$-Achse schneidet.'] },
-      { frage: '„Die Gerade durch $(0|0)$ und $(4|2)$ hat die Gleichung $y = 2x$.“',
-        optionen: ['Stimmt — von 0 auf 4 und von 0 auf 2.', 'Stimmt nicht — $m = \\frac{2}{4} = 0{,}5$.'], ans: 1,
-        warum: ['Prüfen Sie mit dem Punkt: $2 \\cdot 4 = 8 \\neq 2$. „Hoch durch rüber“.'] },
-      { frage: '„Verdoppelt das Taxi seine Grundgebühr, kostet jede Fahrt doppelt so viel.“',
-        optionen: ['Stimmt — alles wird teurer.', 'Stimmt nicht — nur $t$ verdoppelt sich, der km-Anteil $m \\cdot x$ bleibt.'], ans: 1,
-        warum: ['Rechnen Sie nach: $2x + 4$ statt $2x + 2$ — bei 10 km 24 € statt 22 €, nicht 44 €.'] } ]
-  ] });
 });
 </script>
 </body>

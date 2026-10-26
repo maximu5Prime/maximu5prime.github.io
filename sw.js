@@ -1,8 +1,9 @@
 /* Service Worker (PWA, 13.10.2026): alle neuen Seiten offline, Videos nur auf Knopfdruck (Aha-Bibliothek, Cache „videos“).
-   Netz zuerst (Änderungen kommen sofort an), ohne Netz oder nach 4 s Warten die gespeicherte Fassung.
+   Seiten: Netz zuerst (Änderungen kommen sofort an), ohne Netz oder nach 3 s Warten die gespeicherte Fassung;
+   CSS/JS/Schriften aus der Liste sofort aus dem Speicher.
    STAND = Pfad → Prüfsumme; beim Update lädt die Installation nur geänderte Dateien. Die Liste schreibt
    tools/pwa.py (nach jeder Änderung an Seiten/Assets laufen lassen, sonst bleibt die Offline-Fassung alt). */
-var SEITEN = 'seiten', VIDEOS = 'videos', WARTEN = 4000;
+var SEITEN = 'seiten', VIDEOS = 'videos', WARTEN = 3000;
 // STAND-ANFANG (tools/pwa.py)
 var STAND = {
   "/apple-touch-icon.png": "4b341c50e2",
@@ -16,19 +17,20 @@ var STAND = {
   "/kit11/": "2dee13b2f6",
   "/kit11/ki-fails/": "6fcac5b1eb",
   "/kit11/prompt-baukasten/": "5949b3118f",
-  "/m11/funktionsbegriff/": "a28124164b",
-  "/m11/": "c406b81f3a",
-  "/m11/lineare-funktionen/": "e0fc154d9e",
+  "/m11/funktionsbegriff/": "6cbd74c606",
+  "/m11/": "e9cf8a747e",
+  "/m11/lineare-funktionen/": "658a633257",
   "/m11/nullstellen/MT11_VID_Schneiden_Beruehren.jpg": "00a04c0e9a",
   "/m11/nullstellen/MT11_VID_Schneiden_Beruehren.vtt": "e5d8edc56e",
-  "/m11/nullstellen/": "e31cf4bac4",
+  "/m11/nullstellen/": "97b3520e72",
   "/m11/parabel/MT11_VID_Parabel_verschieben.jpg": "2c6b648936",
   "/m11/parabel/MT11_VID_Parabel_verschieben.vtt": "c2ad82ff91",
-  "/m11/parabel/": "46eb104f56",
-  "/m11/schnittpunkte/": "9d67e64302",
+  "/m11/parabel/": "7577891f93",
+  "/m11/schnittpunkte/": "ff8f0aae79",
+  "/m11/ueben-funktionen/": "64dc8597c2",
   "/m11/ungleichungen/MT11_VID_Zeichen_kippt.jpg": "0e18af6fe4",
   "/m11/ungleichungen/MT11_VID_Zeichen_kippt.vtt": "bcf27c5970",
-  "/m11/ungleichungen/": "51bb416960",
+  "/m11/ungleichungen/": "51b97dc4ba",
   "/m12/ableitungsgraph/MT12_VID_Ableitungsgraph.jpg": "20eabff89f",
   "/m12/ableitungsgraph/MT12_VID_Ableitungsgraph.vtt": "cc769b2291",
   "/m12/ableitungsgraph/MT12_VID_Graph_f_aus_Ableitung.jpg": "2f3b121fb8",
@@ -86,8 +88,8 @@ var STAND = {
   "/static/katex/katex.min.js": "6d481709e3",
   "/static/v2/DMSans-var.woff2": "c57593e0ad",
   "/static/v2/JetBrainsMono-var.woff2": "e7277e7145",
-  "/static/v2/aha-lib.js": "cbf5e6f006",
-  "/static/v2/base.css": "71001ac0a7",
+  "/static/v2/aha-lib.js": "d01177f887",
+  "/static/v2/base.css": "134657809c",
   "/static/v2/farben.css": "24d3b5c3ef",
   "/static/v2/icons/icon-192.png": "1eb1ed140b",
   "/static/v2/icons/icon-512.png": "ad691cd9c3",
@@ -95,24 +97,34 @@ var STAND = {
 };
 // STAND-ENDE
 
-self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(SEITEN).then(function (c) {
+/* Robust bei schlechtem Netz (26.10.2026, Kanban #19): Jede Datei einzeln — scheitert eine, bleibt der Rest gespeichert
+   und die Installation gilt trotzdem; Fehlendes holt auffuellen() beim nächsten Seitenaufruf nach. In __stand steht
+   nur, was wirklich im Speicher liegt. */
+function auffuellen() {
+  return caches.open(SEITEN).then(function (c) {
     return c.match('/__stand').then(function (r) { return r ? r.json() : {}; }).catch(function () { return {}; }).then(function (alt) {
-      var holen = Object.keys(STAND).map(function (u) {
-        return c.match(u).then(function (da) {
-          if (da && alt[u] === STAND[u]) return;
+      var da = {};
+      return Promise.all(Object.keys(STAND).map(function (u) {
+        return c.match(u).then(function (g) {
+          if (g && alt[u] === STAND[u]) { da[u] = STAND[u]; return; }
           return fetch(u, { cache: 'reload' }).then(function (r) {
             if (!r.ok) throw new Error(u + ': ' + r.status);
-            return sauber(r).then(function (s) { return c.put(u, s); });
-          });
+            return sauber(r).then(function (s) { return c.put(u, s); }).then(function () { da[u] = STAND[u]; });
+          }).catch(function () { if (g) da[u] = alt[u]; });   // alte Fassung behalten, später neu versuchen
+        });
+      })).then(function () {
+        Object.keys(alt).forEach(function (u) { if (!(u in STAND)) c.delete(u); });
+        return c.put('/__stand', new Response(JSON.stringify(da))).then(function () {
+          return Object.keys(STAND).every(function (u) { return da[u] === STAND[u]; });
         });
       });
-      return Promise.all(holen).then(function () {
-        Object.keys(alt).forEach(function (u) { if (!(u in STAND)) c.delete(u); });
-        return c.put('/__stand', new Response(JSON.stringify(STAND)));
-      });
     });
-  }).then(function () { return self.skipWaiting(); }));
+  });
+}
+var vollstaendig = false, zuletzt = 0;
+
+self.addEventListener('install', function (e) {
+  e.waitUntil(auffuellen().catch(function () {}).then(function (ok) { vollstaendig = ok === true; return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function (e) {
@@ -124,8 +136,14 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (e) {
   var req = e.request, url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== location.origin) return;
-  if (/\.mp4$/.test(url.pathname)) { if (!url.searchParams.has('neu')) e.respondWith(video(req)); }
-  else e.respondWith(netzZuerst(req, req.mode === 'navigate'));
+  if (/\.mp4$/.test(url.pathname)) { if (!url.searchParams.has('neu')) e.respondWith(video(req)); return; }
+  var seite = req.mode === 'navigate';
+  e.respondWith(seite || !(url.pathname in STAND) ? netzZuerst(req, seite) : speicherZuerst(req));
+  // Unvollständige Offline-Liste: beim Seitenaufruf nachholen (höchstens einmal pro Minute)
+  if (seite && !vollstaendig && Date.now() - zuletzt > 60000) {
+    zuletzt = Date.now();
+    e.waitUntil(auffuellen().then(function (ok) { vollstaendig = ok; }).catch(function () {}));
+  }
 });
 
 /* Safari lehnt Antworten mit Weiterleitung für Seitenaufrufe ab → ohne redirected-Markierung ablegen */
@@ -141,12 +159,14 @@ function schluessel(u) {
   return x.href;
 }
 
+/* Seiten: Netz zuerst (Änderungen kommen sofort an), nach WARTEN oder bei Fehler/Fehlerseite die gespeicherte Fassung */
 function netzZuerst(req, seite) {
   return caches.open(SEITEN).then(function (c) {
     var key = seite ? schluessel(req.url) : req;
     var gespeichert = c.match(key);
     var netz = fetch(req).then(function (r) {
       if (r.ok && r.type === 'basic') sauber(r.clone()).then(function (s) { c.put(key, s); });
+      if (!r.ok && r.status !== 404) return gespeichert.then(function (g) { return g || r; });  // 5xx, WLAN-Anmeldeseite …
       return r;
     });
     var notfall = new Promise(function (ok) { setTimeout(ok, WARTEN); }).then(function () {
@@ -155,6 +175,14 @@ function netzZuerst(req, seite) {
     return Promise.race([netz, notfall]).catch(function () {
       return gespeichert.then(function (g) { return g || (seite ? c.match('/offline.html') : Response.error()); });
     });
+  });
+}
+
+/* CSS, JS, Schriften, Bilder aus der Offline-Liste: sofort aus dem Speicher — neue Fassungen holt die Installation
+   (Prüfsumme in STAND). Kein Warten pro Datei bei schlechtem Netz. */
+function speicherZuerst(req) {
+  return caches.open(SEITEN).then(function (c) {
+    return c.match(new URL(req.url).pathname).then(function (g) { return g || netzZuerst(req, false); });
   });
 }
 

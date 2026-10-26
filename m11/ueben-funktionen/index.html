@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Üben: Funktionen · M11</title>
+  <meta name="description" content="M11 Lernbereich 1 · Lineare und quadratische Funktionen: zu jedem Thema eine Aufgabe in drei Stufen.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+</head>
+<body>
+<!-- Übungsseite je Lernbereich (Kanban #19, 26.10.2026): je Thema ein Aha.Stufen-Block, Nummer wie auf der Kursseite.
+     Sprungmarke #<thema> klappt den Block auf (Link „Üben“ auf der Themenseite). Nie Beispiele vom Arbeitsblatt. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Funktionen</div>
+    <h1><mark>Üben</mark>: Lineare und quadratische Funktionen</h1>
+    <p>Zu jedem Thema eine Aufgabe, die in drei Stufen schwerer wird.</p>
+  </header>
+
+  <details class="warum flach uebung" id="funktionsbegriff">
+    <summary class="etappe"><span>1</span>Funktion oder nicht?</summary>
+    <div id="ueben-funktionsbegriff"></div>
+    <a class="zum-thema" href="/m11/funktionsbegriff/">← Zum Thema</a>
+  </details>
+  <details class="warum flach uebung" id="lineare-funktionen">
+    <summary class="etappe"><span>2</span>Lineare Funktionen</summary>
+    <div id="ueben-lineare-funktionen"></div>
+    <a class="zum-thema" href="/m11/lineare-funktionen/">← Zum Thema</a>
+  </details>
+  <details class="warum flach uebung" id="schnittpunkte">
+    <summary class="etappe"><span>3</span>Schnittpunkte</summary>
+    <div id="ueben-schnittpunkte"></div>
+    <a class="zum-thema" href="/m11/schnittpunkte/">← Zum Thema</a>
+  </details>
+  <details class="warum flach uebung" id="ungleichungen">
+    <summary class="etappe"><span>4</span>Ungleichungen</summary>
+    <div id="ueben-ungleichungen"></div>
+    <a class="zum-thema" href="/m11/ungleichungen/">← Zum Thema</a>
+  </details>
+  <details class="warum flach uebung" id="parabel">
+    <summary class="etappe"><span>5</span>Parabel verschieben</summary>
+    <div id="ueben-parabel"></div>
+    <a class="zum-thema" href="/m11/parabel/">← Zum Thema</a>
+  </details>
+  <details class="warum flach uebung" id="nullstellen">
+    <summary class="etappe"><span>6</span>Schneiden oder Berühren?</summary>
+    <div id="ueben-nullstellen"></div>
+    <a class="zum-thema" href="/m11/nullstellen/">← Zum Thema</a>
+  </details>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/nullstellen/"><span>← Voriges Thema</span>Schneiden oder Berühren?</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('load', function () {
+  /* 3 Üben: ein Aufgabentyp („Funktion oder nicht — und warum?“), drei Stufen. Bewusst andere Beispiele als
+     Arbeitsblatt 1.1 (dort: Tag ↔ Temperatur, x², Kreis, y-Achse). */
+  var JA = 'Ja — jedes $x$ hat genau einen Wert.';
+  Aha.Stufen({ el: 'ueben-funktionsbegriff', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Jeder Person im Bus wird ihr Geburtsjahr zugeordnet. Funktion?',
+        optionen: [JA, 'Nein — mehrere Personen haben dasselbe Geburtsjahr.'], ans: 0,
+        warum: [, 'Gleiche Werte für verschiedene Personen sind erlaubt. Verboten ist nur: eine Person mit zwei Werten.'] },
+      { frage: 'Jeder Schülerin und jedem Schüler wird die Körpergröße in cm zugeordnet. Funktion?',
+        optionen: [JA, 'Nein — zwei Personen können gleich groß sein.'], ans: 0,
+        warum: [, 'Zwei Personen mit derselben Größe sind erlaubt — jede Person hat trotzdem nur eine Größe.'] },
+      { frage: 'Jeder Schülerin und jedem Schüler werden die eigenen Geschwister zugeordnet. Funktion?',
+        optionen: [JA, 'Nein — eine Person kann mehrere Geschwister haben.'], ans: 1,
+        warum: ['Wer zwei Geschwister hat, bekommt zwei Werte zugeordnet. Das ist nicht „genau ein“.'] } ],
+    [ { frage: 'Die Punkte $(1|4)$, $(2|5)$, $(2|6)$, $(3|7)$ bilden eine Zuordnung. Funktion?',
+        optionen: ['Ja — es sind lauter verschiedene Punkte.', 'Nein — zu $x = 2$ gehören zwei $y$-Werte.'], ans: 1,
+        warum: ['Schauen Sie auf die $x$-Werte: Die $2$ kommt zweimal vor, mit $y = 5$ und $y = 6$.'] },
+      { frage: 'Die Punkte $(-1|3)$, $(0|3)$, $(1|3)$, $(2|3)$ bilden eine Zuordnung. Funktion?',
+        optionen: ['Ja — jedes $x$ kommt nur einmal vor.', 'Nein — alle Punkte haben denselben $y$-Wert.'], ans: 0,
+        warum: [, 'Derselbe $y$-Wert für verschiedene $x$ ist erlaubt. Entscheidend sind doppelte $x$-Werte.'] },
+      { frage: 'Die Punkte $(0|0)$, $(1|1)$, $(1|-1)$, $(4|2)$ bilden eine Zuordnung. Funktion?',
+        optionen: ['Ja — jeder $y$-Wert kommt nur einmal vor.', 'Nein — zu $x = 1$ gehören zwei $y$-Werte.'], ans: 1,
+        warum: ['Prüfen Sie die $x$-Werte, nicht die $y$-Werte: Zu $x = 1$ gehören $1$ und $-1$.'] } ],
+    [ { frage: '„Ein Graph, den eine waagrechte Gerade zweimal schneidet, gehört zu keiner Funktion.“',
+        optionen: ['Stimmt — zwei Schnittpunkte heißen zwei Werte.', 'Stimmt nicht — auf einer waagrechten Geraden haben die Punkte verschiedene $x$.'], ans: 1,
+        warum: ['Waagrecht ist der falsche Test: Dort ist $y$ gleich, nicht $x$. Denken Sie an die S-Kurve.'] },
+      { frage: '„Die senkrechte Gerade $x = 2$ ist der Graph einer linearen Funktion.“',
+        optionen: ['Stimmt — jede Gerade ist der Graph einer linearen Funktion.', 'Stimmt nicht — zu $x = 2$ gehören unendlich viele $y$.'], ans: 1,
+        warum: ['Nur nicht-senkrechte Geraden sind Funktionsgraphen. Die senkrechte Prüflinie fällt hier mit dem Graphen zusammen.'] },
+      { frage: '„Fügt man zum Graphen einer Funktion einen einzelnen Punkt hinzu, ist es immer noch eine Funktion.“',
+        optionen: ['Stimmt — ein Punkt mehr ändert nichts.', 'Stimmt nicht — liegt der Punkt über einem $x$, das schon einen Wert hat, gehören zu diesem $x$ zwei $y$.'], ans: 1,
+        warum: ['Prüfen Sie mit der senkrechten Linie durch den neuen Punkt: Trifft sie den alten Graphen auch?'] } ]
+  ] });
+});
+</script>
+<script>
+window.addEventListener('load', function () {
+  /* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Steigung m. Andere Terme als AB 1.2. */
+  Aha.Stufen({ el: 'ueben-lineare-funktionen', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Taxi: $f(x) = 1{,}8x + 3{,}5$ ($x$ in km, $f(x)$ in €). Was bedeutet $1{,}8$?',
+        optionen: ['1,80 € je gefahrenem km', 'Die Grundgebühr', 'Der Fahrpreis nach 1 km'], ans: 0,
+        warum: [, 'Die Grundgebühr ist der Wert bei $x = 0$, also $t = 3{,}5$.', 'Nach 1 km kostet die Fahrt $1{,}8 + 3{,}5 = 5{,}30$ €.'] },
+      { frage: 'Handytarif: $f(x) = 0{,}09x + 4$ ($x$ in Minuten, $f(x)$ in €). Was bedeutet $0{,}09$?',
+        optionen: ['Die monatliche Grundgebühr', '9 Cent je Minute', 'Nach 9 Minuten kostet es 4 €'], ans: 1,
+        warum: ['Die Grundgebühr ist $t = 4$ — sie fällt auch bei 0 Minuten an.'] },
+      { frage: 'Kerze: $h(x) = -0{,}5x + 12$ ($x$ in h, $h(x)$ in cm). Was bedeutet $-0{,}5$?',
+        optionen: ['Die Kerze ist am Anfang 0,5 cm hoch.', 'Die Kerze wird je Stunde 0,5 cm kürzer.', 'Nach 0,5 Stunden ist die Kerze abgebrannt.'], ans: 1,
+        warum: ['Die Anfangshöhe ist der Wert bei $x = 0$, also 12 cm.', , 'Bei $-0{,}5$ je Stunde dauert das 24 Stunden.'] } ],
+    [ { frage: 'Eine Gerade geht durch $A(1|3)$ und $B(3|7)$. Wie groß ist die Steigung?',
+        optionen: ['$m = 2$', '$m = 0{,}5$', '$m = 4$'], ans: 0,
+        warum: [, 'Vertauscht: $\\Delta y$ gehört nach oben, $m = \\frac{7-3}{3-1}$.', '$4$ ist nur $\\Delta y$ — noch durch $\\Delta x = 2$ teilen.'] },
+      { frage: 'Eine Gerade geht durch $A(2|1)$ und $B(6|3)$. Wie groß ist die Steigung?',
+        optionen: ['$m = 2$', '$m = 0{,}5$', '$m = -0{,}5$'], ans: 1,
+        warum: ['Vertauscht: $m = \\frac{\\Delta y}{\\Delta x} = \\frac{3-1}{6-2}$.', , 'Von $A$ nach $B$ geht es nach oben — die Steigung ist positiv.'] },
+      { frage: 'Eine Gerade geht durch $A(-1|5)$ und $B(2|-1)$. Wie groß ist die Steigung?',
+        optionen: ['$m = 2$', '$m = -2$', '$m = -0{,}5$'], ans: 1,
+        warum: ['Von $A$ nach $B$ geht es nach unten: $\\Delta y = -1 - 5 = -6$.', , 'Vertauscht: $m = \\frac{-6}{3}$, nicht $\\frac{3}{-6}$.'] } ],
+    [ { frage: '„Die Gerade $f(x) = -2x + 6$ steigt, weil $6$ positiv ist.“',
+        optionen: ['Stimmt — der Graph liegt anfangs oben.', 'Stimmt nicht — ob sie steigt, entscheidet allein $m = -2$.'], ans: 1,
+        warum: ['$t = 6$ sagt nur, wo die Gerade die $y$-Achse schneidet.'] },
+      { frage: '„Die Gerade durch $(0|0)$ und $(4|2)$ hat die Gleichung $y = 2x$.“',
+        optionen: ['Stimmt — von 0 auf 4 und von 0 auf 2.', 'Stimmt nicht — $m = \\frac{2}{4} = 0{,}5$.'], ans: 1,
+        warum: ['Prüfen Sie mit dem Punkt: $2 \\cdot 4 = 8 \\neq 2$. „Hoch durch rüber“.'] },
+      { frage: '„Verdoppelt das Taxi seine Grundgebühr, kostet jede Fahrt doppelt so viel.“',
+        optionen: ['Stimmt — alles wird teurer.', 'Stimmt nicht — nur $t$ verdoppelt sich, der km-Anteil $m \\cdot x$ bleibt.'], ans: 1,
+        warum: ['Rechnen Sie nach: $2x + 4$ statt $2x + 2$ — bei 10 km 24 € statt 22 €, nicht 44 €.'] } ]
+  ] });
+});
+</script>
+<script>
+window.addEventListener('load', function () {
+  /* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Schnittpunkte zweier Geraden. Andere Terme als AB 1.3. */
+  Aha.Stufen({ el: 'ueben-schnittpunkte', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Wie viele Schnittpunkte haben $f(x) = 3x - 2$ und $g(x) = 3x + 1$?',
+        optionen: ['keinen', 'genau einen', 'unendlich viele'], ans: 0,
+        warum: [, 'Gleiche Steigung $3$, aber verschiedene $t$: Die Geraden sind parallel.', 'Dafür müssten auch die $t$-Werte gleich sein.'] },
+      { frage: 'Wie viele Schnittpunkte haben $h(x) = -2x + 5$ und $k(x) = 0{,}5x + 5$?',
+        optionen: ['keinen', 'genau einen', 'unendlich viele'], ans: 1,
+        warum: ['Verschiedene Steigungen — die Geraden müssen sich schneiden (hier auf der $y$-Achse).', , 'Nur der $y$-Achsenabschnitt ist gleich, die Steigungen nicht.'] },
+      { frage: 'Wie viele Schnittpunkte haben $f(x) = 2x + 4$ und $g(x) = 2(x + 2)$?',
+        optionen: ['keinen', 'genau einen', 'unendlich viele'], ans: 2,
+        warum: ['Ausmultiplizieren: $2(x + 2) = 2x + 4$.', 'Ausmultiplizieren: $2(x + 2) = 2x + 4$ — es ist dieselbe Gerade.'] } ],
+    [ { frage: 'Wo schneiden sich $f(x) = 2x + 1$ und $g(x) = -x + 7$?',
+        optionen: ['$S(2|5)$', '$S(5|2)$', '$S(2|3)$'], ans: 0,
+        warum: [, '$x$ und $y$ vertauscht: Aus $3x = 6$ folgt $x = 2$.', 'Den $y$-Wert mit $f$ oder $g$ berechnen: $f(2) = 5$.'] },
+      { frage: 'Wo schneiden sich $f(x) = x + 4$ und $g(x) = 3x$?',
+        optionen: ['$S(6|2)$', '$S(-2|2)$', '$S(2|6)$'], ans: 2,
+        warum: ['$x$ und $y$ vertauscht: Aus $2x = 4$ folgt $x = 2$.', 'Vorzeichen: $x + 4 = 3x \\Rightarrow 4 = 2x$, also $x = +2$.'] },
+      { frage: 'Wo schneiden sich $f(x) = -x + 1$ und $g(x) = x - 3$?',
+        optionen: ['$S(2|-1)$', '$S(-1|2)$', '$S(2|1)$'], ans: 0,
+        warum: [, '$x$ und $y$ vertauscht: Aus $4 = 2x$ folgt $x = 2$.', '$f(2) = -2 + 1 = -1$ — Vorzeichen beachten.'] } ],
+    [ { frage: '„Beim Gleichsetzen kommt $0 = 9$ heraus. Also schneiden sich die Geraden bei $x = 0$.“',
+        optionen: ['Stimmt — links steht ja $0$.', 'Stimmt nicht — $x$ ist verschwunden, es gibt keine Lösung.'], ans: 1,
+        warum: ['$0 = 9$ ist eine falsche Aussage. Die Geraden sind parallel.'] },
+      { frage: '„Beim Gleichsetzen kommt $4 = 4$ heraus. Also sind die Geraden identisch.“',
+        optionen: ['Stimmt — jede Zahl $x$ löst die Gleichung.', 'Stimmt nicht — sie schneiden sich bei $x = 4$.'], ans: 0,
+        warum: [, 'In $4 = 4$ kommt kein $x$ mehr vor — die Aussage ist für jedes $x$ wahr.'] },
+      { frage: '„$f(x) = x$ und $g(x) = -x$ sind parallel, weil beide durch den Ursprung gehen.“',
+        optionen: ['Stimmt — beide sind Ursprungsgeraden.', 'Stimmt nicht — die Steigungen $1$ und $-1$ sind verschieden; sie schneiden sich in $(0|0)$.'], ans: 1,
+        warum: ['Parallel heißt: gleiche Steigung. Ein gemeinsamer Punkt heißt gerade: Schnittpunkt.'] } ]
+  ] });
+});
+</script>
+<script>
+window.addEventListener('load', function () {
+  /* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Ungleichung lösen. Andere Terme als AB 1.3. */
+  Aha.Stufen({ el: 'ueben-ungleichungen', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Lösen Sie $3x + 4 > x + 10$.',
+        optionen: ['$x > 3$', '$x > 7$', '$x < 3$'], ans: 0,
+        warum: [, 'Erst $-x$: $2x + 4 > 10$, dann $-4$: $2x > 6$.', 'Sie teilen durch $+2$ — das Zeichen bleibt.'] },
+      { frage: 'Lösen Sie $5x - 2 < 2x + 7$.',
+        optionen: ['$x > 3$', '$x < 3$', '$x < 9$'], ans: 1,
+        warum: ['Sie teilen durch $+3$ — das Zeichen bleibt.', , '$3x < 9$ — noch durch $3$ teilen.'] },
+      { frage: 'Lösen Sie $4x + 1 \\ge 2x + 9$.',
+        optionen: ['$x \\ge 4$', '$x \\ge 5$', '$x \\le 4$'], ans: 0,
+        warum: [, '$2x \\ge 8$, also $x \\ge 4$.', 'Sie teilen durch $+2$ — das Zeichen bleibt.'] } ],
+    [ { frage: 'Lösen Sie $-2x > 8$.',
+        optionen: ['$x > -4$', '$x < -4$', '$x > 4$'], ans: 1,
+        warum: ['Durch eine negative Zahl geteilt — das Zeichen kippt.', , 'Vorzeichen: $8 : (-2) = -4$. Und das Zeichen kippt.'] },
+      { frage: 'Lösen Sie $7 - 3x \\le 1$.',
+        optionen: ['$x \\le 2$', '$x \\ge 2$', '$x \\ge -2$'], ans: 1,
+        warum: ['$-3x \\le -6$: Beim Teilen durch $-3$ kippt das Zeichen.', , '$-6 : (-3) = +2$.'] },
+      { frage: 'Lösen Sie $-x + 5 < 2x - 4$.',
+        optionen: ['$x > 3$', '$x < 3$', '$x > -3$'], ans: 0,
+        warum: [, '$-3x < -9$: Beim Teilen durch $-3$ kippt das Zeichen.', '$-9 : (-3) = +3$.'] } ],
+    [ { frage: 'Bar: $e(x) = 5x$, $k(x) = x + 1200$. „Bei 250 Getränken macht die Bar Gewinn.“',
+        optionen: ['Stimmt — 250 Getränke sind viel.', 'Stimmt nicht — Gewinn erst ab mehr als 300 Getränken.'], ans: 1,
+        warum: ['$5x > x + 1200 \\Rightarrow x > 300$. Probe: $e(250) = 1250 < k(250) = 1450$.'] },
+      { frage: 'Bar: $e(x) = 4x$, $k(x) = x + 900$. „Ab 300 Getränken macht die Bar Gewinn.“',
+        optionen: ['Stimmt — bei 300 ist die Schwelle.', 'Stimmt nicht — bei 300 ist der Gewinn genau 0, Gewinn erst ab 301.'], ans: 1,
+        warum: ['$e(300) = 1200 = k(300)$: Bei der Schwelle selbst ist der Gewinn $0$.'] },
+      { frage: '„Die Lösung von $e(x) > k(x)$ ist die Gewinnschwelle, also eine einzige Zahl.“',
+        optionen: ['Stimmt — die Gewinnschwelle ist die Lösung.', 'Stimmt nicht — die Lösung ist ein ganzer Bereich, z. B. $]\\,500;\\ \\infty\\,[$.'], ans: 1,
+        warum: ['Die Schwelle löst die <b>Gleichung</b> $e(x) = k(x)$. Die Ungleichung gilt für alle $x$ danach.'] } ]
+  ] });
+});
+</script>
+<script>
+window.addEventListener('load', function () {
+  /* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Scheitelpunktform. Andere Terme als AB 1.5. */
+  Aha.Stufen({ el: 'ueben-parabel', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Welchen Scheitelpunkt hat $f(x) = (x + 4)^2 - 2$?',
+        optionen: ['$S(4|-2)$', '$S(-4|-2)$', '$S(-4|2)$'], ans: 1,
+        warum: ['$(x + 4)$ wird bei $x = -4$ null, nicht bei $4$.', , 'Das $-2$ hinter der Klammer gilt mit Vorzeichen.'] },
+      { frage: 'Welchen Scheitelpunkt hat $f(x) = (x - 1)^2 + 5$?',
+        optionen: ['$S(-1|5)$', '$S(1|-5)$', '$S(1|5)$'], ans: 2,
+        warum: ['$(x - 1)$ wird bei $x = +1$ null.', 'Das $+5$ hinter der Klammer gilt mit Vorzeichen.'] },
+      { frage: 'Welchen Scheitelpunkt hat $f(x) = (x + 3)^2$?',
+        optionen: ['$S(3|0)$', '$S(0|3)$', '$S(-3|0)$'], ans: 2,
+        warum: ['$(x + 3)$ wird bei $x = -3$ null.', 'Die Verschiebung steckt in der Klammer — also in $x$-Richtung.'] } ],
+    [ { frage: 'Die Normalparabel wird um 2 nach rechts und um 3 nach oben verschoben. Welcher Term gehört dazu?',
+        optionen: ['$f(x) = (x + 2)^2 + 3$', '$f(x) = (x - 2)^2 + 3$', '$f(x) = (x - 3)^2 + 2$'], ans: 1,
+        warum: ['$(x + 2)$ wird bei $-2$ null — das wäre nach links.', , 'Die Zahl in der Klammer verschiebt nach rechts/links, die dahinter nach oben/unten.'] },
+      { frage: 'Die Normalparabel wird um 1 nach links und um 4 nach unten verschoben. Welcher Term gehört dazu?',
+        optionen: ['$f(x) = (x + 1)^2 - 4$', '$f(x) = (x - 1)^2 - 4$', '$f(x) = (x + 4)^2 - 1$'], ans: 0,
+        warum: [, '$(x - 1)$ wird bei $+1$ null — das wäre nach rechts.', 'Die Zahl in der Klammer verschiebt nach rechts/links, die dahinter nach oben/unten.'] },
+      { frage: 'Die Normalparabel wird um 5 nach rechts verschoben. Welcher Term gehört dazu?',
+        optionen: ['$f(x) = x^2 + 5$', '$f(x) = (x + 5)^2$', '$f(x) = (x - 5)^2$'], ans: 2,
+        warum: ['$+5$ hinter $x^2$ verschiebt nach oben.', '$(x + 5)$ wird bei $-5$ null — das wäre nach links.'] } ],
+    [ { frage: '„Bei $h(x) = 2(x + 3)^2$ liegt der Scheitel bei $x = 3$.“',
+        optionen: ['Stimmt — in der Klammer steht 3.', 'Stimmt nicht — die Klammer wird bei $x = -3$ null.'], ans: 1,
+        warum: ['Lesen Sie $x_S$ mit Vorzeichen: $(x + 3) = (x - (-3))$.'] },
+      { frage: '„Ändert man in $f(x) = a(x - 2)^2 + 1$ den Faktor $a$, wandert der Scheitel mit.“',
+        optionen: ['Stimmt — die Parabel wird ja breiter.', 'Stimmt nicht — $a$ streckt nur, der Scheitel bleibt bei $S(2|1)$.'], ans: 1,
+        warum: ['Setzen Sie $x = 2$ ein: $a \\cdot 0 + 1 = 1$ — egal, welches $a$.'] },
+      { frage: '„$g(x) = -(x - 1)^2 + 4$ hat den Scheitel $S(1|4)$.“',
+        optionen: ['Stimmt — das Minus vorne öffnet die Parabel nur nach unten.', 'Stimmt nicht — das Minus vorne verschiebt nach links.'], ans: 0,
+        warum: [, 'Das Minus vor der Klammer ist $a = -1$: Es spiegelt, verschiebt aber nicht.'] } ]
+  ] });
+});
+</script>
+<script>
+window.addEventListener('load', function () {
+  /* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Nullstellen und Vorzeichen. Andere Terme als AB 1.6 und INTRO. */
+  Aha.Stufen({ el: 'ueben-nullstellen', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Wie viele Nullstellen hat $f(x) = (x + 2)^2 - 1$?',
+        optionen: ['keine', 'eine', 'zwei'], ans: 2,
+        warum: ['Der Scheitel $S(-2|-1)$ liegt <b>unter</b> der Achse, die Parabel ist nach oben offen.', 'Eine gäbe es nur, wenn der Scheitel auf der Achse läge.'] },
+      { frage: 'Wie viele Nullstellen hat $f(x) = -(x - 3)^2 - 2$?',
+        optionen: ['keine', 'eine', 'zwei'], ans: 0,
+        warum: [, 'Der Scheitel $S(3|-2)$ liegt nicht auf der Achse.', 'Nach unten offen und Scheitel schon unter der Achse: Sie kommt nie hoch.'] },
+      { frage: 'Wie viele Nullstellen hat $f(x) = 0{,}5\\,(x + 1)^2$?',
+        optionen: ['keine', 'eine (doppelt)', 'zwei'], ans: 1,
+        warum: ['Setzen Sie $x = -1$ ein: $f(-1) = 0$.', , 'Der Scheitel $S(-1|0)$ liegt <b>auf</b> der Achse: Die Parabel berührt nur.'] } ],
+    [ { frage: 'Für welche $x$ ist $(x - 1)(x - 5) < 0$?',
+        optionen: ['$1 < x < 5$', '$x < 1$ oder $x > 5$', '$x < 5$'], ans: 0,
+        warum: [, 'Das ist der Bereich <b>über</b> der Achse. Nach oben offen: unter der Achse liegt sie zwischen den Nullstellen.', 'Links von $1$ liegt die Parabel wieder über der Achse, z. B. $x = 0$: $(-1)(-5) = 5 > 0$.'] },
+      { frage: 'Für welche $x$ ist $-(x + 2)(x - 4) > 0$?',
+        optionen: ['$x < -2$ oder $x > 4$', '$-2 < x < 4$', '$x > 4$'], ans: 1,
+        warum: ['Nach unten offen: Über der Achse liegt sie zwischen den Nullstellen.', , 'Probe $x = 5$: $-(7)(1) = -7 < 0$.'] },
+      { frage: 'Für welche $x$ ist $(x - 3)^2 > 0$?',
+        optionen: ['für alle $x$', 'für alle $x$ außer $3$', 'für kein $x$'], ans: 1,
+        warum: ['Bei $x = 3$ ist der Wert genau $0$, nicht größer.', , 'Nur bei $x = 3$ ist der Wert $0$, sonst immer positiv.'] } ],
+    [ { frage: '„$x^2 > 25$ hat die Lösung $x > 5$.“',
+        optionen: ['Stimmt — Wurzel ziehen.', 'Stimmt nicht — auch $x < -5$ gehört dazu.'], ans: 1,
+        warum: ['Probe $x = -6$: $36 > 25$. Die Skizze von $x^2 - 25$ zeigt zwei Bereiche.'] },
+      { frage: '„Ist $D = 0$, berührt die Parabel die $x$-Achse.“',
+        optionen: ['Stimmt — eine doppelte Nullstelle, der Scheitel liegt auf der Achse.', 'Stimmt nicht — dann gibt es keine Nullstelle.'], ans: 0,
+        warum: [, 'Keine Nullstelle gibt es bei $D < 0$.'] },
+      { frage: '„Eine nach oben offene Parabel mit $c > 0$ hat keine Nullstelle.“',
+        optionen: ['Stimmt — sie startet ja oberhalb der Achse.', 'Stimmt nicht — Gegenbeispiel $x^2 - 4x + 1$.'], ans: 1,
+        warum: ['$c$ ist nur der $y$-Achsenabschnitt. $x^2 - 4x + 1$ hat $S(2|-3)$ unter der Achse, also zwei Nullstellen.'] } ]
+  ] });
+});
+</script>
+</body>
+</html>
