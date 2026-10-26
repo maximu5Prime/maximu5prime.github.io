@@ -168,10 +168,10 @@ window.addEventListener('load', function () {
   function de(n) { return Aha.de(Math.round(n * 10) / 10, 1); }
 
   var fmtT = function (n) { return n === 0 ? '' : String(Math.round(n)); };
-  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 30, yMin: 0, yMax: 70 },
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 32, yMin: 0, yMax: 70 },
     step: { x: 1, y: 10 }, label: { x: 5, y: 20 }, xLabel: 't in s', yLabel: 'x in m', minH: 1, maxH: 9999,
     fmtX: fmtT, fmtY: function (n) { return String(Math.round(n)); } });
-  var V = new Aha.Plot({ canvas: 'tv', wrap: 'tvWrap', view: { xMin: 0, xMax: 30, yMin: 0, yMax: 6 },
+  var V = new Aha.Plot({ canvas: 'tv', wrap: 'tvWrap', view: { xMin: 0, xMax: 32, yMin: 0, yMax: 6 },
     step: { x: 1, y: 2 }, label: { x: 5, y: 2 }, xLabel: 't in s', yLabel: 'v in m/s', minH: 1, maxH: 9999,
     fmtX: fmtT, fmtY: function (n) { return String(Math.round(n)); } });
 
@@ -202,12 +202,12 @@ window.addEventListener('load', function () {
     });
     c.restore();
   }
-  /* Laufbahn −10 … 70 m wie die x-Achse; Hütchen bei 0 und 60 m; Jana auf der vorderen, Mo auf der hinteren Spur */
+  /* Laufbahn −10 … 70 m (eigene Skala, Hütchen bei 0 und 60 m); Hütchen bei 0 und 60 m; Jana auf der vorderen, Mo auf der hinteren Spur */
   function bahn(schwung) {
-    var cv = Aha.$('bahn'), wrap = Aha.$('bahnWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 84;
+    var cv = Aha.$('bahn'), wrap = Aha.$('bahnWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 106;
     cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
     var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
-    var C = P.C, l = P.pad.l, r = P.pad.r, X = function (x) { return l + (x + 10) / 80 * (W - l - r); }, y = 62, f = F();
+    var C = P.C, l = P.pad.l, r = P.pad.r, X = function (x) { return l + (x + 10) / 80 * (W - l - r); }, y = 82, f = F();   // y = Spur; Platz nach oben für Mos Kopf (Figur ≈ 52 px)
     c.fillStyle = gitter(); c.fillRect(X(-10), y - 16, X(70) - X(-10), 22);
     c.strokeStyle = C.axis; c.lineWidth = 1.5; c.beginPath(); c.moveTo(X(-10), y + 6); c.lineTo(X(70), y + 6); c.stroke();
     c.beginPath(); c.moveTo(X(70) + 4, y + 6); c.lineTo(X(70) - 4, y + 1); c.lineTo(X(70) - 4, y + 11); c.closePath(); c.fillStyle = C.axis; c.fill();
@@ -230,12 +230,12 @@ window.addEventListener('load', function () {
     var f = F(), zeigen = laeuft || gelaufen, t = tAnim, m = mo(), J = L().J, Z = L().Z, k;
     var neg = m.v < 0 || J[1] < 0;                                                     // negativer Bereich nur, wenn nötig
     V.o.view.yMin = neg ? Math.min(-2, Math.floor(Math.min(m.v, J[1]))) : 0;
-    hoehe(P, 170); hoehe(V, neg ? 120 - 20 * V.o.view.yMin : 120);
+    hoehe(P, 180); hoehe(V, 78 + (neg ? 18 : 14) * (V.o.view.yMax - V.o.view.yMin));      // px je m/s (negativ mehr, damit 0 und −2 getrennt), Rand 78 px
     /* t-x */
     P.setup(); var C = P.C; C.grid = gitter(); P.grid();
     P.ctx.beginPath(); P.ctx.arc(P.X(Z[0]), P.Y(Z[1]), 11, 0, 2 * Math.PI); P.ctx.strokeStyle = C.text; P.ctx.lineWidth = 2.5;
     P.ctx.setLineDash([5, 4]); P.ctx.stroke(); P.ctx.setLineDash([]);
-    P.text('Treffpunkt', Z[0], Z[1], C.text, Z[0] > 22 ? 'right' : 'center', Z[0] > 22 ? -16 : 0, Z[1] > 55 ? 30 : -18, 700);
+    P.text('Treffpunkt', Z[0], Z[1], C.text, Z[0] > 22 ? 'right' : 'center', Z[0] > 22 ? -20 : 0, Z[1] > 55 ? 5 : -18, 700);   // oben rechts: links neben den Ring, über den Graphen
     if (zeigen) {
       P.segment(0, xJ(0), t, xJ(t), f[0], 4.5);
       var mStop = Math.min(t, m.ts);
@@ -245,7 +245,20 @@ window.addEventListener('load', function () {
       if (tr && tr[0] <= t + 1e-9) P.dot(tr[0], tr[1], C.text, 6);
     }
     /* t-v: Flächen = Ortsänderung (Jana ab 0, Mo ab seinem Start) */
-    V.setup(); V.C.grid = gitter(); V.grid();
+    /* v < 0: Beschriftung selbst setzen – Zeitzahlen und „t in s“ an den unteren Rand (sonst liegen sie auf Mos Fläche),
+       die 0 auf Höhe der t-Achse (die Bibliothek setzt sie unter die Achse) */
+    V.setup(); V.C.grid = gitter();
+    if (!neg) V.grid();
+    else {
+      var cv = V.ctx, schrift = V.C.text, lx = V.W < 520 ? 10 : 5;
+      V.C.text = 'rgba(0,0,0,0)'; V.grid(); V.C.text = schrift;
+      cv.font = '500 12px ' + V.C.mono; cv.fillStyle = schrift; cv.textAlign = 'center';
+      for (k = lx; k <= 30; k += lx) cv.fillText(String(k), V.X(k), V.Y(V.o.view.yMin) + 17);
+      cv.textAlign = 'right';
+      for (k = V.o.view.yMin; k <= V.o.view.yMax; k += 2) cv.fillText(String(k).replace('-', '−'), V.X(0) - 7, V.Y(k) + 4);
+      cv.fillText('t in s', V.X(V.o.view.xMax), V.H - 5);
+      cv.textAlign = 'left'; cv.fillText('v in m/s', V.X(0) + 8, V.pad.t - 14);
+    }
     if (zeigen) {
       if (t > 0) V.between(function () { return J[1]; }, function () { return 0; }, 0, t, f[0] + '40');
       if (t > m.ts) {
