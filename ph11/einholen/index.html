@@ -25,16 +25,13 @@
     .level button.aktiv { background: var(--c-accent); color: var(--c-on-accent); }
     .level button.geschafft::after { content: ' ✓'; }
     .stage .mission { margin-bottom: 0; padding-top: .45em; padding-bottom: .45em; }
-    .stage .plot { margin: 6px auto 0; }
+    .stage .plot { margin: 4px auto 0; touch-action: pan-y; }   /* kein Ziehen im Diagramm → Seite muss am Handy scrollen (Lehrkraft 26.10.2026) */
     .stage .plot, .regler, .lauf-zeile, .flaechen { max-width: 660px; margin-left: auto; margin-right: auto; }
     /* Wer ist wer: Farbe + Linienart (gestrichelt = Mo), damit es auch ohne Farbe lesbar bleibt */
-    .legende { display: flex; flex-wrap: wrap; gap: 4px 18px; max-width: 660px; margin: 8px auto 0; font-weight: 700; font-size: .9rem; }
-    .legende span::before { content: ''; display: inline-block; width: 26px; height: 0; margin-right: 6px; vertical-align: middle;
-      border-top: 4px solid var(--viz-1); }
-    .legende .mo::before { border-top: 4px dashed var(--viz-2); }
-    .diag-titel { max-width: 660px; margin: 10px auto 0; font-size: .85rem; font-weight: 700; color: var(--c-muted); }
-    .regler { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; margin-top: 8px; }
-    .regler .r { padding: 4px 6px 0; border-top: 4px solid var(--viz-2); }
+    .regler { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 14px; margin-top: 6px; }
+    .regler .r { padding: 4px 6px 0; border-top: 4px dashed var(--viz-2); }
+    .regler .r.jana { border-top: 4px solid var(--viz-1); }
+    .regler .r.jana .werte { font-family: var(--font-mono); font-size: .9rem; padding-top: 6px; }
     .regler label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 6px; font-size: .82rem; font-weight: 700; color: var(--c-muted); }
     .regler output { font-family: var(--font-mono); font-size: .9rem; color: var(--c-text); }
     .regler .r.fest { border-top-color: var(--c-line); }
@@ -46,7 +43,7 @@
     .lauf-zeile .btn[disabled] { opacity: .6; cursor: default; }
     .rueckmeldung { flex: 1 1 260px; font-weight: 600; }
     .rueckmeldung.ok { color: var(--c-gain); }
-    @media (max-width: 520px) { .regler { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .regler { grid-template-columns: 1fr 1fr; } .regler .r.jana { grid-column: 1 / -1; } }
   </style>
 </head>
 <body>
@@ -74,17 +71,15 @@
       <div class="level" id="level" aria-label="Level wählen"></div>
       <div class="mission" id="mission"><span class="icon"></span>
         <span id="auftrag"></span></div>
-      <div class="legende"><span>Jana</span><span class="mo">Mo</span></div>
       <div class="plot" id="bahnWrap"><canvas id="bahn" aria-label="Laufbahn mit Jana und Mo"></canvas></div>
-      <div class="diag-titel">t-x-Diagramm: Wo ist wer?</div>
       <div class="plot" id="plotWrap"><canvas id="plot" aria-label="t-x-Diagramm mit Treffpunkt"></canvas></div>
-      <div class="diag-titel">t-v-Diagramm: Wie schnell? Die Fläche ist die Ortsänderung.</div>
       <div class="plot" id="tvWrap"><canvas id="tv" aria-label="t-v-Diagramm mit Flächen"></canvas></div>
       <div class="flaechen" id="flaechen" aria-live="polite"></div>
       <div class="regler">
-        <div class="r" id="rStart"><label for="ts">Mo startet bei <output id="ots"></output></label>
+        <div class="r jana"><label>Jana (fest)</label><div class="werte" id="janaWerte"></div></div>
+        <div class="r" id="rStart"><label for="ts"><span id="moOrt">Mo</span> <output id="ots"></output></label>
           <input type="range" id="ts" min="0" max="20" step="1" value="0"></div>
-        <div class="r" id="rV"><label for="vm">Mos Geschwindigkeit <output id="ovm"></output></label>
+        <div class="r" id="rV"><label for="vm">Mo: v = <output id="ovm"></output></label>
           <input type="range" id="vm" min="-5" max="5" step="0.5" value="0"></div>
       </div>
       <div class="lauf-zeile">
@@ -105,9 +100,9 @@
   <details class="warum flach">
     <summary class="etappe"><span>2</span>Warum?</summary>
     <div class="warum-inhalt">
-      <div class="schritt"><span>•</span><div>Ein Nullpunkt, eine Uhr für beide. Dann gilt für jeden $x(t) = x_0 + v\cdot t$.
+      <div class="schritt"><span>•</span><div>Ein Nullpunkt und eine Zeitmessung für beide. Dann gilt für jeden $x(t) = x_0 + v\cdot t$.
         Treffen heißt: zur selben Zeit am selben Ort, also $x_1(t) = x_2(t)$.</div></div>
-      <div class="schritt"><span>•</span><div>Später los: Startet die Uhr, wenn der Zweite losläuft, hat der Erste schon einen Vorsprung $x_0 = v \cdot \Delta t$.</div></div>
+      <div class="schritt"><span>•</span><div>Später los: Startet die Zeitmessung, wenn der Zweite losläuft, hat der Erste schon einen Vorsprung $x_0 = v \cdot \Delta t$.</div></div>
       <div class="schritt"><span>•</span><div>Entgegen: Wer gegen die Pfeilrichtung läuft, hat $v < 0$. Seine Fläche im t-v-Diagramm liegt unter der $t$-Achse.</div></div>
       <div class="schritt"><span>•</span><div>Fläche im t-v-Diagramm $= v \cdot \Delta t = \Delta x$. Beispiel: $3\,\frac{\text{m}}{\text{s}} \cdot 10\,\text{s} = 30\,\text{m}$.</div></div>
       <div class="fehler"><b>Typischer Fehler:</b> Den Treffpunkt im t-v-Diagramm suchen. Dort heißt „gleiche Höhe“ nur: gleich schnell —
@@ -174,17 +169,17 @@ window.addEventListener('load', function () {
 
   var fmtT = function (n) { return n === 0 ? '' : String(Math.round(n)); };
   var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 30, yMin: 0, yMax: 70 },
-    step: { x: 1, y: 10 }, label: { x: 5, y: 10 }, xLabel: 't in s', yLabel: 'x in m', minH: 1, maxH: 9999,
+    step: { x: 1, y: 10 }, label: { x: 5, y: 20 }, xLabel: 't in s', yLabel: 'x in m', minH: 1, maxH: 9999,
     fmtX: fmtT, fmtY: function (n) { return String(Math.round(n)); } });
-  var V = new Aha.Plot({ canvas: 'tv', wrap: 'tvWrap', view: { xMin: 0, xMax: 30, yMin: -6, yMax: 6 },
+  var V = new Aha.Plot({ canvas: 'tv', wrap: 'tvWrap', view: { xMin: 0, xMax: 30, yMin: 0, yMax: 6 },
     step: { x: 1, y: 2 }, label: { x: 5, y: 2 }, xLabel: 't in s', yLabel: 'v in m/s', minH: 1, maxH: 9999,
     fmtX: fmtT, fmtY: function (n) { return String(Math.round(n)); } });
 
-  /* Kästchen quadratisch (wie t-x-Diagramm): Höhe aus der Breite; am Handy 2-s-Kästchen */
-  function quadrat(D, spalten, zeilen) {
-    var W = Aha.$(D.o.wrap).clientWidth, b = W - D.pad.l - D.pad.r, grob = W < 560;
-    D.o.step.x = grob ? 2 : 1; if (grob) spalten /= 2;
-    D.o.ratio = (b / spalten * zeilen + D.pad.t + D.pad.b) / W;
+  /* Feste Höhe (Lehrkraft 26.10.2026: Applet kleiner, alles ohne Scrollen sichtbar); am Handy 2-s-Kästchen */
+  function hoehe(D, px) {
+    var W = Aha.$(D.o.wrap).clientWidth;
+    D.o.step.x = W < 560 ? 2 : 1;
+    D.o.ratio = px / W;
   }
   function gitter() { return css('--c-muted') + '4d'; }
 
@@ -209,10 +204,10 @@ window.addEventListener('load', function () {
   }
   /* Laufbahn −10 … 70 m wie die x-Achse; Hütchen bei 0 und 60 m; Jana auf der vorderen, Mo auf der hinteren Spur */
   function bahn(schwung) {
-    var cv = Aha.$('bahn'), wrap = Aha.$('bahnWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 104;
+    var cv = Aha.$('bahn'), wrap = Aha.$('bahnWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 84;
     cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
     var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
-    var C = P.C, l = P.pad.l, r = P.pad.r, X = function (x) { return l + (x + 10) / 80 * (W - l - r); }, y = 80, f = F();
+    var C = P.C, l = P.pad.l, r = P.pad.r, X = function (x) { return l + (x + 10) / 80 * (W - l - r); }, y = 62, f = F();
     c.fillStyle = gitter(); c.fillRect(X(-10), y - 16, X(70) - X(-10), 22);
     c.strokeStyle = C.axis; c.lineWidth = 1.5; c.beginPath(); c.moveTo(X(-10), y + 6); c.lineTo(X(70), y + 6); c.stroke();
     c.beginPath(); c.moveTo(X(70) + 4, y + 6); c.lineTo(X(70) - 4, y + 1); c.lineTo(X(70) - 4, y + 11); c.closePath(); c.fillStyle = C.axis; c.fill();
@@ -233,17 +228,19 @@ window.addEventListener('load', function () {
 
   function zeichne(schwung) {
     var f = F(), zeigen = laeuft || gelaufen, t = tAnim, m = mo(), J = L().J, Z = L().Z, k;
-    quadrat(P, 30, 7); quadrat(V, 30, 6);
+    var neg = m.v < 0 || J[1] < 0;                                                     // negativer Bereich nur, wenn nötig
+    V.o.view.yMin = neg ? Math.min(-2, Math.floor(Math.min(m.v, J[1]))) : 0;
+    hoehe(P, 170); hoehe(V, neg ? 120 - 20 * V.o.view.yMin : 120);
     /* t-x */
     P.setup(); var C = P.C; C.grid = gitter(); P.grid();
     P.ctx.beginPath(); P.ctx.arc(P.X(Z[0]), P.Y(Z[1]), 11, 0, 2 * Math.PI); P.ctx.strokeStyle = C.text; P.ctx.lineWidth = 2.5;
     P.ctx.setLineDash([5, 4]); P.ctx.stroke(); P.ctx.setLineDash([]);
-    P.text('Treffpunkt', Z[0], Z[1], C.text, Z[0] > 22 ? 'right' : 'left', Z[0] > 22 ? -16 : 16, Z[1] > 60 ? 22 : -10, 700);
+    P.text('Treffpunkt', Z[0], Z[1], C.text, Z[0] > 22 ? 'right' : 'center', Z[0] > 22 ? -16 : 0, Z[1] > 55 ? 30 : -18, 700);
     if (zeigen) {
       P.segment(0, xJ(0), t, xJ(t), f[0], 4.5);
       var mStop = Math.min(t, m.ts);
       P.segment(0, m.x0, mStop, m.x0, f[1], 2, [3, 5]);                                  // Mo wartet
-      if (t > m.ts) { P.ctx.setLineDash([10, 6]); P.segment(m.ts, m.x0, t, xM(t), f[1], 4.5); P.ctx.setLineDash([]); }
+      if (t > m.ts) P.segment(m.ts, m.x0, t, xM(t), f[1], 4.5, [10, 6]);
       var tr = treffen();
       if (tr && tr[0] <= t + 1e-9) P.dot(tr[0], tr[1], C.text, 6);
     }
@@ -260,8 +257,8 @@ window.addEventListener('load', function () {
         c.restore();
       }
       V.segment(0, J[1], t, J[1], f[0], 4.5);
-      if (t > 0) { V.ctx.setLineDash([10, 6]); V.segment(0, 0, Math.min(t, m.ts), 0, f[1], 4); V.ctx.setLineDash([]); }
-      if (t > m.ts) { V.ctx.setLineDash([10, 6]); V.segment(m.ts, m.v, t, m.v, f[1], 4.5); V.ctx.setLineDash([]); }
+      if (t > 0 && m.ts > 0) V.segment(0, 0, Math.min(t, m.ts), 0, f[1], 4, [10, 6]);
+      if (t > m.ts) V.segment(m.ts, m.v, t, m.v, f[1], 4.5, [10, 6]);
       Aha.$('flaechen').innerHTML = '<span style="color:' + f[0] + '">Jana: ' + de(J[1]) + ' m/s · ' + de(t) + ' s = ' + de(J[1] * t) + ' m</span>' +
         '<span style="color:' + f[1] + '">Mo: ' + de(m.v) + ' m/s · ' + de(Math.max(0, t - m.ts)) + ' s = ' + de(m.v * Math.max(0, t - m.ts)) + ' m</span>';
     } else Aha.$('flaechen').innerHTML = '';
@@ -277,6 +274,9 @@ window.addEventListener('load', function () {
   function knopf(text, aus) { var b = Aha.$('los'); b.textContent = text; b.disabled = !!aus; }
   function zahlen() {
     var m = mo();
+    var J = L().J;
+    Aha.$('janaWerte').innerHTML = 'Start bei ' + J[0] + ' m<br>v = ' + de(J[1]) + ' m/s';
+    Aha.$('moOrt').textContent = 'Mo: Start bei ' + m.x0 + ' m nach';
     Aha.$('ots').textContent = m.ts + ' s';
     Aha.$('ovm').textContent = de(m.v) + ' m/s';
     Aha.$('ts').value = m.ts; Aha.$('vm').value = m.v;
