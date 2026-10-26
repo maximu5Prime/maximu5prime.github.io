@@ -45,6 +45,11 @@
     <div id="ueben-t-x-diagramm"></div>
     <a class="zum-thema" href="/ph11/t-x-diagramm/">← Zum Thema</a>
   </details>
+  <details class="warum flach uebung" id="einholen">
+    <summary class="etappe"><span>3</span>Wo treffen sich die beiden?</summary>
+    <div id="ueben-einholen"></div>
+    <a class="zum-thema" href="/ph11/einholen/">← Zum Thema</a>
+  </details>
 
   <h2 class="abschnitt">Weitere Übungen</h2>
   <ol class="themen">
@@ -52,7 +57,7 @@
   </ol>
 
   <nav class="pager2" aria-label="Themen">
-    <a href="/ph11/t-x-diagramm/"><span>← Voriges Thema</span>Was erzählt das t-x-Diagramm?</a>
+    <a href="/ph11/einholen/"><span>← Voriges Thema</span>Wo treffen sich die beiden?</a>
     <a class="next" href="/ph11/bewegung/"><span>Nächstes Thema →</span>Gleichförmige Bewegung</a>
   </nav>
 
@@ -123,6 +128,8 @@ window.addEventListener('load', function () {
          '<text x="' + (X(0) + 5) + '" y="' + (Y(o.xmax) - 2) + '">' + o.xL + '</text>';
     s += '<polyline fill="none" stroke="var(--ph)" stroke-width="3" stroke-linejoin="round" points="' +
          o.pts.map(function (p) { return X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }).join(' ') + '"/>';
+    if (o.pts2) s += '<polyline fill="none" stroke="var(--c-text)" stroke-width="3" stroke-dasharray="8 5" stroke-linejoin="round" points="' +
+         o.pts2.map(function (p) { return X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }).join(' ') + '"/>';
     return s + '</svg>';
   }
   function tx(pts, tmax, xmax, extra) {
@@ -167,6 +174,34 @@ window.addEventListener('load', function () {
       { frage: '„Im Abschnitt mit dem höchsten Punkt des t-x-Graphen fährt das Modellauto am schnellsten.“' + auto,
         optionen: ['Stimmt nicht: Die Höhe zeigt den Ort, die Steigung die Geschwindigkeit.', 'Stimmt: Am höchsten Punkt ist es am weitesten gekommen.'], ans: 0,
         warum: [, 'Am weitesten heißt nicht am schnellsten. Am schnellsten ist das Auto, wo der Graph am steilsten ist (0 bis 10 s).'] } ]
+  ] });
+
+  /* 3 Üben „Wo treffen sich die beiden?“ (UE 3): ⭐ Treffpunkt ablesen → ⭐⭐ berechnen → ⭐⭐⭐ Aussagen beurteilen.
+     Kontexte nicht aus Skript UE 3 (Anna/Tom, Joggerin/Rad, Inliner, Lkw/Pkw, Rangierlok, Lea/Max) und nicht aus dem Applet (Jana/Mo):
+     Hund und Herrchen, zwei Fähren, Radfahrer, Ruderboote, Drohnen. Durchgezogen = erster, gestrichelt = zweiter. */
+  var hund = tx([[0, 0], [30, 90]], 30, 100, { pts2: [[0, 60], [30, 30]] });          // Hund 3 m/s, Herrchen von 60 m mit −1 m/s → (15|45)
+  var faehre = tx([[0, 0], [60, 120]], 60, 140, { pts2: [[0, 0], [20, 0], [60, 120]] }); // A 2 m/s, B ab 20 s mit 3 m/s → (60|120)
+  var drohnen = dia({ tmax: 30, dt: 10, xmin: -6, xmax: 6, dx: 2, tL: 't in s', xL: 'v in m/s',
+    pts: [[0, 3], [30, 3]], pts2: [[0, 0], [10, 0], [10, 5], [30, 5]] });               // A 3 m/s, B ab 10 s mit 5 m/s, gleicher Start
+  Aha.Stufen({ el: 'ueben-einholen', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
+    [ { frage: 'Ein Hund (durchgezogen) läuft los, sein Herrchen (gestrichelt) kommt ihm entgegen. Wann und wo treffen sie sich?' + hund,
+        optionen: ['nach $15\\,\\text{s}$ bei $45\\,\\text{m}$', 'nach $0\\,\\text{s}$ bei $60\\,\\text{m}$', 'nach $30\\,\\text{s}$ bei $90\\,\\text{m}$'], ans: 0,
+        warum: [, 'Bei $t = 0$ steht das Herrchen bei $60\\,\\text{m}$, der Hund bei $0\\,\\text{m}$: noch weit auseinander.', 'Dort ist nur der Hund. Der Treffpunkt ist der Schnittpunkt der beiden Graphen.'] },
+      { frage: 'Zwei Fähren legen am selben Steg ab, die zweite (gestrichelt) später. Wann holt sie die erste ein?' + faehre,
+        optionen: ['nach $60\\,\\text{s}$ bei $120\\,\\text{m}$', 'nach $20\\,\\text{s}$, wenn sie losfährt', 'nie, weil sie später startet'], ans: 0,
+        warum: [, 'Bei $20\\,\\text{s}$ fährt sie erst los, die erste ist dann schon $40\\,\\text{m}$ weit.', 'Ihr Graph ist steiler: Sie ist schneller und holt auf. Die Graphen schneiden sich bei $60\\,\\text{s}$.'] } ],
+    [ { frage: 'Radfahrerin A startet bei $x = 0$ mit $5\\,\\frac{\\text{m}}{\\text{s}}$. Gleichzeitig kommt ihr B von $x = 300\\,\\text{m}$ mit $10\\,\\frac{\\text{m}}{\\text{s}}$ entgegen. Bestimmen Sie den Treffpunkt.',
+        optionen: ['nach $20\\,\\text{s}$ bei $100\\,\\text{m}$', 'nach $60\\,\\text{s}$ bei $300\\,\\text{m}$', 'nach $30\\,\\text{s}$ bei $150\\,\\text{m}$'], ans: 0,
+        warum: [, 'In $60\\,\\text{s}$ schafft A allein die $300\\,\\text{m}$. B fährt aber auch: $5t = 300 - 10t$.', 'Sie haben nur B betrachtet. Gleichsetzen: $5\\,\\frac{\\text{m}}{\\text{s}}\\cdot t = 300\\,\\text{m} - 10\\,\\frac{\\text{m}}{\\text{s}}\\cdot t$ ergibt $t = 20\\,\\text{s}$.'] },
+      { frage: 'Ruderboot A legt mit $4\\,\\frac{\\text{m}}{\\text{s}}$ ab. $15\\,\\text{s}$ später folgt Boot B vom selben Steg mit $6\\,\\frac{\\text{m}}{\\text{s}}$. Bestimmen Sie, wann (nach dem Start von B) und wo B das Boot A einholt.',
+        optionen: ['$30\\,\\text{s}$ nach dem Start von B, $180\\,\\text{m}$ vom Steg', '$10\\,\\text{s}$ nach dem Start von B, $60\\,\\text{m}$ vom Steg', 'B holt A nie ein, weil A Vorsprung hat'], ans: 0,
+        warum: [, 'Nach $10\\,\\text{s}$ ist B dort, wo A beim Start von B war. A ist inzwischen weiter. Vorsprung $60\\,\\text{m}$, B holt $2\\,\\frac{\\text{m}}{\\text{s}}$ auf: $30\\,\\text{s}$.', 'B ist schneller und holt jede Sekunde $2\\,\\text{m}$ auf.'] } ],
+    [ { frage: 'Zwei Drohnen starten am selben Ort, B (gestrichelt) später. „Bei $t = 10\\,\\text{s}$ ist B schon vorn, weil ihre Linie höher liegt.“' + drohnen,
+        optionen: ['Stimmt nicht: Bei $10\\,\\text{s}$ startet B erst. A hat schon $30\\,\\text{m}$ (Fläche), B holt A erst bei $25\\,\\text{s}$ ein.', 'Stimmt: Im t-v-Diagramm liegt B ab $10\\,\\text{s}$ oben, also ist B vorn.'], ans: 0,
+        warum: [, 'Höher heißt nur schneller. Wo die Drohnen sind, zeigt die Fläche: bei $25\\,\\text{s}$ beide $75\\,\\text{m}$.'] },
+      { frage: '„Wo sich zwei Graphen im t-x-Diagramm schneiden, sind beide gleich schnell.“',
+        optionen: ['Stimmt nicht: Dort sind beide zur selben Zeit am selben Ort. Die Steigungen sind verschieden.', 'Stimmt: Am Schnittpunkt haben die Graphen denselben Wert.'], ans: 0,
+        warum: [, 'Gleicher Wert im t-x-Diagramm heißt gleicher Ort. Gleich schnell wären sie bei gleicher Steigung.'] } ]
   ] });
 });
 </script>

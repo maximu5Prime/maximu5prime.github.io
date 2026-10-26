@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="physik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einholen und Begegnen · Ph11</title>
+  <meta name="description" content="Zwei Läufer: Startzeit und Geschwindigkeit einstellen, bis sie sich genau am Treffpunkt treffen. Treffpunkt im t-x-Diagramm, Ortsänderung als Fläche im t-v-Diagramm.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    .level { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .level button { font: inherit; font-weight: 700; font-size: .92rem; border: 0; border-radius: 999px; padding: .3em .85em; min-height: 38px;
+      cursor: pointer; background: var(--c-surface-2); color: var(--c-text); }
+    .level button.aktiv { background: var(--c-accent); color: var(--c-on-accent); }
+    .level button.geschafft::after { content: ' ✓'; }
+    .stage .mission { margin-bottom: 0; padding-top: .45em; padding-bottom: .45em; }
+    .stage .plot { margin: 6px auto 0; }
+    .stage .plot, .regler, .lauf-zeile, .flaechen { max-width: 660px; margin-left: auto; margin-right: auto; }
+    /* Wer ist wer: Farbe + Linienart (gestrichelt = Mo), damit es auch ohne Farbe lesbar bleibt */
+    .legende { display: flex; flex-wrap: wrap; gap: 4px 18px; max-width: 660px; margin: 8px auto 0; font-weight: 700; font-size: .9rem; }
+    .legende span::before { content: ''; display: inline-block; width: 26px; height: 0; margin-right: 6px; vertical-align: middle;
+      border-top: 4px solid var(--viz-1); }
+    .legende .mo::before { border-top: 4px dashed var(--viz-2); }
+    .diag-titel { max-width: 660px; margin: 10px auto 0; font-size: .85rem; font-weight: 700; color: var(--c-muted); }
+    .regler { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; margin-top: 8px; }
+    .regler .r { padding: 4px 6px 0; border-top: 4px solid var(--viz-2); }
+    .regler label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 6px; font-size: .82rem; font-weight: 700; color: var(--c-muted); }
+    .regler output { font-family: var(--font-mono); font-size: .9rem; color: var(--c-text); }
+    .regler .r.fest { border-top-color: var(--c-line); }
+    .regler .r.fest output::after { content: ' (fest)'; color: var(--c-muted); font-family: var(--font-body); font-size: .8rem; }
+    .regler input[type=range] { width: 100%; height: 34px; accent-color: var(--viz-2); }
+    .regler input[type=range][disabled] { opacity: .45; cursor: default; }
+    .flaechen { display: flex; flex-wrap: wrap; gap: 2px 18px; font-family: var(--font-mono); font-size: .88rem; margin-top: 4px; min-height: 1.4em; }
+    .lauf-zeile { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin-top: 8px; }
+    .lauf-zeile .btn[disabled] { opacity: .6; cursor: default; }
+    .rueckmeldung { flex: 1 1 260px; font-weight: 600; }
+    .rueckmeldung.ok { color: var(--c-gain); }
+    @media (max-width: 520px) { .regler { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<!-- Aha-Seite (26.10.2026), FT11 Physik LB1 UE 3: zwei Körper — Einholen (späterer Start), Begegnen, Treffpunkt im t-x-Diagramm,
+     Ortsänderung als Fläche im t-v-Diagramm. QR im Arbeitsskript UE 3 (Basis-Aufgabe nach der gemeinsamen Aufgabe).
+     Kontext Laufbahn wie /ph11/t-x-diagramm/ (Jana) + zweiter Läufer Mo. Keine Aufgabe des Skripts lösen: dort Anna/Tom (Rad, E-Scooter),
+     Joggerin/Radfahrer, Inliner/Rennrad, Lkw/Pkw, Rangierlok, Lea/Max, Überholen Landstraße. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/ph11/">← Ph11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">Ph11 · Bewegung</div>
+    <h1>Wo <mark>treffen</mark> sich die beiden?</h1>
+    <p>Jana und Mo laufen auf derselben Bahn. Stellen Sie Mos Start und Tempo so ein, dass sich beide genau am Treffpunkt treffen.</p>
+  </header>
+
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Ausprobieren">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="level" id="level" aria-label="Level wählen"></div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span id="auftrag"></span></div>
+      <div class="legende"><span>Jana</span><span class="mo">Mo</span></div>
+      <div class="plot" id="bahnWrap"><canvas id="bahn" aria-label="Laufbahn mit Jana und Mo"></canvas></div>
+      <div class="diag-titel">t-x-Diagramm: Wo ist wer?</div>
+      <div class="plot" id="plotWrap"><canvas id="plot" aria-label="t-x-Diagramm mit Treffpunkt"></canvas></div>
+      <div class="diag-titel">t-v-Diagramm: Wie schnell? Die Fläche ist die Ortsänderung.</div>
+      <div class="plot" id="tvWrap"><canvas id="tv" aria-label="t-v-Diagramm mit Flächen"></canvas></div>
+      <div class="flaechen" id="flaechen" aria-live="polite"></div>
+      <div class="regler">
+        <div class="r" id="rStart"><label for="ts">Mo startet bei <output id="ots"></output></label>
+          <input type="range" id="ts" min="0" max="20" step="1" value="0"></div>
+        <div class="r" id="rV"><label for="vm">Mos Geschwindigkeit <output id="ovm"></output></label>
+          <input type="range" id="vm" min="-5" max="5" step="0.5" value="0"></div>
+      </div>
+      <div class="lauf-zeile">
+        <button class="btn" id="los" type="button">▶ Loslaufen</button>
+        <span class="rueckmeldung" id="rueck" aria-live="polite"></span>
+      </div>
+    </section>
+  </div>
+
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Der Treffpunkt ist der <b>Schnittpunkt</b> im t-x-Diagramm. Im t-v-Diagramm ist die <b>Fläche</b> die Ortsänderung:
+    Starten beide am selben Ort, treffen sie sich, wenn ihre Flächen gleich groß sind.
+  </div>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>•</span><div>Ein Nullpunkt, eine Uhr für beide. Dann gilt für jeden $x(t) = x_0 + v\cdot t$.
+        Treffen heißt: zur selben Zeit am selben Ort, also $x_1(t) = x_2(t)$.</div></div>
+      <div class="schritt"><span>•</span><div>Später los: Startet die Uhr, wenn der Zweite losläuft, hat der Erste schon einen Vorsprung $x_0 = v \cdot \Delta t$.</div></div>
+      <div class="schritt"><span>•</span><div>Entgegen: Wer gegen die Pfeilrichtung läuft, hat $v < 0$. Seine Fläche im t-v-Diagramm liegt unter der $t$-Achse.</div></div>
+      <div class="schritt"><span>•</span><div>Fläche im t-v-Diagramm $= v \cdot \Delta t = \Delta x$. Beispiel: $3\,\frac{\text{m}}{\text{s}} \cdot 10\,\text{s} = 30\,\text{m}$.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Den Treffpunkt im t-v-Diagramm suchen. Dort heißt „gleiche Höhe“ nur: gleich schnell —
+        nicht am gleichen Ort.</div>
+    </div>
+  </details>
+
+  <a class="zum-ueben" href="/ph11/ueben-bewegungen/#einholen"><span>Üben<small>Bewegungen · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/ph11/t-x-diagramm/"><span>← Voriges Thema</span>Was erzählt das t-x-Diagramm?</a>
+    <a class="next" href="/ph11/ueben-bewegungen/"><span>Nächstes Thema →</span>Üben: Bewegungen</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Physik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+/* 1 Ausprobieren: wie /ph11/t-x-diagramm/ — Ziel sichtbar (Treffpunkt-Ring im t-x-Diagramm), eigene Graphen erst nach „▶ Loslaufen“,
+   30 s Lauf in 9 s, Rückmeldung danach, bei Erfolg „Nächstes Level →“. Jana (--viz-1, durchgezogen) läuft ab t = 0 gleichförmig,
+   Mo (--viz-2, gestrichelt) steht bis zu seiner Startzeit an seinem Startort und läuft dann gleichförmig. Im t-v-Diagramm wachsen die
+   Flächen mit (Fläche = Ortsänderung), darunter die Zahlen. Level: J = [x0, v], M = [x0, tStart, v], frei = 'v' | 'ts' | 'beide',
+   Z = [t, x] des Treffpunkts. Level 3 (Begegnung) schaltet das Aha frei. Fortschritt in localStorage (ph11-einholen-level). */
+window.addEventListener('load', function () {
+  var LEVEL = [
+    { st: 1, J: [0, 2], M: [0, 10, 3], frei: 'v', Z: [30, 60],
+      auftrag: 'Jana läuft los. Mo startet 10 s später am selben Hütchen. Wie schnell muss Mo laufen, um Jana genau am zweiten Hütchen einzuholen?' },
+    { st: 1, J: [0, 3], M: [0, 5, 4], frei: 'ts', Z: [20, 60],
+      auftrag: 'Mo läuft schneller als Jana. Wie viele Sekunden darf er warten, damit er Jana genau am zweiten Hütchen einholt?' },
+    { st: 1, J: [0, 2], M: [60, 0, -1], frei: 'v', Z: [20, 40], aha: true,
+      auftrag: 'Mo kommt Jana vom zweiten Hütchen aus entgegen. Welche Geschwindigkeit braucht er für den Treffpunkt? Achten Sie auf das Vorzeichen.' },
+    { st: 2, J: [20, 1.5], M: [0, 0, 2.5], frei: 'v', Z: [20, 50],
+      auftrag: 'Jana startet mit 20 m Vorsprung. Mo startet gleichzeitig am ersten Hütchen. Bestimmen Sie Mos Geschwindigkeit.' },
+    { st: 2, J: [0, 2], M: [0, 15, 5], frei: 'beide', Z: [25, 50],
+      auftrag: 'Jetzt dürfen Sie beides einstellen. Finden Sie zwei verschiedene Lösungen für denselben Treffpunkt.' }
+  ];
+  var SPEICHER = 'ph11-einholen-level';
+  var lv = 0, geschafft = [], S = { ts: 0, v: 0 }, tAnim = 0, laeuft = false, gelaufen = false, loesungen = {};
+  try { geschafft = JSON.parse(localStorage.getItem(SPEICHER) || '[]'); } catch (e) { geschafft = []; }
+  for (var i = 0; i < LEVEL.length; i++) if (!geschafft[i]) { lv = i; break; }
+
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function F() { return [css('--viz-1'), css('--viz-2')]; }
+  function L() { return LEVEL[lv]; }
+  function mo() { var M = L().M; return { x0: M[0], ts: L().frei === 'v' ? M[1] : S.ts, v: L().frei === 'ts' ? M[2] : S.v }; }
+  function xJ(t) { return L().J[0] + L().J[1] * t; }
+  function xM(t) { var m = mo(); return t <= m.ts ? m.x0 : m.x0 + m.v * (t - m.ts); }
+  function vM(t) { var m = mo(); return t < m.ts ? 0 : m.v; }
+  /* Treffpunkt: erstes t > Mos Start (bzw. > 0) mit gleichem Ort, sonst null */
+  function treffen() {
+    var m = mo(), J = L().J, t;
+    if (m.v === J[1]) return null;
+    t = (m.x0 - m.v * m.ts - J[0]) / (J[1] - m.v);
+    if (t <= Math.max(m.ts, 0) + 1e-9 || t > 30 + 1e-9) return null;
+    return [t, xJ(t)];
+  }
+  function mathe(el) {
+    if (window.renderMathInElement) renderMathInElement(el, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+  }
+  function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify(geschafft)); } catch (e) {} }
+  function de(n) { return Aha.de(Math.round(n * 10) / 10, 1); }
+
+  var fmtT = function (n) { return n === 0 ? '' : String(Math.round(n)); };
+  var P = new Aha.Plot({ canvas: 'plot', wrap: 'plotWrap', view: { xMin: 0, xMax: 30, yMin: 0, yMax: 70 },
+    step: { x: 1, y: 10 }, label: { x: 5, y: 10 }, xLabel: 't in s', yLabel: 'x in m', minH: 1, maxH: 9999,
+    fmtX: fmtT, fmtY: function (n) { return String(Math.round(n)); } });
+  var V = new Aha.Plot({ canvas: 'tv', wrap: 'tvWrap', view: { xMin: 0, xMax: 30, yMin: -6, yMax: 6 },
+    step: { x: 1, y: 2 }, label: { x: 5, y: 2 }, xLabel: 't in s', yLabel: 'v in m/s', minH: 1, maxH: 9999,
+    fmtX: fmtT, fmtY: function (n) { return String(Math.round(n)); } });
+
+  /* Kästchen quadratisch (wie t-x-Diagramm): Höhe aus der Breite; am Handy 2-s-Kästchen */
+  function quadrat(D, spalten, zeilen) {
+    var W = Aha.$(D.o.wrap).clientWidth, b = W - D.pad.l - D.pad.r, grob = W < 560;
+    D.o.step.x = grob ? 2 : 1; if (grob) spalten /= 2;
+    D.o.ratio = (b / spalten * zeilen + D.pad.t + D.pad.b) / W;
+  }
+  function gitter() { return css('--c-muted') + '4d'; }
+
+  /* Läufer als Strichfigur (aus /ph11/t-x-diagramm/): Füße bei (px|py), dir = Blickrichtung, schwung = Beinphase (0 = steht) */
+  function figur(c, px, py, dir, schwung, farbe) {
+    c.save(); c.translate(px, py); c.scale(1.35, 1.35); c.translate(-px, -py);
+    var a = Math.sin(schwung) * 0.65, lauf = schwung !== 0;
+    var hx = px - dir * (lauf ? 1 : 0), hy = py - 15, sx = px + dir * (lauf ? 3 : 0), sy = py - 28;
+    c.strokeStyle = farbe; c.fillStyle = farbe; c.lineWidth = 2.4; c.lineCap = 'round'; c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(hx, hy); c.lineTo(sx, sy); c.stroke();
+    c.beginPath(); c.arc(sx + dir * (lauf ? 2 : 0), sy - 6, 4.5, 0, 2 * Math.PI); c.fill();
+    [1, -1].forEach(function (s) {
+      var b = lauf ? s * a : s * 0.18;
+      var kx = hx + Math.sin(b) * 8 * dir, ky = hy + Math.cos(b) * 8;
+      var fx = kx + Math.sin(b - (lauf ? 0.5 : 0)) * 8 * dir, fy = ky + Math.cos(b - (lauf ? 0.5 : 0)) * 8;
+      c.beginPath(); c.moveTo(hx, hy); c.lineTo(kx, ky); c.lineTo(fx, Math.min(fy, py)); c.stroke();
+      var r = lauf ? -s * a : s * 0.25;
+      var ex = sx + Math.sin(r) * 6 * dir, ey = sy + 3 + Math.cos(r) * 6;
+      c.beginPath(); c.moveTo(sx, sy + 3); c.lineTo(ex, ey); c.lineTo(ex + dir * (lauf ? 5 : 0), ey + (lauf ? -2 : 6)); c.stroke();
+    });
+    c.restore();
+  }
+  /* Laufbahn −10 … 70 m wie die x-Achse; Hütchen bei 0 und 60 m; Jana auf der vorderen, Mo auf der hinteren Spur */
+  function bahn(schwung) {
+    var cv = Aha.$('bahn'), wrap = Aha.$('bahnWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 104;
+    cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+    var C = P.C, l = P.pad.l, r = P.pad.r, X = function (x) { return l + (x + 10) / 80 * (W - l - r); }, y = 80, f = F();
+    c.fillStyle = gitter(); c.fillRect(X(-10), y - 16, X(70) - X(-10), 22);
+    c.strokeStyle = C.axis; c.lineWidth = 1.5; c.beginPath(); c.moveTo(X(-10), y + 6); c.lineTo(X(70), y + 6); c.stroke();
+    c.beginPath(); c.moveTo(X(70) + 4, y + 6); c.lineTo(X(70) - 4, y + 1); c.lineTo(X(70) - 4, y + 11); c.closePath(); c.fillStyle = C.axis; c.fill();
+    c.font = '500 12px ' + C.mono; c.fillStyle = C.text; c.textAlign = 'center';
+    for (var x = 0; x <= 60; x += 10) { c.beginPath(); c.moveTo(X(x), y + 3); c.lineTo(X(x), y + 9); c.stroke(); c.fillText(String(x), X(x), y + 22); }
+    c.textAlign = 'left'; c.fillText('x in m', X(-10), 12);
+    [0, 60].forEach(function (x) {
+      c.fillStyle = C.k; c.beginPath(); c.moveTo(X(x) - 5, y + 2); c.lineTo(X(x) + 5, y + 2); c.lineTo(X(x), y - 11); c.closePath(); c.fill();
+    });
+    var zeigen = laeuft || gelaufen, t = tAnim, m = mo();
+    var xj = Math.max(-10, Math.min(70, xJ(t))), xm = Math.max(-10, Math.min(70, xM(t)));
+    var lJ = laeuft && L().J[1] !== 0, lM = laeuft && vM(t) !== 0;
+    figur(c, X(xm), y - 12, m.v < 0 ? -1 : 1, lM ? schwung + 1.3 : 0, zeigen ? f[1] : C.muted);   // Mo hinten
+    figur(c, X(xj), y + 2, 1, lJ ? schwung : 0, zeigen ? f[0] : C.text);                         // Jana vorn
+    c.font = '700 13px ' + C.body; c.textAlign = 'right'; c.fillStyle = C.text;
+    c.fillText('t = ' + Aha.de(t, 1) + ' s', X(70), 12);
+  }
+
+  function zeichne(schwung) {
+    var f = F(), zeigen = laeuft || gelaufen, t = tAnim, m = mo(), J = L().J, Z = L().Z, k;
+    quadrat(P, 30, 7); quadrat(V, 30, 6);
+    /* t-x */
+    P.setup(); var C = P.C; C.grid = gitter(); P.grid();
+    P.ctx.beginPath(); P.ctx.arc(P.X(Z[0]), P.Y(Z[1]), 11, 0, 2 * Math.PI); P.ctx.strokeStyle = C.text; P.ctx.lineWidth = 2.5;
+    P.ctx.setLineDash([5, 4]); P.ctx.stroke(); P.ctx.setLineDash([]);
+    P.text('Treffpunkt', Z[0], Z[1], C.text, Z[0] > 22 ? 'right' : 'left', Z[0] > 22 ? -16 : 16, Z[1] > 60 ? 22 : -10, 700);
+    if (zeigen) {
+      P.segment(0, xJ(0), t, xJ(t), f[0], 4.5);
+      var mStop = Math.min(t, m.ts);
+      P.segment(0, m.x0, mStop, m.x0, f[1], 2, [3, 5]);                                  // Mo wartet
+      if (t > m.ts) { P.ctx.setLineDash([10, 6]); P.segment(m.ts, m.x0, t, xM(t), f[1], 4.5); P.ctx.setLineDash([]); }
+      var tr = treffen();
+      if (tr && tr[0] <= t + 1e-9) P.dot(tr[0], tr[1], C.text, 6);
+    }
+    /* t-v: Flächen = Ortsänderung (Jana ab 0, Mo ab seinem Start) */
+    V.setup(); V.C.grid = gitter(); V.grid();
+    if (zeigen) {
+      if (t > 0) V.between(function () { return J[1]; }, function () { return 0; }, 0, t, f[0] + '40');
+      if (t > m.ts) {
+        V.between(function () { return m.v; }, function () { return 0; }, m.ts, t, f[1] + '40');
+        var c = V.ctx; c.save(); c.beginPath();
+        c.rect(V.X(m.ts), Math.min(V.Y(m.v), V.Y(0)), V.X(t) - V.X(m.ts), Math.abs(V.Y(m.v) - V.Y(0))); c.clip();
+        c.strokeStyle = f[1] + '99'; c.lineWidth = 1;                                     // Mo zusätzlich schraffiert
+        for (var s = -400; s < 1200; s += 9) { c.beginPath(); c.moveTo(V.X(m.ts) + s, V.Y(5)); c.lineTo(V.X(m.ts) + s + 300, V.Y(-5) + 0); c.stroke(); }
+        c.restore();
+      }
+      V.segment(0, J[1], t, J[1], f[0], 4.5);
+      if (t > 0) { V.ctx.setLineDash([10, 6]); V.segment(0, 0, Math.min(t, m.ts), 0, f[1], 4); V.ctx.setLineDash([]); }
+      if (t > m.ts) { V.ctx.setLineDash([10, 6]); V.segment(m.ts, m.v, t, m.v, f[1], 4.5); V.ctx.setLineDash([]); }
+      Aha.$('flaechen').innerHTML = '<span style="color:' + f[0] + '">Jana: ' + de(J[1]) + ' m/s · ' + de(t) + ' s = ' + de(J[1] * t) + ' m</span>' +
+        '<span style="color:' + f[1] + '">Mo: ' + de(m.v) + ' m/s · ' + de(Math.max(0, t - m.ts)) + ' s = ' + de(m.v * Math.max(0, t - m.ts)) + ' m</span>';
+    } else Aha.$('flaechen').innerHTML = '';
+    bahn(schwung || 0);
+  }
+
+  function leiste() {
+    Aha.$('level').innerHTML = LEVEL.map(function (X, j) {
+      return '<button type="button" data-l="' + j + '" class="' + (j === lv ? 'aktiv' : '') + (geschafft[j] ? ' geschafft' : '') +
+        '" aria-label="Level ' + (j + 1) + '">' + (j + 1) + ' ' + '⭐'.repeat(X.st) + '</button>';
+    }).join('');
+  }
+  function knopf(text, aus) { var b = Aha.$('los'); b.textContent = text; b.disabled = !!aus; }
+  function zahlen() {
+    var m = mo();
+    Aha.$('ots').textContent = m.ts + ' s';
+    Aha.$('ovm').textContent = de(m.v) + ' m/s';
+    Aha.$('ts').value = m.ts; Aha.$('vm').value = m.v;
+  }
+  function bereit() {
+    gelaufen = false; tAnim = 0;
+    Aha.$('mission').classList.remove('done');
+    var r = Aha.$('rueck'); r.textContent = ''; r.className = 'rueckmeldung';
+    knopf('▶ Loslaufen');
+    zeichne();
+  }
+  function waehle(j) {
+    lv = j; loesungen = {};
+    var M = L().M;
+    S = { ts: L().frei === 'v' ? M[1] : 0, v: L().frei === 'ts' ? M[2] : 0 };
+    Aha.$('rStart').classList.toggle('fest', L().frei === 'v'); Aha.$('ts').disabled = L().frei === 'v';
+    Aha.$('rV').classList.toggle('fest', L().frei === 'ts'); Aha.$('vm').disabled = L().frei === 'ts';
+    var t = Aha.$('auftrag'); t.innerHTML = 'Level ' + (lv + 1) + ' · ' + L().auftrag; mathe(t);
+    zahlen(); leiste(); bereit();
+  }
+  /* Rückmeldung nach dem Lauf: Treffpunkt zu früh/zu spät/gar nicht, freundlich und konkret */
+  function auswerten() {
+    var tr = treffen(), Z = L().Z, m = mo(), r = Aha.$('rueck'), ok = tr && Math.abs(tr[0] - Z[0]) < 0.01 && Math.abs(tr[1] - Z[1]) < 0.01, txt;
+    if (ok && L().frei === 'beide') {
+      loesungen[m.ts + '|' + m.v] = true;
+      if (Object.keys(loesungen).length < 2) {
+        r.textContent = 'Treffer! Mo startet bei ' + m.ts + ' s mit ' + de(m.v) + ' m/s. Finden Sie noch eine zweite Lösung.'; r.className = 'rueckmeldung ok';
+        knopf('▶ Noch einmal laufen'); return;
+      }
+    }
+    if (ok) {
+      r.textContent = 'Geschafft! Die Graphen schneiden sich genau im Treffpunkt.'; r.className = 'rueckmeldung ok';
+      Aha.$('mission').classList.add('done');
+      if (!geschafft[lv]) { geschafft[lv] = true; speichern(); leiste(); }
+      if (L().aha) Aha.mission(true);
+      knopf(lv < LEVEL.length - 1 ? 'Nächstes Level →' : '▶ Noch einmal laufen');
+      return;
+    }
+    var entgegen = m.x0 > L().J[0] + 30;
+    if (m.v === L().J[1] && m.ts === 0 && m.x0 === L().J[0]) txt = 'Mo läuft die ganze Zeit neben Jana her – das ist kein Einholen.';
+    else if (entgegen && m.v >= 0) txt = 'Mo läuft von Jana weg. Wer entgegenkommt, hat ein negatives Vorzeichen.';
+    else if (!tr) txt = 'Die beiden treffen sich bis 30 s gar nicht. Mo ist zu langsam oder startet zu spät.';
+    else if (tr[0] < Z[0]) txt = 'Sie treffen sich schon bei t = ' + de(tr[0]) + ' s und x = ' + de(tr[1]) + ' m – zu früh.';
+    else txt = 'Sie treffen sich erst bei t = ' + de(tr[0]) + ' s und x = ' + de(tr[1]) + ' m – zu spät.';
+    r.textContent = 'Noch nicht ganz. ' + txt; r.className = 'rueckmeldung';
+    knopf('▶ Noch einmal laufen');
+  }
+  function sperren(an) { Aha.$('ts').disabled = an || L().frei === 'v'; Aha.$('vm').disabled = an || L().frei === 'ts'; }
+  function laufen() {
+    sperren(true); laeuft = true; gelaufen = false; tAnim = 0;
+    Aha.$('rueck').textContent = ''; knopf('Die beiden laufen …', true);
+    var t0 = null;
+    function schritt(ts) {
+      if (t0 === null) t0 = ts;
+      tAnim = Math.min(30, (ts - t0) / 1000 * 10 / 3);
+      zeichne((ts - t0) / 1000 * 2 * Math.PI * 1.6 + 0.01);
+      if (tAnim < 30) { requestAnimationFrame(schritt); return; }
+      laeuft = false; gelaufen = true; sperren(false); zeichne(); auswerten();
+    }
+    requestAnimationFrame(schritt);
+  }
+
+  Aha.$('ts').addEventListener('input', function () { if (laeuft) return; S.ts = +this.value; zahlen(); bereit(); });
+  Aha.$('vm').addEventListener('input', function () { if (laeuft) return; S.v = +this.value; zahlen(); bereit(); });
+  Aha.$('level').addEventListener('click', function (ev) { var b = ev.target.closest('button'); if (b && !laeuft) waehle(+b.dataset.l); });
+  Aha.$('los').addEventListener('click', function () {
+    if (laeuft) return;
+    if (gelaufen && Aha.$('mission').classList.contains('done') && lv < LEVEL.length - 1) { waehle(lv + 1); return; }
+    laufen();
+  });
+  Aha.onRedraw(function () { zeichne(); });
+  window.addEventListener('resize', function () { zeichne(); });
+  waehle(lv);
+});
+</script>
+</body>
+</html>
