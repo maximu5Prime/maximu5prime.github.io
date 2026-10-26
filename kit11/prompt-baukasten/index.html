@@ -61,40 +61,43 @@
     <p>Im Chat steht nur „Elektromotor“. Bauen Sie den Prompt aus: <b>R</b>olle · <b>O</b>peration · <b>L</b>imits · <b>E</b>rwartetes Format · <b>S</b>til.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
-  <section class="stage" aria-label="Ausprobieren">
-    <div class="mission" id="mission"><span class="icon"></span>
-      <span>Die Antwort soll konkret, kurz, in Schritten und verständlich sein.</span></div>
-
-    <div class="wahl baustein-wahl" id="bausteine" role="group" aria-label="Prompt-Bausteine">
-      <button type="button" data-b="R" aria-pressed="false"><b>R</b>Rolle</button>
-      <button type="button" data-b="O" aria-pressed="false"><b>O</b>Operation</button>
-      <button type="button" data-b="L" aria-pressed="false"><b>L</b>Limits</button>
-      <button type="button" data-b="E" aria-pressed="false"><b>E</b>Format</button>
-      <button type="button" data-b="S" aria-pressed="false"><b>S</b>Stil</button>
-    </div>
-
-    <div class="fenster">
-      <div class="fenster-kopf">Ihr Prompt</div>
-      <div class="prompt-text" id="prompt"></div>
-    </div>
-
-    <div class="spielraum">
-      <span>Spielraum der KI</span>
-      <div class="spur"><div class="balken" id="balken"></div></div>
-      <output id="spielraum"></output>
-    </div>
-
-    <div class="fenster">
-      <div class="fenster-kopf">Antwort der KI (Beispiel)</div>
-      <div class="antwort-text" id="antwort"></div>
-      <div class="woerter" id="woerter"></div>
-    </div>
-
-    <div class="ergebnis">
-      <ul class="merkmale" id="merkmale" aria-label="Eigenschaften der Antwort"></ul>
-    </div>
-  </section>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Ausprobieren">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span>Die Antwort soll konkret, kurz, in Schritten und verständlich sein.</span></div>
+  
+      <div class="wahl baustein-wahl" id="bausteine" role="group" aria-label="Prompt-Bausteine">
+        <button type="button" data-b="R" aria-pressed="false"><b>R</b>Rolle</button>
+        <button type="button" data-b="O" aria-pressed="false"><b>O</b>Operation</button>
+        <button type="button" data-b="L" aria-pressed="false"><b>L</b>Limits</button>
+        <button type="button" data-b="E" aria-pressed="false"><b>E</b>Format</button>
+        <button type="button" data-b="S" aria-pressed="false"><b>S</b>Stil</button>
+      </div>
+  
+      <div class="fenster">
+        <div class="fenster-kopf">Ihr Prompt</div>
+        <div class="prompt-text" id="prompt"></div>
+      </div>
+  
+      <div class="spielraum">
+        <span>Spielraum der KI</span>
+        <div class="spur"><div class="balken" id="balken"></div></div>
+        <output id="spielraum"></output>
+      </div>
+  
+      <div class="fenster">
+        <div class="fenster-kopf">Antwort der KI (Beispiel)</div>
+        <div class="antwort-text" id="antwort"></div>
+        <div class="woerter" id="woerter"></div>
+      </div>
+  
+      <div class="ergebnis">
+        <ul class="merkmale" id="merkmale" aria-label="Eigenschaften der Antwort"></ul>
+      </div>
+    </section>
+  </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
@@ -118,12 +121,11 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/kit11/ueben-ki/#prompt-baukasten"><span>Üben<small>KI · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <span></span>
-    <a class="next" href="/kit11/ki-fails/"><span>Nächstes Thema →</span>KI-Fail-Detektor</a>
+    <a class="next" href="/kit11/ueben-ki/"><span>Nächstes Thema →</span>Üben: KI</a>
   </nav>
 
   <footer class="fuss">
@@ -214,35 +216,6 @@ document.addEventListener('DOMContentLoaded', function () {
     aktualisiere();
   });
   aktualisiere();
-});
-</script>
-<script>
-/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Bausteine eines Prompts. */
-window.addEventListener('load', function () {
-  var B = ['R — Rolle', 'O — Operation', 'L — Limits', 'E — Erwartetes Format', 'S — Stil'];
-  var W = ['Die Rolle legt fest, <b>wer</b> antwortet (Beruf, Blickwinkel).', 'Die Operation sagt, <b>was</b> die KI tun soll (erkläre, vergleiche …).', 'Limits setzen <b>Grenzen</b>: Länge, Umfang, Zeit.', 'Das Format legt die <b>Form</b> fest: Liste, Tabelle, Schritte.', 'Der Stil legt fest, <b>wie</b> es klingt: einfache Sprache, Zielgruppe.'];
-  function ohne(j) { return W.map(function (w, k) { return k === j ? undefined : w; }); }
-  Aha.Stufen({ el: 'ueben', operatoren: ['Ordnen Sie zu', 'Analysieren Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: 'Zu welchem Baustein gehört „Antworte in höchstens fünf Sätzen.“?', optionen: B, ans: 2, warum: ohne(2) },
-      { frage: 'Zu welchem Baustein gehört „Du bist Ausbilderin in einem Elektrobetrieb.“?', optionen: B, ans: 0, warum: ohne(0) },
-      { frage: 'Zu welchem Baustein gehört „Gib die Antwort als nummerierte Liste aus.“?', optionen: B, ans: 3, warum: ohne(3) },
-      { frage: 'Zu welchem Baustein gehört „Erkläre es so, dass es jemand ohne Vorwissen versteht.“?', optionen: B, ans: 4, warum: ohne(4) } ],
-    [ { frage: '„Du bist Physiklehrer. Erkläre das ohmsche Gesetz für die 11. Klasse als Tabelle mit drei Spalten.“ Welcher Baustein fehlt?', optionen: B, ans: 2,
-        warum: ['„Du bist Physiklehrer“ ist die Rolle.', '„Erkläre …“ ist die Operation.', , '„als Tabelle mit drei Spalten“ ist das Format.', '„für die 11. Klasse“ legt den Stil fest.'] },
-      { frage: '„Du bist Kfz-Meister. Erkläre, wie ein Katalysator funktioniert. Höchstens 80 Wörter, so, dass es ein Laie versteht.“ Welcher Baustein fehlt?', optionen: B, ans: 3,
-        warum: ['„Du bist Kfz-Meister“ ist die Rolle.', '„Erkläre …“ ist die Operation.', '„Höchstens 80 Wörter“ ist ein Limit.', , '„so, dass es ein Laie versteht“ ist der Stil.'] },
-      { frage: '„Erkläre, wie ein Kühlschrank kühlt. Höchstens fünf Sätze, als nummerierte Liste, in einfacher Sprache.“ Welcher Baustein fehlt?', optionen: B, ans: 0,
-        warum: [, '„Erkläre …“ ist die Operation.', '„Höchstens fünf Sätze“ ist ein Limit.', '„als nummerierte Liste“ ist das Format.', '„in einfacher Sprache“ ist der Stil.'] } ],
-    [ { frage: 'Die KI schreibt: „Der erste Elektromotor wurde 1950 gebaut.“ Wie gehen Sie damit um?',
-        optionen: ['Übernehmen — der Prompt war ja genau.', 'An einer zweiten Stelle prüfen, bevor ich sie verwende.', 'Den Prompt länger machen, dann stimmt die Zahl sicher.'], ans: 1,
-        warum: ['Ein genauer Prompt steuert die Form, nicht die Wahrheit. Jahreszahlen kann die KI erfinden.', , 'Auch ein langer Prompt macht aus einer wahrscheinlichen Zahl keine geprüfte.'] },
-      { frage: '„Mit allen fünf Bausteinen ist die Antwort der KI sicher richtig.“',
-        optionen: ['Stimmt — dann hat die KI keinen Spielraum mehr.', 'Stimmt nicht — die Bausteine steuern Form und Inhalt, prüfen muss man trotzdem.'], ans: 1,
-        warum: ['Weniger Spielraum heißt passendere Antwort, nicht geprüfte Fakten.'] },
-      { frage: '„Für die Frage nach der Uhrzeit in Tokio braucht man alle fünf Bausteine.“',
-        optionen: ['Stimmt — ein guter Prompt hat immer alle fünf.', 'Stimmt nicht — man wählt nur die Bausteine, die das Ziel braucht.'], ans: 1,
-        warum: ['Rolle, Format und Stil ändern an einer Uhrzeit nichts. Mehr Bausteine sind nicht automatisch besser.'] } ]
-  ] });
 });
 </script>
 </body>

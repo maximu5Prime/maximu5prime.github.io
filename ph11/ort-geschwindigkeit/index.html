@@ -36,15 +36,20 @@
     <p>Ein Fahrrad fährt vom Kiosk zur Brücke. Was ändert sich, wenn Sie den Nullpunkt oder die Pfeilrichtung anders wählen?</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Anschauen</h2>
-  <div class="videos">
-  <figure class="video" data-titel="Wo ist der Nullpunkt?">
-    <video controls playsinline preload="metadata" poster="PH11_UE01_VID_Nullpunkt.jpg">
-      <source src="PH11_UE01_VID_Nullpunkt.mp4" type="video/mp4">
-      <track kind="subtitles" src="PH11_UE01_VID_Nullpunkt.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Wo ist der Nullpunkt?</b> (89 s) — Ort, Ortsänderung und Vorzeichen.</figcaption>
-  </figure>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <div class="kachel-video">
+      <div class="kachel-kopf">Anschauen</div>
+      <div class="videos">
+      <figure class="video" data-titel="Wo ist der Nullpunkt?">
+        <video controls playsinline preload="metadata" poster="PH11_UE01_VID_Nullpunkt.jpg">
+          <source src="PH11_UE01_VID_Nullpunkt.mp4" type="video/mp4">
+          <track kind="subtitles" src="PH11_UE01_VID_Nullpunkt.vtt" srclang="de" label="Deutsch" default>
+        </video>
+        <figcaption><b>Wo ist der Nullpunkt?</b> (89 s) — Ort, Ortsänderung und Vorzeichen.</figcaption>
+      </figure>
+      </div>
+    </div>
   </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
@@ -65,11 +70,10 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/ph11/ueben-bewegungen/#ort-geschwindigkeit"><span>Üben<small>Bewegungen · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
-    <span></span>
+    <a href="/ph11/einheiten/"><span>← Voriges Thema</span>Einheiten und Formeln</a>
     <a class="next" href="/ph11/t-x-diagramm/"><span>Nächstes Thema →</span>Was erzählt das t-x-Diagramm?</a>
   </nav>
 
@@ -78,39 +82,5 @@
     <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
   </footer>
 </div>
-<script>
-/* 3 Üben: ein Aufgabentyp (Ortsänderung und Geschwindigkeit mit Vorzeichen), drei Stufen (Aha.Stufen). Andere Zahlen als AB/Info 1.1. */
-window.addEventListener('load', function () {
-  Aha.Stufen({ el: 'ueben', operatoren: ['Berechnen Sie', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: 'Ein Hund läuft von $x_1 = 20\\,\\text{m}$ nach $x_2 = 65\\,\\text{m}$. Wie groß ist die Ortsänderung $\\Delta x$?',
-        optionen: ['$\\Delta x = 45\\,\\text{m}$', '$\\Delta x = -45\\,\\text{m}$', '$\\Delta x = 85\\,\\text{m}$'], ans: 0,
-        warum: [, 'Ende minus Anfang: $65\\,\\text{m} - 20\\,\\text{m}$, nicht umgekehrt.', 'Die Orte werden nicht addiert, sondern voneinander abgezogen.'] },
-      { frage: 'Ein Paket rutscht auf dem Band von $x_1 = 12\\,\\text{m}$ nach $x_2 = 4\\,\\text{m}$. Wie groß ist $\\Delta x$?',
-        optionen: ['$\\Delta x = 8\\,\\text{m}$', '$\\Delta x = -8\\,\\text{m}$', '$\\Delta x = 16\\,\\text{m}$'], ans: 1,
-        warum: ['Ende minus Anfang: $4\\,\\text{m} - 12\\,\\text{m}$ ist negativ — das Paket bewegt sich gegen die Pfeilrichtung.', , 'Die Orte werden nicht addiert, sondern voneinander abgezogen.'] },
-      { frage: 'Ein Läufer startet bei $x_1 = -30\\,\\text{m}$ und kommt bei $x_2 = 50\\,\\text{m}$ an. Wie groß ist $\\Delta x$?',
-        optionen: ['$\\Delta x = 20\\,\\text{m}$', '$\\Delta x = -80\\,\\text{m}$', '$\\Delta x = 80\\,\\text{m}$'], ans: 2,
-        warum: ['$50\\,\\text{m} - (-30\\,\\text{m}) = 50\\,\\text{m} + 30\\,\\text{m}$ — Minus mal Minus beachten.', 'Ende minus Anfang: $50 - (-30)$, nicht $-30 - 50$.'] } ],
-    [ { frage: 'Ein Aufzug fährt in $8{,}0\\,\\text{s}$ von $x_1 = 24\\,\\text{m}$ auf $x_2 = 0\\,\\text{m}$ (Achse nach oben). Bestimmen Sie $v$.',
-        optionen: ['$v = 3{,}0\\,\\tfrac{\\text{m}}{\\text{s}}$', '$v = -3{,}0\\,\\tfrac{\\text{m}}{\\text{s}}$', '$v = -0{,}33\\,\\tfrac{\\text{m}}{\\text{s}}$'], ans: 1,
-        warum: ['Der Aufzug fährt nach unten, gegen die Pfeilrichtung: $\\Delta x = -24\\,\\text{m}$.', , 'Ortsänderung durch Zeit, nicht Zeit durch Ortsänderung.'] },
-      { frage: 'Eine Straßenbahn fährt in $50\\,\\text{s}$ von $x_1 = 150\\,\\text{m}$ nach $x_2 = 650\\,\\text{m}$. Bestimmen Sie $v$ in $\\tfrac{\\text{km}}{\\text{h}}$.',
-        optionen: ['$v = 10\\,\\tfrac{\\text{km}}{\\text{h}}$', '$v = 36\\,\\tfrac{\\text{km}}{\\text{h}}$', '$v = 2{,}8\\,\\tfrac{\\text{km}}{\\text{h}}$'], ans: 1,
-        warum: ['$10\\,\\tfrac{\\text{m}}{\\text{s}}$ stimmt — aber noch mit $3{,}6$ multiplizieren.', , 'Von $\\tfrac{\\text{m}}{\\text{s}}$ nach $\\tfrac{\\text{km}}{\\text{h}}$ wird mit $3{,}6$ multipliziert, nicht geteilt.'] },
-      { frage: 'Eine Katze läuft in $4{,}0\\,\\text{s}$ von $x_1 = 18\\,\\text{m}$ nach $x_2 = 6\\,\\text{m}$. Bestimmen Sie $v$.',
-        optionen: ['$v = -3{,}0\\,\\tfrac{\\text{m}}{\\text{s}}$', '$v = 3{,}0\\,\\tfrac{\\text{m}}{\\text{s}}$', '$v = -6{,}0\\,\\tfrac{\\text{m}}{\\text{s}}$'], ans: 0,
-        warum: [, 'Die Katze läuft gegen die Pfeilrichtung: $\\Delta x = 6\\,\\text{m} - 18\\,\\text{m} = -12\\,\\text{m}$.', 'Teilen Sie durch die Zeit $4{,}0\\,\\text{s}$, nicht durch $2$.'] } ],
-    [ { frage: '„Legt man den Nullpunkt woanders hin, ändert sich auch die Geschwindigkeit.“',
-        optionen: ['Stimmt — die Orte ändern sich ja.', 'Stimmt nicht — die Ortsänderung und damit $v$ bleiben gleich.'], ans: 1,
-        warum: ['Beide Orte verschieben sich um denselben Betrag, ihre Differenz $\\Delta x$ bleibt.'] },
-      { frage: '„Eine negative Geschwindigkeit heißt: Der Körper wird langsamer.“',
-        optionen: ['Stimmt nicht — das Minus zeigt nur die Richtung gegen den Pfeil.', 'Stimmt — minus heißt weniger.'], ans: 0,
-        warum: [, 'Mit $-20\\,\\tfrac{\\text{m}}{\\text{s}}$ ist ein Auto genauso schnell wie mit $+20\\,\\tfrac{\\text{m}}{\\text{s}}$ — nur in die andere Richtung.'] },
-      { frage: '„Ein Bus fährt eine Runde und kommt zur Haltestelle zurück. Seine Ortsänderung ist null, sein Weg aber nicht.“',
-        optionen: ['Stimmt nicht — wer fährt, hat immer eine Ortsänderung.', 'Stimmt — Ende und Anfang sind gleich, der Weg ist die ganze Runde.'], ans: 1,
-        warum: ['$\\Delta x = x_2 - x_1 = 0$, wenn Ende und Anfang derselbe Ort sind. Der Weg zählt dagegen jeden Meter.'] } ]
-  ] });
-});
-</script>
 </body>
 </html>

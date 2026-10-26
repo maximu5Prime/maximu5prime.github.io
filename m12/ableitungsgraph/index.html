@@ -35,23 +35,28 @@
     <p>Die Steigung von $G_f$ ist der $y$-Wert von $G_{f'}$ — an derselben Stelle.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Anschauen</h2>
-  <div class="videos">
-  <figure class="video" id="hin" data-titel="Von f zu f′">
-    <video controls playsinline preload="metadata" poster="MT12_VID_Ableitungsgraph.jpg">
-      <source src="MT12_VID_Ableitungsgraph.mp4" type="video/mp4">
-      <track kind="subtitles" src="MT12_VID_Ableitungsgraph.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Von $G_f$ zu $G_{f'}$</b> (92 s) — Eine Tangente gleitet über $G_f$.</figcaption>
-  </figure>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <div class="kachel-video">
+      <div class="kachel-kopf">Anschauen</div>
+      <div class="videos">
+      <figure class="video" id="hin" data-titel="Von f zu f′">
+        <video controls playsinline preload="metadata" poster="MT12_VID_Ableitungsgraph.jpg">
+          <source src="MT12_VID_Ableitungsgraph.mp4" type="video/mp4">
+          <track kind="subtitles" src="MT12_VID_Ableitungsgraph.vtt" srclang="de" label="Deutsch" default>
+        </video>
+        <figcaption><b>Von $G_f$ zu $G_{f'}$</b> (92 s) — Eine Tangente gleitet über $G_f$.</figcaption>
+      </figure>
 
-  <figure class="video" id="zurueck" data-titel="Von f′ zu f">
-    <video controls playsinline preload="metadata" poster="MT12_VID_Graph_f_aus_Ableitung.jpg">
-      <source src="MT12_VID_Graph_f_aus_Ableitung.mp4" type="video/mp4">
-      <track kind="subtitles" src="MT12_VID_Graph_f_aus_Ableitung.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Von $G_{f'}$ zurück zu $G_f$</b> (121 s) — und warum ein Punkt die Höhe festlegt.</figcaption>
-  </figure>
+      <figure class="video" id="zurueck" data-titel="Von f′ zu f">
+        <video controls playsinline preload="metadata" poster="MT12_VID_Graph_f_aus_Ableitung.jpg">
+          <source src="MT12_VID_Graph_f_aus_Ableitung.mp4" type="video/mp4">
+          <track kind="subtitles" src="MT12_VID_Graph_f_aus_Ableitung.vtt" srclang="de" label="Deutsch" default>
+        </video>
+        <figcaption><b>Von $G_{f'}$ zurück zu $G_f$</b> (121 s) — und warum ein Punkt die Höhe festlegt.</figcaption>
+      </figure>
+      </div>
+    </div>
   </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
@@ -73,8 +78,7 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/m12/ueben-differenzialrechnung/#ableitungsgraph"><span>Üben<small>Differenzialrechnung · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m12/aenderungsrate/"><span>← Voriges Thema</span>Änderungsrate</a>
@@ -86,39 +90,5 @@
     <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
   </footer>
 </div>
-<script>
-/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: was G_f und G_f′ an einer Stelle haben. Andere Funktionen als AB 1.3. */
-window.addEventListener('load', function () {
-  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: '$G_f$ hat bei $x = 1$ einen Hochpunkt. Was hat $G_{f\'}$ bei $x = 1$?',
-        optionen: ['einen Hochpunkt', 'eine Nullstelle, Vorzeichen von $+$ nach $-$', 'eine Nullstelle, Vorzeichen von $-$ nach $+$'], ans: 1,
-        warum: ['Nicht abmalen: Am Hochpunkt ist die Tangente waagrecht, also $f\'(1) = 0$.', , 'Vor dem Hochpunkt steigt $G_f$ ($f\' > 0$), danach fällt er.'] },
-      { frage: '$G_f$ hat bei $x = -2$ einen Tiefpunkt. Was hat $G_{f\'}$ bei $x = -2$?',
-        optionen: ['eine Nullstelle, Vorzeichen von $-$ nach $+$', 'einen Tiefpunkt', 'eine Nullstelle, Vorzeichen von $+$ nach $-$'], ans: 0,
-        warum: [, 'Nicht abmalen: Am Tiefpunkt ist die Tangente waagrecht, also $f\'(-2) = 0$.', 'Vor dem Tiefpunkt fällt $G_f$ ($f\' < 0$), danach steigt er.'] },
-      { frage: '$G_f$ steigt bei $x = 0$ am steilsten. Was hat $G_{f\'}$ bei $x = 0$?',
-        optionen: ['eine Nullstelle', 'einen Hochpunkt', 'einen Tiefpunkt'], ans: 1,
-        warum: ['Eine Nullstelle von $f\'$ hieße: waagrechte Tangente. Hier ist $G_f$ aber am steilsten.', , 'Am steilsten <b>steigend</b> heißt: $f\'$ ist dort am größten.'] } ],
-    [ { frage: '$G_{f\'}$ ist eine nach oben geöffnete Parabel mit den Nullstellen $-1$ und $3$. Was hat $G_f$ bei $x = -1$?',
-        optionen: ['einen Hochpunkt', 'einen Tiefpunkt', 'einen Wendepunkt'], ans: 0,
-        warum: [, 'Links von $-1$ liegt die Parabel oben ($f\' > 0$), danach unten: erst steigen, dann fallen.', 'Der Wendepunkt liegt beim Scheitel der Parabel, bei $x = 1$.'] },
-      { frage: '$G_{f\'}$ ist eine nach oben geöffnete Parabel mit den Nullstellen $-1$ und $3$. Was hat $G_f$ bei $x = 3$?',
-        optionen: ['einen Hochpunkt', 'einen Tiefpunkt', 'einen Terrassenpunkt'], ans: 1,
-        warum: ['Bei $3$ wechselt $f\'$ von $-$ nach $+$: erst fallen, dann steigen.', , 'Die Parabel schneidet die Achse — das Vorzeichen wechselt.'] },
-      { frage: '$G_{f\'}$ ist eine nach oben geöffnete Parabel mit den Nullstellen $-1$ und $3$. Was hat $G_f$ bei $x = 1$?',
-        optionen: ['einen Tiefpunkt', 'eine Nullstelle', 'einen Wendepunkt'], ans: 2,
-        warum: ['Bei $x = 1$ ist $f\'$ nicht null, sondern am kleinsten (Scheitel).', 'Nullstellen von $f$ lassen sich aus $G_{f\'}$ nicht ablesen.'] } ],
-    [ { frage: '„Es gilt $f\'(x) = (x - 2)^2$. Weil $f\'(2) = 0$ ist, hat $G_f$ bei $x = 2$ einen Tiefpunkt.“',
-        optionen: ['Stimmt — $f\'(2) = 0$ und danach steigt $G_f$.', 'Stimmt nicht — $(x - 2)^2$ wechselt das Vorzeichen nicht: Terrassenpunkt.'], ans: 1,
-        warum: ['$G_f$ steigt auch <b>vor</b> $x = 2$: $(x - 2)^2 \\ge 0$. Ohne Vorzeichenwechsel kein Extrempunkt.'] },
-      { frage: '„$G_{f\'}$ liegt ganz oberhalb der $x$-Achse. Dann liegt auch $G_f$ ganz oberhalb der $x$-Achse.“',
-        optionen: ['Stimmt — positive Steigung, positive Werte.', 'Stimmt nicht — $G_f$ steigt nur überall; wie hoch er liegt, sagt $G_{f\'}$ nicht.'], ans: 1,
-        warum: ['$f(x) = x^3 + x - 10$ steigt überall, ist bei $x = 0$ aber $-10$.'] },
-      { frage: '„$G_f$ und $G_{f\'}$ haben dieselben Nullstellen.“',
-        optionen: ['Stimmt — $f\'$ entsteht ja aus $f$.', 'Stimmt nicht — Nullstellen von $f\'$ gehören zu waagrechten Tangenten von $G_f$.'], ans: 1,
-        warum: ['Beispiel $f(x) = x^2 - 1$: Nullstellen $\\pm 1$, aber $f\'(x) = 2x$ hat die Nullstelle $0$.'] } ]
-  ] });
-});
-</script>
 </body>
 </html>

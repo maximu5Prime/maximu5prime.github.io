@@ -514,11 +514,16 @@
   }
 
   /* Kacheln (Kanban #19, 26.10.2026): <div class="duo"> mit .stage (Applet) und .kachel-video. Damit beide in der
-     Vorschau gleich groß sind, startet das Applet eingeklappt: nur Graph (16:9, wie das Video) und Auftrag, darüber
+     Vorschau gleich groß sind, startet das Applet eingeklappt: nur Graph bzw. SVG-Bühne (16:9, wie das Video) und Auftrag, darüber
      „▶ Ausprobieren“. Antippen klappt es auf; offen nimmt es die ganze Breite, das Video rutscht darunter. */
   function Duo(duo) {
-    var st = duo.querySelector(':scope > .stage'), plot = st && st.querySelector('.plot');
+    var st = duo.querySelector(':scope > .stage'), plot = st && st.querySelector(':scope > .plot, :scope > svg.labor');
     if (!plot || !duo.querySelector(':scope > .kachel-video')) return;
+    if (plot.tagName !== 'DIV') {                    // SVG-Bühne (KIT11 Kraft-Labor): Hülle für den Knopf
+      var huelle = document.createElement('div');
+      plot.parentNode.insertBefore(huelle, plot); huelle.appendChild(plot); plot = huelle;
+    }
+    plot.classList.add('vorschau');
     st.classList.add('zu');
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'vorschau-knopf'; b.innerHTML = '<span>▶ Ausprobieren</span>';

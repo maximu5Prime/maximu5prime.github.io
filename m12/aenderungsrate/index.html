@@ -35,15 +35,20 @@
     <p>Wie hoch das Wasser steht, sagt $h(t)$. Wie schnell es steigt, sagt $h'(t)$.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Anschauen</h2>
-  <div class="videos">
-  <figure class="video" data-titel="Schnellster Anstieg">
-    <video controls playsinline preload="metadata" poster="MT12_VID_Schnellster_Anstieg.jpg">
-      <source src="MT12_VID_Schnellster_Anstieg.mp4" type="video/mp4">
-      <track kind="subtitles" src="MT12_VID_Schnellster_Anstieg.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Wann steigt das Wasser am schnellsten?</b> (82 s) — Bei der Frage anhalten und selbst schätzen.</figcaption>
-  </figure>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <div class="kachel-video">
+      <div class="kachel-kopf">Anschauen</div>
+      <div class="videos">
+      <figure class="video" data-titel="Schnellster Anstieg">
+        <video controls playsinline preload="metadata" poster="MT12_VID_Schnellster_Anstieg.jpg">
+          <source src="MT12_VID_Schnellster_Anstieg.mp4" type="video/mp4">
+          <track kind="subtitles" src="MT12_VID_Schnellster_Anstieg.vtt" srclang="de" label="Deutsch" default>
+        </video>
+        <figcaption><b>Wann steigt das Wasser am schnellsten?</b> (82 s) — Bei der Frage anhalten und selbst schätzen.</figcaption>
+      </figure>
+      </div>
+    </div>
   </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
@@ -65,8 +70,7 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/m12/ueben-differenzialrechnung/#aenderungsrate"><span>Üben<small>Differenzialrechnung · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <span></span>
@@ -78,39 +82,5 @@
     <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
   </footer>
 </div>
-<script>
-/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: stärkste Zunahme. Andere Funktionen als AB 1.2. */
-window.addEventListener('load', function () {
-  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: '$s(t)$ ist ein Weg in m, $t$ in s. In welcher Einheit wird $s\'(t)$ angegeben?',
-        optionen: ['m', 's pro m', 'm pro s'], ans: 2,
-        warum: ['m ist die Einheit von $s$ selbst, nicht die der Änderungsrate.', 'Umgekehrt: Einheit von $y$ <b>pro</b> Einheit von $x$.'] },
-      { frage: '$T(t)$ ist eine Temperatur in °C, $t$ in min. In welcher Einheit wird $T\'(t)$ angegeben?',
-        optionen: ['°C pro min', 'min pro °C', '°C'], ans: 0,
-        warum: [, 'Umgekehrt: Einheit von $y$ <b>pro</b> Einheit von $x$.', '°C ist die Einheit von $T$ selbst.'] },
-      { frage: '$K(x)$ sind Kosten in €, $x$ die Stückzahl. In welcher Einheit wird $K\'(x)$ angegeben?',
-        optionen: ['Stück', '€ pro Stück', '€'], ans: 1,
-        warum: ['Einheit von $y$ <b>pro</b> Einheit von $x$.', , '€ ist die Einheit von $K$ selbst.'] } ],
-    [ { frage: 'An welcher Stelle nimmt $f(x) = -x^3 + 6x^2$ am stärksten zu?',
-        optionen: ['$x = 2$', '$x = 4$', '$x = 0$'], ans: 0,
-        warum: [, 'Bei $x = 4$ ist der Hochpunkt: $f\'(4) = 0$.', 'Bei $x = 0$ ist $f\'(0) = 0$. Setzen Sie $f\'\'(x) = -6x + 12 = 0$.'] },
-      { frage: 'An welcher Stelle nimmt $f(x) = -x^3 + 9x^2$ am stärksten zu?',
-        optionen: ['$x = 6$', '$x = 3$', '$x = 0$'], ans: 1,
-        warum: ['Bei $x = 6$ ist der Hochpunkt: $f\'(6) = 0$.', , 'Bei $x = 0$ ist $f\'(0) = 0$. Setzen Sie $f\'\'(x) = -6x + 18 = 0$.'] },
-      { frage: 'An welcher Stelle nimmt $f(x) = -2x^3 + 6x^2$ am stärksten zu?',
-        optionen: ['$x = 0$', '$x = 2$', '$x = 1$'], ans: 2,
-        warum: ['Bei $x = 0$ ist $f\'(0) = 0$.', 'Bei $x = 2$ ist der Hochpunkt: $f\'(2) = 0$. Setzen Sie $f\'\'(x) = -12x + 12 = 0$.'] } ],
-    [ { frage: '$g(x) = x^3 - 3x^2$ auf $[-1;\\,4]$ mit $g\'(-1) = 9$, $g\'(1) = -3$, $g\'(4) = 24$. „Die stärkste Zunahme liegt an der Wendestelle $x = 1$.“',
-        optionen: ['Stimmt — Wendestelle heißt stärkste Steigung.', 'Stimmt nicht — am Rand $x = 4$ ist $g\' = 24$ am größten.'], ans: 1,
-        warum: ['Bei $x = 1$ ist $g\'$ sogar negativ. Auf einem Intervall immer auch die Ränder prüfen.'] },
-      { frage: '$k(x) = -x^3 + 3x$ auf $[-2;\\,2]$ mit $k\'(-2) = -9$, $k\'(0) = 3$, $k\'(2) = -9$. „Die stärkste Abnahme liegt an der Wendestelle $x = 0$.“',
-        optionen: ['Stimmt — an der Wendestelle ist $k\'$ extrem.', 'Stimmt nicht — bei $x = 0$ ist die stärkste <b>Zunahme</b>; die stärkste Abnahme liegt an den Rändern.'], ans: 1,
-        warum: ['$k\'(0) = 3$ ist positiv — dort steigt der Graph. Abnahme heißt: $k\'$ möglichst negativ.'] },
-      { frage: '„Wenn der Pegel am höchsten steht, steigt er am schnellsten.“',
-        optionen: ['Stimmt — höher geht es nicht.', 'Stimmt nicht — am Hochpunkt ist die Änderungsrate $0$.'], ans: 1,
-        warum: ['Am Hochpunkt ist die Tangente waagrecht: Der Pegel steigt in diesem Moment gar nicht.'] } ]
-  ] });
-});
-</script>
 </body>
 </html>

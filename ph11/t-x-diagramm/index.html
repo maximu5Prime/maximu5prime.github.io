@@ -57,9 +57,6 @@
     .start[hidden] { display: none; }
     .start output { font-family: var(--font-mono); color: var(--c-accent); min-width: 3.5em; }
     .start input[type=range] { flex: 1; height: 34px; }
-    .tr-diagramm { display: block; width: 100%; max-width: 420px; margin: .6rem 0 .2rem; }
-    .tr-diagramm text { font: 11px var(--font-body); fill: var(--c-muted); }
-    .st-opts .tr-diagramm { width: 200px; max-width: 100%; margin: 0; }
   </style>
 </head>
 <body>
@@ -80,29 +77,32 @@
     <p>Jana läuft im Sportunterricht einen Pendellauf. Stellen Sie ihre Geschwindigkeiten so ein, dass ihr Graph genau auf dem Ziel landet.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
-  <section class="stage" aria-label="Ausprobieren">
-    <div class="level" id="level" aria-label="Level wählen"></div>
-    <div class="mission" id="mission"><span class="icon"></span>
-      <span id="auftrag"></span></div>
-    <div class="plot" id="bahnWrap"><canvas id="bahn" aria-label="Laufbahn mit Jana"></canvas></div>
-    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="t-x-Diagramm mit Zielgraph"></canvas></div>
-    <div class="ab-regler" id="abRegler">
-      <div class="ab a1"><label for="r1">0–10 s <output id="o1"></output></label>
-        <input type="range" id="r1" min="-4" max="4" step="0.5" value="0" aria-label="Geschwindigkeit von 0 bis 10 s"></div>
-      <div class="ab a2"><label for="r2">10–20 s <output id="o2"></output></label>
-        <input type="range" id="r2" min="-4" max="4" step="0.5" value="0" aria-label="Geschwindigkeit von 10 bis 20 s"></div>
-      <div class="ab a3"><label for="r3">20–30 s <output id="o3"></output></label>
-        <input type="range" id="r3" min="-4" max="4" step="0.5" value="0" aria-label="Geschwindigkeit von 20 bis 30 s"></div>
-    </div>
-    <div class="start" id="startRegler" hidden><label for="r0">Startort $x_0$</label>
-      <input type="range" id="r0" min="0" max="60" step="10" value="0"><output id="o0"></output></div>
-    <div class="plot" id="tvWrap"><canvas id="tv" aria-label="t-v-Diagramm zu Janas Lauf"></canvas></div>
-    <div class="lauf-zeile">
-      <button class="btn" id="los" type="button">▶ Jana laufen lassen</button>
-      <span class="rueckmeldung" id="rueck" aria-live="polite"></span>
-    </div>
-  </section>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Ausprobieren">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="level" id="level" aria-label="Level wählen"></div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span id="auftrag"></span></div>
+      <div class="plot" id="bahnWrap"><canvas id="bahn" aria-label="Laufbahn mit Jana"></canvas></div>
+      <div class="plot" id="plotWrap"><canvas id="plot" aria-label="t-x-Diagramm mit Zielgraph"></canvas></div>
+      <div class="ab-regler" id="abRegler">
+        <div class="ab a1"><label for="r1">0–10 s <output id="o1"></output></label>
+          <input type="range" id="r1" min="-4" max="4" step="0.5" value="0" aria-label="Geschwindigkeit von 0 bis 10 s"></div>
+        <div class="ab a2"><label for="r2">10–20 s <output id="o2"></output></label>
+          <input type="range" id="r2" min="-4" max="4" step="0.5" value="0" aria-label="Geschwindigkeit von 10 bis 20 s"></div>
+        <div class="ab a3"><label for="r3">20–30 s <output id="o3"></output></label>
+          <input type="range" id="r3" min="-4" max="4" step="0.5" value="0" aria-label="Geschwindigkeit von 20 bis 30 s"></div>
+      </div>
+      <div class="start" id="startRegler" hidden><label for="r0">Startort $x_0$</label>
+        <input type="range" id="r0" min="0" max="60" step="10" value="0"><output id="o0"></output></div>
+      <div class="plot" id="tvWrap"><canvas id="tv" aria-label="t-v-Diagramm zu Janas Lauf"></canvas></div>
+      <div class="lauf-zeile">
+        <button class="btn" id="los" type="button">▶ Jana laufen lassen</button>
+        <span class="rueckmeldung" id="rueck" aria-live="polite"></span>
+      </div>
+    </section>
+  </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
@@ -126,12 +126,11 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/ph11/ueben-bewegungen/#t-x-diagramm"><span>Üben<small>Bewegungen · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/ph11/ort-geschwindigkeit/"><span>← Voriges Thema</span>Wo ist der Nullpunkt?</a>
-    <a class="next" href="/ph11/einheiten/"><span>Nächstes Thema →</span>Einheiten und Formeln</a>
+    <a class="next" href="/ph11/ueben-bewegungen/"><span>Nächstes Thema →</span>Üben: Bewegungen</a>
   </nav>
 
   <footer class="fuss">
@@ -363,81 +362,6 @@ window.addEventListener('load', function () {
   Aha.onRedraw(function () { zeichne(); });
   window.addEventListener('resize', function () { zeichne(); });
   waehle(lv);
-});
-</script>
-<script>
-/* 3 Üben: ein Aufgabentyp „Was verrät das t-x-Diagramm?“, ⭐ angeben → ⭐⭐ bestimmen → ⭐⭐⭐ beurteilen.
-   Kontexte nicht vom AB/INFO: Modellauto, Straßenbahn, Laufkatze eines Krans, Hund. */
-window.addEventListener('load', function () {
-  function de(x) { return String(+(+x).toPrecision(10)).replace('.', ','); }
-  /* Mini-Diagramm als SVG: o = {tmax, dt, xmin, xmax, dx, tL, xL, pts} */
-  function dia(o) {
-    var W = 320, H = 190, l = 40, r = 40, t = 14, b = 28;
-    function X(tt) { return l + tt / o.tmax * (W - l - r); }
-    function Y(x) { return t + (o.xmax - x) / (o.xmax - o.xmin) * (H - t - b); }
-    var s = '<svg class="tr-diagramm" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + o.xL + ' über ' + o.tL + '">', i, k;
-    for (i = 0; i <= o.tmax / o.dt; i++) {
-      var tt = i * o.dt;
-      s += '<line x1="' + X(tt) + '" y1="' + Y(o.xmax) + '" x2="' + X(tt) + '" y2="' + Y(o.xmin) + '" stroke="var(--c-grid)"/>';
-      if (i > 0) s += '<text x="' + X(tt) + '" y="' + (Y(Math.max(0, o.xmin)) + 13) + '" text-anchor="middle">' + de(tt) + '</text>';
-    }
-    for (k = 0; k <= (o.xmax - o.xmin) / o.dx; k++) {
-      var x = o.xmin + k * o.dx;
-      s += '<line x1="' + X(0) + '" y1="' + Y(x) + '" x2="' + X(o.tmax) + '" y2="' + Y(x) + '" stroke="var(--c-grid)"/>';
-      if (Math.abs(x) > 1e-9) s += '<text x="' + (X(0) - 5) + '" y="' + (Y(x) + 4) + '" text-anchor="end">' + de(x) + '</text>';
-    }
-    var y0 = Math.max(0, o.xmin);
-    s += '<line x1="' + X(0) + '" y1="' + Y(y0) + '" x2="' + (X(o.tmax) + 14) + '" y2="' + Y(y0) + '" stroke="var(--c-axis)" stroke-width="1.5"/>' +
-         '<line x1="' + X(0) + '" y1="' + Y(o.xmin) + '" x2="' + X(0) + '" y2="' + (Y(o.xmax) - 8) + '" stroke="var(--c-axis)" stroke-width="1.5"/>' +
-         '<text x="' + (X(o.tmax) + 14) + '" y="' + (Y(y0) - 5) + '" text-anchor="end">' + o.tL + '</text>' +
-         '<text x="' + (X(0) + 5) + '" y="' + (Y(o.xmax) - 2) + '">' + o.xL + '</text>';
-    s += '<polyline fill="none" stroke="var(--ph)" stroke-width="3" stroke-linejoin="round" points="' +
-         o.pts.map(function (p) { return X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }).join(' ') + '"/>';
-    return s + '</svg>';
-  }
-  function tx(pts, tmax, xmax, extra) {
-    var o = { tmax: tmax, dt: tmax > 30 ? 10 : 5, xmin: 0, xmax: xmax, dx: xmax > 60 ? 20 : 10, tL: 't in s', xL: 'x in m', pts: pts };
-    for (var k in extra) o[k] = extra[k];
-    return dia(o);
-  }
-  function tv(pts, vmax, tmax) {
-    return dia({ tmax: tmax, dt: 10, xmin: -vmax, xmax: vmax, dx: vmax / 2, tL: 't in s', xL: 'v in m/s', pts: pts });
-  }
-  var auto = tx([[0, 0], [10, 30], [20, 30], [30, 50]], 30, 60);              // Modellauto: 3 m/s, Halt, 2 m/s
-  var bahn = tx([[0, 0], [20, 80], [40, 80], [60, 0]], 60, 100);             // Straßenbahn: 4 m/s, Halt, −4 m/s
-
-  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: 'Ein Modellauto fährt geradeaus. In welchem Abschnitt <b>steht</b> es?' + auto,
-        optionen: ['von 0 bis 10 s', 'von 10 bis 20 s', 'von 20 bis 30 s'], ans: 1,
-        warum: ['Hier steigt der Graph: Der Ort ändert sich, das Auto fährt.', , 'Hier steigt der Graph: Das Auto fährt weiter.'] },
-      { frage: 'Dasselbe Modellauto: In welchem Abschnitt fährt es am <b>schnellsten</b>?' + auto,
-        optionen: ['von 0 bis 10 s', 'von 10 bis 20 s', 'von 20 bis 30 s'], ans: 0,
-        warum: [, 'Waagrecht heißt: Der Ort bleibt gleich, das Auto steht.', 'Hier ist das Auto am weitesten weg, aber der Graph ist flacher: $20\\,\\text{m}$ in $10\\,\\text{s}$ statt $30\\,\\text{m}$.'] },
-      { frage: 'Eine Straßenbahn fährt auf gerader Strecke. Was macht sie zwischen $40\\,\\text{s}$ und $60\\,\\text{s}$?' + bahn,
-        optionen: ['Sie fährt zurück zum Start.', 'Sie bremst bis zum Stillstand.', 'Sie fährt bergab.'], ans: 0,
-        warum: [, 'Beim Bremsen wird der Graph flacher, aber er fällt nicht. Hier fällt er gleichmäßig: Der Ort wird kleiner.', 'Das t-x-Diagramm ist kein Bild der Strecke. Fallend heißt: Der Ort $x$ wird kleiner.'] } ],
-    [ { frage: 'Bestimmen Sie die Geschwindigkeit der Straßenbahn zwischen $40\\,\\text{s}$ und $60\\,\\text{s}$.' + bahn,
-        optionen: ['$v = -4\\,\\frac{\\text{m}}{\\text{s}}$', '$v = 4\\,\\frac{\\text{m}}{\\text{s}}$', '$v = -1{,}3\\,\\frac{\\text{m}}{\\text{s}}$'], ans: 0,
-        warum: [, 'Der Ort wird kleiner: $\\Delta x = 0\\,\\text{m} - 80\\,\\text{m} = -80\\,\\text{m}$. Das Vorzeichen zeigt die Richtung.', 'Sie haben durch $60\\,\\text{s}$ geteilt. Es zählt nur der Abschnitt: $\\Delta t = 20\\,\\text{s}$.'] },
-      { frage: 'Die Laufkatze eines Krans fährt am Ausleger entlang. Bestimmen Sie die Bewegungsgleichung.' +
-               tx([[0, 40], [20, 0]], 20, 50),
-        optionen: ['$x(t) = 40\\,\\text{m} - 2\\,\\frac{\\text{m}}{\\text{s}}\\cdot t$', '$x(t) = 40\\,\\text{m} + 2\\,\\frac{\\text{m}}{\\text{s}}\\cdot t$', '$x(t) = 20\\,\\text{m} - 2\\,\\frac{\\text{m}}{\\text{s}}\\cdot t$'], ans: 0,
-        warum: [, 'Der Graph fällt: $v$ ist negativ.', '$x_0$ ist der Ort bei $t = 0$: Dort ist der Graph bei $40\\,\\text{m}$.'] },
-      { frage: 'Welches t-v-Diagramm gehört zum Modellauto?' + auto,
-        optionen: [tv([[0, 3], [10, 3], [10, 0], [20, 0], [20, 2], [30, 2]], 4, 30),
-                   tv([[0, 0], [10, 3], [20, 3], [30, 2]], 4, 30),
-                   tv([[0, 3], [10, 3], [10, 0], [20, 0], [20, -2], [30, -2]], 4, 30)], ans: 0,
-        warum: [, 'Das ist der t-x-Graph „abgemalt“. Im t-v-Diagramm wird jedes gerade Stück zu einer waagrechten Stufe.', 'Im letzten Abschnitt steigt der t-x-Graph: $v$ ist positiv.'] } ],
-    [ { frage: 'Kann ein t-x-Diagramm so aussehen? (Hund an der Leine)' + tx([[0, 0], [10, 20], [10, 40], [20, 50]], 20, 60),
-        optionen: ['Nein: Bei $t = 10\\,\\text{s}$ wäre der Hund gleichzeitig an allen Orten von $20$ bis $40\\,\\text{m}$.', 'Ja: Der Hund springt einfach sehr schnell nach vorne.'], ans: 0,
-        warum: [, 'Auch ein schneller Sprung braucht Zeit. Ein senkrechtes Stück hieße: unendlich schnell.'] },
-      { frage: '„Der Graph der Straßenbahn ist am Ende wieder auf der $t$-Achse, also ist sie insgesamt keinen Meter gefahren.“' + bahn,
-        optionen: ['Stimmt nicht: Die Ortsänderung ist $\\Delta x = 0$, der Weg ist $s = 160\\,\\text{m}$.', 'Stimmt: Sie steht wieder am Start, also $s = 0$.'], ans: 0,
-        warum: [, 'Am Start ist sie wieder, also $\\Delta x = 0$. Gefahren ist sie trotzdem: $80\\,\\text{m}$ hin und $80\\,\\text{m}$ zurück.'] },
-      { frage: '„Im Abschnitt mit dem höchsten Punkt des t-x-Graphen fährt das Modellauto am schnellsten.“' + auto,
-        optionen: ['Stimmt nicht: Die Höhe zeigt den Ort, die Steigung die Geschwindigkeit.', 'Stimmt: Am höchsten Punkt ist es am weitesten gekommen.'], ans: 0,
-        warum: [, 'Am weitesten heißt nicht am schnellsten. Am schnellsten ist das Auto, wo der Graph am steilsten ist (0 bis 10 s).'] } ]
-  ] });
 });
 </script>
 </body>

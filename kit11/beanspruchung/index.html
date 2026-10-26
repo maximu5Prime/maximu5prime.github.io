@@ -59,29 +59,36 @@
     <p>Die Kraft von außen heißt <b>Belastung</b>, was sie im Inneren bewirkt <b>Beanspruchung</b> — erkennbar an der Verformung.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
-  <figure class="video">
-    <video controls playsinline preload="metadata" poster="KIT11_UE01_VID_Beanspruchung.jpg">
-      <source src="KIT11_UE01_VID_Beanspruchung.mp4" type="video/mp4">
-      <track kind="subtitles" src="KIT11_UE01_VID_Beanspruchung.vtt" srclang="de" label="Deutsch" default>
-    </video>
-    <figcaption><b>Belastung oder Beanspruchung?</b> — die fünf Arten im Video.</figcaption>
-  </figure>
-
-  <section class="stage" aria-label="Kraft-Labor">
-    <div class="mission" id="mission"><span class="icon"></span>
-      <span>Kraftbild wählen, Kraft aufdrehen, Beanspruchung benennen. <span class="stand" id="stand">0/5</span></span></div>
-    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-      <marker id="spitze" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
-        <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs></svg>
-    <div class="kraftbilder" id="kraftbilder" role="group" aria-label="Kraftbilder"></div>
-    <svg class="labor" id="labor" viewBox="0 0 420 200" role="img" aria-label="Stab unter Belastung"></svg>
-    <div class="regler"><div><label for="F">Kraft <output id="FVal">0 %</output></label>
-      <input type="range" id="F" min="0" max="100" step="1" value="0"></div></div>
-    <p class="namefrage" id="namefrage"></p>
-    <div class="wahl" id="namen"></div>
-    <p class="rueck" id="rueck"></p>
-  </section>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Kraft-Labor">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span>Kraftbild wählen, Kraft aufdrehen, Beanspruchung benennen. <span class="stand" id="stand">0/5</span></span></div>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+        <marker id="spitze" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs></svg>
+      <div class="kraftbilder" id="kraftbilder" role="group" aria-label="Kraftbilder"></div>
+      <svg class="labor" id="labor" viewBox="0 0 420 200" role="img" aria-label="Stab unter Belastung"></svg>
+      <div class="regler"><div><label for="F">Kraft <output id="FVal">0 %</output></label>
+        <input type="range" id="F" min="0" max="100" step="1" value="0"></div></div>
+      <p class="namefrage" id="namefrage"></p>
+      <div class="wahl" id="namen"></div>
+      <p class="rueck" id="rueck"></p>
+    </section>
+    <div class="kachel-video">
+      <div class="kachel-kopf">Anschauen</div>
+      <div class="videos">
+      <figure class="video">
+        <video controls playsinline preload="metadata" poster="KIT11_UE01_VID_Beanspruchung.jpg">
+          <source src="KIT11_UE01_VID_Beanspruchung.mp4" type="video/mp4">
+          <track kind="subtitles" src="KIT11_UE01_VID_Beanspruchung.vtt" srclang="de" label="Deutsch" default>
+        </video>
+        <figcaption><b>Belastung oder Beanspruchung?</b> — die fünf Arten im Video.</figcaption>
+      </figure>
+      </div>
+    </div>
+  </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
@@ -108,11 +115,10 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <section id="trainer" aria-label="Übungsaufgaben"></section>
+  <a class="zum-ueben" href="/kit11/ueben-maschinenbau/#beanspruchung"><span>Üben<small>Maschinenbau · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <details class="zusatz" id="hilfe">
-    <summary>Hilfe zum Auftragsblatt (Ingenieurbüro, Arbeitspaket 1)</summary>
+    <summary>Hilfe zu den Aufgaben</summary>
     <p class="notiz">Erst Tipp 1, dann Tipp 2.</p>
     <details class="hilfe"><summary>Aufgabe 1 · Den Kran begutachten — Tipp 1</summary>
       <p>Stellen Sie sich jedes Bauteil aus Gummi vor: Wird es länger, kürzer, krumm, verschoben oder verdreht?</p></details>
@@ -132,6 +138,7 @@
 
   <nav class="pager2" aria-label="Themen">
     <a href="/kit11/ki-fails/"><span>← Voriges Thema</span>KI-Fail-Detektor</a>
+    <a class="next" href="/kit11/ueben-maschinenbau/"><span>Nächstes Thema →</span>Üben: Maschinenbau</a>
   </nav>
 
   <footer class="fuss">
@@ -172,7 +179,12 @@ window.addEventListener('load', function () {
   function zeichne() {
     var s = F / 100, html = '', N = 40, u, i, oben = [], unten = [];
     var cx = 210, cy = 100, L = 200, h = 40;
-    if (!art) { svg.innerHTML = '<text x="210" y="105" text-anchor="middle" fill="var(--c-muted)">Wählen Sie oben ein Kraftbild.</text>'; return; }
+    if (!art) {                                 // noch kein Kraftbild: unbelasteter Stab (auch Vorschau der eingeklappten Kachel)
+      svg.innerHTML = '<rect class="wand" x="96" y="50" width="14" height="100" rx="3"/>' +
+        '<rect class="koerper" x="' + (cx - L / 2) + '" y="' + (cy - h / 2) + '" width="' + L + '" height="' + h + '" rx="4"/>' +
+        '<text x="210" y="178" text-anchor="middle" fill="var(--c-muted)">Wählen Sie oben ein Kraftbild.</text>';
+      return;
+    }
     if (art === 'zug' || art === 'druck') {
       var Lz = L * (art === 'zug' ? 1 + .32 * s : 1 - .22 * s);
       for (i = 0; i <= N; i++) {
@@ -259,46 +271,6 @@ window.addEventListener('load', function () {
   });
   zeichne();
   Aha.onRedraw && window.addEventListener('resize', zeichne);
-
-  // ── Trainer ─────────────────────────────────────────────────────────
-  var NAME = ['Zug', 'Druck', 'Biegung', 'Abscherung', 'Torsion'];
-  var WORAN = ['Kräfte wirken längs und ziehen nach außen', 'Kräfte wirken längs und drücken nach innen',
-    'Kraft wirkt quer, mit Abstand zur Halterung', 'zwei Kräfte wirken quer, dicht nebeneinander', 'die Enden werden gegeneinander gedreht'];
-  var TEILE = [
-    ['ein Kletterseil, an dem eine Person hängt', 0], ['eine gespannte Gitarrensaite', 0], ['die Kette eines Fahrrads beim Treten', 0],
-    ['ein Tischbein unter einer schweren Tischplatte', 1], ['eine Säule unter einer Brücke', 1], ['ein Wagenheber, der ein Auto anhebt', 1],
-    ['ein Regalbrett mit Büchern in der Mitte', 2], ['eine Angelrute, an deren Spitze ein Fisch zieht', 2], ['ein Balkon, der nur an der Hauswand befestigt ist', 2],
-    ['ein Blatt Papier zwischen den Klingen einer Schere', 3], ['ein Niet, der zwei gegeneinander gezogene Bleche verbindet', 3],
-    ['ein Schlüssel im Schloss beim Aufsperren', 4], ['ein Handtuch beim Auswringen', 4], ['die Antriebswelle eines Elektromotors', 4]];
-  var AUSSAGEN = [
-    ['„Eine Tür, die sich in den Angeln dreht, wird auf Torsion beansprucht.“', false, 'Die Tür bewegt sich nur, sie wird nicht in sich verdreht. Bewegung ist keine Verformung.'],
-    ['„Ein Bohrer wird beim Bohren auf Druck und Torsion beansprucht.“', true, 'Er wird ins Werkstück gedrückt und zugleich verdreht — mehrfache Beanspruchung.'],
-    ['„Ein Seil kann eine Last auch von unten stützen.“', false, 'Ein Seil ist biegeweich: Es nimmt nur Zug auf. Unter Druck weicht es seitlich aus.'],
-    ['„Ein Regalbrett mit Büchern wird oben gestaucht und unten gedehnt.“', true, 'Es biegt sich nach unten durch: Die Oberseite wird kürzer, die Unterseite länger.'],
-    ['„Eine Schraube wird beim Anziehen nur auf Torsion beansprucht.“', false, 'Beim Anziehen wird sie verdreht und zugleich gelängt: Torsion und Zug.'],
-    ['„Wer an der Spitze einer Angelrute zieht, beansprucht sie vor allem auf Zug.“', false, 'Die Kraft greift quer zur Rute an, mit großem Abstand zum Griff: Biegung.'],
-    ['„Beton hält viel Druck, aber wenig Zug — deshalb liegt in Betonbalken unten Stahl.“', true, 'Ein belasteter Balken wird unten gedehnt (Zug). Dort hilft der Stahl.'],
-    ['„Je größer die Kraft, desto eher wird aus Zug eine Biegung.“', false, 'Die Art hängt von Richtung und Lage der Kraft ab, nicht von ihrer Größe.']];
-  function wahlFeld(label, ans) {
-    return { typ: 'wahl', label: label, optionen: NAME, ans: ans,
-      warum: NAME.map(function (n, j) { return j === ans ? '' : 'Schauen Sie auf die Richtung der Kräfte: ' + WORAN[ans] + '.'; }) };
-  }
-  Aha.Trainer({ el: 'trainer', stufen: ['Zuordnen', 'Bestimmen', 'Beurteilen'], neu: function (stufe) {
-    if (stufe < 3) {
-      var T = Aha.eins(TEILE), a = T[1];
-      var weg = '<p><b>' + NAME[a] + '</b>: ' + WORAN[a] + '.</p>';
-      if (stufe === 1) return { operator: 'Ordnen Sie zu', frage: 'Wie wird ' + T[0] + ' beansprucht?',
-        felder: [wahlFeld('', a)], tipp: 'Stellen Sie sich das Bauteil aus Gummi vor: länger, kürzer, krumm, verschoben oder verdreht?', weg: weg };
-      return { operator: 'Bestimmen Sie', frage: 'Bestimmen Sie die Beanspruchung von ' + T[0].replace(/^ein /, 'einem ').replace(/^eine /, 'einer ').replace(/^die /, 'der ').replace(/^das /, 'dem ') + ' — und woran Sie sie erkennen.',
-        felder: [wahlFeld('Beanspruchung:', a), { typ: 'wahl', label: 'Woran erkannt?', optionen: WORAN, ans: a,
-          warum: WORAN.map(function (w, j) { return j === a ? '' : 'Passt die Richtung der Kräfte zu diesem Bauteil?'; }) }],
-        tipp: 'Zeichnen Sie in Gedanken die Kraftpfeile ein: längs oder quer? Mit Abstand oder dicht nebeneinander?', weg: weg };
-    }
-    var S = Aha.eins(AUSSAGEN);
-    return { operator: 'Beurteilen Sie', frage: 'Stimmt die Aussage? ' + S[0],
-      felder: [{ typ: 'wahl', optionen: ['stimmt', 'stimmt nicht'], ans: S[1] ? 0 : 1, warum: ['', ''].map(function () { return S[2]; }) }],
-      tipp: 'Fragen Sie: Wie verformt sich das Bauteil <b>in sich</b>? Bewegung allein zählt nicht.', weg: '<p>' + (S[1] ? 'Stimmt. ' : 'Stimmt nicht. ') + S[2] + '</p>' };
-  } });
 });
 </script>
 </body>

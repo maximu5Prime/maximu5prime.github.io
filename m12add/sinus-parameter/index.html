@@ -59,33 +59,36 @@
     <p>$f(x) = a\cdot\sin(bx - c) + d$ — vier Regler, sechs Zielkurven.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
-  <section class="stage" aria-label="Ausprobieren">
-    <div class="level" id="level" aria-label="Level wählen"></div>
-    <div class="mission" id="mission"><span class="icon"></span>
-      <span id="auftrag">Legen Sie Ihre Kurve genau auf die gestrichelte Zielkurve.</span></div>
-    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graph der Sinusfunktion mit Zielkurve"></canvas></div>
-    <div class="regler vier">
-      <div><label for="ra">$a$ <output id="va"></output></label>
-        <input type="range" id="ra" min="-3" max="3" step="0.5" value="1"></div>
-      <div><label for="rb">$b$ <output id="vb"></output></label>
-        <input type="range" id="rb" min="0.5" max="3" step="0.5" value="1"></div>
-      <div><label for="rc">$c$ <output id="vc"></output></label>
-        <input type="range" id="rc" min="-8" max="8" step="1" value="0"></div>
-      <div><label for="rd">$d$ <output id="vd"></output></label>
-        <input type="range" id="rd" min="-2" max="2" step="0.5" value="0"></div>
-    </div>
-    <button class="klein-btn" id="reset" type="button">Zurück auf $\sin(x)$</button>
-    <div class="hinweis-falle" id="falle"></div>
-    <div class="ergebnis">
-      <div class="gross" id="term"></div>
-      <div class="deckung"><span>Deckung</span><div class="spur"><div class="balken" id="balken"></div></div><output id="prozent"></output></div>
-    </div>
-    <div class="weiter-zeile" id="weiterZeile" hidden>
-      <button class="btn" id="weiter" type="button">Nächstes Level →</button>
-      <span class="profi-info" id="profiInfo"></span>
-    </div>
-  </section>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Ausprobieren">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="level" id="level" aria-label="Level wählen"></div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span id="auftrag">Legen Sie Ihre Kurve genau auf die gestrichelte Zielkurve.</span></div>
+      <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Graph der Sinusfunktion mit Zielkurve"></canvas></div>
+      <div class="regler vier">
+        <div><label for="ra">$a$ <output id="va"></output></label>
+          <input type="range" id="ra" min="-3" max="3" step="0.5" value="1"></div>
+        <div><label for="rb">$b$ <output id="vb"></output></label>
+          <input type="range" id="rb" min="0.5" max="3" step="0.5" value="1"></div>
+        <div><label for="rc">$c$ <output id="vc"></output></label>
+          <input type="range" id="rc" min="-8" max="8" step="1" value="0"></div>
+        <div><label for="rd">$d$ <output id="vd"></output></label>
+          <input type="range" id="rd" min="-2" max="2" step="0.5" value="0"></div>
+      </div>
+      <button class="klein-btn" id="reset" type="button">Zurück auf $\sin(x)$</button>
+      <div class="hinweis-falle" id="falle"></div>
+      <div class="ergebnis">
+        <div class="gross" id="term"></div>
+        <div class="deckung"><span>Deckung</span><div class="spur"><div class="balken" id="balken"></div></div><output id="prozent"></output></div>
+      </div>
+      <div class="weiter-zeile" id="weiterZeile" hidden>
+        <button class="btn" id="weiter" type="button">Nächstes Level →</button>
+        <span class="profi-info" id="profiInfo"></span>
+      </div>
+    </section>
+  </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
@@ -97,7 +100,7 @@
 
   <details class="zusatz" id="riesenrad">
     <summary>Zusatz: Vom Riesenrad zur Sinuskurve</summary>
-    <p>Gondel aus dem Skript: Einstieg unten in $2\,\text{m}$ Höhe, Nabe $27\,\text{m}$ hoch, eine Umdrehung in $10$ Minuten.</p>
+    <p>Gondel: Einstieg unten in $2\,\text{m}$ Höhe, Nabe $27\,\text{m}$ hoch, eine Umdrehung in $10$ Minuten.</p>
 
     <section class="stage" aria-label="Riesenrad">
       <div class="mission" id="radMission"><span class="icon"></span>
@@ -129,11 +132,11 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/m12add/ueben-trigonometrie/#sinus-parameter"><span>Üben<small>Trigonometrie · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m12add/einheitskreis/"><span>← Voriges Thema</span>Einheitskreis, Tangens, Bogenmaß</a>
+    <a class="next" href="/m12add/ueben-trigonometrie/"><span>Nächstes Thema →</span>Üben: Trigonometrie</a>
   </nav>
 
   <footer class="fuss">
@@ -143,6 +146,8 @@
 </div>
 <script>
 window.addEventListener('load', function () {
+  /* Riesenrad liegt im aufklappbaren Zusatz: beim Öffnen neu zeichnen (vorher Breite 0) */
+  Aha.$('riesenrad').addEventListener('toggle', function () { window.dispatchEvent(new Event('resize')); });
   var PI = Math.PI, S = { a: 1, b: 1, k: 0, d: 0 };          // c = k·π/4
 
   /* Zielkurven (c = k·π/4): von einem Regler bis zu allen vier. Keine Funktion aus dem Skript 2.5 (Aufg. 2–5). */
@@ -405,42 +410,6 @@ window.addEventListener('load', function () {
   });
   Aha.$('radZeichen').addEventListener('change', radZeichne);
   Aha.onRedraw(radZeichne);
-});
-</script>
-<script>
-/* 3 Üben: ein Aufgabentyp, drei Stufen (Aha.Stufen). Familie: Was bewirkt der Parameter? Keine Funktion aus Skript 2.5. */
-window.addEventListener('load', function () {
-  /* Riesenrad liegt im aufklappbaren Zusatz: beim Öffnen neu zeichnen (vorher Breite 0) */
-  Aha.$('riesenrad').addEventListener('toggle', function () { window.dispatchEvent(new Event('resize')); });
-  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: 'Welche Periode hat $f(x) = \\sin(3x)$?',
-        optionen: ['$3\\pi$', '$\\frac{2}{3}\\pi$', '$6\\pi$'], ans: 1,
-        warum: ['Größeres $b$ macht die Wellen enger, nicht breiter: Periode $\\frac{2\\pi}{b}$.', , 'Nicht mal $b$, sondern durch $b$: $\\frac{2\\pi}{3}$.'] },
-      { frage: 'Welche Periode hat $f(x) = \\sin(2x)$?',
-        optionen: ['$\\pi$', '$2\\pi$', '$4\\pi$'], ans: 0,
-        warum: [, '$2\\pi$ ist die Periode von $\\sin(x)$. Mit $b = 2$ passen zwei Wellen hinein.', 'Nicht mal $b$, sondern durch $b$: $\\frac{2\\pi}{2}$.'] },
-      { frage: 'Welche Periode hat $f(x) = \\sin(0{,}5x)$?',
-        optionen: ['$\\pi$', '$4\\pi$', '$0{,}5\\pi$'], ans: 1,
-        warum: ['$b < 1$ macht die Wellen breiter: $\\frac{2\\pi}{0{,}5} = 4\\pi$.', , '$\\frac{2\\pi}{b}$ mit $b = 0{,}5$ — durch $0{,}5$ teilen heißt verdoppeln.'] } ],
-    [ { frage: 'Wie ist $\\sin\\bigl(2x + \\frac{\\pi}{2}\\bigr)$ gegenüber $\\sin(2x)$ verschoben?',
-        optionen: ['um $\\frac{\\pi}{2}$ nach links', 'um $\\frac{\\pi}{4}$ nach links', 'um $\\frac{\\pi}{4}$ nach rechts'], ans: 1,
-        warum: ['Die Verschiebung ist $\\frac{c}{b}$, nicht $c$: $\\frac{\\pi/2}{2} = \\frac{\\pi}{4}$.', , 'Plus im Argument heißt $c < 0$: nach links.'] },
-      { frage: 'Wie ist $\\sin(3x - \\pi)$ gegenüber $\\sin(3x)$ verschoben?',
-        optionen: ['um $\\pi$ nach rechts', 'um $\\frac{\\pi}{3}$ nach rechts', 'um $\\frac{\\pi}{3}$ nach links'], ans: 1,
-        warum: ['Die Verschiebung ist $\\frac{c}{b} = \\frac{\\pi}{3}$, nicht $c$.', , 'Minus im Argument: nach rechts.'] },
-      { frage: 'Wie ist $\\sin\\bigl(2x - \\frac{\\pi}{2}\\bigr)$ gegenüber $\\sin(2x)$ verschoben?',
-        optionen: ['um $\\frac{\\pi}{4}$ nach rechts', 'um $\\frac{\\pi}{2}$ nach rechts', 'um $\\frac{\\pi}{4}$ nach links'], ans: 0,
-        warum: [, 'Die Verschiebung ist $\\frac{c}{b}$: $\\frac{\\pi/2}{2} = \\frac{\\pi}{4}$.', 'Minus im Argument: nach rechts.'] } ],
-    [ { frage: '„Die Graphen von $-\\sin(x)$ und $\\sin(x - \\pi)$ sind gleich.“',
-        optionen: ['Stimmt — Spiegeln und Verschieben um eine halbe Periode ergeben hier dasselbe Bild.', 'Stimmt nicht — bei $-\\sin(x)$ ist $a$ negativ, also eine andere Kurve.'], ans: 0,
-        warum: [, 'Vergleichen Sie Werte: Bei $x = \\frac{\\pi}{2}$ liefern beide $-1$. Verschiedene Parameter können dieselbe Kurve ergeben.'] },
-      { frage: '„$f(x) = 2\\sin(x) + 1$ nimmt nur Werte zwischen $-1$ und $3$ an.“',
-        optionen: ['Stimmt — Mittellinie $1$, Amplitude $2$.', 'Stimmt nicht — Werte zwischen $1$ und $2$.'], ans: 0,
-        warum: [, 'Die Mittellinie liegt bei $d = 1$, die Kurve schwingt $2$ darüber und $2$ darunter.'] },
-      { frage: '„$\\sin(2x)$ hat die doppelte Periode von $\\sin(x)$.“',
-        optionen: ['Stimmt — $b = 2$ verdoppelt.', 'Stimmt nicht — die Periode halbiert sich auf $\\pi$.'], ans: 1,
-        warum: ['$b = 2$ verdoppelt die Zahl der Wellen — jede Welle ist dann halb so lang.'] } ]
-  ] });
 });
 </script>
 </body>

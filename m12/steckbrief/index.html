@@ -57,23 +57,26 @@
     <p>Ansatz $f(x) = ax^3 + bx^2 + cx + d$: vier Unbekannte. Jede Angabe über $G_f$ wird zu einer Gleichung.</p>
   </header>
 
-  <h2 class="etappe"><span>1</span>Ausprobieren</h2>
-  <section class="stage" aria-label="Ausprobieren">
-    <div class="mission" id="mission"><span class="icon"></span>
-      <span>Machen Sie aus dem Bündel genau eine Kurve.</span></div>
-    <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Bündel von Graphen, die zu den gewählten Angaben passen"></canvas></div>
-    <div class="ergebnis">
-      <div class="gross" id="stand"></div>
-      <div class="rechnung" id="rechnung"></div>
-    </div>
-    <div class="sb-karten" id="karten">
-      <button type="button" data-k="0">$P(0\,|\,1)$ liegt auf $G_f$<span class="gl">$f(0) = 1$</span></button>
-      <button type="button" data-k="1">waagrechte Tangente bei $x = 3$<span class="gl">$f'(3) = 0$</span></button>
-      <button type="button" data-k="2">$G_f$ schneidet die $y$-Achse bei&nbsp;$1$<span class="gl">$f(0) = 1$</span></button>
-      <button type="button" data-k="3">Wendepunkt bei $x = 2$<span class="gl">$f''(2) = 0$</span></button>
-      <button type="button" data-k="4">$Q(4\,|\,5)$ liegt auf $G_f$<span class="gl">$f(4) = 5$</span></button>
-    </div>
-  </section>
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Ausprobieren">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span>Machen Sie aus dem Bündel genau eine Kurve.</span></div>
+      <div class="plot" id="plotWrap"><canvas id="plot" aria-label="Bündel von Graphen, die zu den gewählten Angaben passen"></canvas></div>
+      <div class="ergebnis">
+        <div class="gross" id="stand"></div>
+        <div class="rechnung" id="rechnung"></div>
+      </div>
+      <div class="sb-karten" id="karten">
+        <button type="button" data-k="0">$P(0\,|\,1)$ liegt auf $G_f$<span class="gl">$f(0) = 1$</span></button>
+        <button type="button" data-k="1">waagrechte Tangente bei $x = 3$<span class="gl">$f'(3) = 0$</span></button>
+        <button type="button" data-k="2">$G_f$ schneidet die $y$-Achse bei&nbsp;$1$<span class="gl">$f(0) = 1$</span></button>
+        <button type="button" data-k="3">Wendepunkt bei $x = 2$<span class="gl">$f''(2) = 0$</span></button>
+        <button type="button" data-k="4">$Q(4\,|\,5)$ liegt auf $G_f$<span class="gl">$f(4) = 5$</span></button>
+      </div>
+    </section>
+  </div>
 
   <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
 
@@ -94,12 +97,11 @@
     </div>
   </details>
 
-  <h2 class="etappe"><span>3</span>Üben</h2>
-  <div id="ueben"></div>
+  <a class="zum-ueben" href="/m12/ueben-differenzialrechnung/#steckbrief"><span>Üben<small>Differenzialrechnung · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
 
   <nav class="pager2" aria-label="Themen">
     <a href="/m12/ableitungsgraph/"><span>← Voriges Thema</span>Graph von f und f′</a>
-    <a class="next" href="/m12/graphen-domino/"><span>Nächstes Thema →</span>Graphen-Domino</a>
+    <a class="next" href="/m12/ueben-differenzialrechnung/"><span>Nächstes Thema →</span>Üben: Differenzialrechnung</a>
   </nav>
 
   <footer class="fuss">
@@ -247,40 +249,6 @@ window.addEventListener('load', function () {
   });
   stand();
   Aha.onRedraw(zeichne);
-});
-</script>
-<script>
-/* 3 Üben: drei Stufen (Aha.Stufen). Familie: Angabe → Bedingung → wie viele Funktionen passen. Andere Zahlen als AB 1.5. */
-window.addEventListener('load', function () {
-  Aha.Stufen({ el: 'ueben', operatoren: ['Geben Sie an', 'Bestimmen Sie', 'Beurteilen Sie'], stufen: [
-    [ { frage: '$G_f$ verläuft durch $P(2\\,|\\,5)$. Welche Bedingung gehört dazu?',
-        optionen: ['$f(5) = 2$', '$f(2) = 5$', '$f\'(2) = 5$'], ans: 1,
-        warum: ['Die $x$-Koordinate kommt in die Klammer, die $y$-Koordinate auf die rechte Seite.', , 'Ein Punkt sagt nichts über die Steigung: Gleichung mit $f$.'] },
-      { frage: '$G_f$ hat an der Stelle $x = 3$ eine waagrechte Tangente. Welche Bedingung gehört dazu?',
-        optionen: ['$f(3) = 0$', '$f\'\'(3) = 0$', '$f\'(3) = 0$'], ans: 2,
-        warum: ['$f(3) = 0$ hieße: $G_f$ schneidet dort die $x$-Achse.', 'Mit $f\'\'$ beschreibt man Wendestellen.'] },
-      { frage: '$G_f$ hat an der Stelle $x = 1$ einen Wendepunkt. Welche Bedingung gehört dazu?',
-        optionen: ['$f\'\'(1) = 0$', '$f\'(1) = 0$', '$f(1) = 0$'], ans: 0,
-        warum: [, '$f\'(1) = 0$ gehört zu einer waagrechten Tangente.', 'Ob $G_f$ dort die $x$-Achse trifft, ist nicht gesagt.'] } ],
-    [ { frage: '$f$ ist eine ganzrationale Funktion 4. Grades, $G_f$ ist achsensymmetrisch zur $y$-Achse. Wie viele Koeffizienten hat der Ansatz?',
-        optionen: ['$5$', '$3$', '$2$'], ans: 1,
-        warum: ['Bei Achsensymmetrie fallen $bx^3$ und $dx$ weg: $f(x) = ax^4 + cx^2 + e$.', , '$a$, $c$ und $e$ bleiben.'] },
-      { frage: '$G_f$ hat den Tiefpunkt $T(2\\,|\\,{-4})$. Welche Bedingungen gehören dazu?',
-        optionen: ['nur $f\'(2) = 0$', '$f(2) = -4$ und $f\'(2) = 0$', '$f(2) = -4$ und $f\'\'(2) = 0$'], ans: 1,
-        warum: ['$T$ liegt auch auf $G_f$: Es fehlt $f(2) = -4$.', , '$f\'\'(2) = 0$ gehört zu einem Wendepunkt.'] },
-      { frage: 'Für eine quadratische Funktion gilt $c = 1$ und $b = -2a$. Außerdem verläuft $G_f$ durch $Q(2\\,|\\,1)$. Was folgt daraus für $a$?',
-        optionen: ['$a = 1$', '$a = 0$', 'Nichts — die Angabe ist keine neue Bedingung.'], ans: 2,
-        warum: ['Einsetzen: $4a - 4a + 1 = 1$, also $1 = 1$. Das gilt für jedes $a$.', 'Einsetzen: $4a - 4a + 1 = 1$ — das gilt für jedes $a$, nicht nur für $0$.'] } ],
-    [ { frage: '„$f$ ist eine quadratische Funktion. $G_f$ hat den Hochpunkt $H(1\\,|\\,3)$ und den Tiefpunkt $T(4\\,|\\,0)$. Dazu passt genau eine Funktion.“',
-        optionen: ['Stimmt — vier Bedingungen reichen für drei Koeffizienten.', 'Stimmt nicht — der Graph einer quadratischen Funktion hat nur einen Extrempunkt.'], ans: 1,
-        warum: ['Die Angaben widersprechen sich. Es passt <b>keine</b> Funktion.'] },
-      { frage: '„$G_f$ ist achsensymmetrisch zur $y$-Achse, Ansatz $f(x) = ax^4 + cx^2 + e$. Die Bedingung $f\'(0) = 0$ hilft, einen Koeffizienten zu bestimmen.“',
-        optionen: ['Stimmt — waagrechte Tangente bei $0$.', 'Stimmt nicht — $f\'(x) = 4ax^3 + 2cx$ ist bei $0$ immer null.'], ans: 1,
-        warum: ['Die Gleichung lautet $0 = 0$. Sie gilt immer und ist keine zusätzliche Bedingung.'] },
-      { frage: '„$f$ ist ganzrational 3. Grades, $G_f$ ist punktsymmetrisch zum Ursprung und verläuft durch $P(2\\,|\\,4)$. Dazu passt genau eine Funktion.“',
-        optionen: ['Stimmt — Symmetrie und ein Punkt reichen.', 'Stimmt nicht — es passen unendlich viele Funktionen.'], ans: 1,
-        warum: ['Ansatz $ax^3 + cx$: zwei Koeffizienten, aber nur eine Gleichung $8a + 2c = 4$. Zum Beispiel $x^3 - 2x$ oder $\\tfrac12 x^3$.'] } ]
-  ] });
 });
 </script>
 </body>
