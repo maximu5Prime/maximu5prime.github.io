@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="physik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anfahren · Ph11</title>
+  <meta name="description" content="Ein Auto fährt an: Beschleunigung einstellen und zusehen, wie t-x-, t-v- und t²-x-Diagramm entstehen. Steigung = Beschleunigung, Fläche = Ortsänderung, x ~ t².">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    .level { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .level button { font: inherit; font-weight: 700; font-size: .92rem; border: 0; border-radius: 999px; padding: .3em .85em; min-height: 38px;
+      cursor: pointer; background: var(--c-surface-2); color: var(--c-text); }
+    .level button.aktiv { background: var(--c-accent); color: var(--c-on-accent); }
+    .level button.geschafft::after { content: ' ✓'; }
+    .stage .mission { margin-bottom: 0; padding-top: .45em; padding-bottom: .45em; }
+    .stage .plot { margin: 4px auto 0; touch-action: pan-y; }
+    #strasseWrap, .diagramme, .regler, .lauf-zeile, .werte { max-width: 900px; margin-left: auto; margin-right: auto; }
+    /* drei Diagramme nebeneinander, am Handy untereinander */
+    .diagramme { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 10px; }
+    .diagramme figure { margin: 0; min-width: 0; }
+    .diagramme .plot { margin: 0; }
+    .diagramme figcaption { font-size: .82rem; font-weight: 700; color: var(--c-muted); text-align: center; }
+    @media (max-width: 700px) { .diagramme { grid-template-columns: 1fr; } }
+    .regler { margin-top: 8px; padding: 4px 6px 0; border-top: 4px solid var(--viz-1); }
+    .regler { display: block; }
+    .regler input[type=range] { display: block; }
+    .regler label { display: flex; justify-content: space-between; font-size: .85rem; font-weight: 700; color: var(--c-muted); }
+    .regler output { font-family: var(--font-mono); font-size: .95rem; color: var(--c-text); }
+    .regler input[type=range] { width: 100%; height: 34px; accent-color: var(--viz-1); }
+    .regler input[type=range][disabled] { opacity: .45; cursor: default; }
+    .werte { display: flex; flex-wrap: wrap; gap: 2px 18px; font-family: var(--font-mono); font-size: .88rem; margin-top: 4px; min-height: 1.4em; }
+    .lauf-zeile { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin-top: 8px; }
+    .lauf-zeile .btn[disabled] { opacity: .6; cursor: default; }
+    .rueckmeldung { flex: 1 1 260px; font-weight: 600; }
+    .rueckmeldung.ok { color: var(--c-gain); }
+  </style>
+</head>
+<body>
+<!-- Aha-Seite (29.10.2026), FT11 Physik LB1 UE 4: Anfahren aus dem Stand — a als Steigung im t-v-Diagramm, Ortsänderung als Dreiecksfläche,
+     Linearisieren (t²-x-Diagramm wird Ursprungsgerade, x ~ t²). QR im Arbeitsskript UE 4, Info B; „Weiter üben“.
+     Keine Aufgabe des Skripts lösen: dort Auto an der Ampel a = 2,4 m/s² (bis 8 s), E-Bike 1,5, Motorroller 2,5, Fahrrad 1,25,
+     Stadtbus 1,2, Straßenbahn 1,0, Ampelstart Anna/Auto 2,5. Regler deshalb in 0,5er-Schritten, Zeit nur bis 6 s, Level mit a = 2, 3, 3,5. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/ph11/">← Ph11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">Ph11 · Bewegung</div>
+    <h1>Wie weit kommt ein Auto beim <mark>Anfahren</mark>?</h1>
+    <p>Stellen Sie die Beschleunigung ein und lassen Sie das Auto anfahren. Ein Punkt pro Sekunde – wie bei einer Videoanalyse.</p>
+  </header>
+
+  <h2 class="etappe"><span>1</span>Entdecken</h2>
+  <div class="duo">
+    <section class="stage" aria-label="Ausprobieren">
+      <div class="kachel-kopf">Ausprobieren</div>
+      <div class="level" id="level" aria-label="Level wählen"></div>
+      <div class="mission" id="mission"><span class="icon"></span>
+        <span id="auftrag"></span></div>
+      <div class="plot" id="strasseWrap"><canvas id="strasse" aria-label="Straße mit anfahrendem Auto"></canvas></div>
+      <div class="diagramme">
+        <figure><div class="plot" id="txWrap"><canvas id="tx" aria-label="t-x-Diagramm"></canvas></div><figcaption>t-x-Diagramm</figcaption></figure>
+        <figure><div class="plot" id="tvWrap"><canvas id="tv" aria-label="t-v-Diagramm mit Fläche"></canvas></div><figcaption>t-v-Diagramm</figcaption></figure>
+        <figure><div class="plot" id="qxWrap"><canvas id="qx" aria-label="t²-x-Diagramm"></canvas></div><figcaption>t²-x-Diagramm</figcaption></figure>
+      </div>
+      <div class="werte" id="werte" aria-live="polite"></div>
+      <div class="regler">
+        <label for="a">Beschleunigung a = <output id="oa"></output></label>
+        <input type="range" id="a" min="0.5" max="4" step="0.5" value="1">
+      </div>
+      <div class="lauf-zeile">
+        <button class="btn" id="los" type="button">▶ Anfahren</button>
+        <span class="rueckmeldung" id="rueck" aria-live="polite"></span>
+      </div>
+    </section>
+  </div>
+
+  <button class="aha-btn leise" id="ahaBtn" type="button">Aha zeigen</button>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Aha!</strong>
+    Doppelte Zeit heißt beim Anfahren nicht doppelter, sondern <b>vierfacher</b> Ort. Im t²-x-Diagramm liegen die Punkte auf einer
+    <b>Ursprungsgeraden</b>: $x \sim t^2$.
+  </div>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>•</span><div>Gleichmäßig anfahren heißt: jede Sekunde gleich viel schneller. Im t-v-Diagramm eine Gerade,
+        ihre Steigung ist die Beschleunigung $a = \frac{\Delta v}{\Delta t}$ in $\frac{\text{m}}{\text{s}^2}$.</div></div>
+      <div class="schritt"><span>•</span><div>Die Fläche unter dem t-v-Graphen ist die Ortsänderung. Beim Anfahren ein Dreieck:
+        $\Delta x = \frac{1}{2} \cdot \Delta t \cdot \Delta v$.</div></div>
+      <div class="schritt"><span>•</span><div>Doppelte Zeit: Das Dreieck wird doppelt so breit und doppelt so hoch, also viermal so groß.
+        Darum ist das t-x-Diagramm eine Kurve, die immer steiler wird.</div></div>
+      <div class="schritt"><span>•</span><div>Linearisieren: Trägt man $x$ über $t^2$ auf, wird aus der Kurve eine Ursprungsgerade.
+        Die prüft man mit dem Lineal, ihre Steigung $k$ hat die Einheit $\frac{\text{m}}{\text{s}^2}$.</div></div>
+      <div class="fehler"><b>Typischer Fehler:</b> Beim Dreieck das $\frac{1}{2}$ vergessen – oder im t-x-Diagramm eine Gerade durch die Punkte legen.</div>
+    </div>
+  </details>
+
+  <a class="zum-ueben" href="/ph11/ueben-bewegungen/"><span>Üben<small>Bewegungen · in drei Stufen ⭐ bis ⭐⭐⭐</small></span><span>→</span></a>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/ph11/einholen/"><span>← Voriges Thema</span>Wo treffen sich die beiden?</a>
+    <a class="next" href="/ph11/ueben-bewegungen/"><span>Nächstes Thema →</span>Üben: Bewegungen</a>
+  </nav>
+
+  <footer class="fuss">
+    <span>Physik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+/* 1 Ausprobieren: wie /ph11/einholen/ — Ziel sichtbar (Ring in einem Diagramm), Graphen erst nach „▶ Anfahren“ (6 s in 6 s),
+   Rückmeldung danach, bei Erfolg „Nächstes Level →“. Auto fährt aus dem Stand gleichmäßig beschleunigt an: v = a·t, x = ½·a·t².
+   Jede volle Sekunde ein Messpunkt (Straße, t-x, t²-x) wie bei der Videoanalyse; im t-v-Diagramm wächst die Dreiecksfläche.
+   Level: D = Diagramm des Ziels ('tv' | 'tx' | 'qx'), Z = Zielpunkt, A = richtiges a. Level 3 schaltet das Aha frei.
+   Fortschritt in localStorage (ph11-anfahren-level). */
+window.addEventListener('load', function () {
+  var LEVEL = [
+    { st: 1, D: 'tv', Z: [4, 8], A: 2,
+      auftrag: 'Stellen Sie die Beschleunigung so ein, dass das Auto nach 4 s genau 8 m/s schnell ist.' },
+    { st: 2, D: 'tx', Z: [4, 24], A: 3,
+      auftrag: 'Das Auto soll nach 4 s genau 24 m weit sein. Tipp: Schauen Sie auf die Fläche im t-v-Diagramm.' },
+    { st: 2, D: 'qx', Z: [36, 63], A: 3.5, aha: true,
+      auftrag: 'Treffen Sie mit der Geraden im t²-x-Diagramm den Ring. Achten Sie darauf, wie weit das Auto nach 3 s und nach 6 s ist.' }
+  ];
+  var SPEICHER = 'ph11-anfahren-level', TMAX = 6;
+  var lv = 0, geschafft = [], a = 1, tAnim = 0, laeuft = false, gelaufen = false;
+  try { geschafft = JSON.parse(localStorage.getItem(SPEICHER) || '[]'); } catch (e) { geschafft = []; }
+  for (var i = 0; i < LEVEL.length; i++) if (!geschafft[i]) { lv = i; break; }
+
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function L() { return LEVEL[lv]; }
+  function x(t) { return 0.5 * a * t * t; }
+  function v(t) { return a * t; }
+  function de(n) { return Aha.de(Math.round(n * 10) / 10, 1); }
+  function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify(geschafft)); } catch (e) {} }
+  function mathe(el) {
+    if (window.renderMathInElement) renderMathInElement(el, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+  }
+  function gitter() { return css('--c-muted') + '4d'; }
+  var ganz = function (n) { return n === 0 ? '' : String(Math.round(n)); };
+
+  function plot(id, view, step, label, xl, yl) {
+    return new Aha.Plot({ canvas: id, wrap: id + 'Wrap', view: view, step: step, label: label, xLabel: xl, yLabel: yl,
+      minH: 1, maxH: 9999, ratio: 0.85, padL: 40, fmtX: ganz, fmtY: ganz });
+  }
+  var PX = plot('tx', { xMin: 0, xMax: 6.4, yMin: 0, yMax: 75 }, { x: 1, y: 10 }, { x: 1, y: 20 }, 't in s', 'x in m');
+  var PV = plot('tv', { xMin: 0, xMax: 6.4, yMin: 0, yMax: 25 }, { x: 1, y: 5 }, { x: 1, y: 5 }, 't in s', 'v in m/s');
+  var PQ = plot('qx', { xMin: 0, xMax: 38, yMin: 0, yMax: 75 }, { x: 4, y: 10 }, { x: 8, y: 20 }, 't² in s²', 'x in m');
+
+  /* Straße 0 … 75 m, Auto als einfaches Profil, Messpunkte je Sekunde */
+  function strasse() {
+    var cv = Aha.$('strasse'), wrap = Aha.$('strasseWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 92;
+    cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+    var C = PX.C, l = 40, r = 16, X = function (m) { return l + m / 75 * (W - l - r); }, y = 58, f = css('--viz-1');
+    c.fillStyle = gitter(); c.fillRect(X(0) - 30, y - 30, X(75) - X(0) + 30, 34);
+    c.fillStyle = C.text; c.fillRect(X(0) - 2, y - 30, 4, 34);                                     // Haltelinie
+    c.strokeStyle = C.axis; c.lineWidth = 1.5; c.beginPath(); c.moveTo(X(0), y + 6); c.lineTo(X(75), y + 6); c.stroke();
+    c.font = '500 12px ' + C.mono; c.fillStyle = C.text; c.textAlign = 'center';
+    for (var m = 0; m <= 70; m += 10) { c.beginPath(); c.moveTo(X(m), y + 3); c.lineTo(X(m), y + 9); c.stroke(); c.fillText(String(m), X(m), y + 22); }
+    c.textAlign = 'left'; c.fillText('x in m', 2, 12);
+    var zeigen = laeuft || gelaufen, t = tAnim;
+    if (zeigen) for (var s = 1; s <= Math.floor(t + 1e-9); s++) {                                  // Messpunkte = Front des Autos je Sekunde
+      c.fillStyle = f; c.beginPath(); c.arc(X(x(s)), y + 6, 4, 0, 2 * Math.PI); c.fill();
+    }
+    var xf = X(Math.min(75, x(t))), w = 34, h = 16;                                                 // Auto: Front bei x
+    c.fillStyle = zeigen ? f : C.muted;
+    c.beginPath(); c.moveTo(xf - w, y - 4); c.lineTo(xf - w, y - h + 4); c.lineTo(xf - w + 9, y - h + 4); c.lineTo(xf - w + 14, y - h - 4);
+    c.lineTo(xf - 12, y - h - 4); c.lineTo(xf - 7, y - h + 4); c.lineTo(xf, y - h + 6); c.lineTo(xf, y - 4); c.closePath(); c.fill();
+    c.fillStyle = C.text; [xf - w + 7, xf - 8].forEach(function (rx) { c.beginPath(); c.arc(rx, y - 3, 4.5, 0, 2 * Math.PI); c.fill(); });
+    c.font = '700 13px ' + C.body; c.textAlign = 'right'; c.fillStyle = C.text;
+    c.fillText('t = ' + Aha.de(t, 1) + ' s', X(75), 12);
+  }
+
+  function ring(P, p) {
+    var c = P.ctx; c.beginPath(); c.arc(P.X(p[0]), P.Y(p[1]), 10, 0, 2 * Math.PI);
+    c.strokeStyle = P.C.text; c.lineWidth = 2.5; c.setLineDash([5, 4]); c.stroke(); c.setLineDash([]);
+  }
+  function zeichne() {
+    var f = css('--viz-1'), zeigen = laeuft || gelaufen, t = tAnim, s;
+    [PX, PV, PQ].forEach(function (P) {                                                   // untereinander (Handy): flacher
+      P.o.ratio = window.innerWidth <= 700 ? 0.6 : 0.85; P.setup(); P.C.grid = gitter(); P.grid(); });
+    ring({ tv: PV, tx: PX, qx: PQ }[L().D], L().Z);
+    if (zeigen) {
+      /* t-v: Gerade + Dreiecksfläche */
+      PV.between(function (u) { return v(u); }, function () { return 0; }, 0, t, f + '40');
+      PV.curve(v, f, 4, 0, t);
+      /* t-x: Kurve + Punkte je Sekunde */
+      PX.curve(x, f, 4, 0, t);
+      /* t²-x: Punkte je Sekunde, Gerade erst nach dem Lauf (Ursprungsgerade) */
+      for (s = 1; s <= Math.floor(t + 1e-9); s++) { PX.dot(s, x(s), f, 5); PQ.dot(s * s, x(s), f, 5); }
+      if (gelaufen) PQ.curve(function (q) { return 0.5 * a * q; }, f, 2.5, 0, 36);
+      PX.dot(t, x(t), PX.C.text, 4); PV.dot(t, v(t), PV.C.text, 4);
+      Aha.$('werte').innerHTML = '<span>v = ' + de(v(t)) + ' m/s</span><span>x = ' + de(x(t)) + ' m</span><span>t² = ' + de(t * t) + ' s²</span>';
+    } else Aha.$('werte').innerHTML = '';
+    strasse();
+  }
+
+  function leiste() {
+    Aha.$('level').innerHTML = LEVEL.map(function (X, j) {
+      return '<button type="button" data-l="' + j + '" class="' + (j === lv ? 'aktiv' : '') + (geschafft[j] ? ' geschafft' : '') +
+        '" aria-label="Level ' + (j + 1) + '">' + (j + 1) + ' ' + '⭐'.repeat(X.st) + '</button>';
+    }).join('');
+  }
+  function knopf(text, aus) { var b = Aha.$('los'); b.textContent = text; b.disabled = !!aus; }
+  function bereit() {
+    gelaufen = false; tAnim = 0;
+    Aha.$('mission').classList.remove('done');
+    var r = Aha.$('rueck'); r.textContent = ''; r.className = 'rueckmeldung';
+    Aha.$('oa').textContent = de(a) + ' m/s²';
+    knopf('▶ Anfahren'); zeichne();
+  }
+  function waehle(j) {
+    lv = j; leiste();
+    var t = Aha.$('auftrag'); t.innerHTML = 'Level ' + (lv + 1) + ' · ' + L().auftrag; mathe(t);
+    bereit();
+  }
+  /* Rückmeldung: Wert an der Zielstelle zu klein/zu groß */
+  function auswerten() {
+    var r = Aha.$('rueck'), Z = L().Z, ist, einheit, wo;
+    if (Math.abs(a - L().A) < 1e-9) {
+      r.textContent = L().aha ? 'Geschafft! Nach 6 s ist das Auto viermal so weit wie nach 3 s – nicht doppelt so weit.'
+                              : 'Geschafft! Das Auto trifft das Ziel genau.';
+      r.className = 'rueckmeldung ok'; Aha.$('mission').classList.add('done');
+      if (!geschafft[lv]) { geschafft[lv] = true; speichern(); leiste(); }
+      if (L().aha) Aha.mission(true);
+      knopf(lv < LEVEL.length - 1 ? 'Nächstes Level →' : '▶ Noch einmal anfahren');
+      return;
+    }
+    if (L().D === 'tv') { ist = v(Z[0]); einheit = ' m/s'; wo = 'nach ' + Z[0] + ' s'; }
+    else if (L().D === 'tx') { ist = x(Z[0]); einheit = ' m'; wo = 'nach ' + Z[0] + ' s'; }
+    else { ist = x(Math.sqrt(Z[0])); einheit = ' m'; wo = 'bei t² = ' + Z[0] + ' s²'; }
+    r.textContent = 'Noch nicht ganz. ' + wo[0].toUpperCase() + wo.slice(1) + ' sind es ' + de(ist) + einheit + ' statt ' + Z[1] + einheit +
+      (ist < Z[1] ? ' – mehr Beschleunigung.' : ' – weniger Beschleunigung.');
+    r.className = 'rueckmeldung'; knopf('▶ Noch einmal anfahren');
+  }
+  function fahren() {
+    Aha.$('a').disabled = true; laeuft = true; gelaufen = false; tAnim = 0;
+    Aha.$('rueck').textContent = ''; knopf('Das Auto fährt …', true);
+    var t0 = null;
+    function schritt(ts) {
+      if (t0 === null) t0 = ts;
+      tAnim = Math.min(TMAX, (ts - t0) / 1000);
+      zeichne();
+      if (tAnim < TMAX) { requestAnimationFrame(schritt); return; }
+      laeuft = false; gelaufen = true; Aha.$('a').disabled = false; zeichne(); auswerten();
+    }
+    requestAnimationFrame(schritt);
+  }
+
+  Aha.$('a').value = a;
+  Aha.$('a').addEventListener('input', function () { if (laeuft) return; a = +this.value; bereit(); });
+  Aha.$('level').addEventListener('click', function (ev) { var b = ev.target.closest('button'); if (b && !laeuft) waehle(+b.dataset.l); });
+  Aha.$('los').addEventListener('click', function () {
+    if (laeuft) return;
+    if (gelaufen && Aha.$('mission').classList.contains('done') && lv < LEVEL.length - 1) { waehle(lv + 1); return; }
+    fahren();
+  });
+  Aha.onRedraw(function () { zeichne(); });
+  window.addEventListener('resize', function () { zeichne(); });
+  waehle(lv);
+});
+</script>
+</body>
+</html>
