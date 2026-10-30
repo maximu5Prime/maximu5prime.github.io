@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anfahren · Ph11</title>
-  <meta name="description" content="Ein Auto fährt an: Beschleunigung einstellen und zusehen, wie t-x-, t-v- und t²-x-Diagramm entstehen. Steigung = Beschleunigung, Fläche = Ortsänderung, x ~ t².">
+  <meta name="description" content="Ein Auto fährt an: Beschleunigung einstellen und zusehen, wie t-x- und t-v-Diagramm entstehen. Ein Geisterbild pro Sekunde wie bei der Videoanalyse. Steigung = Beschleunigung, Fläche = Ortsänderung.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -28,7 +28,7 @@
     .stage .plot { margin: 4px auto 0; touch-action: pan-y; }
     #strasseWrap, .diagramme, .regler, .lauf-zeile, .werte { max-width: 900px; margin-left: auto; margin-right: auto; }
     /* drei Diagramme nebeneinander, am Handy untereinander */
-    .diagramme { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 10px; }
+    .diagramme { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 10px; }
     .diagramme figure { margin: 0; min-width: 0; }
     .diagramme .plot { margin: 0; }
     .diagramme figcaption { font-size: .82rem; font-weight: 700; color: var(--c-muted); text-align: center; }
@@ -49,7 +49,7 @@
 </head>
 <body>
 <!-- Aha-Seite (29.10.2026), FT11 Physik LB1 UE 4: Anfahren aus dem Stand — a als Steigung im t-v-Diagramm, Ortsänderung als Dreiecksfläche,
-     Linearisieren (t²-x-Diagramm wird Ursprungsgerade, x ~ t²). QR im Arbeitsskript UE 4, Info B; „Weiter üben“.
+     doppelte Zeit = vierfacher Ort; Geisterbild je Sekunde (Videoanalyse). t²-x bewusst nicht (Lehrkraft 29.10.2026, Linearisieren im Skript). QR im Arbeitsskript UE 4, Info B; „Weiter üben“.
      Keine Aufgabe des Skripts lösen: dort Auto an der Ampel a = 2,4 m/s² (bis 8 s), E-Bike 1,5, Motorroller 2,5, Fahrrad 1,25,
      Stadtbus 1,2, Straßenbahn 1,0, Ampelstart Anna/Auto 2,5. Regler deshalb in 0,5er-Schritten, Zeit nur bis 6 s, Level mit a = 2, 3, 3,5. -->
 <div class="wrap">
@@ -62,7 +62,7 @@
   <header class="hero">
     <div class="kurs">Ph11 · Bewegung</div>
     <h1>Wie weit kommt ein Auto beim <mark>Anfahren</mark>?</h1>
-    <p>Stellen Sie die Beschleunigung ein und lassen Sie das Auto anfahren. Ein Punkt pro Sekunde – wie bei einer Videoanalyse.</p>
+    <p>Stellen Sie die Beschleunigung ein und lassen Sie das Auto anfahren. Jede Sekunde bleibt ein Geisterbild stehen – wie bei einer Videoanalyse.</p>
   </header>
 
   <h2 class="etappe"><span>1</span>Entdecken</h2>
@@ -76,7 +76,6 @@
       <div class="diagramme">
         <figure><div class="plot" id="txWrap"><canvas id="tx" aria-label="t-x-Diagramm"></canvas></div><figcaption>t-x-Diagramm</figcaption></figure>
         <figure><div class="plot" id="tvWrap"><canvas id="tv" aria-label="t-v-Diagramm mit Fläche"></canvas></div><figcaption>t-v-Diagramm</figcaption></figure>
-        <figure><div class="plot" id="qxWrap"><canvas id="qx" aria-label="t²-x-Diagramm"></canvas></div><figcaption>t²-x-Diagramm</figcaption></figure>
       </div>
       <div class="werte" id="werte" aria-live="polite"></div>
       <div class="regler">
@@ -94,8 +93,8 @@
 
   <div class="aha" id="aha" hidden>
     <strong>Aha!</strong>
-    Doppelte Zeit heißt beim Anfahren nicht doppelter, sondern <b>vierfacher</b> Ort. Im t²-x-Diagramm liegen die Punkte auf einer
-    <b>Ursprungsgeraden</b>: $x \sim t^2$.
+    Doppelte Zeit heißt beim Anfahren nicht doppelter, sondern <b>vierfacher</b> Ort. Die Geisterbilder rücken jede Sekunde weiter auseinander,
+    das t-x-Diagramm ist eine Kurve, die immer steiler wird.
   </div>
 
   <details class="warum flach">
@@ -107,9 +106,7 @@
         $\Delta x = \frac{1}{2} \cdot \Delta t \cdot \Delta v$.</div></div>
       <div class="schritt"><span>•</span><div>Doppelte Zeit: Das Dreieck wird doppelt so breit und doppelt so hoch, also viermal so groß.
         Darum ist das t-x-Diagramm eine Kurve, die immer steiler wird.</div></div>
-      <div class="schritt"><span>•</span><div>Linearisieren: Trägt man $x$ über $t^2$ auf, wird aus der Kurve eine Ursprungsgerade.
-        Die prüft man mit dem Lineal, ihre Steigung $k$ hat die Einheit $\frac{\text{m}}{\text{s}^2}$.</div></div>
-      <div class="fehler"><b>Typischer Fehler:</b> Beim Dreieck das $\frac{1}{2}$ vergessen – oder im t-x-Diagramm eine Gerade durch die Punkte legen.</div>
+      <div class="fehler"><b>Typischer Fehler:</b> Beim Dreieck das $\frac{1}{2}$ vergessen – oder durch die Messpunkte im t-x-Diagramm eine Gerade legen.</div>
     </div>
   </details>
 
@@ -128,8 +125,8 @@
 <script>
 /* 1 Ausprobieren: wie /ph11/einholen/ — Ziel sichtbar (Ring in einem Diagramm), Graphen erst nach „▶ Anfahren“ (6 s in 6 s),
    Rückmeldung danach, bei Erfolg „Nächstes Level →“. Auto fährt aus dem Stand gleichmäßig beschleunigt an: v = a·t, x = ½·a·t².
-   Jede volle Sekunde ein Messpunkt (Straße, t-x, t²-x) wie bei der Videoanalyse; im t-v-Diagramm wächst die Dreiecksfläche.
-   Level: D = Diagramm des Ziels ('tv' | 'tx' | 'qx'), Z = Zielpunkt, A = richtiges a. Level 3 schaltet das Aha frei.
+   Jede volle Sekunde ein Geisterbild auf der Straße und ein Messpunkt im t-x-Diagramm (Videoanalyse); im t-v-Diagramm wächst die Dreiecksfläche.
+   Level: D = Diagramm des Ziels ('tv' | 'tx'), Z = Zielpunkt, A = richtiges a. Level 3 schaltet das Aha frei.
    Fortschritt in localStorage (ph11-anfahren-level). */
 window.addEventListener('load', function () {
   var LEVEL = [
@@ -137,8 +134,8 @@ window.addEventListener('load', function () {
       auftrag: 'Stellen Sie die Beschleunigung so ein, dass das Auto nach 4 s genau 8 m/s schnell ist.' },
     { st: 2, D: 'tx', Z: [4, 24], A: 3,
       auftrag: 'Das Auto soll nach 4 s genau 24 m weit sein. Tipp: Schauen Sie auf die Fläche im t-v-Diagramm.' },
-    { st: 2, D: 'qx', Z: [36, 63], A: 3.5, aha: true,
-      auftrag: 'Treffen Sie mit der Geraden im t²-x-Diagramm den Ring. Achten Sie darauf, wie weit das Auto nach 3 s und nach 6 s ist.' }
+    { st: 2, D: 'tx', Z: [6, 63], A: 3.5, aha: true,
+      auftrag: 'Das Auto soll nach 6 s genau 63 m weit sein. Vergleichen Sie danach die Geisterbilder bei 3 s und bei 6 s.' }
   ];
   var SPEICHER = 'ph11-anfahren-level', TMAX = 6;
   var lv = 0, geschafft = [], a = 1, tAnim = 0, laeuft = false, gelaufen = false;
@@ -163,9 +160,8 @@ window.addEventListener('load', function () {
   }
   var PX = plot('tx', { xMin: 0, xMax: 6.4, yMin: 0, yMax: 75 }, { x: 1, y: 10 }, { x: 1, y: 20 }, 't in s', 'x in m');
   var PV = plot('tv', { xMin: 0, xMax: 6.4, yMin: 0, yMax: 25 }, { x: 1, y: 5 }, { x: 1, y: 5 }, 't in s', 'v in m/s');
-  var PQ = plot('qx', { xMin: 0, xMax: 38, yMin: 0, yMax: 75 }, { x: 4, y: 10 }, { x: 8, y: 20 }, 't² in s²', 'x in m');
 
-  /* Straße 0 … 75 m, Auto als einfaches Profil, Messpunkte je Sekunde */
+  /* Straße 0 … 75 m, Auto als einfaches Profil; je volle Sekunde ein blasses Geisterbild mit Zeitmarke */
   function strasse() {
     var cv = Aha.$('strasse'), wrap = Aha.$('strasseWrap'), dpr = window.devicePixelRatio || 1, W = wrap.clientWidth, H = 92;
     cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
@@ -178,14 +174,22 @@ window.addEventListener('load', function () {
     for (var m = 0; m <= 70; m += 10) { c.beginPath(); c.moveTo(X(m), y + 3); c.lineTo(X(m), y + 9); c.stroke(); c.fillText(String(m), X(m), y + 22); }
     c.textAlign = 'left'; c.fillText('x in m', 2, 12);
     var zeigen = laeuft || gelaufen, t = tAnim;
-    if (zeigen) for (var s = 1; s <= Math.floor(t + 1e-9); s++) {                                  // Messpunkte = Front des Autos je Sekunde
-      c.fillStyle = f; c.beginPath(); c.arc(X(x(s)), y + 6, 4, 0, 2 * Math.PI); c.fill();
+    function auto(xf, farbe, alpha) {                                                               // Front bei xf (px)
+      var w = 34, h = 16; c.save(); c.globalAlpha = alpha; c.fillStyle = farbe;
+      c.beginPath(); c.moveTo(xf - w, y - 4); c.lineTo(xf - w, y - h + 4); c.lineTo(xf - w + 9, y - h + 4); c.lineTo(xf - w + 14, y - h - 4);
+      c.lineTo(xf - 12, y - h - 4); c.lineTo(xf - 7, y - h + 4); c.lineTo(xf, y - h + 6); c.lineTo(xf, y - 4); c.closePath(); c.fill();
+      c.fillStyle = C.text; [xf - w + 7, xf - 8].forEach(function (rx) { c.beginPath(); c.arc(rx, y - 3, 4.5, 0, 2 * Math.PI); c.fill(); });
+      c.restore();
     }
-    var xf = X(Math.min(75, x(t))), w = 34, h = 16;                                                 // Auto: Front bei x
-    c.fillStyle = zeigen ? f : C.muted;
-    c.beginPath(); c.moveTo(xf - w, y - 4); c.lineTo(xf - w, y - h + 4); c.lineTo(xf - w + 9, y - h + 4); c.lineTo(xf - w + 14, y - h - 4);
-    c.lineTo(xf - 12, y - h - 4); c.lineTo(xf - 7, y - h + 4); c.lineTo(xf, y - h + 6); c.lineTo(xf, y - 4); c.closePath(); c.fill();
-    c.fillStyle = C.text; [xf - w + 7, xf - 8].forEach(function (rx) { c.beginPath(); c.arc(rx, y - 3, 4.5, 0, 2 * Math.PI); c.fill(); });
+    var letzte = -99;                                                                               // Zeitmarken nicht übereinander
+    if (zeigen) for (var s = 0; s <= Math.floor(t + 1e-9); s++) {                                  // Geisterbilder 0 s, 1 s, 2 s …
+      var gx = X(Math.min(75, x(s)));
+      auto(gx, f, 0.25);
+      c.fillStyle = f; c.beginPath(); c.arc(gx, y + 6, 3.5, 0, 2 * Math.PI); c.fill();
+      c.font = '700 11px ' + C.body; c.textAlign = 'center'; c.fillStyle = C.muted;
+      if (gx - letzte > 24) { c.fillText(s + ' s', gx - 6, y - 26); letzte = gx; }
+    }
+    auto(X(Math.min(75, x(t))), zeigen ? f : C.muted, 1);
     c.font = '700 13px ' + C.body; c.textAlign = 'right'; c.fillStyle = C.text;
     c.fillText('t = ' + Aha.de(t, 1) + ' s', X(75), 12);
   }
@@ -196,20 +200,18 @@ window.addEventListener('load', function () {
   }
   function zeichne() {
     var f = css('--viz-1'), zeigen = laeuft || gelaufen, t = tAnim, s;
-    [PX, PV, PQ].forEach(function (P) {                                                   // untereinander (Handy): flacher
+    [PX, PV].forEach(function (P) {                                                   // untereinander (Handy): flacher
       P.o.ratio = window.innerWidth <= 700 ? 0.6 : 0.85; P.setup(); P.C.grid = gitter(); P.grid(); });
-    ring({ tv: PV, tx: PX, qx: PQ }[L().D], L().Z);
+    ring({ tv: PV, tx: PX }[L().D], L().Z);
     if (zeigen) {
       /* t-v: Gerade + Dreiecksfläche */
       PV.between(function (u) { return v(u); }, function () { return 0; }, 0, t, f + '40');
       PV.curve(v, f, 4, 0, t);
       /* t-x: Kurve + Punkte je Sekunde */
       PX.curve(x, f, 4, 0, t);
-      /* t²-x: Punkte je Sekunde, Gerade erst nach dem Lauf (Ursprungsgerade) */
-      for (s = 1; s <= Math.floor(t + 1e-9); s++) { PX.dot(s, x(s), f, 5); PQ.dot(s * s, x(s), f, 5); }
-      if (gelaufen) PQ.curve(function (q) { return 0.5 * a * q; }, f, 2.5, 0, 36);
+      for (s = 1; s <= Math.floor(t + 1e-9); s++) PX.dot(s, x(s), f, 5);
       PX.dot(t, x(t), PX.C.text, 4); PV.dot(t, v(t), PV.C.text, 4);
-      Aha.$('werte').innerHTML = '<span>v = ' + de(v(t)) + ' m/s</span><span>x = ' + de(x(t)) + ' m</span><span>t² = ' + de(t * t) + ' s²</span>';
+      Aha.$('werte').innerHTML = '<span>v = ' + de(v(t)) + ' m/s</span><span>x = ' + de(x(t)) + ' m</span>';
     } else Aha.$('werte').innerHTML = '';
     strasse();
   }
@@ -245,9 +247,8 @@ window.addEventListener('load', function () {
       knopf(lv < LEVEL.length - 1 ? 'Nächstes Level →' : '▶ Noch einmal anfahren');
       return;
     }
-    if (L().D === 'tv') { ist = v(Z[0]); einheit = ' m/s'; wo = 'nach ' + Z[0] + ' s'; }
-    else if (L().D === 'tx') { ist = x(Z[0]); einheit = ' m'; wo = 'nach ' + Z[0] + ' s'; }
-    else { ist = x(Math.sqrt(Z[0])); einheit = ' m'; wo = 'bei t² = ' + Z[0] + ' s²'; }
+    if (L().D === 'tv') { ist = v(Z[0]); einheit = ' m/s'; } else { ist = x(Z[0]); einheit = ' m'; }
+    wo = 'nach ' + Z[0] + ' s';
     r.textContent = 'Noch nicht ganz. ' + wo[0].toUpperCase() + wo.slice(1) + ' sind es ' + de(ist) + einheit + ' statt ' + Z[1] + einheit +
       (ist < Z[1] ? ' – mehr Beschleunigung.' : ' – weniger Beschleunigung.');
     r.className = 'rueckmeldung'; knopf('▶ Noch einmal anfahren');

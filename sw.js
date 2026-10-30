@@ -60,7 +60,7 @@ var STAND = {
   "/m12add/ueben-trigonometrie/": "d0f25f0b79",
   "/manifest.webmanifest": "038816e85d",
   "/offline.html": "c4cf5c8960",
-  "/ph11/anfahren/": "e558381143",
+  "/ph11/anfahren/": "ee47db6094",
   "/ph11/bewegung/": "73d07b4a9a",
   "/ph11/einheiten/": "11eb4b2d16",
   "/ph11/einholen/": "159bac0d7c",
