@@ -42,11 +42,15 @@
     root.classList.add('vq');
     root.innerHTML =
       (videos.length > 1 ? '<div class="vq-chips" role="tablist"></div>' : '') +
-      '<div class="vq-buehne"><video controls playsinline preload="metadata"></video></div>' +
+      '<div class="vq-buehne"><video controls playsinline preload="metadata"></video><button type="button" class="vq-hinweis" hidden></button></div>' +
       '<div class="vq-leiste"><span class="vq-stand"></span><span class="vq-punkte"></span></div>' +
       '<div class="vq-karte" hidden aria-live="polite"></div>';
     var chips = root.querySelector('.vq-chips'), video = root.querySelector('video'), karte = root.querySelector('.vq-karte');
     var stand = root.querySelector('.vq-stand'), punkte = root.querySelector('.vq-punkte');
+    var hinweis = root.querySelector('.vq-hinweis');
+    // Hinweis im Video, solange eine Frage offen ist; Klick führt zur Frage unter dem Video
+    hinweis.addEventListener('click', function () { karte.scrollIntoView({ block: 'center', behavior: 'smooth' }); var f = karte.querySelector('input, .vq-opt, .vq-go'); if (f) f.focus({ preventScroll: true }); });
+    function zu() { karte.hidden = true; hinweis.hidden = true; }
     var aktiv = null, stopps = [], cues = [], lastT = 0, inFrage = false, gesehen = {};
 
     function zeitVon(prefix, ende) {
@@ -65,7 +69,7 @@
     }
 
     function laden(v, autoplay) {
-      aktiv = v; inFrage = false; karte.hidden = true;
+      aktiv = v; inFrage = false; zu();
       if (chips) chips.querySelectorAll('button').forEach(function (b) { b.classList.toggle('aktiv', b.dataset.id === v.id); b.setAttribute('aria-selected', b.dataset.id === v.id); });
       video.innerHTML = '';
       video.poster = v.poster || '';
@@ -95,7 +99,7 @@
       });
     }
 
-    function weiter() { karte.hidden = true; inFrage = false; lastT = video.currentTime + 0.01; zeigePunkte(); video.play().catch(function () {}); }
+    function weiter() { zu(); inFrage = false; lastT = video.currentTime + 0.01; zeigePunkte(); video.play().catch(function () {}); }
 
     function frage(s) {
       inFrage = true;
@@ -109,6 +113,8 @@
       karte.innerHTML = kopf + (s.frage ? '<h3>' + s.frage + '</h3>' : '') + koerper + '<div class="vq-fb"></div><div class="vq-akt">' +
         (s.typ === 'info' ? '<button type="button" class="vq-btn haupt vq-go">Weiter ▸</button>' : '<button type="button" class="vq-leise vq-skip">Überspringen</button>') + '</div>';
       karte.hidden = false;
+      hinweis.textContent = s.typ === 'info' ? 'ℹ Zusatzinfo unter dem Video ↓' : '❓ Frage unter dem Video ↓';
+      hinweis.hidden = false;
       katex(karte);
       karte.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       var go = karte.querySelector('.vq-go');
@@ -147,7 +153,7 @@
           (s.tz != null ? '<button type="button" class="vq-btn vq-back">↺ Stelle noch einmal ansehen</button>' : '');
         akt.querySelector('.vq-skip').addEventListener('click', weiter);
         var bk = akt.querySelector('.vq-back');
-        if (bk) bk.addEventListener('click', function () { karte.hidden = true; inFrage = false; video.currentTime = s.tz; lastT = s.tz; video.play().catch(function () {}); });
+        if (bk) bk.addEventListener('click', function () { zu(); inFrage = false; video.currentTime = s.tz; lastT = s.tz; video.play().catch(function () {}); });
       }
       katex(fb);
       zeigePunkte();
