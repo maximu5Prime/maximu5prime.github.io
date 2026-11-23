@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funktionsterm aufstellen · M11</title>
+  <meta name="description" content="Funktionsterm einer Parabel aus Scheitel oder Nullstellen und einem Punkt – Video mit Fragen, Beispiel Torbogen.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/v2/video-quiz.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <script defer src="/static/v2/video-quiz.js"></script>
+</head>
+<body>
+<!-- Video-Seite (23.11.2026), FT11 LB1 1.8 (Wochenpaket). QR im Skript 1.8 Aufgabe 3. Video: Quelle 04_Kurse/…/08_Funktionsterm_aufstellen/video/ — nach Neubau mp4 + vtt hierher kopieren. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Quadratische Funktionen</div>
+    <h1>Funktionsterm <mark>aufstellen</mark></h1>
+    <p>Erst die passende Form wählen, dann den Streckfaktor aus einem Punkt bestimmen.</p>
+  </header>
+
+  <h2 class="etappe"><span>1</span>Anschauen und mitdenken</h2>
+  <div id="vq"></div>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>•</span><div>Scheitel bekannt: $f(x) = a\,(x - x_S)^2 + y_S$ – nur $a$ fehlt.</div></div>
+      <div class="schritt"><span>•</span><div>Nullstellen bekannt: $f(x) = a\,(x - x_1)(x - x_2)$ – Vorsicht: Nullstelle $-2$ gibt den Faktor $(x + 2)$.</div></div>
+      <div class="schritt"><span>•</span><div>Ein weiterer Punkt liegt auf der Parabel, erfüllt also die Gleichung: einsetzen, nach $a$ auflösen.</div></div>
+    </div>
+  </details>
+  <a class="zum-ueben" href="/m11/brunnen/"><span>Escape: Der Brunnen-Code<small>Raum 2 – Funktionsterm aufstellen</small></span><span>→</span></a>
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/formen-nullstellen/"><span>← Voriges Thema</span>Formen und Nullstellen</a>
+    <a class="next" href="/m11/wasserstrahl/"><span>Nächstes Thema →</span>Wasserstrahl-Challenge</a>
+  </nav>
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  VideoQuiz.mount('vq', { videos: [
+    { id: 'video', titel: 'Funktionsterm aufstellen', src: 'MT11_1-8_VID_Funktionsterm.mp4', vtt: 'MT11_1-8_VID_Funktionsterm.vtt',
+      poster: 'MT11_1-8_VID_Funktionsterm.jpg', stopps: [
+      { vor: 'Zwei Nullstellen sind gegeben', typ: 'wahl', frage: 'Nullstellen $1$ und $5$, Punkt $P(3\\,|\\,-8)$: Welcher Ansatz passt?',
+        optionen: ['$f(x) = a\\,(x - 1)(x - 5)$', '$f(x) = a\\,(x + 1)(x + 5)$', '$f(x) = a\\,(x - 3)^2 - 8$'], richtig: 0, zurueck: 'Aufgabe drei a',
+        erklaerung: 'Nullstellen gegeben: Produktform. $P$ ist nicht der Scheitel – deshalb passt die dritte Option nicht.' },
+      { vor: 'Geteilt durch minus vier', typ: 'zahl', frage: 'Aus $-4a = -8$ folgt $a = \\ldots$', richtig: 2, toleranz: 0, zurueck: 'Jetzt setzt du P ein',
+        erklaerung: '$-8 : (-4) = 2$.' },
+      { vor: 'Wir legen die y-Achse in die Mitte', typ: 'info',
+        text: 'Wo der Ursprung liegt, dürfen Sie selbst festlegen. Liegt die $y$-Achse in der Mitte, ist der Scheitel $S(0\\,|\\,4)$ – das macht die Rechnung kurz.' },
+      { vor: 'Mit dem Scheitel wird der Ansatz', typ: 'wahl', frage: 'Scheitel $S(0\\,|\\,4)$: Welcher Ansatz passt?',
+        optionen: ['$f(x) = a\\,x^2 + 4$', '$f(x) = a\\,(x - 4)^2$', '$f(x) = a\\,x^2 - 4$'], richtig: 0, zurueck: 'Wir legen die y-Achse',
+        erklaerung: '$a\\,(x - 0)^2 + 4 = a\\,x^2 + 4$.' },
+      { vor: 'Wir berechnen f von 1,2', typ: 'wahl', frage: 'Der Transporter ist $2{,}4$ m breit und fährt in der Mitte. Was berechnen Sie?',
+        optionen: ['$f(1{,}2)$ – die Höhe des Bogens über der Ecke', '$f(2{,}4)$', '$f(3)$ – die Höhe des Transporters'], richtig: 0, zurueck: 'Der Transporter ist 2,4',
+        erklaerung: 'Die Ecken liegen bei $x = \\pm 1{,}2$. Dort muss der Bogen höher als $3$ m sein.' }
+    ] }
+  ] });
+});
+</script>
+</body>
+</html>

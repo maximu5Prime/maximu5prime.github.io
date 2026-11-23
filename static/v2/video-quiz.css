@@ -1,0 +1,34 @@
+/* video-quiz.css – zu video-quiz.js (23.11.2026); nur Tokens aus farben.css */
+.vq { background: var(--c-surface); border-radius: var(--radius); padding: 14px; margin: 8px 0 22px; box-shadow: var(--shadow); }
+.vq-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.vq-chips button { border: 1px solid var(--c-line); background: var(--c-surface-2); color: var(--c-text); border-radius: 999px;
+  padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+.vq-chips button.aktiv { background: var(--c-accent); color: var(--c-on-accent); border-color: var(--c-accent); }
+.vq-chips button.fertig::after { content: " ✓"; }
+.vq-buehne video { width: 100%; display: block; border-radius: 10px; background: #000; aspect-ratio: 16 / 9; }
+.vq-leiste { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: .9rem; color: var(--c-muted); margin: 8px 2px 0; }
+.vq-karte { margin-top: 12px; border-left: 4px solid var(--c-accent); background: var(--c-surface-2); border-radius: 10px; padding: 14px 16px; }
+.vq-karte h3 { margin: 4px 0 12px; font-size: 1.08rem; line-height: 1.4; }
+.vq-nr { font-size: .8rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--c-accent); }
+.vq-info { line-height: 1.5; margin: 6px 0 4px; }
+.vq-opts { display: grid; gap: 8px; }
+.vq-opt { text-align: left; border: 1px solid var(--c-line); background: var(--c-surface); color: var(--c-text); border-radius: 10px;
+  padding: 10px 12px; font: inherit; cursor: pointer; min-height: 44px; }
+.vq-opt:hover:not(:disabled) { border-color: var(--c-accent); }
+.vq-opt.richtig { border: 2px solid var(--c-gain); background: var(--c-gain-fill); }
+.vq-opt.falsch { border: 2px solid var(--c-loss); background: var(--c-loss-fill); opacity: .8; }
+.vq-opt.falsch::before { content: "✗ "; color: var(--c-loss); font-weight: 700; }
+.vq-opt.richtig::before { content: "✓ "; color: var(--c-gain); font-weight: 700; }
+.vq-zahl { display: flex; gap: 8px; flex-wrap: wrap; }
+.vq-zahl input { flex: 1 1 140px; min-height: 44px; font: inherit; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--c-line);
+  background: var(--c-surface); color: var(--c-text); }
+.vq-fb { display: none; margin-top: 10px; line-height: 1.5; }
+.vq-fb.an { display: block; }
+.vq-fb.ok b { color: var(--c-gain); }
+.vq-fb.nein b { color: var(--c-loss); }
+.vq-akt { display: flex; justify-content: flex-end; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+.vq-btn { border: 1px solid var(--c-accent); background: var(--c-surface); color: var(--c-text); border-radius: 10px; padding: 9px 16px;
+  font: inherit; font-weight: 600; cursor: pointer; min-height: 44px; }
+.vq-btn.haupt { background: var(--c-accent); color: var(--c-on-accent); }
+.vq-leise { border: 0; background: none; color: var(--c-muted); text-decoration: underline; font: inherit; cursor: pointer; }
+@media (max-width: 560px) { .vq { padding: 10px; } .vq-karte { padding: 12px; } }

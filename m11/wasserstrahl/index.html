@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wasserstrahl-Challenge · M11</title>
+  <meta name="description" content="Stellen Sie die Düse so ein, dass der Wasserstrahl den Becher trifft – und nicht das Glasdach. Gemeinsame Punkte von Gerade und Parabel, Parameter und Diskriminante.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/v2/video-quiz.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <script defer src="/static/v2/video-quiz.js"></script>
+  <style>
+    .ws-modi { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+    .ws-modi button { border: 1px solid var(--c-line); background: var(--c-surface-2); color: var(--c-text); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+    .ws-modi button.aktiv { background: var(--c-accent); color: var(--c-on-accent); border-color: var(--c-accent); }
+    #ws { width: 100%; height: auto; display: block; background: var(--c-surface-2); border-radius: 10px; touch-action: manipulation; }
+    .ws-steuer { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-top: 12px; }
+    .ws-steuer label { display: grid; gap: 4px; font-weight: 600; font-size: .95rem; }
+    .ws-steuer input, .ws-steuer select { min-height: 44px; font: inherit; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--c-line); background: var(--c-surface); color: var(--c-text); width: 9em; }
+    .ws-btn { min-height: 44px; border-radius: 10px; border: 1px solid var(--c-accent); background: var(--c-accent); color: var(--c-on-accent); font: inherit; font-weight: 700; padding: 8px 16px; cursor: pointer; }
+    .ws-btn.leise { background: var(--c-surface); color: var(--c-text); }
+    .ws-meldung { margin-top: 12px; min-height: 1.6em; line-height: 1.5; }
+    .ws-meldung .ok { color: var(--c-gain); font-weight: 700; }
+    .ws-meldung .nein { color: var(--c-loss); font-weight: 700; }
+    .ws-level { display: flex; gap: 6px; margin: 4px 0 10px; }
+    .ws-level span { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .85rem; background: var(--c-surface-2); color: var(--c-muted); border: 1px solid var(--c-line); }
+    .ws-level span.jetzt { border: 2px solid var(--c-accent); color: var(--c-text); }
+    .ws-level span.fertig { background: var(--c-gain-fill); color: var(--c-gain); border-color: var(--c-gain); }
+    .ws-tabelle { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: .95rem; }
+    .ws-tabelle th, .ws-tabelle td { border-bottom: 1px solid var(--c-line); padding: 6px 8px; text-align: left; }
+    .ws-code { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: var(--c-aha); color: var(--c-aha-text); font-weight: 600; }
+    .ws-code b { letter-spacing: .25em; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+<!-- Challenge-Seite (23.11.2026), FT11 LB1 1.9 (Wochenpaket, Escape Raum 3). QR im Skript 1.9 Aufgabe 6 (Seite) und Aufgabe 3 (#video).
+     Strahl h_c(x) = −0,25x² + 2x + c (c = Düsenhöhe), Glasdach g(x) = 0,5x + 4 → D = c − 1,75 (Problem 1.9).
+     Zielkarten A–H (Teammodus) stehen auch in der Übersicht von 1.9; G und H gehen nicht (Dach). Endcode Raum 3: FONTAENE.
+     Video: Quelle 04_Kurse/…/09_Gemeinsame_Punkte_und_Parameter/video/ — nach Neubau mp4 + vtt hierher kopieren. -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Quadratische Funktionen</div>
+    <h1>Wasserstrahl-<mark>Challenge</mark></h1>
+    <p>Stellen Sie die Düse so ein, dass der Strahl den Becher trifft – und nicht das Glasdach.</p>
+  </header>
+
+  <h2 class="etappe"><span>1</span>Zielen</h2>
+  <section class="stage" aria-label="Challenge">
+    <div class="ws-modi" role="tablist">
+      <button type="button" id="modAllein" class="aktiv">Allein üben</button>
+      <button type="button" id="modTeam">Im Unterricht (Teams)</button>
+    </div>
+    <div class="mission" id="mission"><span class="icon"></span><span id="auftrag"></span></div>
+    <div class="ws-level" id="levelLeiste"></div>
+    <svg id="ws" viewBox="0 0 720 600" role="img" aria-label="Brunnen mit Düse, Wasserstrahl, Glasdach und Becher"></svg>
+    <p class="tipp-zeile">Strahl: $h_c(x) = -0{,}25x^2 + 2x + c$ · Glasdach: $g(x) = 0{,}5x + 4$ · alles in m</p>
+
+    <div class="ws-steuer" id="steuerAllein">
+      <label>Düsenhöhe <i>c</i> in m <input id="cAllein" inputmode="decimal" autocomplete="off" placeholder="z. B. 1,25"></label>
+      <button class="ws-btn" id="losAllein" type="button">Wasser marsch!</button>
+      <span id="wahlBox" hidden>
+        <button class="ws-btn leise" id="wahlJa" type="button">Ja, das geht</button>
+        <button class="ws-btn leise" id="wahlNein" type="button">Nein – das Dach ist im Weg</button>
+      </span>
+    </div>
+
+    <div class="ws-steuer" id="steuerTeam" hidden>
+      <label>Team <select id="team"></select></label>
+      <label>Zielkarte <select id="karte"></select></label>
+      <label>Düsenhöhe <i>c</i> in m <input id="cTeam" inputmode="decimal" autocomplete="off" placeholder="z. B. 1"></label>
+      <button class="ws-btn" id="losTeam" type="button">Wasser marsch!</button>
+      <button class="ws-btn leise" id="gehtNicht" type="button">Geht nicht (Dach)</button>
+    </div>
+
+    <div class="ws-meldung" id="meldung" aria-live="polite"></div>
+    <div id="teamInfo" hidden>
+      <table class="ws-tabelle" id="punkte"><thead><tr><th>Team</th><th>Versuche</th><th>Treffer</th></tr></thead><tbody></tbody></table>
+      <p style="margin-top:12px"><button class="ws-btn leise" id="kartenZeigen" type="button">Zielkarten zeigen</button>
+        <button class="ws-btn leise" id="codeZeigen" type="button">Code für Raum 3 zeigen</button></p>
+      <div id="kartenListe" hidden></div>
+    </div>
+    <div class="ws-code" id="code" hidden>Raum 3 geschafft – der Brunnen läuft! Code: <b>FONTAENE</b> · <a href="/m11/brunnen/#raum3">zum Escape</a></div>
+  </section>
+
+  <h2 class="etappe"><span>2</span>Anschauen und mitdenken</h2>
+  <div id="vq"></div>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>3</span>Warum?</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>•</span><div>Becher treffen: Der Punkt $B(x_B\,|\,y_B)$ liegt auf dem Strahl, also $h_c(x_B) = y_B$ – nach $c$ auflösen.</div></div>
+      <div class="schritt"><span>•</span><div>Glasdach: gleichsetzen, auf null bringen: $-0{,}25x^2 + 1{,}5x + (c - 4) = 0$, also $D(c) = 2{,}25 + (c - 4) = c - 1{,}75$.</div></div>
+      <div class="schritt"><span>•</span><div>$D(c) &lt; 0$, also $c &lt; 1{,}75$: kein gemeinsamer Punkt – das Dach bleibt trocken. Bei $c = 1{,}75$ streift der Strahl das Dach in $(3\,|\,5{,}5)$.</div></div>
+    </div>
+  </details>
+  <a class="zum-ueben" href="/m11/brunnen/#raum3"><span>Escape: Der Brunnen-Code<small>Raum 3 – den Brunnen starten</small></span><span>→</span></a>
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/funktionsterm/"><span>← Voriges Thema</span>Funktionsterm aufstellen</a>
+    <a class="next" href="/m11/ueben-funktionen/"><span>Nächstes Thema →</span>Üben: Funktionen</a>
+  </nav>
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  // ── Modell ──
+  var h = function (c, x) { return -0.25 * x * x + 2 * x + c; };
+  var g = function (x) { return 0.5 * x + 4; };
+  var DACH_BIS = 10;
+  var de = function (n) { return (Math.round(n * 100) / 100).toString().replace('.', ','); };
+  var zahl = function (s) { return parseFloat(String(s).trim().replace(/\s/g, '').replace(',', '.')); };
+  var dachTreffer = function (c) { // erster gemeinsamer Punkt mit dem Dach (x ≥ 0) oder null
+    var D = c - 1.75; if (D < -1e-9) return null;
+    var r = Math.sqrt(Math.max(D, 0)), x1 = (-1.5 + r) / (-0.5), x2 = (-1.5 - r) / (-0.5);
+    var xs = [x1, x2].filter(function (x) { return x >= 0 && x <= DACH_BIS; }).sort(function (a, b) { return a - b; });
+    return xs.length ? xs[0] : null;
+  };
+
+  // ── Zeichnen (SVG) ──
+  var svg = document.getElementById('ws'), NS = 'http://www.w3.org/2000/svg';
+  var X0 = 60, Y0 = 560, S = 56;          // Ursprung in px, 1 m = 56 px
+  var px = function (x) { return X0 + x * S; }, py = function (y) { return Y0 - y * S; };
+  function el(name, attr, eltern) { var e = document.createElementNS(NS, name); for (var k in attr) e.setAttribute(k, attr[k]); (eltern || svg).appendChild(e); return e; }
+  var zustand = { c: null, becher: null, strahl: null };
+
+  function szene() {
+    svg.innerHTML = '';
+    for (var x = 0; x <= 11; x++) el('line', { x1: px(x), y1: py(0), x2: px(x), y2: py(9.5), style: 'stroke:var(--c-grid);stroke-width:1' });
+    for (var y = 0; y <= 9; y++) el('line', { x1: px(-0.9), y1: py(y), x2: px(11.4), y2: py(y), style: 'stroke:var(--c-grid);stroke-width:1' });
+    el('rect', { x: px(-0.9), y: py(0), width: S * 12.3, height: 30, style: 'fill:var(--c-mission);opacity:.55' });
+    el('line', { x1: px(-0.9), y1: py(0), x2: px(11.4), y2: py(0), style: 'stroke:var(--c-axis);stroke-width:2' });
+    el('line', { x1: px(0), y1: py(0), x2: px(0), y2: py(9.4), style: 'stroke:var(--c-axis);stroke-width:1.5' });
+    for (x = 2; x <= 10; x += 2) { var t = el('text', { x: px(x), y: py(0) + 20, 'text-anchor': 'middle', style: 'fill:var(--c-muted);font-size:24px' }); t.textContent = x; }
+    for (y = 2; y <= 8; y += 2) { t = el('text', { x: px(0) - 10, y: py(y) + 5, 'text-anchor': 'end', style: 'fill:var(--c-muted);font-size:24px' }); t.textContent = y; }
+    t = el('text', { x: px(11.3), y: py(0) - 8, 'text-anchor': 'end', style: 'fill:var(--c-muted);font-size:22px' }); t.textContent = 'x in m';
+    // Glasdach
+    el('line', { x1: px(0), y1: py(g(0)), x2: px(DACH_BIS), y2: py(g(DACH_BIS)), style: 'stroke:var(--c-axis);stroke-width:7;opacity:.55;stroke-linecap:round' });
+    t = el('text', { x: px(7.2), y: py(g(7.2)) - 14, 'text-anchor': 'middle', style: 'fill:var(--c-muted);font-size:24px;font-weight:600' }); t.textContent = 'Glasdach';
+    // Säule mit Düse
+    var c = zustand.c == null ? 1 : zustand.c;
+    el('rect', { x: px(0) - 14, y: py(c), width: 14, height: Math.max(0, c * S), style: 'fill:var(--c-muted);opacity:.6' });
+    el('rect', { x: px(0) - 18, y: py(c) - 6, width: 22, height: 8, rx: 2, style: 'fill:var(--c-text)' });
+    // Becher
+    if (zustand.becher) {
+      var b = zustand.becher, bx = px(b.x), by = py(b.y);
+      el('line', { x1: bx, y1: by + 34, x2: bx, y2: py(0), style: 'stroke:var(--c-muted);stroke-width:3' });
+      el('path', { d: 'M' + (bx - 16) + ' ' + by + ' L' + (bx + 16) + ' ' + by + ' L' + (bx + 11) + ' ' + (by + 34) + ' L' + (bx - 11) + ' ' + (by + 34) + ' Z',
+        style: 'fill:var(--c-accent);opacity:.85' });
+      t = el('text', { x: bx, y: by - 10, 'text-anchor': 'middle', style: 'fill:var(--c-text);font-size:24px;font-weight:700' });
+      t.textContent = b.name ? b.name + ' (' + de(b.x) + ' | ' + de(b.y) + ')' : 'B(' + de(b.x) + ' | ' + de(b.y) + ')';
+    }
+    zustand.strahl = el('path', { d: '', style: 'fill:none;stroke:var(--c-e);stroke-width:5;stroke-linecap:round;opacity:.9' });
+  }
+
+  function schiessen(c, fertig) {
+    zustand.c = c; szene();
+    var b = zustand.becher, xDach = dachTreffer(c), xEnde = 11.2, ergebnis = 'boden';
+    // Wo endet der Strahl?
+    var xBoden = 4 + Math.sqrt(16 + 4 * c);                       // h_c(x) = 0
+    xEnde = Math.min(xEnde, xBoden);
+    if (xDach != null && xDach < xEnde) { xEnde = xDach; ergebnis = 'dach'; }
+    if (b && b.x <= xEnde && Math.abs(h(c, b.x) - b.y) <= 0.12) { xEnde = b.x; ergebnis = 'becher'; }
+    var t0 = null, dauer = 400 + 230 * xEnde;
+    function schritt(ts) {
+      if (t0 == null) t0 = ts;
+      var anteil = Math.min(1, (ts - t0) / dauer), xs = anteil * xEnde, d = 'M' + px(0) + ' ' + py(c);
+      for (var x = 0; x <= xs; x += 0.05) d += ' L' + px(x) + ' ' + py(h(c, x));
+      d += ' L' + px(xs) + ' ' + py(h(c, xs));
+      zustand.strahl.setAttribute('d', d);
+      if (anteil < 1) requestAnimationFrame(schritt);
+      else {
+        var farbe = ergebnis === 'becher' ? 'var(--c-gain)' : ergebnis === 'dach' ? 'var(--c-loss)' : 'var(--c-e)';
+        for (var i = 0; i < 9; i++) {
+          var w = i / 9 * Math.PI * 2;
+          el('line', { x1: px(xEnde), y1: py(h(c, xEnde)), x2: px(xEnde) + Math.cos(w) * 16, y2: py(h(c, xEnde)) + Math.sin(w) * 16, style: 'stroke:' + farbe + ';stroke-width:3;stroke-linecap:round' });
+        }
+        fertig(ergebnis, xEnde);
+      }
+    }
+    requestAnimationFrame(schritt);
+  }
+
+  var meldung = document.getElementById('meldung');
+  function melde(html) { meldung.innerHTML = html; if (window.renderMathInElement) renderMathInElement(meldung, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false }); }
+  function auftrag(html) { var a = document.getElementById('auftrag'); a.innerHTML = html; if (window.renderMathInElement) renderMathInElement(a, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false }); }
+
+  // ── Allein üben: 5 Level ──
+  var level = 0, aufgaben = [];
+  function zufallsBecher(mitDach) {
+    var cs = mitDach ? [2, 2.5, 3] : [0.25, 0.5, 0.75, 1, 1.25, 1.5], kandid = [];
+    cs.forEach(function (c) {
+      for (var x = 2; x <= 9; x++) {
+        var y = h(c, x);
+        if (y < 0.6 || y > 8.2) continue;
+        if (!mitDach && y > g(x) - 0.9) continue;
+        if (mitDach && (y > g(x) - 0.6)) continue;
+        kandid.push({ x: x, y: y, c: c });
+      }
+    });
+    return kandid[Math.floor(Math.random() * kandid.length)];
+  }
+  function neueRunde() {
+    aufgaben = [zufallsBecher(false), zufallsBecher(false), zufallsBecher(false), { dach: true }, zufallsBecher(true)];
+    while (aufgaben[1].c === aufgaben[0].c && aufgaben[1].x === aufgaben[0].x) aufgaben[1] = zufallsBecher(false);
+    level = 0; zeigeLevel();
+  }
+  function leiste() {
+    document.getElementById('levelLeiste').innerHTML = aufgaben.map(function (a, i) {
+      return '<span class="' + (i < level ? 'fertig' : i === level ? 'jetzt' : '') + '">' + (i + 1) + '</span>'; }).join('');
+  }
+  function zeigeLevel() {
+    leiste(); melde(''); document.getElementById('cAllein').value = '';
+    var a = aufgaben[level], wahl = document.getElementById('wahlBox'), los = document.getElementById('losAllein'), feld = document.getElementById('cAllein').parentNode;
+    wahl.hidden = true; los.hidden = false; feld.hidden = false;
+    if (level >= aufgaben.length) {
+      zustand.becher = null; szene(); auftrag('Alle fünf Level geschafft!');
+      document.getElementById('code').hidden = false;
+      melde('<button class="ws-btn leise" id="nochmal" type="button">Noch eine Runde</button>');
+      document.getElementById('nochmal').addEventListener('click', function () { document.getElementById('code').hidden = true; neueRunde(); });
+      return;
+    }
+    if (a.dach) {
+      zustand.becher = null; zustand.c = 1; szene();
+      auftrag('Level 4: Bei welcher Düsenhöhe $c$ streift der Strahl das Glasdach gerade (genau ein gemeinsamer Punkt)?');
+    } else if (level === 4) {
+      zustand.becher = { x: a.x, y: a.y }; zustand.c = 1; szene();
+      auftrag('Level 5: Lässt sich dieser Becher treffen, ohne dass der Strahl vorher ans Glasdach spritzt? Rechnen Sie $c$ aus und prüfen Sie das Dach.');
+      wahl.hidden = false; los.hidden = true; feld.hidden = true;
+    } else {
+      zustand.becher = { x: a.x, y: a.y }; zustand.c = 1; szene();
+      auftrag('Level ' + (level + 1) + ': Bestimmen Sie die Düsenhöhe $c$, mit der der Strahl den Becher trifft.');
+    }
+  }
+  document.getElementById('losAllein').addEventListener('click', function () {
+    var c = zahl(document.getElementById('cAllein').value), a = aufgaben[level];
+    if (!isFinite(c) || c < 0 || c > 6) { melde('Bitte eine Düsenhöhe zwischen $0$ und $6$ m eingeben.'); return; }
+    this.disabled = true; var knopf = this;
+    schiessen(c, function (erg, xe) {
+      knopf.disabled = false;
+      if (a.dach) {
+        if (Math.abs(c - 1.75) <= 0.01) { melde('<span class="ok">Genau!</span> $D(c) = c - 1{,}75 = 0$: Der Strahl berührt das Dach in $(3\\,|\\,5{,}5)$.'); level++; setTimeout(zeigeLevel, 2200); }
+        else if (c < 1.75) melde('<span class="nein">Noch zu niedrig</span> – der Strahl kommt nicht ans Dach. Gesucht ist der Wert, bei dem $D = 0$ ist.');
+        else melde('<span class="nein">Zu hoch</span> – der Strahl schneidet das Dach zweimal. Gesucht ist $D = 0$.');
+        return;
+      }
+      if (erg === 'becher') { melde('<span class="ok">Treffer!</span> $h_c(' + de(a.x) + ') = ' + de(a.y) + '$ für $c = ' + de(c) + '$.'); level++; setTimeout(zeigeLevel, 1800); }
+      else if (erg === 'dach') melde('<span class="nein">Glasdach getroffen.</span> Ihr $c$ ist zu groß – prüfen Sie die Rechnung $h_c(' + de(a.x) + ') = ' + de(a.y) + '$.');
+      else melde('<span class="nein">Daneben.</span> Bei $x = ' + de(a.x) + '$ ist Ihr Strahl $' + de(h(c, a.x)) + '$ m hoch, der Becher steht bei $' + de(a.y) + '$ m.');
+    });
+  });
+  function level5(ja) {
+    var a = aufgaben[4];
+    schiessen(a.c, function () {
+      if (!ja) { melde('<span class="ok">Richtig!</span> Nötig wäre $c = ' + de(a.c) + '$, aber $c \\ge 1{,}75$: Der Strahl trifft vorher das Dach.'); level++; setTimeout(zeigeLevel, 2600); }
+      else melde('<span class="nein">Leider nein.</span> Für den Becher bräuchte man $c = ' + de(a.c) + '$ – sehen Sie, wo der Strahl landet? Prüfen Sie $D(c) = c - 1{,}75$.');
+    });
+  }
+  document.getElementById('wahlJa').addEventListener('click', function () { level5(true); });
+  document.getElementById('wahlNein').addEventListener('click', function () { level5(false); });
+
+  // ── Teams ──
+  var KARTEN = [['A', 6, 4], ['B', 4, 5.5], ['C', 2, 3.5], ['D', 7, 2], ['E', 5, 4.5], ['F', 8, 1.25], ['G', 8, 3], ['H', 6, 5]];
+  var teams = {}, selTeam = document.getElementById('team'), selKarte = document.getElementById('karte');
+  for (var i = 1; i <= 10; i++) selTeam.insertAdjacentHTML('beforeend', '<option>Team ' + i + '</option>');
+  KARTEN.forEach(function (k) { selKarte.insertAdjacentHTML('beforeend', '<option value="' + k[0] + '">' + k[0] + '</option>'); });
+  function karte() { var k = KARTEN.find(function (k) { return k[0] === selKarte.value; }); return { name: k[0], x: k[1], y: k[2], c: k[2] + 0.25 * k[1] * k[1] - 2 * k[1] }; }
+  function zeigeKarte() { var k = karte(); zustand.becher = { x: k.x, y: k.y, name: k.name }; zustand.c = 1; szene(); melde(''); }
+  selKarte.addEventListener('change', zeigeKarte);
+  function wertung(team, treffer) {
+    teams[team] = teams[team] || { v: 0, t: 0 }; teams[team].v++; if (treffer) teams[team].t++;
+    document.querySelector('#punkte tbody').innerHTML = Object.keys(teams).sort().map(function (n) {
+      return '<tr><td>' + n + '</td><td>' + teams[n].v + '</td><td>' + teams[n].t + '</td></tr>'; }).join('');
+  }
+  document.getElementById('losTeam').addEventListener('click', function () {
+    var c = zahl(document.getElementById('cTeam').value), k = karte(), team = selTeam.value;
+    if (!isFinite(c) || c < 0 || c > 6) { melde('Bitte eine Düsenhöhe zwischen $0$ und $6$ m eingeben.'); return; }
+    zustand.becher = { x: k.x, y: k.y, name: k.name };
+    schiessen(c, function (erg) {
+      var t = erg === 'becher';
+      wertung(team, t);
+      melde(t ? '<span class="ok">' + team + ': Treffer!</span>' : erg === 'dach' ? '<span class="nein">' + team + ': Glasdach getroffen.</span>' : '<span class="nein">' + team + ': Daneben.</span>');
+    });
+  });
+  document.getElementById('gehtNicht').addEventListener('click', function () {
+    var k = karte(), team = selTeam.value, richtig = k.c >= 1.75;
+    zustand.becher = { x: k.x, y: k.y, name: k.name };
+    schiessen(k.c, function () {
+      wertung(team, richtig);
+      melde(richtig ? '<span class="ok">' + team + ': Richtig erkannt!</span> Nötig wäre $c = ' + de(k.c) + '$ – damit trifft der Strahl das Dach.'
+                    : '<span class="nein">' + team + ': Doch, das geht</span> – mit $c = ' + de(k.c) + '$ bleibt das Dach trocken.');
+    });
+  });
+  document.getElementById('kartenZeigen').addEventListener('click', function () {
+    var l = document.getElementById('kartenListe'); l.hidden = !l.hidden;
+    l.innerHTML = '<table class="ws-tabelle"><thead><tr><th>Karte</th><th>Becher</th></tr></thead><tbody>' + KARTEN.map(function (k) {
+      return '<tr><td>' + k[0] + '</td><td>$B(' + de(k[1]) + '\\,|\\,' + de(k[2]) + ')$</td></tr>'; }).join('') + '</tbody></table>';
+    if (window.renderMathInElement) renderMathInElement(l, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+  });
+  document.getElementById('codeZeigen').addEventListener('click', function () { document.getElementById('code').hidden = false; });
+
+  // ── Modus ──
+  function modus(team) {
+    document.getElementById('modAllein').classList.toggle('aktiv', !team);
+    document.getElementById('modTeam').classList.toggle('aktiv', team);
+    document.getElementById('steuerAllein').hidden = team; document.getElementById('levelLeiste').hidden = team;
+    document.getElementById('steuerTeam').hidden = !team; document.getElementById('teamInfo').hidden = !team;
+    document.getElementById('code').hidden = true;
+    if (team) { auftrag('Jedes Team zieht eine Zielkarte. Erst rechnen, dann gibt die Lehrkraft $c$ ein – oder „Geht nicht“, wenn das Dach im Weg ist.'); zeigeKarte(); }
+    else neueRunde();
+  }
+  document.getElementById('modAllein').addEventListener('click', function () { modus(false); });
+  document.getElementById('modTeam').addEventListener('click', function () { modus(true); });
+  modus(location.hash === '#team');
+
+  // ── Video ──
+  VideoQuiz.mount('vq', { videos: [
+    { id: 'video', titel: 'Gerade trifft Parabel', src: 'MT11_1-9_VID_Gerade_Parabel.mp4', vtt: 'MT11_1-9_VID_Gerade_Parabel.vtt',
+      poster: 'MT11_1-9_VID_Gerade_Parabel.jpg', stopps: [
+      { vor: 'a ist minus eins, b zwei', typ: 'zahl', frage: 'Berechnen Sie die Diskriminante von $-x^2 + 2x - 1 = 0$.', richtig: 0, toleranz: 0,
+        zurueck: 'Alles nach links', erklaerung: '$D = 2^2 - 4 \\cdot (-1) \\cdot (-1) = 4 - 4 = 0$.' },
+      { vor: 'D gleich null heißt', typ: 'wahl', frage: 'Was bedeutet $D = 0$ nach dem Gleichsetzen?',
+        optionen: ['Die Gerade berührt die Parabel (genau ein Punkt).', 'Gerade und Parabel schneiden sich zweimal.', 'Es ist ein Rechenfehler passiert.'], richtig: 0,
+        zurueck: 'Gemeinsame Punkte haben', erklaerung: 'Eine Lösung der Gleichung = ein gemeinsamer Punkt: Die Gerade ist eine Tangente.' },
+      { vor: 'Die Diskriminante hängt jetzt von k ab', typ: 'wahl', frage: 'Wie lautet $D(k)$ für $x^2 + 2x - k = 0$?',
+        optionen: ['$D(k) = 4 + 4k$', '$D(k) = 4 - 4k$', '$D(k) = 4k$'], richtig: 0, zurueck: 'Gleichsetzen und auf null',
+        erklaerung: '$a = 1$, $b = 2$, $c = -k$: $D = 4 - 4 \\cdot 1 \\cdot (-k) = 4 + 4k$.' },
+      { vor: 'Zwei Schnittpunkte gibt es', typ: 'info',
+        text: '$4 + 4k > 0$ ist eine lineare Ungleichung: $-4$, dann $:4$ ergibt $k > -1$. Das Zeichen dreht sich nur beim Teilen durch eine negative Zahl.' }
+    ] }
+  ] });
+});
+</script>
+</body>
+</html>

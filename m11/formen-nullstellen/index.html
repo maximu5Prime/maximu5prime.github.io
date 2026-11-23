@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formen und Nullstellen · M11</title>
+  <meta name="description" content="Quadratische Funktionen wiederholen: Scheitelpunktform, Produktform und das passende Verfahren für Nullstellen – Videos, die anhalten und fragen.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/v2/video-quiz.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <script defer src="/static/v2/video-quiz.js"></script>
+</head>
+<body>
+<!-- Video-Seite (23.11.2026), FT11 LB1 1.7 (Wochenpaket). QR im Skript 1.7 Aufgabe 3 (#formen) und Aufgabe 5 (#nullstellen). Videos: Quelle 04_Kurse/01_Mathematik/FT11/LB01_…/07_Wiederholung_…/video/ — nach Neubau oder eigener Aufnahme mp4 + vtt hierher kopieren. Stopps hängen am Satzanfang (video-quiz.js). -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Quadratische Funktionen</div>
+    <h1>Formen und <mark>Nullstellen</mark></h1>
+    <p>Drei Formen, eine Parabel – und für jede Gleichung das passende Verfahren. Die Videos halten an und fragen Sie.</p>
+  </header>
+
+  <h2 class="etappe"><span>1</span>Anschauen und mitdenken</h2>
+  <div id="vq"></div>
+
+  <details class="warum flach">
+    <summary class="etappe"><span>2</span>Warum?</summary>
+    <div class="warum-inhalt">
+      <div class="schritt"><span>•</span><div><b>Allgemeine Form</b> $ax^2 + bx + c$ zeigt den $y$-Achsenabschnitt $c$, <b>Scheitelpunktform</b> $a\,(x - x_S)^2 + y_S$ den Scheitel, <b>Produktform</b> $a\,(x - x_1)(x - x_2)$ die Nullstellen.</div></div>
+      <div class="schritt"><span>•</span><div>Quadratisch ergänzen: halbe Zahl vor $x$ ins Quadrat dazu und gleich wieder weg – der Term bleibt gleich. Steht vor $x^2$ keine 1, erst $a$ ausklammern.</div></div>
+      <div class="schritt"><span>•</span><div>Nullstellen: Produkt? Ablesen. Keine Zahl ohne $x$? Ausklammern. $x$ nur im Quadrat? Radizieren ($\pm$). Sonst: Lösungsformel.</div></div>
+      <div class="schritt"><span>•</span><div>Die Diskriminante $D = b^2 - 4ac$ zählt: $D &gt; 0$ zwei, $D = 0$ eine, $D &lt; 0$ keine Nullstelle.</div></div>
+    </div>
+  </details>
+  <a class="zum-ueben" href="/m11/brunnen/"><span>Escape: Der Brunnen-Code<small>Raum 1 – Formen und Nullstellen</small></span><span>→</span></a>
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/brunnen/"><span>← Voriges Thema</span>Escape: Der Brunnen-Code</a>
+    <a class="next" href="/m11/funktionsterm/"><span>Nächstes Thema →</span>Funktionsterm aufstellen</a>
+  </nav>
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  var V = ['Ablesen', 'Ausklammern', 'Radizieren ($\\pm\\sqrt{\\ }$)', 'Lösungsformel'];
+  VideoQuiz.mount('vq', { videos: [
+    { id: 'formen', titel: 'Formen umwandeln', src: 'MT11_1-7_VID_Formen_umwandeln.mp4', vtt: 'MT11_1-7_VID_Formen_umwandeln.vtt',
+      poster: 'MT11_1-7_VID_Formen_umwandeln.jpg', stopps: [
+      { vor: 'Schau auf die Zahl vor x', typ: 'wahl', frage: 'Welche Zahl wird bei $g(x) = x^2 + 6x + 5$ ergänzt (und gleich wieder abgezogen)?',
+        optionen: ['$3^2 = 9$', '$6^2 = 36$', '$5$'], richtig: 0, zurueck: 'Aufgabe b',
+        erklaerung: 'Die halbe Zahl vor $x$: $6 : 2 = 3$, ins Quadrat: $9$.' },
+      { vor: 'So ändert sich der Wert nicht', typ: 'info',
+        text: 'Die binomische Formel $(x + 3)^2 = x^2 + 6x + 9$ braucht die $9$. Damit der Term gleich bleibt, wird sie sofort wieder abgezogen – insgesamt kommt $0$ dazu.' },
+      { vor: 'Der Scheitel liegt bei minus drei', typ: 'wahl', frage: 'Wo liegt der Scheitel von $g(x) = (x + 3)^2 - 4$?',
+        optionen: ['$S(-3\\,|\\,-4)$', '$S(3\\,|\\,-4)$', '$S(-3\\,|\\,4)$'], richtig: 0, zurueck: 'Die ersten drei Summanden',
+        erklaerung: '$(x + 3) = (x - (-3))$, also $x_S = -3$; dahinter steht $y_S = -4$.' },
+      { vor: 'Deshalb klammern wir zuerst', typ: 'wahl', frage: 'Bei $h(x) = 0{,}5x^2 - 2x - 6$: Was ist der erste Schritt?',
+        optionen: ['$0{,}5$ aus $0{,}5x^2 - 2x$ ausklammern', 'sofort $(-2) : 2 = -1$ ergänzen', 'den ganzen Term mal $2$ nehmen'], richtig: 0, zurueck: 'Aufgabe c',
+        erklaerung: 'Quadratisch ergänzen klappt nur mit $1$ vor $x^2$. Mal $2$ ist verboten: $h(x)$ ist keine Gleichung, der Term würde sich verdoppeln.' },
+      { vor: 'Jetzt die Nullstellen', typ: 'wahl', frage: 'Wie viele Nullstellen hat $h(x) = 0{,}5\\,(x - 2)^2 - 8$?',
+        optionen: ['zwei', 'eine', 'keine'], richtig: 0, zurueck: 'Also h von x gleich',
+        erklaerung: 'Der Scheitel $S(2\\,|\\,-8)$ liegt unter der $x$-Achse und die Parabel ist nach oben geöffnet ($a = 0{,}5 &gt; 0$).' },
+      { vor: 'Plus acht, dann durch', typ: 'zahl', frage: 'Rechnen Sie selbst: $0{,}5\\,(x - 2)^2 - 8 = 0$. Welche Zahl steht dann rechts bei $(x - 2)^2 = \\ldots$?',
+        richtig: 16, toleranz: 0, zurueck: 'Jetzt die Nullstellen', erklaerung: '$+8$ ergibt $0{,}5\\,(x - 2)^2 = 8$, durch $0{,}5$ (also mal $2$): $16$.' }
+    ] },
+    { id: 'nullstellen', titel: 'Nullstellen: Verfahren wählen', src: 'MT11_1-7_VID_Nullstellen_Verfahren.mp4', vtt: 'MT11_1-7_VID_Nullstellen_Verfahren.vtt',
+      poster: 'MT11_1-7_VID_Nullstellen_Verfahren.jpg', stopps: [
+      { vor: 'Es gibt keine Zahl ohne x', typ: 'wahl', frage: 'Welches Verfahren passt zu $3x^2 - 12x = 0$?', optionen: V, richtig: 1, zurueck: 'Aufgabe a',
+        erklaerung: 'Es fehlt die Zahl ohne $x$: $x$ ausklammern, $3x\\,(x - 4) = 0$.' },
+      { vor: 'x steht nur in der Klammer', typ: 'wahl', frage: 'Welches Verfahren passt zu $2\\,(x + 1)^2 - 18 = 0$?', optionen: V, richtig: 2, zurueck: 'Aufgabe b',
+        erklaerung: '$x$ steht nur in $(x + 1)^2$: nach der Klammer auflösen und die Wurzel ziehen ($\\pm$).' },
+      { vor: 'Die Wurzel aus neun', typ: 'info', text: '$3^2 = 9$, aber auch $(-3)^2 = 9$. Deshalb heißt es beim Wurzelziehen immer $\\pm$: zwei Lösungen.' },
+      { vor: 'Hier steht schon ein Produkt', typ: 'wahl', frage: 'Welches Verfahren passt zu $-0{,}5\\,(x - 3)(x + 7) = 0$?', optionen: V, richtig: 0, zurueck: 'Aufgabe c',
+        erklaerung: 'Ein Produkt ist null, wenn ein Faktor null ist – ablesen: $3$ und $-7$.' },
+      { vor: 'Kein Produkt, eine Zahl ohne x', typ: 'wahl', frage: 'Welches Verfahren passt zu $x^2 - 4x - 12 = 0$?', optionen: V, richtig: 3, zurueck: 'Aufgabe d',
+        erklaerung: 'Kein Produkt, es gibt eine Zahl ohne $x$, und $x$ steht nicht nur im Quadrat: Lösungsformel.' },
+      { vor: 'Neun minus zweiunddreißig', typ: 'zahl', frage: 'Berechnen Sie die Diskriminante von $2x^2 + 3x + 4 = 0$.', richtig: -23, toleranz: 0, zurueck: 'Aufgabe e',
+        erklaerung: '$D = b^2 - 4ac = 3^2 - 4 \\cdot 2 \\cdot 4 = 9 - 32 = -23$.' }
+    ] }
+  ] });
+});
+</script>
+</body>
+</html>

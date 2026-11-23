@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de" data-fach="mathematik">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Der Brunnen-Code · M11</title>
+  <meta name="description" content="Escape in drei Räumen: Formen und Nullstellen, Funktionsterm aufstellen, Wasserstrahl-Challenge. Jeder Raum liefert einen Code.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="/static/v2/base.css">
+  <link rel="stylesheet" href="/static/v2/farben.css">
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+  <script defer src="/static/v2/aha-lib.js"></script>
+  <style>
+    .raum { background: var(--c-surface); border-radius: var(--radius); padding: 18px; margin: 8px 0 22px; box-shadow: var(--shadow); }
+    .raum.zu { opacity: .55; }
+    .raum.zu .raum-inhalt { display: none; }
+    .raum-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .raum-kopf h3 { margin: 0; font-size: 1.15rem; }
+    .schloss { font-size: .9rem; font-weight: 700; color: var(--c-muted); }
+    .raum.offen .schloss { color: var(--c-gain); }
+    .esc-aufg { border-left: 3px solid var(--c-accent); padding: 4px 0 4px 12px; margin: 16px 0; }
+    .esc-aufg p { margin: 0 0 8px; }
+    .esc-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .esc-opt { border: 1px solid var(--c-line); background: var(--c-surface-2); color: var(--c-text); border-radius: 10px; padding: 8px 12px; font: inherit; cursor: pointer; min-height: 44px; }
+    .esc-opt b { margin-left: 6px; color: var(--c-accent); }
+    .esc-opt.gewaehlt { border: 2px solid var(--c-accent); background: var(--c-mission); }
+    .esc-tuer { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--c-line); }
+    .esc-tuer input { min-height: 44px; font: inherit; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; padding: 6px 12px; border-radius: 10px;
+      border: 1px solid var(--c-line); background: var(--c-surface); color: var(--c-text); width: 12em; }
+    .esc-btn { min-height: 44px; border-radius: 10px; border: 1px solid var(--c-accent); background: var(--c-accent); color: var(--c-on-accent); font: inherit; font-weight: 700; padding: 8px 16px; cursor: pointer; }
+    .esc-meldung { width: 100%; min-height: 1.4em; }
+    .esc-meldung.ok { color: var(--c-gain); font-weight: 700; }
+    .esc-meldung.nein { color: var(--c-loss); font-weight: 700; }
+    .geschichte { line-height: 1.6; }
+  </style>
+</head>
+<body>
+<!-- Escape-Seite (23.11.2026), FT11 LB1 Wochenpaket 1.7–1.9. Steht auch für sich allein: alle Aufgaben stehen hier (gleich wie im Skript
+     1.7 A1 und 1.8 A6). Codes: Raum 1 WASSER, Raum 2 STRAHL, Raum 3 FONTAENE (aus /m11/wasserstrahl/). Geprüft wird per SHA-256,
+     der Klartext steht nicht im Quelltext. Fortschritt in localStorage (nur Komfort). -->
+<div class="wrap">
+
+  <nav class="bar">
+    <a class="back" href="/m11/">← M11</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">◐</button>
+  </nav>
+
+  <header class="hero">
+    <div class="kurs">M11 · Quadratische Funktionen</div>
+    <h1>Der <mark>Brunnen</mark>-Code</h1>
+    <p>Die Steuerung des Springbrunnens ist gesperrt. Drei Räume, drei Codes – dann läuft das Wasser wieder.</p>
+  </header>
+
+  <p class="geschichte">Der Brunnen im Schulhof hat eine neue Steuerung bekommen – und sich prompt selbst gesperrt. Zum Entsperren brauchen Sie drei Codes.
+  Jeder Raum enthält Aufgaben: Kreuzen Sie je Aufgabe die richtige Antwort an, ihr Buchstabe ist ein Teil des Codes.</p>
+
+  <section class="raum offen" id="raum1">
+    <div class="raum-kopf"><h3>Raum 1 · Formen und Nullstellen</h3><span class="schloss" data-schloss>offen</span></div>
+    <div class="raum-inhalt" data-aufgaben="r1"></div>
+  </section>
+
+  <section class="raum zu" id="raum2">
+    <div class="raum-kopf"><h3>Raum 2 · Funktionsterm aufstellen</h3><span class="schloss" data-schloss>🔒 erst Raum 1</span></div>
+    <div class="raum-inhalt" data-aufgaben="r2"></div>
+  </section>
+
+  <section class="raum zu" id="raum3">
+    <div class="raum-kopf"><h3>Raum 3 · Wasserstrahl-Challenge</h3><span class="schloss" data-schloss>🔒 erst Raum 2</span></div>
+    <div class="raum-inhalt">
+      <p>Jetzt wird gezielt: Stellen Sie die Düse so ein, dass der Strahl den Becher trifft – und nicht das Glasdach.
+      Schaffen Sie alle fünf Level der Challenge, erhalten Sie den letzten Code.</p>
+      <p><a class="esc-btn" href="/m11/wasserstrahl/" style="display:inline-block;text-decoration:none">Zur Wasserstrahl-Challenge →</a></p>
+      <div class="esc-tuer"><input id="code3" aria-label="Code Raum 3" autocomplete="off"><button class="esc-btn" type="button" id="tuer3">Brunnen starten</button>
+        <div class="esc-meldung" id="meldung3" aria-live="polite"></div></div>
+    </div>
+  </section>
+
+  <div class="aha" id="aha" hidden>
+    <strong>Geschafft!</strong> Der Brunnen läuft wieder. Sie haben Formen umgewandelt, Nullstellen bestimmt, Funktionsterme aufgestellt
+    und mit der Diskriminante gezielt – das ganze Ende von Lernbereich 1.
+  </div>
+
+  <nav class="pager2" aria-label="Themen">
+    <a href="/m11/nullstellen/"><span>← Voriges Thema</span>Schneiden oder Berühren?</a>
+    <a class="next" href="/m11/formen-nullstellen/"><span>Nächstes Thema →</span>Formen und Nullstellen</a>
+  </nav>
+  <footer class="fuss">
+    <span>Mathematik · FOS Technik</span>
+    <span><a href="/">Startseite</a> · <a href="/archiv/">Archiv</a> · <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a></span>
+  </footer>
+</div>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  var HASH = { 1: '6906f3b49e80d5c56bc61bdc2125fc5318d634adbbd41837840ffe48fe9b7121',
+               2: '47843765cdf6a6863b9cf5c67e0bf6dd712f88a6187d97cc550e0aac86f0ddfd',
+               3: '5ad46de4492b529feb88e424198ea3a7def1063203628982abf6ef80fef74c5e' };
+  // Aufgaben: [Frage, [[Antwort, Buchstabe], …]] – Reihenfolge der Antworten wie im Skript
+  var R = {
+    r1: [
+      ['Scheitel von $f(x) = 2\\,(x + 3)^2 - 1$', [['$(3\\,|\\,-1)$', 'K'], ['$(-3\\,|\\,-1)$', 'W'], ['$(-3\\,|\\,1)$', 'M']]],
+      ['Nullstellen von $f(x) = -0{,}5\\,(x - 4)(x + 2)$', [['$4$; $-2$', 'A'], ['$-4$; $2$', 'E'], ['$-0{,}5$; $4$', 'U']]],
+      ['Scheitelpunktform von $f(x) = x^2 - 6x + 8$', [['$(x - 3)^2 - 1$', 'S'], ['$(x - 6)^2 + 8$', 'T'], ['$(x + 3)^2 - 1$', 'R']]],
+      ['Lösungen von $3x^2 - 12x = 0$', [['$0$ und $4$', 'S'], ['nur $4$', 'N'], ['$2$ und $-2$', 'L']]],
+      ['Anzahl der Nullstellen von $f(x) = x^2 + 2x + 5$', [['zwei', 'B'], ['eine', 'I'], ['keine', 'E']]],
+      ['Produktform von $f(x) = x^2 - x - 6$', [['$(x - 3)(x + 2)$', 'R'], ['$(x + 3)(x - 2)$', 'O'], ['$(x - 6)(x + 1)$', 'H']]]
+    ],
+    r2: [
+      ['Term der Parabel mit Scheitel $S(2\\,|\\,3)$ durch $P(0\\,|\\,1)$', [['$-0{,}5\\,(x - 2)^2 + 3$', 'S'], ['$0{,}5\\,(x - 2)^2 + 3$', 'K'], ['$-0{,}5\\,(x + 2)^2 + 3$', 'M']]],
+      ['Term der Parabel mit den Nullstellen $-1$ und $3$ durch $P(1\\,|\\,-8)$', [['$2\\,(x + 1)(x - 3)$', 'T'], ['$-2\\,(x + 1)(x - 3)$', 'P'], ['$2\\,(x - 1)(x + 3)$', 'N']]],
+      ['Normalparabel, nach unten geöffnet, Scheitel $S(-1\\,|\\,4)$', [['$-(x - 1)^2 + 4$', 'G'], ['$-(x + 1)^2 + 4$', 'R'], ['$(x + 1)^2 + 4$', 'D']]],
+      ['Brückenbogen: Fußpunkte $(0\\,|\\,0)$ und $(30\\,|\\,0)$, in der Mitte $9$ m hoch', [['$0{,}04\\,x\\,(x - 30)$', 'F'], ['$-0{,}4\\,x\\,(x - 30)$', 'I'], ['$-0{,}04\\,x\\,(x - 30)$', 'A']]],
+      ['Parabel durch $(0\\,|\\,0)$ und $(4\\,|\\,0)$ mit Scheitel $S(2\\,|\\,-4)$', [['$x^2 - 4x$', 'H'], ['$-x^2 + 4x$', 'U'], ['$x^2 + 4x$', 'O']]],
+      ['Welche Angabe reicht <b>nicht</b> für genau eine Parabel?', [['Scheitel und ein Punkt', 'E'], ['nur zwei Nullstellen', 'L'], ['zwei Nullstellen und ein Punkt', 'Z']]]
+    ]
+  };
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) { /* egal */ } } };
+  var norm = function (s) { return String(s || '').toUpperCase().replace(/Ä/g, 'AE').replace(/Ö/g, 'OE').replace(/Ü/g, 'UE').replace(/[^A-Z]/g, ''); };
+  function sha(text) {
+    if (!(window.crypto && crypto.subtle)) return Promise.resolve(null);
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (b) {
+      return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, '0'); }).join(''); });
+  }
+
+  function baueRaum(nr) {
+    var box = document.querySelector('[data-aufgaben="r' + nr + '"]'), aufg = R['r' + nr], wahl = [];
+    box.innerHTML = aufg.map(function (a, i) {
+      return '<div class="esc-aufg"><p><b>' + (i + 1) + '</b>&ensp;' + a[0] + '</p><div class="esc-opts">' +
+        a[1].map(function (o, j) { return '<button type="button" class="esc-opt" data-i="' + i + '" data-j="' + j + '">' + o[0] + '<b>' + o[1] + '</b></button>'; }).join('') +
+        '</div></div>'; }).join('') +
+      '<div class="esc-tuer"><input id="code' + nr + '" aria-label="Code Raum ' + nr + '" autocomplete="off" placeholder="Code"><button class="esc-btn" type="button" id="tuer' + nr + '">Tür öffnen</button>' +
+      '<div class="esc-meldung" id="meldung' + nr + '" aria-live="polite"></div></div>';
+    box.querySelectorAll('.esc-opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = +b.dataset.i, j = +b.dataset.j;
+        box.querySelectorAll('.esc-opt[data-i="' + i + '"]').forEach(function (x) { x.classList.remove('gewaehlt'); });
+        b.classList.add('gewaehlt'); wahl[i] = aufg[i][1][j][1];
+        document.getElementById('code' + nr).value = aufg.map(function (_, k) { return wahl[k] || '_'; }).join('');
+      });
+    });
+  }
+  baueRaum(1); baueRaum(2);
+
+  function oeffne(nr, still) {
+    var r = document.getElementById('raum' + nr);
+    document.querySelector('#raum' + nr + ' [data-schloss]').textContent = '✓ gelöst';
+    r.classList.add('offen');
+    store.set('m11-brunnen-' + nr, '1');
+    if (nr < 3) {
+      var n = document.getElementById('raum' + (nr + 1));
+      n.classList.remove('zu'); n.classList.add('offen');
+      n.querySelector('[data-schloss]').textContent = 'offen';
+      if (!still) n.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      document.getElementById('aha').hidden = false;
+      if (!still) document.getElementById('aha').scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+  [1, 2, 3].forEach(function (nr) {
+    document.getElementById('tuer' + nr).addEventListener('click', function () {
+      var m = document.getElementById('meldung' + nr), code = norm(document.getElementById('code' + nr).value);
+      sha(code).then(function (h) {
+        if (h === null) { m.className = 'esc-meldung nein'; m.textContent = 'Dieser Browser kann den Code nicht prüfen – zeigen Sie ihn der Lehrkraft.'; return; }
+        if (h === HASH[nr]) { m.className = 'esc-meldung ok'; m.textContent = nr < 3 ? 'Klick – die Tür ist offen!' : 'Das Wasser läuft!'; oeffne(nr, false); }
+        else { m.className = 'esc-meldung nein'; m.textContent = 'Der Code stimmt nicht. Mindestens eine Antwort ist falsch – prüfen Sie Ihre Rechnungen.'; }
+      });
+    });
+  });
+  [1, 2, 3].forEach(function (nr) { if (store.get('m11-brunnen-' + nr) === '1') oeffne(nr, true); });
+  if (window.renderMathInElement) renderMathInElement(document.querySelector('.wrap'), { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+});
+</script>
+</body>
+</html>
