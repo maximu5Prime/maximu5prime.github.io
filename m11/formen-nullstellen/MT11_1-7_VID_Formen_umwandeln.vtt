@@ -1,52 +1,40 @@
 WEBVTT
 
-00:00.800 --> 00:06.628
-In diesem Video bringen wir zwei Parabeln in andere Formen. Zwischendurch hält das Video an und fragt dich.
+00:00.800 --> 00:08.102
+Eine Parabel, drei Formen. In diesem Video findest du den Scheitel und die Nullstellen. Zwischendurch hält das Video an und fragt dich.
 
-00:07.966 --> 00:15.710
-Aufgabe b: g von x gleich x Quadrat plus sechs x plus fünf. Gesucht ist die Scheitelpunktform. Dafür ergänzen wir quadratisch.
+00:09.433 --> 00:17.061
+Hier ist g von x gleich x Quadrat plus sechs x plus fünf, in allgemeiner Form. Den Scheitel sieht man nicht direkt. Wir rechnen ihn aus.
 
-00:16.033 --> 00:23.637
-Schau auf die Zahl vor x: sechs. Die Hälfte davon ist drei. Wir ergänzen drei Quadrat, also neun, und ziehen neun gleich wieder ab.
+00:17.400 --> 00:25.677
+Die x-Koordinate des Scheitels ist minus b durch zwei a. Hier ist a eins und b sechs. Also minus sechs durch zwei, gleich minus drei.
 
-00:23.966 --> 00:27.321
-So ändert sich der Wert nicht: plus neun minus neun ist null.
+00:26.000 --> 00:32.664
+Den y-Wert bekommst du durch Einsetzen: g von minus drei ist neun minus achtzehn plus fünf, also minus vier.
 
-00:27.666 --> 00:32.531
-Die ersten drei Summanden sind eine binomische Formel: x plus drei in Klammern zum Quadrat.
+00:33.000 --> 00:42.938
+Der Scheitel liegt bei minus drei und minus vier. Die Scheitelpunktform heißt x plus drei zum Quadrat minus vier. Achtung: x S gleich minus drei gibt plus drei in der Klammer.
 
-00:32.866 --> 00:36.163
-Übrig bleibt minus neun plus fünf, also minus vier.
+00:44.866 --> 00:53.109
+Jetzt h von x gleich 0,5 x Quadrat minus zwei x minus sechs. Hier ist a gleich 0,5 und b gleich minus zwei.
 
-00:36.500 --> 00:43.001
-Der Scheitel liegt bei minus drei und minus vier. Achtung: Plus drei in der Klammer heißt x_S gleich minus drei.
+00:53.433 --> 00:57.891
+Minus b ist plus zwei, zwei a ist eins. Also x S gleich zwei.
 
-00:44.933 --> 00:52.259
-Aufgabe c: h von x gleich 0,5 x Quadrat minus zwei x minus sechs. Hier steht vor x Quadrat keine Eins.
+00:58.233 --> 01:06.859
+h von zwei ist zwei minus vier minus sechs, also minus acht. Die Scheitelpunktform: 0,5 mal x minus zwei zum Quadrat minus acht.
 
-00:52.600 --> 01:00.970
-Deshalb klammern wir zuerst 0,5 aus den beiden x-Summanden aus. Minus zwei x geteilt durch 0,5 gibt minus vier x.
+01:08.700 --> 01:15.933
+Jetzt die Nullstellen. Wir setzen h von x gleich null. In der Scheitelpunktform steht x nur im Quadrat, also radizieren wir.
 
-01:01.300 --> 01:07.592
-Die Hälfte von minus vier ist minus zwei. Wir ergänzen zwei Quadrat, also vier, und ziehen es wieder ab.
-
-01:07.933 --> 01:15.108
-Die minus vier steht noch in der Klammer. Holen wir sie heraus, wird sie mit 0,5 multipliziert. Das gibt minus zwei.
-
-01:15.433 --> 01:22.596
-Also h von x gleich 0,5 mal x minus zwei zum Quadrat minus acht. Der Scheitel liegt bei zwei und minus acht.
-
-01:24.433 --> 01:30.145
-Jetzt die Nullstellen. Wir setzen h von x gleich null. x steht nur im Quadrat, also radizieren wir.
-
-01:30.466 --> 01:37.664
+01:16.266 --> 01:23.464
 Plus acht, dann durch 0,5 teilen: x minus zwei zum Quadrat ist sechzehn. Die Wurzel ist plus oder minus vier.
 
-01:38.000 --> 01:43.363
+01:23.800 --> 01:29.163
 Also x gleich sechs oder x gleich minus zwei. Genau dort schneidet die Parabel die x-Achse.
 
-01:43.700 --> 01:51.385
-Damit kennst du die Produktform: 0,5 mal x minus sechs mal x plus zwei. Ausmultipliziert ergibt sich wieder der Anfangsterm.
+01:29.500 --> 01:37.696
+Damit kennst du die Produktform: 0,5 mal x minus sechs mal x plus zwei. Und der Scheitel liegt genau in der Mitte zwischen den Nullstellen, bei zwei.
 
-01:52.733 --> 02:00.964
-Merke: Für die Scheitelpunktform ergänzt du quadratisch, vorher klammerst du a aus. Für die Produktform brauchst du die Nullstellen. Drei Formen, eine Parabel.
+01:39.033 --> 01:47.729
+Merke: Den Scheitel findest du mit minus b durch zwei a, den y-Wert durch Einsetzen. Für die Produktform brauchst du die Nullstellen. Drei Formen, eine Parabel.

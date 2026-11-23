@@ -3,38 +3,38 @@ WEBVTT
 00:00.800 --> 00:06.999
 Schneidet die Gerade die Parabel, berührt sie sie, oder verfehlt sie sie? Das entscheidet die Diskriminante.
 
-00:08.333 --> 00:14.080
-Aufgabe drei a: Berührt die Gerade zwei x plus eins die Parabel minus x Quadrat plus vier x?
+00:08.333 --> 00:13.232
+Berührt die Gerade zwei x plus eins die Parabel minus x Quadrat plus vier x?
 
-00:14.400 --> 00:18.811
+00:13.566 --> 00:17.978
 Gemeinsame Punkte haben dieselben y-Werte. Also setzen wir die Terme gleich.
 
-00:19.133 --> 00:23.707
+00:18.300 --> 00:22.874
 Alles nach links: minus x Quadrat plus zwei x minus eins gleich null.
 
-00:24.033 --> 00:30.592
+00:23.200 --> 00:29.759
 a ist minus eins, b zwei, c minus eins. Die Diskriminante ist vier minus vier, also null.
 
-00:30.933 --> 00:36.529
+00:30.100 --> 00:35.696
 D gleich null heißt: genau ein gemeinsamer Punkt. Die Gerade berührt die Parabel. Sie ist eine Tangente.
 
-00:36.866 --> 00:41.858
+00:36.033 --> 00:41.025
 x ist minus b durch zwei a, also eins. Der Berührpunkt ist eins und drei.
 
-00:43.700 --> 00:50.584
-Jetzt mit Parameter, Aufgabe fünf a: die Parabel x Quadrat plus zwei x und die waagrechte Gerade y gleich k.
+00:42.866 --> 00:48.369
+Jetzt mit Parameter: die Parabel x Quadrat plus zwei x und die waagrechte Gerade y gleich k.
 
-00:50.933 --> 00:55.821
+00:48.700 --> 00:53.587
 Gleichsetzen und auf null bringen: x Quadrat plus zwei x minus k gleich null.
 
-00:56.166 --> 01:01.542
+00:53.933 --> 00:59.308
 Die Diskriminante hängt jetzt von k ab: vier minus vier mal minus k, also vier plus vier k.
 
-01:01.866 --> 01:06.870
+00:59.633 --> 01:04.637
 Zwei Schnittpunkte gibt es, wenn D größer null ist: also für k größer minus eins.
 
-01:07.200 --> 01:14.723
+01:04.966 --> 01:12.489
 Bei k gleich minus eins berührt die Gerade die Parabel, genau im Scheitel. Für k kleiner minus eins gibt es keinen gemeinsamen Punkt.
 
-01:17.733 --> 01:24.954
+01:15.500 --> 01:22.721
 Merke: Gleichsetzen, auf null bringen, Diskriminante bestimmen. Mit Parameter löst du die Bedingung für D nach dem Parameter auf.
