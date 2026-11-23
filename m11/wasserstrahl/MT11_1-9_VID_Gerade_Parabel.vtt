@@ -1,40 +1,40 @@
 WEBVTT
 
-00:00.800 --> 00:06.999
+00:00.800 --> 00:07.994
 Schneidet die Gerade die Parabel, berührt sie sie, oder verfehlt sie sie? Das entscheidet die Diskriminante.
 
-00:08.333 --> 00:13.232
+00:09.333 --> 00:17.978
 Berührt die Gerade zwei x plus eins die Parabel minus x Quadrat plus vier x?
 
-00:13.566 --> 00:17.978
+00:18.300 --> 00:23.783
 Gemeinsame Punkte haben dieselben y-Werte. Also setzen wir die Terme gleich.
 
-00:18.300 --> 00:22.874
+00:24.133 --> 00:30.053
 Alles nach links: minus x Quadrat plus zwei x minus eins gleich null.
 
-00:23.200 --> 00:29.759
+00:30.400 --> 00:54.540
 a ist minus eins, b zwei, c minus eins. Die Diskriminante ist vier minus vier, also null.
 
-00:30.100 --> 00:35.696
+00:54.866 --> 01:02.633
 D gleich null heißt: genau ein gemeinsamer Punkt. Die Gerade berührt die Parabel. Sie ist eine Tangente.
 
-00:36.033 --> 00:41.025
+01:02.966 --> 01:12.315
 x ist minus b durch zwei a, also eins. Der Berührpunkt ist eins und drei.
 
-00:42.866 --> 00:48.369
+01:14.133 --> 01:24.349
 Jetzt mit Parameter: die Parabel x Quadrat plus zwei x und die waagrechte Gerade y gleich k.
 
-00:48.700 --> 00:53.587
+01:24.666 --> 01:29.938
 Gleichsetzen und auf null bringen: x Quadrat plus zwei x minus k gleich null.
 
-00:53.933 --> 00:59.308
+01:30.266 --> 01:37.065
 Die Diskriminante hängt jetzt von k ab: vier minus vier mal minus k, also vier plus vier k.
 
-00:59.633 --> 01:04.637
+01:37.400 --> 01:49.342
 Zwei Schnittpunkte gibt es, wenn D größer null ist: also für k größer minus eins.
 
-01:04.966 --> 01:12.489
+01:49.666 --> 01:58.615
 Bei k gleich minus eins berührt die Gerade die Parabel, genau im Scheitel. Für k kleiner minus eins gibt es keinen gemeinsamen Punkt.
 
-01:15.500 --> 01:22.721
+02:01.633 --> 02:11.849
 Merke: Gleichsetzen, auf null bringen, Diskriminante bestimmen. Mit Parameter löst du die Bedingung für D nach dem Parameter auf.
